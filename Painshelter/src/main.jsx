@@ -4,6 +4,13 @@ import App from "./App.jsx";
 import "./index.css";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Member from "./pages/Member/index.jsx";
+import Login from "./pages/Login/index.jsx";
+import Signup from "./pages/Signup/index.jsx";
+import History from "./pages/History/index.jsx";
+import Post from "./pages/Post/index.jsx";
+import Disagree from "./pages/Disagree/index.jsx";
+import Help from "./pages/Help/index.jsx";
+import LoginMainPage from "./pages/LoginMainPage/index.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -11,6 +18,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="member" element={<Member />} />
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />
+        <Route path="history" element={<History />} />
+        <Route path="post" element={<Post />} />
+        <Route path="disagree" element={<Disagree />} />
+        <Route path="help" element={<Help />} />
+        <Route path="loginMainPage" element={<LoginMainPage />} />
       </Routes>
     </BrowserRouter>
 
