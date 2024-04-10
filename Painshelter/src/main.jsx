@@ -10,7 +10,7 @@ import History from "./pages/History/index.jsx";
 import Post from "./pages/Post/index.jsx";
 import Disagree from "./pages/Disagree/index.jsx";
 import Help from "./pages/Help/index.jsx";
-import LoginMainPage from "./pages/LoginMainPage/index.jsx";
+import Edit from "./pages/Edit/index.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -24,10 +24,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="post" element={<Post />} />
         <Route path="disagree" element={<Disagree />} />
         <Route path="help" element={<Help />} />
-        <Route path="loginMainPage" element={<LoginMainPage />} />
+        <Route path="edit" element={<Edit />} />
       </Routes>
     </BrowserRouter>
-
-    {/* <App /> */}
   </React.StrictMode>
 );
