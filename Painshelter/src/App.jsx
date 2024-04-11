@@ -1,7 +1,11 @@
-import "./App.css";
+// import "./App.css";
 import { useNavigate } from "react-router-dom";
 import { useFormInput } from "./utils/hooks/useFormInput";
 import { useState } from "react";
+import { auth } from "./utils/firebase/firebase.jsx";
+import { signOut } from "firebase/auth";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
 
 function App() {
   const navigate = useNavigate();
@@ -16,8 +20,23 @@ function App() {
     setLoginState(true);
   };
 
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        navigate("/");
+        console.log("Signed out successfully");
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
+
   return (
     <>
+      <div></div>
+
+      {/* 以下是所有功能列表 */}
       <div>標題</div>
       <p>Slogen</p>
       <div>
@@ -45,22 +64,19 @@ function App() {
 
       <button className="bg-gray-600 text-white mt-3">心靈緊急按鈕</button>
 
-      {/* <div className="h-full w-full absolute top-0 right-0 border-gray-300 flex items-center mr-8 gap-5 bg-black bg-opacity-75">
-        <div className="h-96 w-7/12 flex items-center bg-yellow-700">
-          <div className="flex flex-col">
-            <label>
-              請輸入登錄信箱:
-              <input className="mt-0.5" {...emailProps} />
-            </label>
-            <label className="mt-6">
-              請輸入登錄密碼:
-              <input {...passwordProps} />
-            </label>
-            <button className="mt-6 bg-white">登入</button>
-            <button className="mt-6 bg-white">我要註冊</button>
-          </div>
+      <Login />
+
+      {/* 登出 */}
+      <nav className="mt-5">
+        <div>
+          <button onClick={handleLogout} className=" border-2 border-black ">
+            登出
+          </button>
         </div>
-      </div> */}
+      </nav>
+
+      {/* 註冊 */}
+      <Signup />
     </>
   );
 }
