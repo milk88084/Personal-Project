@@ -2,11 +2,13 @@ import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../utils/firebase/firebase.jsx";
 import { NavLink, useNavigate } from "react-router-dom";
+import { loginState } from "../../utils/zustand.js";
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { online } = loginState();
 
   const onLogin = (e) => {
     e.preventDefault();
@@ -22,6 +24,7 @@ const Login = () => {
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
       });
+    online();
   };
 
   return (
