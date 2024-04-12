@@ -8,7 +8,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { online } = loginState();
+  const { online, setLoginUserId } = loginState();
 
   const onLogin = (e) => {
     e.preventDefault();
@@ -18,13 +18,14 @@ const Login = () => {
         const user = userCredential.user;
         navigate("/");
         console.log(user);
+        online();
+        setLoginUserId(user.uid);
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
       });
-    online();
   };
 
   return (

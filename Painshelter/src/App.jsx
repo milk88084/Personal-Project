@@ -1,21 +1,13 @@
 // import "./App.css";
 import { useNavigate } from "react-router-dom";
-import { useFormInput } from "./utils/hooks/useFormInput";
-import { useState } from "react";
 import { auth } from "./utils/firebase/firebase.jsx";
 import { signOut } from "firebase/auth";
-import Signup from "./pages/Signup";
-import Login from "./pages/Login";
 import { loginState } from "./utils/zustand.js";
 
 function App() {
   const navigate = useNavigate();
-  const { getLoginStatus, online, offline } = loginState();
-
-  const nameProps = useFormInput("Max");
-  const emailProps = useFormInput("exmple.com");
-  const passwordProps = useFormInput("<PASSWORD>");
-  const [loginStates, setLoginStates] = useState(false);
+  const { getLoginStatus, online, offline, logout, getLoginUserId } =
+    loginState();
 
   const handleLogout = () => {
     signOut(auth)
@@ -28,6 +20,7 @@ function App() {
         // An error happened.
       });
     offline();
+    logout();
   };
 
   const handleAgree = () => {
@@ -40,13 +33,14 @@ function App() {
     offline();
   };
 
-  console.log(getLoginStatus());
+  console.log("目前登錄狀態：" + getLoginStatus());
+  console.log("目前登入使用者ID：" + getLoginUserId());
 
-  const loginOrNot = getLoginStatus();
+  const login = getLoginStatus();
 
   return (
     <>
-      {loginOrNot ? null : (
+      {login ? null : (
         <div className="flex items-center justify-center h-screen w-full bg-gray-500 absolute opacity-80">
           <div className="flex flex-col items-center justify-center  border-black border-2 w-5/12 h-3/6 ">
             <h1>溫柔宣言</h1>

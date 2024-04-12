@@ -1,23 +1,29 @@
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../../utils/firebase/firebase.jsx";
+import { auth, db } from "../../utils/firebase/firebase.jsx";
+import { setDoc, doc } from "firebase/firestore";
+import { useFormInput } from "../../utils/hooks/useFormInput.jsx";
 
 const Signup = () => {
   const navigate = useNavigate();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const emailInput = useFormInput();
+  const passwordInput = useFormInput();
+  const nameInput = useFormInput();
 
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    await createUserWithEmailAndPassword(auth, email, password)
+    //Official registration member code
+    await createUserWithEmailAndPassword(
+      auth,
+      emailInput.value,
+      passwordInput.value
+    )
       .then((userCredential) => {
-        // Signed in
         const user = userCredential.user;
 
+        //The method needed to add a name during this test.
         updateProfile(user, {
           displayName: name,
         }).then(() => {
@@ -32,8 +38,19 @@ const Signup = () => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
-        // ..
       });
+
+    //Store the registered member's information in Firestore.
+    try {
+      await setDoc(doc(db, "users", auth.currentUser.uid), {
+        id: auth.currentUser.uid,
+        name: nameInput.value,
+        email: emailInput.value,
+        password: passwordInput.value,
+      });
+    } catch (err) {
+      console.error("Error: ", err);
+    }
   };
 
   return (
@@ -50,10 +67,11 @@ const Signup = () => {
                 <input
                   type="text"
                   label="Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  {...nameInput}
+                  value={nameInput.value}
+                  onChange={nameInput.onChange}
                   required
-                  placeholder="王曉明"
+                  placeholder="請輸入註冊者姓名"
                   className=" border-2 border-black"
                 />
               </div>
@@ -68,8 +86,7 @@ const Signup = () => {
                 <input
                   type="email"
                   label="Email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  {...emailInput}
                   required
                   placeholder="Email address"
                   className=" border-2 border-black"
@@ -81,10 +98,9 @@ const Signup = () => {
                   Password
                 </label>
                 <input
-                  type="password"
+                  type="{password}"
                   label="Create password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  {...passwordInput}
                   required
                   placeholder="Password"
                   className=" border-2 border-black "
