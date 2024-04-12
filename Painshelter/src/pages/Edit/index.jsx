@@ -1,52 +1,124 @@
 import React from "react";
 import locationData from "../../utils/data/location.json";
 import { loginState } from "../../utils/zustand.js";
-import { db } from "../../utils/firebase/firebase.jsx";
+// import { db, app, auth } from "../../utils/firebase/firebase.jsx";
+import { useFormInput } from "../../utils/hooks/useFormInput.jsx";
+import { useCheckboxInput } from "../../utils/hooks/useCheckboxInput.jsx";
 
 export default function Edit() {
+  const postStory = useFormInput();
+  const storyTitle = useFormInput();
+  const storyTime = useFormInput();
+  const storyLocation = useFormInput();
+  const storyTypeData = [
+    "成長軌跡",
+    "情感關係",
+    "人際交流",
+    "生命經歷",
+    "職場發展",
+  ];
+  const storyFigureData = [
+    "親人",
+    "伴侶",
+    "朋友",
+    "關係人",
+    "陌生人",
+    "那個他",
+    "內在自我",
+  ];
+  const storyType = useCheckboxInput(storyTypeData);
+  const storyFigure = useCheckboxInput(storyFigureData);
+
   const handleSubmit = (event) => {
-    alert("Your favorite flavor is: ");
+    // alert("Your favorite flavor is: ");
     event.preventDefault();
+    console.log(storyTitle.value);
+    console.log(storyTime.value);
+    console.log(storyLocation.value);
+    console.log(storyType.getSortedCheckedValues());
+    console.log(storyFigure.getSortedCheckedValues());
+    console.log(postStory.value);
   };
 
   return (
     <div>
       <p className="m-3 bg-yellow-300">這裡是要開始投稿故事的地方</p>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <label className="block marker:m-3 bg-red-300">請輸入疼痛暗號</label>
-        <input className=" border-2 border-black " type="text" />
+        <input
+          className=" border-2 border-black "
+          type="text"
+          label="StoryTitle"
+          value={storyTitle.value}
+          onChange={storyTitle.onChange}
+          {...storyTitle}
+          required
+          placeholder="陽明山的星星"
+        />
 
         <label className="block m-3 bg-yellow-300">發生時間</label>
-        <input type="date" id="date" name="expiration" />
+        <input
+          type="date"
+          label="Story time"
+          value={storyTime.value}
+          onChange={storyTime.onChange}
+          {...storyTime}
+          required
+        />
 
         <label className="block m-3 bg-yellow-300"> 發生地點</label>
-        <select>
-          {locationData.map((index) => {
-            return <option key={index}>{index}</option>;
+        <select {...storyLocation}>
+          required
+          {locationData.map((value) => {
+            return (
+              <option key={value} value={value} required>
+                {value}
+              </option>
+            );
           })}
         </select>
 
         <label className="block m-3 bg-red-300">故事類型</label>
         <ul>
           <li>
-            <input type="checkbox" name="title" value="K" />
+            <input
+              type="checkbox"
+              onChange={storyType.onChange}
+              value="成長軌跡"
+            />
             成長軌跡
           </li>
           <li>
-            <input type="checkbox" name="title" value="Q" />
+            <input
+              type="checkbox"
+              onChange={storyType.onChange}
+              value="情感關係"
+            />
             情感關係
           </li>
           <li>
-            <input type="checkbox" name="title" value="J" />
+            <input
+              type="checkbox"
+              onChange={storyType.onChange}
+              value="人際交流"
+            />
             人際交流
           </li>
           <li>
-            <input type="checkbox" name="title" value="J" />
+            <input
+              type="checkbox"
+              onChange={storyType.onChange}
+              value="生命經歷"
+            />
             生命經歷
           </li>
           <li>
-            <input type="checkbox" name="title" value="J" />
+            <input
+              type="checkbox"
+              onChange={storyType.onChange}
+              value="職場發展"
+            />
             職場發展
           </li>
         </ul>
@@ -54,38 +126,76 @@ export default function Edit() {
         <label className="block m-3 bg-yellow-300">故事對象</label>
         <ul>
           <li>
-            <input type="checkbox" name="title" value="K" />
+            <input
+              type="checkbox"
+              onChange={storyFigure.onChange}
+              value="親人"
+            />
             親人
           </li>
           <li>
-            <input type="checkbox" name="title" value="Q" />
+            <input
+              type="checkbox"
+              onChange={storyFigure.onChange}
+              value="伴侶"
+            />
             伴侶
           </li>
           <li>
-            <input type="checkbox" name="title" value="J" />
+            <input
+              type="checkbox"
+              onChange={storyFigure.onChange}
+              value="朋友"
+            />
             朋友
           </li>
           <li>
-            <input type="checkbox" name="title" value="J" />
+            <input
+              type="checkbox"
+              onChange={storyFigure.onChange}
+              value="關係人"
+            />
             關係人
           </li>
+
           <li>
-            <input type="checkbox" name="title" value="J" />
-            內在自我
-          </li>
-          <li>
-            <input type="checkbox" name="title" value="J" />
+            <input
+              type="checkbox"
+              onChange={storyFigure.onChange}
+              value="陌生人"
+            />
             陌生人
           </li>
           <li>
-            <input type="checkbox" name="title" value="J" />
+            <input
+              type="checkbox"
+              onChange={storyFigure.onChange}
+              value="那個他"
+            />
             那個他
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              onChange={storyFigure.onChange}
+              value="內在自我"
+            />
+            內在自我
           </li>
         </ul>
 
         <div>
           <p className="m-3 bg-red-300">請輸入入故事內容</p>
-          <input className=" border-2 border-black " type="text" />
+          <input
+            className=" border-2 border-black "
+            type="text"
+            label="Post story"
+            {...postStory}
+            required
+            placeholder="那一天，我哭了一整夜"
+            value={postStory.value}
+            onChange={postStory.onChange}
+          />
         </div>
 
         <input
