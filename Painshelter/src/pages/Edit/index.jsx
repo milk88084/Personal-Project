@@ -1,11 +1,13 @@
 import React from "react";
 import locationData from "../../utils/data/location.json";
-import { loginState } from "../../utils/zustand.js";
-// import { db, app, auth } from "../../utils/firebase/firebase.jsx";
+import { useLoginState } from "../../utils/zustand.js";
 import { useFormInput } from "../../utils/hooks/useFormInput.jsx";
 import { useCheckboxInput } from "../../utils/hooks/useCheckboxInput.jsx";
+import { db } from "../../utils/firebase/firebase.jsx";
+import { Timestamp, addDoc, collection } from "firebase/firestore";
 
 export default function Edit() {
+  const { getLoginUserId, loginUserId } = useLoginState();
   const postStory = useFormInput();
   const storyTitle = useFormInput();
   const storyTime = useFormInput();
@@ -29,7 +31,7 @@ export default function Edit() {
   const storyType = useCheckboxInput(storyTypeData);
   const storyFigure = useCheckboxInput(storyFigureData);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     // alert("Your favorite flavor is: ");
     event.preventDefault();
     console.log(storyTitle.value);
@@ -38,6 +40,23 @@ export default function Edit() {
     console.log(storyType.getSortedCheckedValues());
     console.log(storyFigure.getSortedCheckedValues());
     console.log(postStory.value);
+
+    try {
+      const docRef = await addDoc(collection(db, "posts"), {
+        title: storyTitle.value,
+        time: storyTime.value,
+        location: storyLocation.value,
+        type: storyType.getSortedCheckedValues(),
+        figure: storyFigure.getSortedCheckedValues(),
+        story: postStory.value,
+        userId: getLoginUserId(),
+        createdAt: Timestamp.fromDate(new Date()),
+      });
+      console.log("Document written with ID: ", docRef.id);
+      console.log(getLoginUserId());
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
   };
 
   return (
@@ -68,11 +87,10 @@ export default function Edit() {
         />
 
         <label className="block m-3 bg-yellow-300"> 發生地點</label>
-        <select {...storyLocation}>
-          required
-          {locationData.map((value) => {
+        <select {...storyLocation} required>
+          {locationData.map((value, index) => {
             return (
-              <option key={value} value={value} required>
+              <option key={index} value={value} required>
                 {value}
               </option>
             );

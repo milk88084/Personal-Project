@@ -2,12 +2,12 @@
 import { useNavigate } from "react-router-dom";
 import { auth } from "./utils/firebase/firebase.jsx";
 import { signOut } from "firebase/auth";
-import { loginState } from "./utils/zustand.js";
+import { useLoginState } from "./utils/zustand.js";
 
 function App() {
   const navigate = useNavigate();
   const { getLoginStatus, online, offline, logout, getLoginUserId } =
-    loginState();
+    useLoginState();
 
   const handleLogout = () => {
     signOut(auth)

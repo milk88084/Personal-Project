@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export const loginState = create((set, get) => ({
+export const useLoginState = create((set, get) => ({
   //Login status
   loginStatus: false,
   getLoginStatus: () => get().loginStatus,
