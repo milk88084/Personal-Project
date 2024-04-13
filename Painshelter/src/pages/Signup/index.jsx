@@ -76,6 +76,8 @@ const Signup = () => {
                 />
               </div>
 
+              <p></p>
+
               <div className="mt-5">
                 <label
                   htmlFor="email-address"
@@ -106,6 +108,8 @@ const Signup = () => {
                   className=" border-2 border-black "
                 />
               </div>
+
+              {passwordInput.value.length < 6 ? <p>請輸入6位數以上密碼</p> : ""}
 
               <button type="submit" className="mt-5 border-2 border-black">
                 註冊

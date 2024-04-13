@@ -9,6 +9,7 @@ import History from "./pages/History/index.jsx";
 import Disagree from "./pages/Disagree/index.jsx";
 import Help from "./pages/Help/index.jsx";
 import Edit from "./pages/Edit/index.jsx";
+import VisitAuthor from "./pages/VisitAuthor/index.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -21,6 +22,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="disagree" element={<Disagree />} />
         <Route path="help" element={<Help />} />
         <Route path="edit" element={<Edit />} />
+        <Route path="visit" element={<VisitAuthor />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

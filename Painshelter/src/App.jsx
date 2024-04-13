@@ -44,6 +44,10 @@ function App() {
   console.log("目前登錄狀態：" + getLoginStatus());
   console.log("目前登入使用者ID：" + getLoginUserId());
 
+  const handleVisitAthor = () => {
+    navigate("/visit");
+  };
+
   //拿取Firestore資料
   useEffect(() => {
     async function getStories() {
@@ -72,7 +76,7 @@ function App() {
     <>
       {login ? null : (
         <div className="flex items-center justify-center h-screen w-full bg-gray-500 absolute opacity-80">
-          <div className="flex flex-col items-center justify-center  border-black border-2 w-5/12 h-3/6 ">
+          <div className="flex flex-col items-center justify-center  bg-white  border-black border-2 w-5/12 h-3/6 ">
             <h1>溫柔宣言</h1>
             <div>
               <p>1.我願意成為那個溫柔傾聽的存在。</p>
@@ -117,8 +121,8 @@ function App() {
           return (
             <div className="bg-blue-600 text-white mt-3" key={index}>
               <p>疼痛暗號：{story.title}</p>
-
               <p>故事地點：{story.location}</p>
+              <button onClick={handleVisitAthor}>點我看作者</button>
             </div>
           );
         })}
