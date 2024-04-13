@@ -1,13 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import locationData from "../../utils/data/location.json";
 import { useLoginState } from "../../utils/zustand.js";
 import { useFormInput } from "../../utils/hooks/useFormInput.jsx";
 import { useCheckboxInput } from "../../utils/hooks/useCheckboxInput.jsx";
 import { db } from "../../utils/firebase/firebase.jsx";
-import { Timestamp, addDoc, collection } from "firebase/firestore";
+import { Timestamp, addDoc, collection, updateDoc } from "firebase/firestore";
 
 export default function Edit() {
-  const { getLoginUserId, loginUserId } = useLoginState();
+  const navigate = useNavigate();
+  const { getLoginUserId } = useLoginState();
   const postStory = useFormInput();
   const storyTitle = useFormInput();
   const storyTime = useFormInput();
@@ -52,11 +54,14 @@ export default function Edit() {
         userId: getLoginUserId(),
         createdAt: Timestamp.fromDate(new Date()),
       });
+
       console.log("Document written with ID: ", docRef.id);
       console.log(getLoginUserId());
     } catch (error) {
       console.error("Error adding document: ", error);
     }
+    navigate("/history");
+    alert("成功提交：" + storyTitle.value + "故事");
   };
 
   return (
@@ -88,9 +93,9 @@ export default function Edit() {
 
         <label className="block m-3 bg-yellow-300"> 發生地點</label>
         <select {...storyLocation} required>
-          {locationData.map((value, index) => {
+          {locationData.map((value) => {
             return (
-              <option key={index} value={value} required>
+              <option key={value} value={value} required>
                 {value}
               </option>
             );
