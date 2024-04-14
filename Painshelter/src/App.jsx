@@ -44,10 +44,6 @@ function App() {
   console.log("目前登錄狀態：" + getLoginStatus());
   console.log("目前登入使用者ID：" + getLoginUserId());
 
-  const handleVisitAthor = () => {
-    navigate("/visit");
-  };
-
   //拿取Firestore資料
   useEffect(() => {
     async function getStories() {
@@ -63,6 +59,7 @@ function App() {
           type: doc.data().type,
           figure: doc.data().figure,
           story: doc.data().story,
+          userId: doc.data().userId,
         }));
         setStories(userStoryList);
       } catch (e) {
@@ -71,6 +68,12 @@ function App() {
     }
     getStories();
   }, [getLoginUserId]);
+
+  //進入到該作者的文章頁面
+
+  const handleVisitAthor = (id) => {
+    navigate("/visit", { state: { data: id } });
+  };
 
   return (
     <>
@@ -122,7 +125,10 @@ function App() {
             <div className="bg-blue-600 text-white mt-3" key={index}>
               <p>疼痛暗號：{story.title}</p>
               <p>故事地點：{story.location}</p>
-              <button onClick={handleVisitAthor}>點我看作者</button>
+
+              <button onClick={() => handleVisitAthor(story.userId)}>
+                點我看作者
+              </button>
             </div>
           );
         })}
