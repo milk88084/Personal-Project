@@ -14,4 +14,8 @@ export const useLoginState = create((set, get) => ({
   getLoginUserId: () => get().loginUserId,
   setLoginUserId: (id) => set({ loginUserId: id }),
   logout: () => set({ loginUserId: "" }),
+  //other author post like
+  postLikeNumber: "",
+  getPostLikeNumber: () => get().postLikeNumber,
+  setPostLikeNumber: (number) => set({ postLikeNumber: number }),
 }));
