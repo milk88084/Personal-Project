@@ -1,4 +1,4 @@
-import { db } from "../../utils/firebase/firebase.jsx";
+import { auth, db } from "../../utils/firebase/firebase.jsx";
 import {
   collection,
   query,
@@ -18,6 +18,7 @@ const VisitAuthor = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const [stories, setStories] = useState([]);
+  const [author, setAuthor] = useState([]);
   const localStorageUserId = window.localStorage.getItem("userId");
   //   const { postLikeNumber, getPostLikeNumber, setPostLikeNumber } =
   //     useLoginState();
@@ -25,7 +26,7 @@ const VisitAuthor = () => {
   console.log("這裡是這個作者的歷史文章", state.data);
   console.log("現在登入的人是：" + localStorageUserId);
 
-  //從firestore讀取資料
+  //從firestore讀取posts資料
   useEffect(() => {
     async function getStories() {
       try {
@@ -52,6 +53,27 @@ const VisitAuthor = () => {
     }
     getStories();
   }, []);
+
+  //從firebase讀取users資料
+  useEffect(() => {
+    async function getAuthor() {
+      try {
+        const authorData = collection(db, "users");
+        const q = query(authorData, where("id", "==", state.data));
+        const querySnapshot = await getDocs(q);
+        const authorList = querySnapshot.docs.map((doc) => ({
+          id: doc.data().id,
+          name: doc.data().name,
+        }));
+        setAuthor(authorList);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    getAuthor();
+  }, []);
+
+  console.log(author);
 
   //判斷story是否為該作者的內容
   const isUserStories = stories.every(
@@ -105,7 +127,7 @@ const VisitAuthor = () => {
       {isUserStories ? (
         <p>這是你自己的頁面</p>
       ) : (
-        <p>這個作者叫做： {state.data}</p>
+        <p>這個作者叫做： {author[0].name}</p>
       )}
 
       {stories.map((story, index) => {

@@ -120,11 +120,9 @@ function App() {
           疼痛日記室
         </button>
       </div>
+
       <div>
-        <button className="bg-green-600 text-white mt-3">情緒光譜</button>
-      </div>
-      <div>
-        <button className="bg-yellow-600 text-white mt-3">疼痛地圖</button>
+        <button className="bg-yellow-600 text-white mt-3">文章精選</button>
         {stories.map((story, index) => {
           return (
             <div className="bg-blue-600 text-white mt-3" key={index}>
@@ -137,6 +135,14 @@ function App() {
             </div>
           );
         })}
+      </div>
+
+      <div>
+        <button className="bg-green-600 text-white mt-3">情緒光譜</button>
+      </div>
+
+      <div>
+        <button className="bg-green-600 text-white mt-3">疼痛地圖</button>
       </div>
 
       <button className="bg-gray-600 text-white mt-3">心靈緊急按鈕</button>

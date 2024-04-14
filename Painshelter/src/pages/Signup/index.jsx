@@ -25,7 +25,7 @@ const Signup = () => {
 
         //The method needed to add a name during this test.
         updateProfile(user, {
-          displayName: name,
+          displayName: nameInput.value,
         }).then(() => {
           console.log(user);
           navigate("/login");
