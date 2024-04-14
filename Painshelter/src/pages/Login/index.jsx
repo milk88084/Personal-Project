@@ -8,7 +8,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { online, setLoginUserId } = useLoginState();
+  const { online, setLoginUserId, loginStatus } = useLoginState();
 
   const onLogin = (e) => {
     e.preventDefault();
@@ -20,11 +20,15 @@ const Login = () => {
         console.log(user);
         online();
         setLoginUserId(user.uid);
+        window.localStorage.setItem("userId", user.uid);
+        window.localStorage.setItem("loginStatus", loginStatus);
+        alert("登入成功");
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
+        alert("登入失敗，重確認信箱或密碼是否正確");
       });
   };
 

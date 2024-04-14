@@ -13,6 +13,7 @@ export default function History() {
   const rand = Math.floor(Math.random() * poemData.length);
   const randPoem = poemData[rand];
   const { getLoginUserId } = useLoginState();
+  const localStorageUserId = window.localStorage.getItem("userId");
 
   useEffect(() => {
     async function getStories() {
@@ -20,7 +21,7 @@ export default function History() {
         const postsData = collection(db, "posts");
         const q = query(
           postsData,
-          where("userId", "==", getLoginUserId()),
+          where("userId", "==", localStorageUserId),
           limit(6)
         );
 

@@ -14,6 +14,7 @@ export default function Edit() {
   const storyTitle = useFormInput();
   const storyTime = useFormInput();
   const storyLocation = useFormInput();
+  const localStorageUserId = window.localStorage.getItem("userId");
   const storyTypeData = [
     "成長軌跡",
     "情感關係",
@@ -51,10 +52,10 @@ export default function Edit() {
         type: storyType.getSortedCheckedValues(),
         figure: storyFigure.getSortedCheckedValues(),
         story: postStory.value,
-        userId: getLoginUserId(),
+        userId: localStorageUserId,
         createdAt: Timestamp.fromDate(new Date()),
       });
-
+      await updateDoc(docRef, { storyId: docRef.id });
       console.log("Document written with ID: ", docRef.id);
       console.log(getLoginUserId());
     } catch (error) {

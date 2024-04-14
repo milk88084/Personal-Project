@@ -12,7 +12,10 @@ function App() {
   const [stories, setStories] = useState([]);
   const { getLoginStatus, online, offline, logout, getLoginUserId } =
     useLoginState();
-  const login = getLoginStatus();
+  const localStorageUserId = window.localStorage.getItem("userId");
+  const localStorageLogin = window.localStorage.getItem("loginStatus");
+  const login = localStorageUserId;
+  // const login = getLoginStatus();
 
   //登出按鈕
   const handleLogout = () => {
@@ -21,6 +24,8 @@ function App() {
         // Sign-out successful.
         navigate("/");
         console.log("Signed out successfully");
+        window.localStorage.removeItem("userId");
+        window.localStorage.removeItem("loginStatus");
       })
       .catch((error) => {
         // An error happened.
@@ -41,8 +46,8 @@ function App() {
     offline();
   };
 
-  console.log("目前登錄狀態：" + getLoginStatus());
-  console.log("目前登入使用者ID：" + getLoginUserId());
+  console.log("目前登錄狀態：" + localStorageLogin);
+  console.log("目前登入使用者ID：" + localStorageUserId);
 
   //拿取Firestore資料
   useEffect(() => {

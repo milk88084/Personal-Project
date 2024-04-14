@@ -3,13 +3,15 @@ import { collection, query, getDocs, where } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { PostReply } from "../../utils/shadcn/PostReply.jsx";
 
 const VisitAuthor = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const [stories, setStories] = useState([]);
+  const localStorageUserId = window.localStorage.getItem("userId");
 
-  console.log("1323", state.data);
+  console.log("這裡是這個作者的歷史文章", state.data);
   //   const {} = useParams();
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const VisitAuthor = () => {
           type: doc.data().type,
           figure: doc.data().figure,
           story: doc.data().story,
-          userId: doc.data().useriId,
+          userId: doc.data().userId,
         }));
         setStories(userStoryList);
       } catch (e) {
@@ -36,9 +38,18 @@ const VisitAuthor = () => {
     getStories();
   }, []);
 
+  const isUserStories = stories.every(
+    (story) => story.userId === localStorageUserId
+  );
+
   return (
     <>
-      <p>這個作者叫做： {state.data}</p>
+      {isUserStories ? (
+        <p>這是你自己的頁面</p>
+      ) : (
+        <p>這個作者叫做： {state.data}</p>
+      )}
+
       {stories.map((story, index) => {
         return (
           <div className="bg-blue-600 text-white mt-3 " key={index}>
@@ -46,8 +57,19 @@ const VisitAuthor = () => {
             <p>故事地點：{story.location}</p>
             <p>時間：{story.time}</p>
             <p>類型：{story.type}</p>
-            <p>圖片：{story.figure}</p>
+            <p>人物：{story.figure}</p>
             <p>內容：{story.story}</p>
+            <div className="bg-yellow-300 flex justify-evenly text-black ">
+              <span>按讚數量</span>
+              <span>留言回覆</span>
+            </div>
+            <div className="bg-white flex justify-evenly text-black ">
+              <button className="bg-red-300" onClick={() => alert("按讚加一")}>
+                我要按讚
+              </button>
+              <span>我要留言</span>
+              <PostReply />
+            </div>
           </div>
         );
       })}

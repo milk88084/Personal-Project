@@ -28,8 +28,6 @@ const Signup = () => {
           displayName: name,
         }).then(() => {
           console.log(user);
-
-          console.log(name);
           navigate("/login");
           // ...
         });
