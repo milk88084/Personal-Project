@@ -231,6 +231,9 @@ export default function Edit() {
           value="送出"
         />
       </form>
+      <button className="m-3 bg-yellow-300" onClick={() => navigate("/")}>
+        回到首頁
+      </button>
     </div>
   );
 }

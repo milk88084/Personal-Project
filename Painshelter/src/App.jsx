@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "./utils/firebase/firebase.jsx";
 import { signOut } from "firebase/auth";
 import { useLoginState } from "./utils/zustand.js";
-import { collection, query, getDocs, limit } from "firebase/firestore";
+import { collection, query, getDocs } from "firebase/firestore";
 import { db } from "./utils/firebase/firebase.jsx";
 import { useState, useEffect } from "react";
 
@@ -54,7 +54,7 @@ function App() {
     async function getStories() {
       try {
         const postsData = collection(db, "posts");
-        const q = query(postsData, limit(6));
+        const q = query(postsData);
 
         const querySnapshot = await getDocs(q);
         const userStoryList = querySnapshot.docs.map((doc) => ({
@@ -74,8 +74,23 @@ function App() {
     getStories();
   }, [getLoginUserId]);
 
-  //進入到該作者的文章頁面
+  //隨機拿到stories的內容
+  function getRandomStories(arr, size) {
+    const result = [];
+    const useIndex = new Set();
 
+    while (result.length < size && result.length < arr.length) {
+      const index = Math.floor(Math.random() * arr.length);
+      if (!useIndex.has(index)) {
+        result.push(arr[index]);
+        useIndex.add(index);
+      }
+    }
+    return result;
+  }
+  const randomStories = getRandomStories(stories, 7);
+
+  //進入到該作者的文章頁面
   const handleVisitAthor = (id) => {
     navigate("/visit", { state: { data: id } });
   };
@@ -123,12 +138,11 @@ function App() {
 
       <div>
         <button className="bg-yellow-600 text-white mt-3">文章精選</button>
-        {stories.map((story, index) => {
+        {randomStories.slice(0, 6).map((story, index) => {
           return (
             <div className="bg-blue-600 text-white mt-3" key={index}>
               <p>疼痛暗號：{story.title}</p>
               <p>故事地點：{story.location}</p>
-
               <button onClick={() => handleVisitAthor(story.userId)}>
                 點我看作者
               </button>

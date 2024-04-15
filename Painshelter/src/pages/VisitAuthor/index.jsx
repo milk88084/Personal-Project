@@ -1,4 +1,4 @@
-import { auth, db } from "../../utils/firebase/firebase.jsx";
+import { db } from "../../utils/firebase/firebase.jsx";
 import {
   collection,
   query,
@@ -7,6 +7,7 @@ import {
   increment,
   updateDoc,
   arrayUnion,
+  doc,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -20,8 +21,6 @@ const VisitAuthor = () => {
   const [stories, setStories] = useState([]);
   const [author, setAuthor] = useState([]);
   const localStorageUserId = window.localStorage.getItem("userId");
-  //   const { postLikeNumber, getPostLikeNumber, setPostLikeNumber } =
-  //     useLoginState();
 
   console.log("這裡是這個作者的歷史文章", state.data);
   console.log("現在登入的人是：" + localStorageUserId);
@@ -73,8 +72,6 @@ const VisitAuthor = () => {
     getAuthor();
   }, []);
 
-  console.log(author);
-
   //判斷story是否為該作者的內容
   const isUserStories = stories.every(
     (story) => story.userId === localStorageUserId
@@ -82,26 +79,33 @@ const VisitAuthor = () => {
 
   //按讚功能
   const handleLike = async (id) => {
+    const likeRef = doc(db, "posts", id);
     try {
-      const q = query(collection(db, "posts"), where("storyId", "==", id));
-      const querySnapshot = await getDocs(q);
-
-      if (!querySnapshot.empty) {
-        const docRef = querySnapshot.docs[0].ref;
-        await updateDoc(docRef, {
-          likeNumber: increment(1),
-        });
-      } else {
-        console.log("沒有找到該文章");
-      }
+      await updateDoc(likeRef, {
+        likeNumber: increment(1),
+      });
+      console.log("按讚成功");
+      setStories((prev) =>
+        prev.map((story) => {
+          if (story.storyId === id) {
+            const updatedStory = {
+              ...story,
+              likeNumber: (story.likeNumber || 0) + 1,
+            };
+            return updatedStory;
+          }
+          return story;
+        })
+      );
     } catch (error) {
-      console.error("操作失敗: ", error);
+      console.error("按讚失敗: ", error);
     }
   };
 
+  //提交回覆的內容
   const handleSubmit = async (event, id) => {
     event.preventDefault();
-    const item = event.target.replySelect.value; // 獲取下拉式選單的value值
+    const item = event.target.replySelect.value; // 获取下拉式菜单的value值
 
     try {
       const q = query(collection(db, "posts"), where("storyId", "==", id));
@@ -113,13 +117,24 @@ const VisitAuthor = () => {
           otherReply: arrayUnion(item),
         });
         console.log("留言更新成功");
+        setStories((prev) =>
+          prev.map((story) => {
+            if (story.storyId === id) {
+              const newReplies = story.otherReply ? [...story.otherReply] : [];
+              if (!newReplies.includes(item)) {
+                newReplies.push(item);
+              }
+              return { ...story, otherReply: newReplies };
+            }
+            return story;
+          })
+        );
       } else {
-        console.log("没有找到该文章");
+        console.log("沒有找到該文章");
       }
     } catch (error) {
-      console.error("操作失败: ", error);
+      console.error("操作失敗: ", error);
     }
-    navigate("/visit", { state: { data: id } });
   };
 
   return (
@@ -127,7 +142,7 @@ const VisitAuthor = () => {
       {isUserStories ? (
         <p>這是你自己的頁面</p>
       ) : (
-        <p>這個作者叫做： {author[0].name}</p>
+        <p>這個作者叫做： {author[0]?.name}</p>
       )}
 
       {stories.map((story, index) => {
@@ -164,7 +179,7 @@ const VisitAuthor = () => {
               <div className="bg-white flex justify-evenly text-black ">
                 <button
                   className="bg-red-300"
-                  onClick={(event) => handleLike(event, story.storyId)}
+                  onClick={() => handleLike(story.storyId)}
                 >
                   我要按讚
                 </button>
