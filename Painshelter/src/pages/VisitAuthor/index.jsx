@@ -8,6 +8,8 @@ import {
   updateDoc,
   arrayUnion,
   doc,
+  setDoc,
+  addDoc,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -41,7 +43,8 @@ const VisitAuthor = () => {
           figure: doc.data().figure,
           story: doc.data().story,
           userId: doc.data().userId,
-          likeNumber: doc.data().likeNumber,
+          // likeNumber: doc.data().likeNumber,
+          likedAuthorId: doc.data().likedAuthorId,
           storyId: doc.data().storyId,
           otherReply: doc.data().otherReply,
         }));
@@ -79,34 +82,50 @@ const VisitAuthor = () => {
 
   //按讚功能
   const handleLike = async (id) => {
-    const likeRef = doc(db, "posts", id);
+    const item = localStorageUserId;
     try {
-      await updateDoc(likeRef, {
-        likeNumber: increment(1),
-      });
-      console.log("按讚成功");
-      setStories((prev) =>
-        prev.map((story) => {
-          if (story.storyId === id) {
-            const updatedStory = {
-              ...story,
-              likeNumber: (story.likeNumber || 0) + 1,
-            };
-            return updatedStory;
-          }
-          return story;
-        })
-      );
+      const q = query(collection(db, "posts"), where("storyId", "==", id));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        const docRef = querySnapshot.docs[0].ref; //ref是指向位置
+        const docData = querySnapshot.docs[0].data(); //data()是實際的data內容
+
+        // 兩者皆為true表示使用者已經按過讚
+        if (docData.likedAuthorId && docData.likedAuthorId.includes(item)) {
+          alert("已按過讚");
+          return;
+        }
+        await updateDoc(docRef, {
+          likedAuthorId: arrayUnion(item),
+        });
+        console.log("按讚成功");
+
+        // 更新state
+        setStories((prev) =>
+          prev.map((story) => {
+            if (story.storyId === id) {
+              const updatedStory = {
+                ...story,
+                likedAuthorId: docData.likedAuthorId
+                  ? [...docData.likedAuthorId, item]
+                  : [item],
+              };
+              return updatedStory;
+            }
+            return story;
+          })
+        );
+      }
     } catch (error) {
-      console.error("按讚失敗: ", error);
+      console.error("操作失败: ", error);
     }
   };
 
   //提交回覆的內容
   const handleSubmit = async (event, id) => {
     event.preventDefault();
-    const item = event.target.replySelect.value; // 获取下拉式菜单的value值
-
+    const item = event.target.replySelect.value;
     try {
       const q = query(collection(db, "posts"), where("storyId", "==", id));
       const querySnapshot = await getDocs(q);
@@ -116,6 +135,7 @@ const VisitAuthor = () => {
         await updateDoc(docRef, {
           otherReply: arrayUnion(item),
         });
+
         console.log("留言更新成功");
         setStories((prev) =>
           prev.map((story) => {
@@ -159,7 +179,7 @@ const VisitAuthor = () => {
             <p>人物：{story.figure}</p>
             <p>內容：{story.story}</p>
             <div className="bg-yellow-300 flex justify-evenly text-black ">
-              <span>按讚數量：{story.likeNumber}</span>
+              <span>按讚數量：{story.likedAuthorId?.length}</span>
 
               <div>
                 留言回覆：

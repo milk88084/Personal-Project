@@ -54,8 +54,6 @@ export default function Edit() {
         story: postStory.value,
         userId: localStorageUserId,
         createdAt: Timestamp.fromDate(new Date()),
-        likeNumber: 0,
-        otherReply: "",
       });
       await updateDoc(docRef, { storyId: docRef.id });
       console.log("Document written with ID: ", docRef.id);
