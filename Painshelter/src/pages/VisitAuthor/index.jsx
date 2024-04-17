@@ -42,7 +42,7 @@ const VisitAuthor = () => {
           userId: doc.data().userId,
           likedAuthorId: doc.data().likedAuthorId,
           storyId: doc.data().storyId,
-          userComments: doc.data().userComments,
+          // userComments: doc.data().userComments,
         }));
         setStories(userStoryList);
       } catch (e) {
@@ -192,7 +192,12 @@ const VisitAuthor = () => {
             <p>人物：{story.figure}</p>
             <p>內容：{story.story}</p>
             <div className="bg-yellow-300 flex justify-evenly text-black ">
-              <span>按讚數量：{story.likedAuthorId?.length}</span>
+              <span>
+                按讚數量：
+                {story.likedAuthorId?.length > 0
+                  ? story.likedAuthorId.length
+                  : 0}
+              </span>
 
               <div>
                 留言回覆數量：

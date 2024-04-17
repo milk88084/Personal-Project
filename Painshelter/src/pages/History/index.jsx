@@ -42,7 +42,7 @@ export default function History() {
       }
     }
     getStories();
-  }, [getLoginUserId]);
+  }, []);
 
   console.log(stories);
   console.log(getLoginUserId());
@@ -62,20 +62,35 @@ export default function History() {
       </button>
 
       <p className="m-3 bg-yellow-300">歷史日記</p>
-      {stories.map((story, index) => {
-        return (
-          <div className="bg-blue-600 text-white mt-3" key={index}>
-            <p>標題：{story.title}</p>
-            <p>時間：{story.time}</p>
-            <p>地點：{story.location}</p>
-            <p>類型：{story.type}</p>
-            <p>人物：{story.figure}</p>
-            <p>內文：{story.story}</p>
-            <p>按讚數量：{story.likedAuthorId?.length}</p>
-            <p>留言內容：{story.userComments}</p>
-          </div>
-        );
-      })}
+      {stories &&
+        stories.map((story, index) => {
+          return (
+            <div className="bg-blue-600 text-white mt-3" key={index}>
+              <p>標題：{story.title}</p>
+              <p>時間：{story.time}</p>
+              <p>地點：{story.location}</p>
+              <p>類型：{story.type}</p>
+              <p>人物：{story.figure}</p>
+              <p>內文：{story.story}</p>
+              <p>按讚數量：{story.likedAuthorId?.length}</p>
+
+              {story.userComments ? (
+                <p>
+                  留言內容：
+                  {story.userComments?.map((comment, index) => (
+                    <p key={index}>{comment.comment}</p>
+                  ))}
+                </p>
+              ) : (
+                ""
+              )}
+
+              <button className="bg-red-600 text-white mt-3 m-2">
+                修改按鈕
+              </button>
+            </div>
+          );
+        })}
       <button
         className="bg-pink-600 text-white mt-3 m-2"
         onClick={() => navigate("/")}
