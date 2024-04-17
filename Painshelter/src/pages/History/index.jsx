@@ -33,6 +33,8 @@ export default function History() {
           type: doc.data().type,
           figure: doc.data().figure,
           story: doc.data().story,
+          userComments: doc.data().userComments,
+          likedAuthorId: doc.data().likedAuthorId,
         }));
         setStories(userStoryList);
       } catch (e) {
@@ -47,7 +49,9 @@ export default function History() {
 
   return (
     <div>
-      <p>暖心小語</p>
+      <h2 className="text-6xl font-sans font-black tracking-wider text-center ">
+        暖心小語
+      </h2>
       <p className="m-3 bg-yellow-300">標題：{randPoem.title}</p>
       <p className="m-3 bg-green-300">內文：{randPoem.content}</p>
       <button
@@ -56,12 +60,7 @@ export default function History() {
       >
         點我撰寫日記
       </button>
-      <button
-        className="bg-pink-600 text-white mt-3 m-2"
-        onClick={() => navigate("/")}
-      >
-        點我回首頁
-      </button>
+
       <p className="m-3 bg-yellow-300">歷史日記</p>
       {stories.map((story, index) => {
         return (
@@ -72,9 +71,17 @@ export default function History() {
             <p>類型：{story.type}</p>
             <p>人物：{story.figure}</p>
             <p>內文：{story.story}</p>
+            <p>按讚數量：{story.likedAuthorId?.length}</p>
+            <p>留言內容：{story.userComments}</p>
           </div>
         );
       })}
+      <button
+        className="bg-pink-600 text-white mt-3 m-2"
+        onClick={() => navigate("/")}
+      >
+        點我回首頁
+      </button>
     </div>
   );
 }

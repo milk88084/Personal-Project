@@ -72,7 +72,7 @@ export default function Edit() {
       <form onSubmit={handleSubmit}>
         <label className="block marker:m-3 bg-red-300">請輸入疼痛暗號</label>
         <input
-          className=" border-2 border-black "
+          className=" border-2 border-black w-1/2"
           type="text"
           label="StoryTitle"
           value={storyTitle.value}
@@ -210,8 +210,8 @@ export default function Edit() {
 
         <div>
           <p className="m-3 bg-red-300">請輸入入故事內容</p>
-          <input
-            className=" border-2 border-black "
+          <textarea
+            className=" border-2 border-black w-1/2 h-24"
             type="text"
             label="Post story"
             {...postStory}
@@ -224,13 +224,19 @@ export default function Edit() {
 
         <input
           onSubmit={handleSubmit}
-          className="m-3 bg-yellow-300"
+          className="m-3 bg-yellow-300 "
           type="submit"
           value="送出"
         />
       </form>
       <button className="m-3 bg-yellow-300" onClick={() => navigate("/")}>
         回到首頁
+      </button>
+      <button
+        className="m-3 bg-yellow-300"
+        onClick={() => navigate("/history")}
+      >
+        回到歷史文章
       </button>
     </div>
   );

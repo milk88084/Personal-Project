@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "./utils/firebase/firebase.jsx";
 import { signOut } from "firebase/auth";
 import { useLoginState } from "./utils/zustand.js";
-import { collection, query, getDocs } from "firebase/firestore";
+import { collection, query, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "./utils/firebase/firebase.jsx";
 import { useState, useEffect } from "react";
 
@@ -14,7 +14,6 @@ function App() {
     useLoginState();
   const localStorageUserId = window.localStorage.getItem("userId");
   const localStorageLogin = window.localStorage.getItem("loginStatus");
-  const login = localStorageUserId;
   // const login = getLoginStatus();
 
   //登出按鈕
@@ -97,7 +96,7 @@ function App() {
 
   return (
     <>
-      {login ? null : (
+      {localStorageLogin ? null : (
         <div className="flex items-center justify-center h-screen w-full bg-gray-500 absolute opacity-80">
           <div className="flex flex-col items-center justify-center  bg-white  border-black border-2 w-5/12 h-3/6 ">
             <h1>溫柔宣言</h1>
@@ -119,36 +118,34 @@ function App() {
         </div>
       )}
 
-      {/* 以下是所有功能列表 */}
-      <div>標題</div>
-      <p>Slogen</p>
+      <h1 className="text-6xl font-sans font-black tracking-wider text-center ">
+        Pain Shelter
+      </h1>
+
       <div>
-        <button className="bg-red-600 text-white">
-          這裡是一個深夜模式按鈕
-        </button>
+        <h2 className="bg-yellow-600 text-white mt-3 text-center ">文章精選</h2>
+        <div className="flex flex-wrap justify-center">
+          {randomStories.slice(0, 6).map((story, index) => {
+            return (
+              <div className="border-2 border-black  m-3 w-1/4 " key={index}>
+                <p>疼痛暗號：{story.title}</p>
+                <p>故事地點：{story.location}</p>
+                <button onClick={() => handleVisitAthor(story.userId)}>
+                  點我看作者
+                </button>
+              </div>
+            );
+          })}
+        </div>
       </div>
+
       <div>
         <button
-          className="bg-blue-600 text-white mt-3"
+          className="bg-blue-600 text-white  mt-3"
           onClick={() => navigate("/history")}
         >
           疼痛日記室
         </button>
-      </div>
-
-      <div>
-        <button className="bg-yellow-600 text-white mt-3">文章精選</button>
-        {randomStories.slice(0, 6).map((story, index) => {
-          return (
-            <div className="bg-blue-600 text-white mt-3" key={index}>
-              <p>疼痛暗號：{story.title}</p>
-              <p>故事地點：{story.location}</p>
-              <button onClick={() => handleVisitAthor(story.userId)}>
-                點我看作者
-              </button>
-            </div>
-          );
-        })}
       </div>
 
       <div>
