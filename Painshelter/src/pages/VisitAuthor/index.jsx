@@ -4,12 +4,8 @@ import {
   query,
   getDocs,
   where,
-  increment,
   updateDoc,
   arrayUnion,
-  doc,
-  setDoc,
-  addDoc,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -24,8 +20,8 @@ const VisitAuthor = () => {
   const [author, setAuthor] = useState([]);
   const localStorageUserId = window.localStorage.getItem("userId");
 
-  console.log("這裡是這個作者的歷史文章", state.data);
-  console.log("現在登入的人是：" + localStorageUserId);
+  // console.log("這裡是這個作者的歷史文章", state.data);
+  // console.log("現在登入的人是：" + localStorageUserId);
 
   //從firestore讀取posts資料
   useEffect(() => {
@@ -34,6 +30,7 @@ const VisitAuthor = () => {
         const postsData = collection(db, "posts");
         const q = query(postsData, where("userId", "==", state.data));
 
+        //原本獲取所有的data資料
         const querySnapshot = await getDocs(q);
         const userStoryList = querySnapshot.docs.map((doc) => ({
           title: doc.data().title,
@@ -43,10 +40,9 @@ const VisitAuthor = () => {
           figure: doc.data().figure,
           story: doc.data().story,
           userId: doc.data().userId,
-          // likeNumber: doc.data().likeNumber,
           likedAuthorId: doc.data().likedAuthorId,
           storyId: doc.data().storyId,
-          otherReply: doc.data().otherReply,
+          userComments: doc.data().userComments,
         }));
         setStories(userStoryList);
       } catch (e) {
@@ -73,7 +69,7 @@ const VisitAuthor = () => {
       }
     }
     getAuthor();
-  }, []);
+  }, [db]);
 
   //判斷story是否為該作者的內容
   const isUserStories = stories.every(
@@ -123,37 +119,54 @@ const VisitAuthor = () => {
   };
 
   //提交回覆的內容
-  const handleSubmit = async (event, id) => {
+  const handleSubmit = async function (event, id) {
     event.preventDefault();
-    const item = event.target.replySelect.value;
+    const commentContent = event.target.replySelect.value;
+    const localStorageUserId = window.localStorage.getItem("userId");
+    const replyArray = { id: localStorageUserId, comment: commentContent };
+
     try {
       const q = query(collection(db, "posts"), where("storyId", "==", id));
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
-        const docRef = querySnapshot.docs[0].ref;
+        const docRef = querySnapshot.docs[0].ref; //ref是指向位置
+        const docData = querySnapshot.docs[0].data(); //data()是實際的data內容
+
+        // 兩者皆為true表示使用者已經留言過
+        if (
+          docData.userComments &&
+          docData.userComments.some(
+            (auhtorId) => auhtorId.id === localStorageUserId
+          )
+        ) {
+          alert("已給過評論");
+          return;
+        }
         await updateDoc(docRef, {
-          otherReply: arrayUnion(item),
+          userComments: arrayUnion(replyArray),
         });
 
-        console.log("留言更新成功");
+        // 更新state
         setStories((prev) =>
           prev.map((story) => {
             if (story.storyId === id) {
-              const newReplies = story.otherReply ? [...story.otherReply] : [];
-              if (!newReplies.includes(item)) {
-                newReplies.push(item);
-              }
-              return { ...story, otherReply: newReplies };
+              const updatedStory = {
+                ...story,
+                userComments: docData.userComments
+                  ? [...docData.userComments, replyArray]
+                  : [replyArray],
+              };
+              return updatedStory;
             }
             return story;
           })
         );
-      } else {
-        console.log("沒有找到該文章");
+
+        console.log("評論成功");
       }
     } catch (error) {
-      console.error("操作失敗: ", error);
+      console.error("操作失败: ", error);
     }
   };
 
@@ -182,16 +195,12 @@ const VisitAuthor = () => {
               <span>按讚數量：{story.likedAuthorId?.length}</span>
 
               <div>
-                留言回覆：
-                {Array.isArray(story.otherReply) ? (
-                  story.otherReply.map((reply, index) => (
-                    <p key={index} className="bg-green-300 block">
-                      {reply}
-                    </p>
-                  ))
-                ) : (
-                  <p className="bg-green-300 block">{story.otherReply}</p>
-                )}
+                留言回覆數量：
+                <span>
+                  {story.userComments?.length > 0
+                    ? story.userComments.length
+                    : 0}
+                </span>
               </div>
             </div>
 
