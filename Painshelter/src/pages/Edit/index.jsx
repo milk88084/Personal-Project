@@ -4,18 +4,12 @@ import { useLoginState } from "../../utils/zustand.js";
 import { useFormInput } from "../../utils/hooks/useFormInput.jsx";
 import { useCheckboxInput } from "../../utils/hooks/useCheckboxInput.jsx";
 import { db } from "../../utils/firebase/firebase.jsx";
-import {
-  Timestamp,
-  addDoc,
-  collection,
-  updateDoc,
-  arrayUnion,
-} from "firebase/firestore";
+import { Timestamp, addDoc, collection, updateDoc } from "firebase/firestore";
 import LocationSearch from "../../components/LocationSearch.jsx";
 
 export default function Edit() {
   const navigate = useNavigate();
-  const { getLoginUserId, getLocationSearch } = useLoginState();
+  const { getLoginUserId, locationSerach } = useLoginState();
   const postStory = useFormInput();
   const storyTitle = useFormInput();
   const storyTime = useFormInput();
@@ -39,14 +33,14 @@ export default function Edit() {
   const storyType = useCheckboxInput(storyTypeData);
   const storyFigure = useCheckboxInput(storyFigureData);
 
-  console.log(getLocationSearch());
+  const storyLocation = locationSerach[0];
+  console.log(storyLocation);
 
   const handleSubmit = async (event) => {
     // alert("Your favorite flavor is: ");
     event.preventDefault();
     console.log(storyTitle.value);
     console.log(storyTime.value);
-    console.log(getLocationSearch());
     console.log(storyType.getSortedCheckedValues());
     console.log(storyFigure.getSortedCheckedValues());
     console.log(postStory.value);
@@ -55,7 +49,7 @@ export default function Edit() {
       const docRef = await addDoc(collection(db, "posts"), {
         title: storyTitle.value,
         time: storyTime.value,
-        location: getLocationSearch(),
+        location: storyLocation,
         type: storyType.getSortedCheckedValues(),
         figure: storyFigure.getSortedCheckedValues(),
         story: postStory.value,

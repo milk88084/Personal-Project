@@ -23,8 +23,8 @@ const LocationSearch = () => {
       if (data && data.length > 0) {
         const { name, lat, lon } = data[0];
         locationArray.push({ name, lat, lon });
-        setLocationSearch(locationArray);
         setLocationState({ name, lat, lon });
+        setLocationSearch(locationArray);
       }
     } catch (error) {
       console.error("Error fetching data: ", error);

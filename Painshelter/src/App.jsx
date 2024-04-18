@@ -3,15 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "./utils/firebase/firebase.jsx";
 import { signOut } from "firebase/auth";
 import { useLoginState } from "./utils/zustand.js";
-import { collection, query, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, query, getDocs } from "firebase/firestore";
 import { db } from "./utils/firebase/firebase.jsx";
 import { useState, useEffect } from "react";
+import PostsLocation from "./components/PostLocation.jsx";
 
 function App() {
   const navigate = useNavigate();
   const [stories, setStories] = useState([]);
-  const { getLoginStatus, online, offline, logout, getLoginUserId } =
-    useLoginState();
+  const { online, offline, logout, getLoginUserId } = useLoginState();
   const localStorageUserId = window.localStorage.getItem("userId");
   const localStorageLogin = window.localStorage.getItem("loginStatus");
   // const login = getLoginStatus();
@@ -27,7 +27,7 @@ function App() {
         window.localStorage.removeItem("loginStatus");
       })
       .catch((error) => {
-        // An error happened.
+        console.log(error);
       });
     offline();
     logout();
@@ -156,7 +156,11 @@ function App() {
         <button className="bg-green-600 text-white mt-3">疼痛地圖</button>
       </div>
 
-      <button className="bg-gray-600 text-white mt-3">心靈緊急按鈕</button>
+      <PostsLocation />
+
+      <button className="bg-gray-600 text-white mt-3 block">
+        心靈緊急按鈕
+      </button>
 
       {/* 登出 */}
       <nav className="mt-5">
