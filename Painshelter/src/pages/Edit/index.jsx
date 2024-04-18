@@ -1,19 +1,24 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import locationData from "../../utils/data/location.json";
 import { useLoginState } from "../../utils/zustand.js";
 import { useFormInput } from "../../utils/hooks/useFormInput.jsx";
 import { useCheckboxInput } from "../../utils/hooks/useCheckboxInput.jsx";
 import { db } from "../../utils/firebase/firebase.jsx";
-import { Timestamp, addDoc, collection, updateDoc } from "firebase/firestore";
+import {
+  Timestamp,
+  addDoc,
+  collection,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
+import LocationSearch from "../../components/LocationSearch.jsx";
 
 export default function Edit() {
   const navigate = useNavigate();
-  const { getLoginUserId } = useLoginState();
+  const { getLoginUserId, getLocationSearch } = useLoginState();
   const postStory = useFormInput();
   const storyTitle = useFormInput();
   const storyTime = useFormInput();
-  const storyLocation = useFormInput();
   const localStorageUserId = window.localStorage.getItem("userId");
   const storyTypeData = [
     "成長軌跡",
@@ -34,12 +39,14 @@ export default function Edit() {
   const storyType = useCheckboxInput(storyTypeData);
   const storyFigure = useCheckboxInput(storyFigureData);
 
+  console.log(getLocationSearch());
+
   const handleSubmit = async (event) => {
     // alert("Your favorite flavor is: ");
     event.preventDefault();
     console.log(storyTitle.value);
     console.log(storyTime.value);
-    console.log(storyLocation.value);
+    console.log(getLocationSearch());
     console.log(storyType.getSortedCheckedValues());
     console.log(storyFigure.getSortedCheckedValues());
     console.log(postStory.value);
@@ -48,7 +55,7 @@ export default function Edit() {
       const docRef = await addDoc(collection(db, "posts"), {
         title: storyTitle.value,
         time: storyTime.value,
-        location: storyLocation.value,
+        location: getLocationSearch(),
         type: storyType.getSortedCheckedValues(),
         figure: storyFigure.getSortedCheckedValues(),
         story: postStory.value,
@@ -58,11 +65,12 @@ export default function Edit() {
       await updateDoc(docRef, { storyId: docRef.id });
       console.log("Document written with ID: ", docRef.id);
       console.log(getLoginUserId());
+      alert("成功提交：" + storyTitle.value + "故事");
     } catch (error) {
       console.error("Error adding document: ", error);
+      alert("投稿失敗");
     }
     navigate("/history");
-    alert("成功提交：" + storyTitle.value + "故事");
   };
 
   return (
@@ -93,15 +101,8 @@ export default function Edit() {
         />
 
         <label className="block m-3 bg-yellow-300"> 發生地點</label>
-        <select {...storyLocation} required>
-          {locationData.map((value) => {
-            return (
-              <option key={value} value={value} required>
-                {value}
-              </option>
-            );
-          })}
-        </select>
+
+        <LocationSearch />
 
         <label className="block m-3 bg-red-300">故事類型</label>
         <ul>

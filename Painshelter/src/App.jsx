@@ -129,7 +129,7 @@ function App() {
             return (
               <div className="border-2 border-black  m-3 w-1/4 " key={index}>
                 <p>疼痛暗號：{story.title}</p>
-                <p>故事地點：{story.location}</p>
+                <p>故事地點：{story.location.name}</p>
                 <button onClick={() => handleVisitAthor(story.userId)}>
                   點我看作者
                 </button>

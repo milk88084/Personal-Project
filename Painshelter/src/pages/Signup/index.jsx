@@ -74,8 +74,6 @@ const Signup = () => {
                 />
               </div>
 
-              <p></p>
-
               <div className="mt-5">
                 <label
                   htmlFor="email-address"

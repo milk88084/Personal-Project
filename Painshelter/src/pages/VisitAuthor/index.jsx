@@ -186,7 +186,7 @@ const VisitAuthor = () => {
             id={stories.storyId}
           >
             <p>疼痛暗號：{story.title}</p>
-            <p>故事地點：{story.location}</p>
+            <p>故事地點：{story.location.name}</p>
             <p>時間：{story.time}</p>
             <p>類型：{story.type}</p>
             <p>人物：{story.figure}</p>

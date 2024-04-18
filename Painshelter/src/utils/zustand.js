@@ -18,4 +18,8 @@ export const useLoginState = create((set, get) => ({
   postLikeNumber: "",
   getPostLikeNumber: () => get().postLikeNumber,
   setPostLikeNumber: (number) => set({ postLikeNumber: number }),
+  //locationSerach
+  locationSerach: [],
+  setLocationSearch: (data) => set({ locationSerach: data }),
+  getLocationSearch: () => get().locationSerach,
 }));

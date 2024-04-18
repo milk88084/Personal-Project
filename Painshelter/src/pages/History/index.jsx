@@ -1,9 +1,7 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../utils/firebase/firebase.jsx";
 import { collection, query, getDocs, where, limit } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import { useLoginState } from "../../utils/zustand.js";
 import poem from "../../utils/data/poem.json";
 
 export default function History() {
@@ -12,7 +10,6 @@ export default function History() {
   const poemData = poem;
   const rand = Math.floor(Math.random() * poemData.length);
   const randPoem = poemData[rand];
-  const { getLoginUserId } = useLoginState();
   const localStorageUserId = window.localStorage.getItem("userId");
 
   useEffect(() => {
@@ -44,9 +41,6 @@ export default function History() {
     getStories();
   }, []);
 
-  console.log(stories);
-  console.log(getLoginUserId());
-
   return (
     <div>
       <h2 className="text-6xl font-sans font-black tracking-wider text-center ">
@@ -68,12 +62,16 @@ export default function History() {
             <div className="bg-blue-600 text-white mt-3" key={index}>
               <p>標題：{story.title}</p>
               <p>時間：{story.time}</p>
-              <p>地點：{story.location}</p>
+              <p>地點：{story.location.name}</p>
               <p>類型：{story.type}</p>
               <p>人物：{story.figure}</p>
               <p>內文：{story.story}</p>
-              <p>按讚數量：{story.likedAuthorId?.length}</p>
-
+              <p>
+                按讚數量：
+                {story.likedAuthorId?.length > 0
+                  ? story.likedAuthorId.length
+                  : 0}
+              </p>
               {story.userComments ? (
                 <p>
                   留言內容：
