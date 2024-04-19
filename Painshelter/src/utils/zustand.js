@@ -22,4 +22,10 @@ export const useLoginState = create((set, get) => ({
   locationSerach: [],
   setLocationSearch: (data) => set({ locationSerach: data }),
   getLocationSearch: () => get().locationSerach,
+
+  //modal
+  modal: false,
+  showModal: () => set({ modal: true }),
+  closeModal: () => set({ modal: false }),
+  getModal: () => get().modal,
 }));

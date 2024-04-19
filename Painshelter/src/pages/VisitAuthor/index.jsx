@@ -11,13 +11,14 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import replyData from "../../utils/data/reply.json";
-// import { useLoginState } from "../../utils/zustand.js";
+import { useLoginState } from "../../utils/zustand.js";
 
 const VisitAuthor = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const [stories, setStories] = useState([]);
   const [author, setAuthor] = useState([]);
+  const { closeModal } = useLoginState();
   const localStorageUserId = window.localStorage.getItem("userId");
 
   // console.log("這裡是這個作者的歷史文章", state.data);
@@ -42,7 +43,6 @@ const VisitAuthor = () => {
           userId: doc.data().userId,
           likedAuthorId: doc.data().likedAuthorId,
           storyId: doc.data().storyId,
-          // userComments: doc.data().userComments,
         }));
         setStories(userStoryList);
       } catch (e) {
@@ -170,6 +170,12 @@ const VisitAuthor = () => {
     }
   };
 
+  //回到首頁
+  const handleBack = () => {
+    navigate("/");
+    closeModal();
+  };
+
   return (
     <>
       {isUserStories ? (
@@ -237,7 +243,7 @@ const VisitAuthor = () => {
           </div>
         );
       })}
-      <button onClick={() => navigate("/")}>回首頁</button>
+      <button onClick={handleBack}>回首頁</button>
     </>
   );
 };

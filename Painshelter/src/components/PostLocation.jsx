@@ -2,11 +2,16 @@ import { useEffect, useState } from "react";
 import { collection, query, getDocs } from "firebase/firestore";
 import { db } from "../utils/firebase/firebase.jsx";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import Modal from "./Modal.jsx";
+import { useLoginState } from "../utils/zustand.js";
+import Backdrop from "./Backdrop.jsx";
 
 const PostsLocation = () => {
   const [locations, setLocations] = useState([]);
   const [titles, setTitles] = useState([]);
+  const [clickTitle, setClickTitle] = useState("");
   const center = [23.604799, 120.7976256];
+  const { modal, showModal, closeModal } = useLoginState();
 
   //讀取firestore資料，並存到state當中
   useEffect(() => {
@@ -56,12 +61,25 @@ const PostsLocation = () => {
     return Object.values(groups);
   };
   const sanmeNameLocation = groupLocation(comebinedArray);
-  console.log(sanmeNameLocation);
+  // console.log(sanmeNameLocation);
 
   //click Popup button可以連到該作者頁面
 
+  const openModal = (title) => {
+    showModal();
+    setClickTitle(title);
+  };
+  const turnOffModal = () => {
+    closeModal();
+  };
+
+  // console.log(clickTitle);
+  console.log("123" + modal);
+
   return (
     <div>
+      <Modal comebinedArray={comebinedArray} clickTitle={clickTitle} />
+
       <MapContainer
         center={center}
         zoom={7}
@@ -73,7 +91,11 @@ const PostsLocation = () => {
             <Popup>
               <p className="bg-yellow-300 text-center">{item.locationName}</p>
               {item.title.map((item, index) => (
-                <button className="block m-2 text-center" key={index}>
+                <button
+                  className="block m-2 text-center"
+                  key={index}
+                  onClick={() => openModal({ item })}
+                >
                   {item}
                 </button>
               ))}

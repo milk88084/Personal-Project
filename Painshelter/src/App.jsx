@@ -153,7 +153,7 @@ function App() {
       </div>
 
       <div>
-        <button className="bg-green-600 text-white mt-3">疼痛地圖</button>
+        <button className="bg-blue-600 text-white mt-3">疼痛地圖</button>
       </div>
 
       <PostsLocation />
