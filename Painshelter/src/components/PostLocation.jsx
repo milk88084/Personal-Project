@@ -8,6 +8,7 @@ const PostsLocation = () => {
   const [titles, setTitles] = useState([]);
   const center = [23.604799, 120.7976256];
 
+  //讀取firestore資料，並存到state當中
   useEffect(() => {
     async function getStories() {
       try {
@@ -25,7 +26,7 @@ const PostsLocation = () => {
     getStories();
   }, []);
 
-  // console.log(locations);
+  //將title加到location array裡面
   const comebinedArray = locations.map((data, index) => {
     const title = titles[index];
     return {
@@ -34,28 +35,51 @@ const PostsLocation = () => {
     };
   });
 
-  console.log(comebinedArray);
+  //進行相同地點不同文章的判斷
+  const groupLocation = (array) => {
+    const groups = {};
+    array.forEach((item) => {
+      const lat = parseFloat(item.lat);
+      const lon = parseFloat(item.lon);
+      const locationName = item.name;
+      const key = `${lat}-${lon}`;
+      if (!groups[key]) {
+        groups[key] = {
+          lat,
+          lon,
+          locationName,
+          title: [],
+        };
+      }
+      groups[key].title.push(item.title);
+    });
+    return Object.values(groups);
+  };
+  const sanmeNameLocation = groupLocation(comebinedArray);
+  console.log(sanmeNameLocation);
+
+  //click Popup button可以連到該作者頁面
 
   return (
     <div>
       <MapContainer
         center={center}
         zoom={7}
-        style={{ height: "400px", width: "100%" }}
+        style={{ height: "400px", width: "80%" }}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        {comebinedArray.map((item, index) => {
-          return (
-            <div key={index}>
-              <Marker position={[item.lat, item.lon]}>
-                <Popup>
-                  <p className="bg-yellow-300">{item.name}</p>
-                  <button>{item.title}</button>
-                </Popup>
-              </Marker>
-            </div>
-          );
-        })}
+        {sanmeNameLocation.map((item, index) => (
+          <Marker key={index} position={[item.lat, item.lon]}>
+            <Popup>
+              <p className="bg-yellow-300 text-center">{item.locationName}</p>
+              {item.title.map((item, index) => (
+                <button className="block m-2 text-center" key={index}>
+                  {item}
+                </button>
+              ))}
+            </Popup>
+          </Marker>
+        ))}
       </MapContainer>
     </div>
   );
