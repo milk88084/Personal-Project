@@ -7,6 +7,7 @@ import { collection, query, getDocs } from "firebase/firestore";
 import { db } from "./utils/firebase/firebase.jsx";
 import { useState, useEffect } from "react";
 import PostsLocation from "./components/PostLocation.jsx";
+import Chart from "./components/Chart.jsx";
 
 function App() {
   const navigate = useNavigate();
@@ -122,7 +123,7 @@ function App() {
         Pain Shelter
       </h1>
 
-      <div>
+      {/* <div>
         <h2 className="bg-yellow-600 text-white mt-3 text-center ">文章精選</h2>
         <div className="flex flex-wrap justify-center">
           {randomStories.slice(0, 6).map((story, index) => {
@@ -137,7 +138,7 @@ function App() {
             );
           })}
         </div>
-      </div>
+      </div> */}
 
       <div>
         <button
@@ -150,13 +151,14 @@ function App() {
 
       <div>
         <button className="bg-green-600 text-white mt-3">情緒光譜</button>
+        <Chart />
       </div>
 
       <div>
         <button className="bg-blue-600 text-white mt-3">疼痛地圖</button>
       </div>
 
-      <PostsLocation />
+      {/* <PostsLocation /> */}
 
       <button className="bg-gray-600 text-white mt-3 block">
         心靈緊急按鈕

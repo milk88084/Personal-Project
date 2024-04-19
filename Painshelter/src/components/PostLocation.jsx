@@ -69,9 +69,6 @@ const PostsLocation = () => {
     showModal();
     setClickTitle(title);
   };
-  const turnOffModal = () => {
-    closeModal();
-  };
 
   // console.log(clickTitle);
   console.log("123" + modal);
