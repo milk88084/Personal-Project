@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.sv_window {
+  right: 5% !important;
+  bottom: 5% !important;
+  max-width: 90% !important;
+  max-height: 90vh !important;
+}
+
+.sd-progress-buttons--numbered
+  .sd-progress-buttons__list
+  li
+  .sd-progress-buttons__button {
+  box-sizing: content-box !important;
+}
+
+.sd-progress-buttons__list
+  li
+  .sd-progress-buttons__button
+  .sd-progress-buttons__button-content {
+  box-sizing: content-box !important;
+}

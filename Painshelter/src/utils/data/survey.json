@@ -1,0 +1,176 @@
+{
+  "pages": [
+    {
+      "name": "page1",
+      "elements": [
+        {
+          "type": "matrix",
+          "name": "physiologicalReaction",
+          "title": "生理反應",
+          "isRequired": true,
+          "columns": [
+            {
+              "value": "hardly",
+              "text": "極少 (每周：1天以下)"
+            },
+            {
+              "value": "seldom",
+              "text": "有時侯(每周：1-2天)"
+            },
+            {
+              "value": "often",
+              "text": "常常或總是(每周：5-7天)"
+            },
+            {
+              "value": "always",
+              "text": "時常(每周：3-4天)"
+            }
+          ],
+          "rows": [
+            {
+              "value": "q1",
+              "text": "1.我睡不好"
+            },
+            {
+              "value": "q2",
+              "text": "2.我不想吃東西"
+            },
+            {
+              "value": "q3",
+              "text": "3.我常常覺得想哭"
+            },
+            {
+              "value": "q4",
+              "text": "4.我覺得記憶力不好"
+            },
+            {
+              "value": "q5",
+              "text": "5.我覺得身體疲勞虛弱、無力"
+            },
+            {
+              "value": "q6",
+              "text": "6.我覺得胸口悶悶的 ( 心肝頭或胸坎綁綁 )"
+            },
+            {
+              "value": "q7",
+              "text": "7.我覺得身體不舒服( 如頭痛、頭暈、心悸或肚子不舒服…等 )"
+            }
+          ]
+        }
+      ],
+      "navigationTitle": "第一部分"
+    },
+    {
+      "name": "page2",
+      "elements": [
+        {
+          "type": "matrix",
+          "name": "emotionalState",
+          "title": "情緒狀態",
+          "isRequired": true,
+          "columns": [
+            {
+              "value": "hardly",
+              "text": "極少 (每周：1天以下)"
+            },
+            {
+              "value": "seldom",
+              "text": "有時侯(每周：1-2天)"
+            },
+            {
+              "value": "often",
+              "text": "常常或總是(每周：5-7天)"
+            },
+            {
+              "value": "always",
+              "text": "時常(每周：3-4天)"
+            }
+          ],
+          "rows": [
+            {
+              "value": "q8",
+              "text": "8.我覺得很煩"
+            },
+            {
+              "value": "q9",
+              "text": "9.我覺得心情不好"
+            },
+            {
+              "value": "q10",
+              "text": "10.我覺得比以前較沒信心"
+            },
+            {
+              "value": "q11",
+              "text": "11.我覺得比以前容易發脾氣"
+            },
+            {
+              "value": "q12",
+              "text": "12.我覺得做事不輕鬆、不舒服"
+            }
+          ]
+        }
+      ],
+      "navigationTitle": "第二部分"
+    },
+    {
+      "name": "page3",
+      "elements": [
+        {
+          "type": "matrix",
+          "name": "mentalState",
+          "title": "精神狀態",
+          "isRequired": true,
+          "columns": [
+            {
+              "value": "hardly",
+              "text": "極少 (每周：1天以下)"
+            },
+            {
+              "value": "seldom",
+              "text": "有時侯(每周：1-2天)"
+            },
+            {
+              "value": "often",
+              "text": "常常或總是(每周：5-7天)"
+            },
+            {
+              "value": "always",
+              "text": "時常(每周：3-4天)"
+            }
+          ],
+          "rows": [
+            {
+              "value": "q13",
+              "text": "13.我覺得自己很沒用"
+            },
+            {
+              "value": "q14",
+              "text": "14.我覺得做事時無法專心"
+            },
+            {
+              "value": "q15",
+              "text": "15.我覺得比較會往壞處想"
+            },
+            {
+              "value": "q16",
+              "text": "16.我覺得想不開、甚至想死"
+            },
+            {
+              "value": "q17",
+              "text": "17.我覺得對什麼事都失去興趣"
+            },
+            {
+              "value": "q18",
+              "text": "18.我覺得想事情或做事時，比平常要緩慢"
+            }
+          ]
+        }
+      ],
+      "navigationTitle": "第三部分"
+    }
+  ],
+  "showQuestionNumbers": "off",
+  "showProgressBar": "auto",
+  "progressBarShowPageTitles": true,
+  "progressBarShowPageNumbers": true
+}

@@ -4,14 +4,13 @@ import { db } from "../utils/firebase/firebase.jsx";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import Modal from "./Modal.jsx";
 import { useLoginState } from "../utils/zustand.js";
-import Backdrop from "./Backdrop.jsx";
 
 const PostsLocation = () => {
   const [locations, setLocations] = useState([]);
   const [titles, setTitles] = useState([]);
   const [clickTitle, setClickTitle] = useState("");
   const center = [23.604799, 120.7976256];
-  const { modal, showModal, closeModal } = useLoginState();
+  const { modal, showModal } = useLoginState();
 
   //讀取firestore資料，並存到state當中
   useEffect(() => {
@@ -61,7 +60,6 @@ const PostsLocation = () => {
     return Object.values(groups);
   };
   const sanmeNameLocation = groupLocation(comebinedArray);
-  // console.log(sanmeNameLocation);
 
   //click Popup button可以連到該作者頁面
 
@@ -69,9 +67,6 @@ const PostsLocation = () => {
     showModal();
     setClickTitle(title);
   };
-
-  // console.log(clickTitle);
-  console.log("123" + modal);
 
   return (
     <div>

@@ -12,7 +12,7 @@ import Chart from "./components/Chart.jsx";
 function App() {
   const navigate = useNavigate();
   const [stories, setStories] = useState([]);
-  const { online, offline, logout, getLoginUserId } = useLoginState();
+  const { online, offline, logout } = useLoginState();
   const localStorageUserId = window.localStorage.getItem("userId");
   const localStorageLogin = window.localStorage.getItem("loginStatus");
   // const login = getLoginStatus();
@@ -72,7 +72,7 @@ function App() {
       }
     }
     getStories();
-  }, [getLoginUserId]);
+  }, []);
 
   //隨機拿到stories的內容
   function getRandomStories(arr, size) {
@@ -98,7 +98,7 @@ function App() {
   return (
     <>
       {localStorageLogin ? null : (
-        <div className="flex items-center justify-center h-screen w-full bg-gray-500 absolute opacity-80">
+        <div className="flex items-center justify-center h-screen w-full bg-gray-500 absolute opacity-80 z-2000">
           <div className="flex flex-col items-center justify-center  bg-white  border-black border-2 w-5/12 h-3/6 ">
             <h1>溫柔宣言</h1>
             <div>
@@ -123,7 +123,7 @@ function App() {
         Pain Shelter
       </h1>
 
-      {/* <div>
+      <div>
         <h2 className="bg-yellow-600 text-white mt-3 text-center ">文章精選</h2>
         <div className="flex flex-wrap justify-center">
           {randomStories.slice(0, 6).map((story, index) => {
@@ -138,7 +138,7 @@ function App() {
             );
           })}
         </div>
-      </div> */}
+      </div>
 
       <div>
         <button
@@ -160,7 +160,10 @@ function App() {
 
       {/* <PostsLocation /> */}
 
-      <button className="bg-gray-600 text-white mt-3 block">
+      <button
+        onClick={() => navigate("/help")}
+        className="bg-gray-600 text-white mt-3 block"
+      >
         心靈緊急按鈕
       </button>
 

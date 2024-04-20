@@ -21,6 +21,8 @@
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.22.3",
     "recharts": "^2.12.5",
+    "survey-react": "^1.9.139",
+    "survey-react-ui": "^1.9.139",
     "zustand": "^4.5.2"
   },
   "devDependencies": {

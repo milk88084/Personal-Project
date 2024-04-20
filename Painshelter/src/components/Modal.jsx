@@ -43,8 +43,7 @@ export default function Modal({ comebinedArray, clickTitle }) {
     if (metchedItem) {
       setModalPost(metchedItem);
     }
-  }, [stories, clickTitle]);
-  // console.log(modalPost);
+  }, []);
 
   const handleVisitAthor = (id) => {
     navigate("/visit", { state: { data: id } });
