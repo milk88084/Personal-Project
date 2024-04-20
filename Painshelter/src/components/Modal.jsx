@@ -35,15 +35,15 @@ export default function Modal({ comebinedArray, clickTitle }) {
     getStories();
   }, []);
 
-  // console.log(comebinedArray);
-
+  console.log(comebinedArray);
+  console.log(modal);
   //判斷點選的title是否吻合db資料，是的話呈現在頁面上
   useEffect(() => {
     const metchedItem = stories.find((data) => data.title === clickTitle.item);
     if (metchedItem) {
       setModalPost(metchedItem);
     }
-  }, []);
+  }, [clickTitle]);
 
   const handleVisitAthor = (id) => {
     navigate("/visit", { state: { data: id } });
@@ -56,7 +56,7 @@ export default function Modal({ comebinedArray, clickTitle }) {
       <div
         className={
           modal
-            ? "translate-y-0 opacity-100 fixed z-2010 w-2/4 bg-white border border-black border-solid shadow-sm p-4 left-1/4 box-border"
+            ? " opacity-100 fixed z-2010 w-2/4 bg-white border border-black border-solid shadow-sm p-4 left-1/4 bottom-1/2 box-border"
             : "translate-y-full opacity-0"
         }
       >

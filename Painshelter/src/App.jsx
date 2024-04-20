@@ -158,11 +158,11 @@ function App() {
         <button className="bg-blue-600 text-white mt-3">疼痛地圖</button>
       </div>
 
-      {/* <PostsLocation /> */}
+      <PostsLocation />
 
       <button
         onClick={() => navigate("/help")}
-        className="bg-gray-600 text-white mt-3 block"
+        className="bg-blue-600 text-white mt-3"
       >
         心靈緊急按鈕
       </button>
