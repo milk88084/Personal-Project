@@ -10,7 +10,7 @@ const PostsLocation = () => {
   const [titles, setTitles] = useState([]);
   const [clickTitle, setClickTitle] = useState("");
   const center = [23.604799, 120.7976256];
-  const { modal, showModal } = useLoginState();
+  const { showModal } = useLoginState();
 
   //讀取firestore資料，並存到state當中
   useEffect(() => {
@@ -29,6 +29,7 @@ const PostsLocation = () => {
     }
     getStories();
   }, []);
+  console.log(locations);
 
   //將title加到location array裡面
   const comebinedArray = locations.map((data, index) => {

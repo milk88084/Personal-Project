@@ -11,6 +11,7 @@ import Help from "./pages/Help/index.jsx";
 import Edit from "./pages/Edit/index.jsx";
 import VisitAuthor from "./pages/VisitAuthor/index.jsx";
 import Openrouteservice from "./components/LocationSearch.jsx";
+import Type from "./components/Chart.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -25,6 +26,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="edit" element={<Edit />} />
         <Route path="visit" element={<VisitAuthor />} />
         <Route path="go" element={<Openrouteservice />} />
+        <Route path="type" element={<Type />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
