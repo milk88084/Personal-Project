@@ -1,27 +1,58 @@
-import React from "react";
+import "survey-core/defaultV2.min.css";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Model } from "survey-core";
-import "survey-core/defaultV2.min.css";
 import { themeJson } from "../../assets/survey";
-import json from "../../utils/data/survey.json";
 import { PopupSurvey } from "survey-react-ui";
-import { useState } from "react";
+import { db } from "../../utils/firebase/firebase.jsx";
+import {
+  collection,
+  query,
+  getDocs,
+  where,
+  updateDoc,
+  arrayUnion,
+  Timestamp,
+} from "firebase/firestore";
 import videoSrc from "../../assets/video/helpbanner.mp4";
+import json from "../../utils/data/survey.json";
 
 function SurveyComponent() {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [surveyData, setSurveyData] = useState([]);
-
+  const [complete, setComplete] = useState(false);
   const survey = new Model(json);
   survey.applyTheme(themeJson);
-  survey.onComplete.add(() => setShow(false));
-
   const handleClick = () => {
     setShow(true);
   };
 
-  //將資料存到localstorage
+  //監聽彈跳視窗叉叉按鈕的狀態
+  useEffect(() => {
+    const closeButton = document.querySelector(".sv_window_button_close");
+    if (closeButton) {
+      const handleCustomClose = () => {
+        setShow(false);
+      };
+      closeButton.addEventListener("click", handleCustomClose);
+      return () => closeButton.removeEventListener("click", handleCustomClose);
+    }
+  }, [show]);
+
+  //監聽測驗完成的按鈕狀態
+  useEffect(() => {
+    const completeButton = document.getElementById("sv-nav-complete");
+    const handleClick = () => {
+      setShow(false);
+      setComplete(true);
+    };
+    if (completeButton) {
+      completeButton.addEventListener("click", handleClick);
+    }
+  }, []);
+
+  //將資料存到state裡面
   survey.onComplete.add(function (result) {
     const surveyData = JSON.stringify(result.data);
     if (surveyData) {
@@ -29,9 +60,9 @@ function SurveyComponent() {
       setSurveyData(results);
     }
   });
+  console.log("資料的物件內容" + surveyData);
 
   //統計測驗結果
-  console.log(surveyData);
   function staticData(data) {
     let resultsData = {};
     for (let section of Object.values(data)) {
@@ -46,7 +77,7 @@ function SurveyComponent() {
     return resultsData;
   }
   const showResult = staticData(surveyData);
-  console.log(showResult);
+  console.log("計算總分" + showResult);
 
   function totalScore(data) {
     let score = 0;
@@ -65,8 +96,32 @@ function SurveyComponent() {
   }
 
   const score = totalScore(showResult);
-  console.log(score);
-  //
+  console.log("總分數" + score);
+
+  //監聽測驗結果，存到firestore中的users集合
+  useEffect(() => {
+    const localStorageUserId = window.localStorage.getItem("userId");
+    const recordArray = { time: Timestamp.fromDate(new Date()), number: score };
+    async function getUser() {
+      try {
+        const q = query(
+          collection(db, "users"),
+          where("id", "==", localStorageUserId)
+        );
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty && !complete) {
+          const docRef = querySnapshot.docs[0].ref;
+          await updateDoc(docRef, {
+            stressRecord: arrayUnion(recordArray),
+          });
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getUser();
+  }, []);
 
   return (
     <>
