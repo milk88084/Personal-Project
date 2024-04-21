@@ -43,6 +43,7 @@ const VisitAuthor = () => {
           userId: doc.data().userId,
           likedAuthorId: doc.data().likedAuthorId,
           storyId: doc.data().storyId,
+          userComments: doc.data().userComments,
         }));
         setStories(userStoryList);
       } catch (e) {
@@ -175,6 +176,8 @@ const VisitAuthor = () => {
     navigate("/");
     closeModal();
   };
+
+  console.log(stories);
 
   return (
     <>

@@ -7,6 +7,9 @@ export default {
         2000: "2000",
         2010: "2010",
       },
+      colors: {
+        oceanblack: "#161410",
+      },
     },
   },
   plugins: [],
