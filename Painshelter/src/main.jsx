@@ -11,7 +11,8 @@ import Help from "./pages/Help/index.jsx";
 import Edit from "./pages/Edit/index.jsx";
 import VisitAuthor from "./pages/VisitAuthor/index.jsx";
 import Openrouteservice from "./components/LocationSearch.jsx";
-import Type from "./components/Chart.jsx";
+import FigureType from "./components/Chart/FigureChart.jsx";
+import SinglePostPage from "./pages/SinglePostPage/index.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -26,7 +27,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="edit" element={<Edit />} />
         <Route path="visit" element={<VisitAuthor />} />
         <Route path="go" element={<Openrouteservice />} />
-        <Route path="type" element={<Type />} />
+        <Route path="type" element={<FigureType />} />
+        <Route path="post/:id" element={<SinglePostPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

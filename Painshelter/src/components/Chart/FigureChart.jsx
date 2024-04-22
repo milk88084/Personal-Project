@@ -1,39 +1,9 @@
 import { useEffect, useState } from "react";
-import { db } from "../utils/firebase/firebase.jsx";
+import { db } from "../../utils/firebase/firebase.jsx";
 import { collection, query, getDocs } from "firebase/firestore";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-} from "recharts";
+import { XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar } from "recharts";
 
-// const data1 = [
-//   {
-//     name: "成長軌跡",
-//     pv: 2400,
-//   },
-//   {
-//     name: "情感關係",
-//     pv: 1398,
-//   },
-//   {
-//     name: "人際交流",
-//     pv: 9800,
-//   },
-//   {
-//     name: "生命經歷",
-//     pv: 3908,
-//   },
-//   {
-//     name: "職場發展",
-//     pv: 4800,
-//   },
-// ];
-export default function Chart() {
+export default function FigureChart() {
   const [typeData, setTypeData] = useState();
   const [types, setTypes] = useState([]);
   useEffect(() => {
@@ -43,7 +13,6 @@ export default function Chart() {
         const q = query(data);
         const querySnapshot = await getDocs(q);
         const userStoryList = querySnapshot.docs.map((doc) => ({
-          type: doc.data().type,
           figure: doc.data().figure,
         }));
         setTypeData(userStoryList);
@@ -53,13 +22,12 @@ export default function Chart() {
     }
     getType();
   }, []);
-  console.log(typeData);
+  //   console.log(typeData);
 
   //扁平化物件裡面的type內容，變成陣列
-
   useEffect(() => {
     if (typeData) {
-      const newTypesArray = typeData.map((item) => item.type).flat();
+      const newTypesArray = typeData.map((item) => item.figure).flat();
       setTypes(newTypesArray);
     }
   }, [typeData]);
@@ -75,7 +43,7 @@ export default function Chart() {
     return obj;
   }, {});
 
-  console.log(total_count);
+  // console.log(total_count);
   const chartData = Object.entries(total_count).map(([name, pv]) => {
     return {
       name,
@@ -83,40 +51,28 @@ export default function Chart() {
     };
   });
 
-  console.log(chartData);
+  // console.log(chartData);
 
   return (
     <div>
-      <LineChart
-        width={1500}
+      <BarChart
+        width={500}
         height={300}
         data={chartData}
         margin={{
-          top: 50,
-          right: 300,
-          left: 200,
+          top: 5,
+          right: 30,
+          left: 20,
           bottom: 5,
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
+        <XAxis dataKey="name" stroke="#c2f800" />
         <YAxis />
-        <Tooltip
-          wrapperStyle={{
-            backgroundColor: "#ff0000",
-            border: "10px solid #6200ff",
-          }}
-          labelStyle={{ fontWeight: "bold" }}
-          itemStyle={{ color: "#ff0000" }}
-        />
-        <Legend />
-        <Line
-          type="monotone"
-          dataKey="pv"
-          stroke="#8884d8"
-          activeDot={{ r: 8 }}
-        />
-      </LineChart>
+        <Tooltip wrapperStyle={{ width: 100, backgroundColor: "#0d00ff" }} />
+
+        <Bar dataKey="pv" fill="#ff0000" />
+      </BarChart>
     </div>
   );
 }

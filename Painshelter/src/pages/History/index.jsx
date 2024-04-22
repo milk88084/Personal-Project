@@ -3,6 +3,7 @@ import { db } from "../../utils/firebase/firebase.jsx";
 import { collection, query, getDocs, where, limit } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import poem from "../../utils/data/poem.json";
+import { modifiedData } from "../../utils/zustand.js";
 
 export default function History() {
   const [stories, setStories] = useState([]);
@@ -11,6 +12,7 @@ export default function History() {
   const rand = Math.floor(Math.random() * poemData.length);
   const randPoem = poemData[rand];
   const localStorageUserId = window.localStorage.getItem("userId");
+  const { setSelectedStoryId } = modifiedData();
 
   useEffect(() => {
     async function getStories() {
@@ -32,6 +34,7 @@ export default function History() {
           story: doc.data().story,
           userComments: doc.data().userComments,
           likedAuthorId: doc.data().likedAuthorId,
+          storyId: doc.data().storyId,
         }));
         setStories(userStoryList);
       } catch (e) {
@@ -40,6 +43,11 @@ export default function History() {
     }
     getStories();
   }, []);
+
+  const modifiedClick = (storyId) => {
+    navigate(`/post/${storyId}`);
+    setSelectedStoryId(storyId);
+  };
 
   return (
     <div>
@@ -83,8 +91,11 @@ export default function History() {
                 ""
               )}
 
-              <button className="bg-red-600 text-white mt-3 m-2">
-                修改按鈕
+              <button
+                className="bg-red-600 text-white mt-3 m-2"
+                onClick={() => modifiedClick(story.storyId)}
+              >
+                點我修改
               </button>
             </div>
           );

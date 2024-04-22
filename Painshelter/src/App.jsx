@@ -7,7 +7,8 @@ import { collection, query, getDocs } from "firebase/firestore";
 import { db } from "./utils/firebase/firebase.jsx";
 import { useState, useEffect } from "react";
 import PostsLocation from "./components/PostLocation.jsx";
-import Chart from "./components/Chart.jsx";
+import Chart from "./components/Chart/TypeChart.jsx";
+import FigureChart from "./components/Chart/FigureChart.jsx";
 
 function App() {
   const navigate = useNavigate();
@@ -150,15 +151,30 @@ function App() {
       </div>
 
       <div>
-        <button className="bg-green-600 text-white mt-3">情緒光譜</button>
-        <Chart />
+        <button className="bg-blue-600 text-white mt-3">情緒光譜</button>
+        <div className="flex justify-center ">
+          <div className="">
+            <FigureChart />
+            <p className="text-4xl text-center">關係人類型統計</p>
+          </div>
+          <div className="">
+            <h1 className="text-4xl text-center ">文章累積數量</h1>
+            <p className="text-9xl text-center items-center mt-16">
+              {stories.length}
+            </p>
+          </div>
+          <div className="">
+            <Chart />
+            <p className="text-4xl text-center">類型統計</p>
+          </div>
+        </div>
       </div>
 
       <div>
         <button className="bg-blue-600 text-white mt-3">疼痛地圖</button>
-      </div>
 
-      <PostsLocation />
+        <PostsLocation />
+      </div>
 
       <button
         onClick={() => navigate("/help")}

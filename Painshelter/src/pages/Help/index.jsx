@@ -15,6 +15,7 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import videoSrc from "../../assets/video/helpbanner.mp4";
+import feature3Banner from "../../assets/img/feature3Banner.png";
 import json from "../../utils/data/survey.json";
 
 function SurveyComponent() {
@@ -24,8 +25,10 @@ function SurveyComponent() {
   const [complete, setComplete] = useState(false);
   const survey = new Model(json);
   survey.applyTheme(themeJson);
+
   const handleClick = () => {
     setShow(true);
+    setComplete(false);
   };
 
   //監聽彈跳視窗叉叉按鈕的狀態
@@ -40,27 +43,17 @@ function SurveyComponent() {
     }
   }, [show]);
 
-  //監聽測驗完成的按鈕狀態
-  useEffect(() => {
-    const completeButton = document.getElementById("sv-nav-complete");
-    const handleClick = () => {
-      setShow(false);
-      setComplete(true);
-    };
-    if (completeButton) {
-      completeButton.addEventListener("click", handleClick);
-    }
-  }, []);
-
   //將資料存到state裡面
   survey.onComplete.add(function (result) {
     const surveyData = JSON.stringify(result.data);
     if (surveyData) {
       const results = JSON.parse(surveyData);
       setSurveyData(results);
+      setShow(false);
+      setComplete(true);
     }
   });
-  console.log("資料的物件內容" + surveyData);
+  // console.log(surveyData);
 
   //統計測驗結果
   function staticData(data) {
@@ -77,26 +70,22 @@ function SurveyComponent() {
     return resultsData;
   }
   const showResult = staticData(surveyData);
-  console.log("計算總分" + showResult);
+  console.log(showResult);
 
   function totalScore(data) {
     let score = 0;
-    for (let item of Object.values(data)) {
-      if (item === "hardly") {
-        score + 0;
-      } else if (item === "seldom") {
-        score += 1;
-      } else if (item === "often") {
-        score += 2;
-      } else {
-        score += 3;
+    for (let [key, value] of Object.entries(data)) {
+      if (key === "seldom") {
+        score += value * 1;
+      } else if (key === "often") {
+        score += value * 2;
+      } else if (key === "always") {
+        score += value * 3;
       }
     }
     return score;
   }
-
   const score = totalScore(showResult);
-  console.log("總分數" + score);
 
   //監聽測驗結果，存到firestore中的users集合
   useEffect(() => {
@@ -110,7 +99,9 @@ function SurveyComponent() {
         );
         const querySnapshot = await getDocs(q);
 
-        if (!querySnapshot.empty && !complete) {
+        if (complete === false) {
+          return;
+        } else if (complete) {
           const docRef = querySnapshot.docs[0].ref;
           await updateDoc(docRef, {
             stressRecord: arrayUnion(recordArray),
@@ -121,17 +112,20 @@ function SurveyComponent() {
       }
     }
     getUser();
-  }, []);
+  }, [complete]);
 
   return (
     <>
       <div className="bg-oceanblack text-white">
         <div className="relative">
           <video src={videoSrc} loop height="480px" autoPlay muted></video>
-          <p className="absolute left-1/2 bottom-1/2 z-100 w-2/4 text-white text-9xl">
-            心靈緊急按鈕
-          </p>
+          <img
+            className="absolute left-1/2  bottom-1/2 z-100 w-1/2 pr-20"
+            src={feature3Banner}
+            alt=""
+          />
         </div>
+
         <div className="relative">
           <div className="flex flex-col justify-center items-center my-16">
             <h1 className="text-center text-6xl  tracking-wider">
@@ -166,6 +160,12 @@ function SurveyComponent() {
                 onClick={handleClick}
               >
                 點我測驗
+              </button>
+              <button
+                className="bg-gray-800 p-3 rounded-md mr-4 mt-6 hover:bg-red-900"
+                onClick={() => navigate("/")}
+              >
+                回首頁
               </button>
             </div>
           </div>
@@ -324,12 +324,7 @@ function SurveyComponent() {
           )
         ) : null}
 
-        <button
-          className="bg-green-600 text-white mt-3"
-          onClick={() => navigate("/")}
-        >
-          回首頁
-        </button>
+        <p>?</p>
       </div>
     </>
   );

@@ -29,3 +29,9 @@ export const useLoginState = create((set, get) => ({
   closeModal: () => set({ modal: false }),
   getModal: () => get().modal,
 }));
+
+export const modifiedData = create((set, get) => ({
+  selectedStoryId: "",
+  getSelectedStoryId: () => get().selectedStoryId,
+  setSelectedStoryId: (id) => set({ selectedStoryId: id }),
+}));

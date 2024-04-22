@@ -10,6 +10,9 @@ export default {
       colors: {
         oceanblack: "#161410",
       },
+      fontSize: {
+        large: "300px",
+      },
     },
   },
   plugins: [],

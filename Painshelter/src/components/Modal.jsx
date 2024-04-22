@@ -9,7 +9,7 @@ export default function Modal({ comebinedArray, clickTitle }) {
   const navigate = useNavigate();
   const [modalPost, setModalPost] = useState([]);
   const [stories, setStories] = useState([]);
-  const { modal, showModal, closeModal } = useLoginState();
+  const { modal, closeModal } = useLoginState();
 
   //拿取所有的db資料
   useEffect(() => {
