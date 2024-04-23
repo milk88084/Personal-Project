@@ -11,6 +11,7 @@ export default function SinglePage() {
   const navigate = useNavigate();
   const params = useParams();
 
+  //拿到firestore的資料
   useEffect(() => {
     async function getStories() {
       try {
@@ -41,10 +42,10 @@ export default function SinglePage() {
     return <p>isLoding</p>;
   }
 
+  //將時間轉換為我要的格式
   let objectDate = new Date(story[0].time);
-  console.log(objectDate);
   let year = objectDate.getFullYear();
-  let month = objectDate.getMonth();
+  let month = objectDate.getMonth() + 1;
   let day = objectDate.getDate();
 
   return (
@@ -90,9 +91,6 @@ export default function SinglePage() {
             </div>
 
             <div className="absolute bottom-0 flex justify-between w-11/12 mb-4">
-              <button className="bg-gray-800 p-3 rounded-md  w-24 text-white hover:bg-red-900 ">
-                編輯
-              </button>
               <button className="bg-gray-800 p-3 rounded-md  w-24 text-white hover:bg-red-900">
                 分享
               </button>

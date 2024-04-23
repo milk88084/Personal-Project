@@ -8,11 +8,12 @@ import Signup from "./pages/Signup/index.jsx";
 import History from "./pages/History/index.jsx";
 import Disagree from "./pages/Disagree/index.jsx";
 import Help from "./pages/Help/index.jsx";
-import Edit from "./pages/Edit/index.jsx";
+import Post from "./pages/Post/index.jsx";
 import VisitAuthor from "./pages/VisitAuthor/index.jsx";
 import Openrouteservice from "./components/LocationSearch.jsx";
 import FigureType from "./components/Chart/FigureChart.jsx";
 import SinglePostPage from "./pages/SinglePostPage/index.jsx";
+import Edit from "./pages/Edit/index.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -24,11 +25,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="history" element={<History />} />
         <Route path="disagree" element={<Disagree />} />
         <Route path="help" element={<Help />} />
-        <Route path="edit" element={<Edit />} />
+        <Route path="post" element={<Post />} />
         <Route path="visit" element={<VisitAuthor />} />
         <Route path="go" element={<Openrouteservice />} />
         <Route path="type" element={<FigureType />} />
         <Route path="post/:id" element={<SinglePostPage />} />
+        <Route path="edit/:id" element={<Edit />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

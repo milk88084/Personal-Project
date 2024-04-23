@@ -45,7 +45,7 @@ export default function History() {
   }, []);
 
   const modifiedClick = (storyId) => {
-    navigate(`/post/${storyId}`);
+    navigate(`/edit/${storyId}`);
     setSelectedStoryId(storyId);
   };
 
@@ -58,7 +58,7 @@ export default function History() {
       <p className="m-3 bg-green-300">內文：{randPoem.content}</p>
       <button
         className="bg-blue-600 text-white mt-3"
-        onClick={() => navigate("/edit")}
+        onClick={() => navigate("/post")}
       >
         點我撰寫日記
       </button>
