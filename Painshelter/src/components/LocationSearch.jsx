@@ -41,7 +41,10 @@ const LocationSearch = () => {
         onChange={storyLocation.onChange}
         placeholder="請輸入地點，如：花蓮市美崙"
       />
-      <button className="bg-red-300" onClick={handleSearch}>
+      <button
+        className="bg-gray-800 p-1 rounded-md  text-white hover:bg-red-900  mr-6 ml-2"
+        onClick={handleSearch}
+      >
         搜尋
       </button>
 
