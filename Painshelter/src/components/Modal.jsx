@@ -35,8 +35,8 @@ export default function Modal({ comebinedArray, clickTitle }) {
     getStories();
   }, []);
 
-  console.log(comebinedArray);
-  console.log(modal);
+  // console.log(comebinedArray);
+  // console.log(modal);
   //判斷點選的title是否吻合db資料，是的話呈現在頁面上
   useEffect(() => {
     const metchedItem = stories.find((data) => data.title === clickTitle.item);

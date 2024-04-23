@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLoginState } from "../../utils/zustand.js";
-import { useFormInput } from "../../utils/hooks/useFormInput.jsx";
-import { useCheckboxInput } from "../../utils/hooks/useCheckboxInput.jsx";
+import { useEditFormInput } from "../../utils/hooks/useEditFormInput.jsx";
+import { useEditCheckboxInput } from "../../utils/hooks/useEditCheckboxInput.jsx";
 import LocationSearch from "../../components/LocationSearch.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../../utils/firebase/firebase.jsx";
@@ -30,16 +30,16 @@ const storyFigureData = [
   "那個他",
   "內在自我",
 ];
+
 export default function Edit() {
   const params = useParams();
   const navigate = useNavigate();
   const { locationSerach } = useLoginState();
-  const postStory = useFormInput();
-  const storyTitle = useFormInput();
-  const storyTime = useFormInput();
-  const storyType = useCheckboxInput(storyTypeData);
-  const storyFigure = useCheckboxInput(storyFigureData);
-  const [story, setStory] = useState();
+  const postStory = useEditFormInput();
+  const storyTitle = useEditFormInput();
+  const storyTime = useEditFormInput();
+  const storyType = useEditCheckboxInput(storyTypeData);
+  const storyFigure = useEditCheckboxInput(storyFigureData);
   const storyLocation = locationSerach[0];
   console.log(storyLocation);
 
@@ -50,23 +50,22 @@ export default function Edit() {
         const postsData = collection(db, "posts");
         const q = query(postsData, where("storyId", "==", params.id));
         const querySnapshot = await getDocs(q);
-        const userStoryList = querySnapshot.docs.map((doc) => ({
-          title: doc.data().title,
-          time: doc.data().time,
-          location: doc.data().location,
-          type: doc.data().type,
-          figure: doc.data().figure,
-          story: doc.data().story,
-          storyId: doc.data().storyId,
-        }));
-        setStory(userStoryList);
+        if (!querySnapshot.empty) {
+          const data = querySnapshot.docs[0].data(); // 直接取得数据
+          storyTitle.setValue(data.title);
+          postStory.setValue(data.story);
+          storyTime.setValue(data.time);
+          storyType.setCheckedValues(data.type);
+          storyFigure.setCheckedValues(data.figure);
+        } else {
+          console.log("No document found with the given storyId");
+        }
       } catch (e) {
-        console.log(e);
+        console.error("Error fetching document: ", e);
       }
     }
     getStories();
-  }, []);
-  console.log(story);
+  }, [db, params.id]);
 
   //更新db資料
   const handleSubmit = async (event) => {
@@ -87,7 +86,7 @@ export default function Edit() {
         await updateDoc(docRef, {
           title: storyTitle.value,
           time: storyTime.value,
-          location: storyLocation,
+          // location: storyLocation,
           type: storyType.getSortedCheckedValues(),
           figure: storyFigure.getSortedCheckedValues(),
           story: postStory.value,
@@ -114,14 +113,11 @@ export default function Edit() {
               疼痛暗號
             </label>
             <input
-              className=" border-2 border-black w-1/2"
+              className="border-2 border-black w-1/2"
               type="text"
-              label="StoryTitle"
               value={storyTitle.value}
               onChange={storyTitle.onChange}
-              {...storyTitle}
               required
-              placeholder={story && story[0]?.title}
             />
           </div>
           <div className="flex mt-12 items-center">
@@ -134,7 +130,6 @@ export default function Edit() {
               label="Story time"
               value={storyTime.value}
               onChange={storyTime.onChange}
-              {...storyTime}
               required
             />
           </div>
@@ -155,6 +150,7 @@ export default function Edit() {
                 <input
                   type="checkbox"
                   onChange={storyType.onChange}
+                  checked={storyType.checkedValues.includes("成長軌跡")}
                   value="成長軌跡"
                 />
                 成長軌跡
@@ -163,6 +159,7 @@ export default function Edit() {
                 <input
                   type="checkbox"
                   onChange={storyType.onChange}
+                  checked={storyType.checkedValues.includes("情感關係")}
                   value="情感關係"
                 />
                 情感關係
@@ -171,6 +168,7 @@ export default function Edit() {
                 <input
                   type="checkbox"
                   onChange={storyType.onChange}
+                  checked={storyType.checkedValues.includes("人際交流")}
                   value="人際交流"
                 />
                 人際交流
@@ -179,6 +177,7 @@ export default function Edit() {
                 <input
                   type="checkbox"
                   onChange={storyType.onChange}
+                  checked={storyType.checkedValues.includes("生命經歷")}
                   value="生命經歷"
                 />
                 生命經歷
@@ -187,6 +186,7 @@ export default function Edit() {
                 <input
                   type="checkbox"
                   onChange={storyType.onChange}
+                  checked={storyType.checkedValues.includes("職場發展")}
                   value="職場發展"
                 />
                 職場發展
@@ -203,6 +203,7 @@ export default function Edit() {
                 <input
                   type="checkbox"
                   onChange={storyFigure.onChange}
+                  checked={storyFigure.checkedValues.includes("親人")}
                   value="親人"
                 />
                 親人
@@ -211,6 +212,7 @@ export default function Edit() {
                 <input
                   type="checkbox"
                   onChange={storyFigure.onChange}
+                  checked={storyFigure.checkedValues.includes("伴侶")}
                   value="伴侶"
                 />
                 伴侶
@@ -219,6 +221,7 @@ export default function Edit() {
                 <input
                   type="checkbox"
                   onChange={storyFigure.onChange}
+                  checked={storyFigure.checkedValues.includes("朋友")}
                   value="朋友"
                 />
                 朋友
@@ -227,6 +230,7 @@ export default function Edit() {
                 <input
                   type="checkbox"
                   onChange={storyFigure.onChange}
+                  checked={storyFigure.checkedValues.includes("關係人")}
                   value="關係人"
                 />
                 關係人
@@ -235,6 +239,7 @@ export default function Edit() {
                 <input
                   type="checkbox"
                   onChange={storyFigure.onChange}
+                  checked={storyFigure.checkedValues.includes("陌生人")}
                   value="陌生人"
                 />
                 陌生人
@@ -243,6 +248,7 @@ export default function Edit() {
                 <input
                   type="checkbox"
                   onChange={storyFigure.onChange}
+                  checked={storyFigure.checkedValues.includes("那個他")}
                   value="那個他"
                 />
                 那個他
@@ -251,6 +257,7 @@ export default function Edit() {
                 <input
                   type="checkbox"
                   onChange={storyFigure.onChange}
+                  checked={storyFigure.checkedValues.includes("內在自我")}
                   value="內在自我"
                 />
                 內在自我
@@ -266,9 +273,7 @@ export default function Edit() {
               className=" border-2 border-black w-full h-48 mt-8 "
               type="text"
               label="Post story"
-              {...postStory}
               required
-              placeholder={story && story[0]?.story}
               value={postStory.value}
               onChange={postStory.onChange}
             />
@@ -279,6 +284,9 @@ export default function Edit() {
               className="bg-gray-800 p-3 rounded-md w-24 text-white hover:bg-red-900  mr-6"
             >
               儲存內容
+            </button>
+            <button className="bg-gray-800 p-3 rounded-md w-24 text-white hover:bg-red-900  mr-6">
+              文章預覽
             </button>
             <button
               onClick={() => navigate("/history")}

@@ -200,7 +200,7 @@ function SurveyComponent() {
                   <div>
                     <button
                       className="bg-gray-800 p-3 rounded-md mr-4 hover:bg-red-900"
-                      onClick={() => navigate("/edit")}
+                      onClick={() => navigate("/post")}
                     >
                       撰寫日記
                     </button>
@@ -234,7 +234,7 @@ function SurveyComponent() {
                   <div>
                     <button
                       className="bg-gray-800 p-3 rounded-md mr-4 hover:bg-red-900"
-                      onClick={() => navigate("/edit")}
+                      onClick={() => navigate("/post")}
                     >
                       撰寫日記
                     </button>
@@ -272,7 +272,7 @@ function SurveyComponent() {
                   <div>
                     <button
                       className="bg-gray-800 p-3 rounded-md mr-4 hover:bg-red-900"
-                      onClick={() => navigate("/edit")}
+                      onClick={() => navigate("/post")}
                     >
                       撰寫日記
                     </button>
@@ -307,7 +307,7 @@ function SurveyComponent() {
                   <div>
                     <button
                       className="bg-gray-800 p-3 rounded-md mr-4 hover:bg-red-900"
-                      onClick={() => navigate("/edit")}
+                      onClick={() => navigate("/post")}
                     >
                       撰寫日記
                     </button>

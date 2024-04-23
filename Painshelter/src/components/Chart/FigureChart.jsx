@@ -31,7 +31,7 @@ export default function FigureChart() {
       setTypes(newTypesArray);
     }
   }, [typeData]);
-  console.log(types);
+  // console.log(types);
 
   //統計文章類型的資料function
   const total_count = types.reduce((obj, item) => {

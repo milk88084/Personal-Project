@@ -29,7 +29,7 @@ const PostsLocation = () => {
     }
     getStories();
   }, []);
-  console.log(locations);
+  // console.log(locations);
 
   //將title加到location array裡面
   const comebinedArray = locations.map((data, index) => {
@@ -63,7 +63,6 @@ const PostsLocation = () => {
   const sanmeNameLocation = groupLocation(comebinedArray);
 
   //click Popup button可以連到該作者頁面
-
   const openModal = (title) => {
     showModal();
     setClickTitle(title);
