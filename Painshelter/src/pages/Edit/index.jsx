@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLoginState } from "../../utils/zustand.js";
 import { useEditFormInput } from "../../utils/hooks/useEditFormInput.jsx";
 import { useEditCheckboxInput } from "../../utils/hooks/useEditCheckboxInput.jsx";
-import LocationSearch from "../../components/LocationSearch.jsx";
+import EditLocationSearch from "../../components/EditLocationSearch.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../../utils/firebase/firebase.jsx";
 import {
@@ -112,27 +112,21 @@ export default function Edit() {
   //刪除文章
   const deleteStory = async () => {
     console.log(params.id);
-    try {
-      const q = doc(db, "posts", params.id);
-      console.log("delete");
-      // ,
-      // where("storyId", "==", params.id)
-      await deleteDoc(q);
-      const querySnapshot = await deleteDoc(q);
-      const docRef = querySnapshot.docs[0].ref;
-      if (!querySnapshot.empty) {
-        await deleteDoc(docRef);
-        alert("成功刪除：" + storyTitle.value + "故事");
-        navigate("/history");
-      } else {
-        console.error("No document found with the given storyId");
+
+    if (window.confirm("確定要刪除此篇投稿故事嗎?")) {
+      try {
+        const q = doc(db, "posts", params.id);
+        console.log("delete");
+        await deleteDoc(q);
+        console.log("finish");
+      } catch (error) {
+        console.error("Error updating document: ", error);
         alert("刪除失敗");
       }
-      console.log("finish");
-    } catch (error) {
-      console.error("Error updating document: ", error);
-      alert("刪除失敗");
+    } else {
+      console.log("取消刪除動作");
     }
+    navigate("/history");
   };
 
   return (
@@ -170,7 +164,7 @@ export default function Edit() {
             <label className="block marker:m-3 text-3xl mr-12 font-semibold">
               發生地點
             </label>
-            <LocationSearch location={locationName} />
+            <EditLocationSearch location={locationName} />
           </div> */}
 
           <div className="flex mt-12 items-center">

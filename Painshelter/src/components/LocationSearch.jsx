@@ -31,10 +31,6 @@ const LocationSearch = () => {
     }
   };
 
-  // useEffect(() => {
-  //   storyLocation.setValue(location);
-  // }, [location, storyLocation]);
-
   console.log(locationSerach);
 
   return (
@@ -46,6 +42,7 @@ const LocationSearch = () => {
         placeholder="請輸入地點，如：花蓮市美崙"
       />
       <button
+        type="button"
         className="bg-gray-800 p-1 rounded-md  text-white hover:bg-red-900  mr-6 ml-2"
         onClick={handleSearch}
       >

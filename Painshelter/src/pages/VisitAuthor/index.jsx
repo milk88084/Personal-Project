@@ -6,6 +6,7 @@ import {
   where,
   updateDoc,
   arrayUnion,
+  doc,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -179,12 +180,58 @@ const VisitAuthor = () => {
 
   console.log(stories);
 
+  const [isFollow, setIsFollow] = useState(false);
+  //關注作者
+  const handleFollow = async () => {
+    try {
+      const q = query(
+        collection(db, "users"),
+        where("id", "==", localStorageUserId)
+      );
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        const docRef = querySnapshot.docs[0].ref;
+        const docData = querySnapshot.docs[0].data();
+
+        if (docData.followAuthor && docData.followAuthor.includes(state.data)) {
+          alert("已關注");
+          setIsFollow(false);
+          return;
+        }
+        await updateDoc(docRef, {
+          followAuthor: arrayUnion(state.data),
+        });
+        console.log("關注成功");
+        setIsFollow(true);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
       {isUserStories ? (
         <p>這是你自己的頁面</p>
       ) : (
-        <p>這個作者叫做： {author[0]?.name}</p>
+        <div>
+          <p>這個作者叫做： {author[0]?.name}</p>
+          {isFollow ? (
+            <button
+              onClick={handleFollow}
+              className="bg-gray-800 p-3 rounded-md w-24 text-white hover:bg-red-900"
+            >
+              關注作者
+            </button>
+          ) : (
+            <button
+              disabled
+              className="bg-gray-300 p-3 rounded-md w-24 text-white hover:bg-red-900"
+            >
+              已關注作者
+            </button>
+          )}
+        </div>
       )}
 
       {stories.map((story, index) => {
