@@ -5,6 +5,28 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import Modal from "./Modal.jsx";
 import { useLoginState } from "../utils/zustand.js";
 
+//Adjust for invisible Marker after deploying due to webpack building
+import L from "leaflet";
+// import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
+// import iconUrl from "leaflet/dist/images/marker-icon.png";
+// import shadowUrl from "leaflet/dist/images/marker-shadow.png";
+// delete L.Icon.Default.prototype._getIconUrl;
+
+// L.Icon.Default.mergeOptions({
+//   iconRetinaUrl,
+//   iconUrl,
+//   shadowUrl,
+// });
+
+const customIcon = new L.Icon({
+  iconUrl: "leaflet/dist/images/marker-icon.png", // 确保这个路径指向您的静态资源文件夹
+  shadowUrl: "leaflet/dist/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
 const PostsLocation = () => {
   const [locations, setLocations] = useState([]);
   const [titles, setTitles] = useState([]);

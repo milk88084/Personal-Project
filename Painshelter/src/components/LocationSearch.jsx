@@ -1,13 +1,13 @@
 import { useFormInput } from "../utils/hooks/useFormInput";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useLoginState } from "../utils/zustand";
 
-const LocationSearch = () => {
+const LocationSearch = ({ location }) => {
   const { locationSerach, setLocationSearch } = useLoginState();
   const [locationState, setLocationState] = useState();
-  const storyLocation = useFormInput();
+  const storyLocation = useFormInput(location);
   const locationArray = [];
 
   const handleSearch = async () => {
@@ -30,6 +30,10 @@ const LocationSearch = () => {
       console.error("Error fetching data: ", error);
     }
   };
+
+  useEffect(() => {
+    storyLocation.setValue(location);
+  }, [location, storyLocation]);
 
   console.log(locationSerach);
 

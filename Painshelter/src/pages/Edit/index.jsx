@@ -42,6 +42,7 @@ export default function Edit() {
   const storyFigure = useEditCheckboxInput(storyFigureData);
   const storyLocation = locationSerach[0];
   console.log(storyLocation);
+  const [locationName, setLocationName] = useState();
 
   //取得db資料
   useEffect(() => {
@@ -57,6 +58,7 @@ export default function Edit() {
           storyTime.setValue(data.time);
           storyType.setCheckedValues(data.type);
           storyFigure.setCheckedValues(data.figure);
+          setLocationName(data.location.name);
         } else {
           console.log("No document found with the given storyId");
         }
@@ -66,6 +68,8 @@ export default function Edit() {
     }
     getStories();
   }, [db, params.id]);
+
+  console.log(locationName);
 
   //更新db資料
   const handleSubmit = async (event) => {
@@ -104,7 +108,7 @@ export default function Edit() {
   };
 
   return (
-    <body className="bg-black min-h-screen relative flex justify-center z-20">
+    <div className="bg-black min-h-screen relative flex justify-center z-20">
       <div className="text-white text-6xl mt-10">文章編輯</div>
       <div className="bg-gray-100 w-7/12 h-5/6 bottom-0 absolute rounded-t-3xl">
         <form onSubmit={handleSubmit} className="p-16">
@@ -138,7 +142,7 @@ export default function Edit() {
             <label className="block marker:m-3 text-3xl mr-12 font-semibold">
               發生地點
             </label>
-            <LocationSearch />
+            <LocationSearch location={locationName} />
           </div>
 
           <div className="flex mt-12 items-center">
@@ -297,6 +301,6 @@ export default function Edit() {
           </div>
         </form>
       </div>
-    </body>
+    </div>
   );
 }

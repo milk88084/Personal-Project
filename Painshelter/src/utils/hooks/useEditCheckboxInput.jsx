@@ -12,9 +12,14 @@ export function useEditCheckboxInput(options, initialValues = []) {
     );
   }
 
+  function getSortedCheckedValues() {
+    return options.filter((option) => checkedValues.includes(option));
+  }
+
   return {
     checkedValues,
     setCheckedValues,
     onChange: handleChange,
+    getSortedCheckedValues,
   };
 }
