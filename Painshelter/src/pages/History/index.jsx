@@ -18,11 +18,7 @@ export default function History() {
     async function getStories() {
       try {
         const postsData = collection(db, "posts");
-        const q = query(
-          postsData,
-          where("userId", "==", localStorageUserId),
-          limit(6)
-        );
+        const q = query(postsData, where("userId", "==", localStorageUserId));
 
         const querySnapshot = await getDocs(q);
         const userStoryList = querySnapshot.docs.map((doc) => ({
@@ -95,7 +91,7 @@ export default function History() {
                 className="bg-red-600 text-white mt-3 m-2"
                 onClick={() => modifiedClick(story.storyId)}
               >
-                點我修改
+                編輯
               </button>
             </div>
           );

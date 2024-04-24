@@ -12,6 +12,8 @@ import {
   query,
   getDocs,
   where,
+  deleteDoc,
+  doc,
 } from "firebase/firestore";
 
 const storyTypeData = [
@@ -41,7 +43,7 @@ export default function Edit() {
   const storyType = useEditCheckboxInput(storyTypeData);
   const storyFigure = useEditCheckboxInput(storyFigureData);
   const storyLocation = locationSerach[0];
-  console.log(storyLocation);
+  // console.log(storyLocation);
   const [locationName, setLocationName] = useState();
 
   //取得db資料
@@ -69,7 +71,7 @@ export default function Edit() {
     getStories();
   }, [db, params.id]);
 
-  console.log(locationName);
+  // console.log(locationName);
 
   //更新db資料
   const handleSubmit = async (event) => {
@@ -107,11 +109,37 @@ export default function Edit() {
     }
   };
 
+  //刪除文章
+  const deleteStory = async () => {
+    console.log(params.id);
+    try {
+      const q = doc(db, "posts", params.id);
+      console.log("delete");
+      // ,
+      // where("storyId", "==", params.id)
+      await deleteDoc(q);
+      const querySnapshot = await deleteDoc(q);
+      const docRef = querySnapshot.docs[0].ref;
+      if (!querySnapshot.empty) {
+        await deleteDoc(docRef);
+        alert("成功刪除：" + storyTitle.value + "故事");
+        navigate("/history");
+      } else {
+        console.error("No document found with the given storyId");
+        alert("刪除失敗");
+      }
+      console.log("finish");
+    } catch (error) {
+      console.error("Error updating document: ", error);
+      alert("刪除失敗");
+    }
+  };
+
   return (
     <div className="bg-black min-h-screen relative flex justify-center z-20">
       <div className="text-white text-6xl mt-10">文章編輯</div>
       <div className="bg-gray-100 w-7/12 h-5/6 bottom-0 absolute rounded-t-3xl">
-        <form onSubmit={handleSubmit} className="p-16">
+        <form className="p-16">
           <div className="flex items-center">
             <label className="block marker:m-3 text-3xl mr-12 font-semibold">
               疼痛暗號
@@ -138,12 +166,12 @@ export default function Edit() {
             />
           </div>
 
-          <div className="flex mt-12 items-center">
+          {/* <div className="flex mt-12 items-center">
             <label className="block marker:m-3 text-3xl mr-12 font-semibold">
               發生地點
             </label>
             <LocationSearch location={locationName} />
-          </div>
+          </div> */}
 
           <div className="flex mt-12 items-center">
             <label className="block marker:m-3 text-3xl mr-12 font-semibold">
@@ -289,8 +317,12 @@ export default function Edit() {
             >
               儲存內容
             </button>
-            <button className="bg-gray-800 p-3 rounded-md w-24 text-white hover:bg-red-900  mr-6">
-              文章預覽
+            <button
+              type="button"
+              onClick={deleteStory}
+              className="bg-gray-800 p-3 rounded-md w-24 text-white hover:bg-red-900  mr-6"
+            >
+              刪除文章
             </button>
             <button
               onClick={() => navigate("/history")}

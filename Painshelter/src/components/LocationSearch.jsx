@@ -4,10 +4,10 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useLoginState } from "../utils/zustand";
 
-const LocationSearch = ({ location }) => {
+const LocationSearch = () => {
   const { locationSerach, setLocationSearch } = useLoginState();
   const [locationState, setLocationState] = useState();
-  const storyLocation = useFormInput(location);
+  const storyLocation = useFormInput();
   const locationArray = [];
 
   const handleSearch = async () => {
@@ -31,9 +31,9 @@ const LocationSearch = ({ location }) => {
     }
   };
 
-  useEffect(() => {
-    storyLocation.setValue(location);
-  }, [location, storyLocation]);
+  // useEffect(() => {
+  //   storyLocation.setValue(location);
+  // }, [location, storyLocation]);
 
   console.log(locationSerach);
 
