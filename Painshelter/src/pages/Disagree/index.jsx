@@ -8,6 +8,8 @@ import { DialogDemo } from "../../components/Shadcn/DisagreeDialog";
 import backgroundImg1 from "../../assets/img/disagreeImg1.jpg";
 import backgroundImg4 from "../../assets/img/disagreeImg4.png";
 import backgroundImg5 from "../../assets/img/disagreeImg5.png";
+import logoImg from "../../assets/img/logoImg.png";
+import logoTitle from "../../assets/img/logoTitle.png";
 const Background = styled.div`
   background-color: #1a1a1a;
   background-image: url(${backgroundImg1});
@@ -109,6 +111,24 @@ const Button = styled.button`
   }
 `;
 
+const LogoSection = styled.div`
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  img {
+    width: 7%;
+  }
+
+  @media screen and (max-width: 1279px) {
+    img {
+      width: 20%;
+      margin-bottom: 10px;
+    }
+  }
+`;
+
 export default function Disagree() {
   const navigate = useNavigate();
   return (
@@ -120,7 +140,7 @@ export default function Disagree() {
           </Halo>
           <Content>
             <Title>
-              <img src={backgroundImg5} alt="" />
+              <img src={backgroundImg5} alt="backgroundImg" />
             </Title>
             <SubTitle>
               我們無法預知每一顆星星閃爍的背後故事，也無法感受它們所經歷的努力或代價。但至少，在這廣闊的宇宙中，我們可以彼此陪伴，共同經歷這個世界的奇妙。
@@ -134,6 +154,10 @@ export default function Disagree() {
                 我同意
               </Button>
             </ButtonSections>
+            <LogoSection>
+              <img src={logoImg} alt="logo" />
+              <img src={logoTitle} alt="brandName" />
+            </LogoSection>
           </Content>
         </MainSection>
       </BlackDiv>

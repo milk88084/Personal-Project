@@ -24,11 +24,13 @@ export function DialogDemo() {
           <DialogTitle className="text-center">溫柔宣言</DialogTitle>
         </DialogHeader>
         <div className="mt-5">
-          <p>我願意成為那個溫柔傾聽的存在。</p>
-          <p className="mt-5">我承諾以尊重為前提</p>
-          <p>絕不輕易對任何故事發表批評。</p>
-          <p className="mt-5">願每一份疼痛最都能找到他的安放之地</p>
-          <p>被溫柔地照看。</p>
+          <p className=" hover:text-gray-500">我願意成為那個溫柔傾聽的存在。</p>
+          <p className="mt-5 hover:text-gray-500">我承諾以尊重為前提</p>
+          <p className=" hover:text-gray-500">絕不輕易對任何故事發表批評。</p>
+          <p className="mt-5 hover:text-gray-500">
+            願每一份疼痛最都能找到他的安放之地
+          </p>
+          <p className=" hover:text-gray-500">被溫柔地照看。</p>
         </div>
         <DialogFooter></DialogFooter>
       </DialogContent>

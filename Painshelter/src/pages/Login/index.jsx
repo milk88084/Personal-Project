@@ -1,14 +1,35 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import styled from "styled-components";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../utils/firebase/firebase.jsx";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useLoginState } from "../../utils/zustand.js";
+import logoImg from "../../assets/img/logoImg.png";
+import logoTitle from "../../assets/img/logoTitle.png";
+import backgroundVideo from "../../assets/video/login.mp4";
+
+const Background = styled.video``;
+
+const BlackDiv = styled.div`
+  background-color: rgba(0, 0, 0, 0.5);
+  background-attachment: fixed;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+`;
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { online, setLoginUserId, loginStatus } = useLoginState();
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.3;
+    }
+  }, []);
 
   const onLogin = (e) => {
     e.preventDefault();
@@ -34,6 +55,9 @@ const Login = () => {
 
   return (
     <>
+      <Background ref={videoRef} src={backgroundVideo} loop autoPlay muted>
+        <BlackDiv></BlackDiv>
+      </Background>
       <main>
         <section>
           <div>
