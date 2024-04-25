@@ -181,6 +181,31 @@ const VisitAuthor = () => {
   console.log(stories);
 
   const [isFollow, setIsFollow] = useState(false);
+
+  //檢查是否有關注
+  useEffect(() => {
+    async function commfirmFollow() {
+      try {
+        const q = query(
+          collection(db, "users"),
+          where("id", "==", localStorageUserId)
+        );
+        const querySnapshot = await getDocs(q);
+        const docData = querySnapshot.docs[0].data().followAuthor;
+        if (docData.includes(state.data)) {
+          setIsFollow(false);
+        } else {
+          setIsFollow(true);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    commfirmFollow();
+  }, []);
+
+  console.log(isFollow);
+
   //關注作者
   const handleFollow = async () => {
     try {

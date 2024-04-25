@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { db } from "../../utils/firebase/firebase.jsx";
-import { collection, query, getDocs, where, limit } from "firebase/firestore";
+import { collection, query, getDocs, where } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import poem from "../../utils/data/poem.json";
 import { modifiedData } from "../../utils/zustand.js";
@@ -13,12 +13,16 @@ export default function History() {
   const randPoem = poemData[rand];
   const localStorageUserId = window.localStorage.getItem("userId");
   const { setSelectedStoryId } = modifiedData();
+  const [followList, setFollowList] = useState();
+  const [authors, setAuthors] = useState();
 
   useEffect(() => {
     async function getStories() {
       try {
         const postsData = collection(db, "posts");
+        const authorData = collection(db, "users");
         const q = query(postsData, where("userId", "==", localStorageUserId));
+        const qA = query(authorData, where("id", "==", localStorageUserId));
 
         const querySnapshot = await getDocs(q);
         const userStoryList = querySnapshot.docs.map((doc) => ({
@@ -33,6 +37,11 @@ export default function History() {
           storyId: doc.data().storyId,
         }));
         setStories(userStoryList);
+        const querySnapshotA = await getDocs(qA);
+        const followListData = querySnapshotA.docs
+          .map((doc) => doc.data().followAuthor)
+          .flat();
+        setFollowList(followListData);
       } catch (e) {
         console.log(e);
       }
@@ -40,10 +49,41 @@ export default function History() {
     getStories();
   }, []);
 
+  // console.log(followList);
+  // console.log(stories);
+
   const modifiedClick = (storyId) => {
     navigate(`/edit/${storyId}`);
     setSelectedStoryId(storyId);
   };
+
+  //用作者id去對應到相對的名稱
+  useEffect(() => {
+    async function getAuthors() {
+      try {
+        const authorData = collection(db, "users");
+        const promises = followList.map((authorId) => {
+          const q = query(authorData, where("id", "==", authorId));
+          return getDocs(q);
+        });
+        const querySnapshots = await Promise.all(promises);
+        const authorNamesList = querySnapshots.map((snapshot) => {
+          return snapshot.docs.map((doc) => ({
+            id: doc.data().id,
+            name: doc.data().name,
+          }))[0];
+        });
+        if (followList && followList.length > 0) {
+          setAuthors(authorNamesList);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    getAuthors();
+  }, [db, followList]);
+
+  console.log(authors);
 
   return (
     <div>
@@ -58,6 +98,12 @@ export default function History() {
       >
         點我撰寫日記
       </button>
+
+      <div>
+        <h1 className="m-3 bg-yellow-300">關注列表</h1>
+        {authors &&
+          authors.map((name, index) => <p key={index}>{name.name}</p>)}
+      </div>
 
       <p className="m-3 bg-yellow-300">歷史日記</p>
       {stories &&
