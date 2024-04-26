@@ -10,7 +10,6 @@ import backgroundVideo from "../../assets/video/login.mp4";
 
 const Background = styled.div`
   height: 100vh;
-  background-color: red;
 `;
 
 const BackgroundVideo = styled.video`
@@ -43,7 +42,17 @@ const LogoSection = styled.div`
   }
 
   img:first-of-type {
-    width: 7%; // 假設這是您只想應用到第一個 img 的特定樣式
+    width: 7%;
+  }
+
+  @media screen and (max-width: 1279px) {
+    top: 10%;
+    img {
+      width: 40%;
+    }
+    img:first-of-type {
+      width: 20%;
+    }
   }
 `;
 
@@ -52,11 +61,18 @@ const MainSection = styled.div`
   top: 40%;
   left: 38%;
   z-index: 40;
-  margin: 0 auto;
   background-color: rgba(255, 255, 255, 0.8);
   width: 25%;
   height: 50%;
   border-radius: 20px;
+
+  @media screen and (max-width: 1279px) {
+    top: 30%;
+    width: 300px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  }
 `;
 
 const FormSection = styled.div`
@@ -193,9 +209,10 @@ const Login = () => {
               </InputSection>
 
               <ButtonSection>
-                <button onClick={onLogin}>登入</button>
+                <button type="button" onClick={onLogin}>
+                  登入
+                </button>
                 <button>
-                  {" "}
                   <NavLink to="/signup">註冊會員</NavLink>
                 </button>
               </ButtonSection>
