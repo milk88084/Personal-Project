@@ -103,6 +103,7 @@ const Button = styled.button`
   border-radius: 10px;
   font-weight: 400;
   border: 1px solid white;
+  margin: 24px;
 
   &:hover,
   &:focus {
@@ -147,12 +148,7 @@ export default function Disagree() {
             </SubTitle>
             <ButtonSections>
               <DialogDemo></DialogDemo>
-              <Button
-                className="bg-green-400 m-6"
-                onClick={() => navigate("/login")}
-              >
-                我同意
-              </Button>
+              <Button onClick={() => navigate("/login")}>我同意</Button>
             </ButtonSections>
             <LogoSection>
               <img src={logoImg} alt="logo" />
