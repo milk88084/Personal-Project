@@ -13,10 +13,13 @@ import FigureChart from "./components/Chart/FigureChart.jsx";
 import backgroundImg1 from "./assets/img/disagreeImg1.jpg";
 import logoImg from "./assets/img/logoImg.png";
 import logoTitle from "./assets/img/logoTitle.png";
+import mainBanner from "./assets/img/mainBanner.jpg";
 import { CarouselDemo } from "./components/Shadcn/CarouselDemo";
+import aboutpainsectionimg from "./assets/img/aboutpainsection1.jpg";
+import aboutpainsectionimg2 from "./assets/img/aboutpainsection2.jpg";
 
 const Background = styled.div`
-  background-color: #000d15;
+  background-color: #1a1a1a;
   position: relative;
 `;
 
@@ -123,6 +126,124 @@ const ModalButton = styled.div`
   }
 `;
 
+const Banner = styled.div`
+  background-image: url(${mainBanner});
+  height: 100vh;
+  @media screen and (max-width: 1279px) {
+  }
+`;
+
+const Categories = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  color: white;
+  font-size: 40px;
+  letter-spacing: 5px;
+  padding-top: 30px;
+  font-weight: 600;
+  z-index: 500;
+
+  button {
+    margin: 12px;
+    margin-right: 50px;
+    opacity: 10%;
+  }
+
+  button:hover {
+    opacity: 100%;
+    transform: scale(1.1);
+    text-shadow: 1px 1px 20px white;
+  }
+`;
+
+const Logo = styled.div`
+  display: flex;
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  margin-top: 180px;
+  margin-left: 180px;
+
+  img:nth-of-type(1) {
+    width: 180px;
+    object-fit: contain;
+  }
+
+  img:nth-of-type(2) {
+    width: 500px;
+    object-fit: contain;
+  }
+`;
+
+const SubTitle = styled.div`
+  position: absolute;
+  color: white;
+  font-size: 170px;
+  font-family: sans-serif;
+  opacity: 5%;
+  margin-top: -150px;
+`;
+
+const AboutPain = styled.div`
+  background: linear-gradient(#1a1a1a, red);
+  color: white;
+`;
+
+const AboutPainTitle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 50px;
+  h1 {
+    font-style: oblique;
+    margin-left: 50px;
+    font-size: 80px;
+  }
+  h2 {
+    font-style: oblique;
+    margin-right: 50px;
+    font-size: 80px;
+  }
+  p {
+    font-style: oblique;
+    font-size: 50px;
+    margin-right: 50px;
+  }
+  span {
+    font-style: oblique;
+    font-size: 50px;
+    margin-left: 50px;
+  }
+`;
+
+const AboutPaintContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  p {
+    width: 600px;
+    margin-left: 50px;
+    opacity: 65%;
+  }
+  span {
+    width: 600px;
+    margin-right: 50px;
+    opacity: 65%;
+  }
+  img {
+    margin-right: 50px;
+    margin-left: 50px;
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+    filter: gray;
+  }
+`;
+
 function App() {
   const navigate = useNavigate();
   const [stories, setStories] = useState([]);
@@ -212,26 +333,6 @@ function App() {
   return (
     <>
       <Background>
-        {/* {localStorageLogin ? null : (
-          <div className="flex items-center justify-center h-screen w-full bg-gray-500 absolute opacity-80 z-2000">
-            <div className="flex flex-col items-center justify-center  bg-white  border-black border-2 w-5/12 h-3/6 ">
-              <h1>溫柔宣言</h1>
-              <div>
-                <p>1.我願意成為那個溫柔傾聽的存在。</p>
-                <p>2.我承諾以尊重為前提,絕不輕易對任何故事發表批評。</p>
-                <p>3.願每一份疼痛最都能找到他的安放之地,被溫柔地照看。</p>
-              </div>
-              <div>
-                <button className="bg-green-400 m-6" onClick={handleDisagree}>
-                  不同意
-                </button>
-                  同意
-                </button>
-              </div>
-            </div>
-          </div>
-        )} */}
-
         {localStorageLogin ? null : (
           <ModalBackground>
             <Opacity>
@@ -241,7 +342,7 @@ function App() {
                   <img src={logoTitle} alt="Logo title" />
                 </ModalLogo>
                 <ModalContent>
-                  <h1>溫柔宣言</h1>ㄔㄛ
+                  <h1>溫柔宣言</h1>
                   <span>
                     <CarouselDemo></CarouselDemo>
                   </span>
@@ -255,7 +356,49 @@ function App() {
           </ModalBackground>
         )}
 
-        <h1 className="text-6xl font-sans font-black tracking-wider text-center ">
+        <Banner>
+          <Categories>
+            <button>關於疼痛</button>
+            <button>疼痛日記室</button>
+            <button>疼痛光譜</button>
+            <button>疼痛地圖</button>
+            <button>心靈緊急按鈕</button>
+            <button>關於我們</button>
+            <button>登出</button>
+          </Categories>
+          <Logo>
+            <img src={logoImg} alt="Logo" />
+            <img src={logoTitle} alt="Logo title" />
+          </Logo>
+          <SubTitle>PAINSHELTER</SubTitle>
+        </Banner>
+
+        <AboutPain>
+          <AboutPainTitle>
+            <h1>關於疼痛</h1>
+            <p>About Pain</p>
+          </AboutPainTitle>
+          <AboutPaintContent>
+            <p>
+              疼痛讓我們揭開了生活的另一面，那里沒有華麗的掩飾，只有原始的、真實的自我。我們學會在這悲傷的碎片中搜尋意義，學會讓淚水洗凈心靈的創傷。
+            </p>
+            <img src={aboutpainsectionimg} alt="" />
+          </AboutPaintContent>
+          <AboutPainTitle>
+            <span>About Shelter</span>
+            <h2>關於收容所</h2>
+          </AboutPainTitle>
+          <AboutPaintContent>
+            <img src={aboutpainsectionimg2} alt="" />
+            <span>
+              疼痛收容所是一個放置任意程度大小疼痛的故事空間，在這裡將不問對錯、不批判，期待達成自我療癒
+              / 你可以在這裡分享任何大小的疼痛故事、不能說的秘密到平台上 /
+              我們期待在這個微小的樹洞中，可以安置你的故事，或在瀏覽或傾聽他人的故事中，讓悲傷的故事或許不會那麼令人心碎。
+            </span>
+          </AboutPaintContent>
+        </AboutPain>
+
+        {/* <h1 className="text-6xl font-sans font-black tracking-wider text-center ">
           Pain Shelter
         </h1>
 
@@ -318,16 +461,16 @@ function App() {
           className="bg-blue-600 text-white mt-3"
         >
           心靈緊急按鈕
-        </button>
+        </button> */}
 
         {/* 登出 */}
-        <nav className="mt-5">
+        <button className="mt-5">
           <div>
             <button onClick={handleLogout} className=" border-2 border-black ">
               登出
             </button>
           </div>
-        </nav>
+        </button>
       </Background>
     </>
   );
