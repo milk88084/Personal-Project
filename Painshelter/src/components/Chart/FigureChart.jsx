@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import { db } from "../../utils/firebase/firebase.jsx";
 import { collection, query, getDocs } from "firebase/firestore";
-import { XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar } from "recharts";
+import {
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ScatterChart,
+  Scatter,
+  Cell,
+} from "recharts";
 
 export default function FigureChart() {
   const [typeData, setTypeData] = useState();
@@ -44,35 +52,46 @@ export default function FigureChart() {
   }, {});
 
   // console.log(total_count);
-  const chartData = Object.entries(total_count).map(([name, pv]) => {
+  const chartData = Object.entries(total_count).map(([name, count]) => {
     return {
       name,
-      pv,
+      count,
     };
   });
 
-  // console.log(chartData);
+  console.log(chartData);
+
+  const COLORS = [
+    "#FFF0AC",
+    "#FFED97",
+    "#FFBB28",
+    "#FFFF93",
+    "#FFD306",
+    "pink",
+  ];
 
   return (
     <div>
-      <BarChart
-        width={500}
-        height={300}
-        data={chartData}
+      <ScatterChart
+        width={520}
+        height={350}
         margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
+          top: 20,
+          right: 20,
+          bottom: 20,
+          left: 10,
         }}
       >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" stroke="#c2f800" />
-        <YAxis />
-        <Tooltip wrapperStyle={{ width: 100, backgroundColor: "#0d00ff" }} />
-
-        <Bar dataKey="pv" fill="#ff0000" />
-      </BarChart>
+        <CartesianGrid />
+        <XAxis type="category" dataKey="name" name="關係人" />
+        <YAxis type="number" dataKey="count" name="數量" />
+        <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+        <Scatter name="people" data={chartData} fill="#8884d8">
+          {chartData.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Scatter>
+      </ScatterChart>
     </div>
   );
 }

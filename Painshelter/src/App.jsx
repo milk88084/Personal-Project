@@ -187,7 +187,7 @@ const SubTitle = styled.div`
 `;
 
 const AboutPain = styled.div`
-  background: linear-gradient(#1a1a1a, red);
+  background: linear-gradient(#1a1a1a, #000d15);
   color: white;
 `;
 
@@ -241,6 +241,96 @@ const AboutPaintContent = styled.div`
     -o-filter: grayscale(100%);
     filter: grayscale(100%);
     filter: gray;
+  }
+`;
+
+const FeatureTitles = styled.div`
+  background-color: #000d15;
+  color: white;
+  font-style: oblique;
+  font-size: 80px;
+  text-align: center;
+  padding-top: 150px;
+  padding-bottom: 50px;
+`;
+
+const Highlights = styled.div`
+  display: flex;
+  justify-content: space-around;
+  gap: 30px;
+  flex-wrap: wrap;
+  background: linear-gradient(#000d15, #001420);
+`;
+
+const HighlightPost = styled.div`
+  background-color: white;
+  height: 300px;
+  width: 400px;
+  border-radius: 20px;
+  font-size: 18px;
+
+  div {
+    padding: 30px;
+  }
+
+  h1 {
+    font-size: 50px;
+    font-weight: 800;
+  }
+
+  h2 {
+    font-size: 15px;
+    color: #000d15;
+    font-weight: 400;
+    opacity: 80%;
+  }
+
+  p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 15px;
+  }
+
+  &:hover {
+    background-color: #65747b;
+    cursor: pointer;
+    transform: scale(1.1);
+    color: white;
+  }
+`;
+
+const ChartSection = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+`;
+
+const PostsCounts = styled.div`
+  font-size: 40px;
+  color: white;
+  text-align: center;
+
+  p {
+    font-size: 180px;
+    font-weight: 700;
+  }
+`;
+
+const FigureChartSection = styled.div`
+  color: white;
+  h1 {
+    font-size: 40px;
+    text-align: center;
+  }
+`;
+const TypesChartsSection = styled.div`
+  color: white;
+  h1 {
+    font-size: 40px;
+    text-align: center;
   }
 `;
 
@@ -323,12 +413,14 @@ function App() {
     }
     return result;
   }
-  const randomStories = getRandomStories(stories, 7);
+  const randomStories = getRandomStories(stories, 6);
 
   //進入到該作者的文章頁面
   const handleVisitAthor = (id) => {
     navigate("/visit", { state: { data: id } });
   };
+
+  console.log(randomStories);
 
   return (
     <>
@@ -397,29 +489,46 @@ function App() {
             </span>
           </AboutPaintContent>
         </AboutPain>
+        <FeatureTitles>
+          <p>精選文章</p>
+        </FeatureTitles>
 
-        {/* <h1 className="text-6xl font-sans font-black tracking-wider text-center ">
-          Pain Shelter
-        </h1>
-
-        <div>
-          <h2 className="bg-yellow-600 text-white mt-3 text-center ">
-            文章精選
-          </h2>
-          <div className="flex flex-wrap justify-center">
-            {randomStories.slice(0, 6).map((story, index) => {
-              return (
-                <div className="border-2 border-black  m-3 w-1/4 " key={index}>
-                  <p>疼痛暗號：{story.title}</p>
-                  <p>故事地點：{story.location.name}</p>
-                  <button onClick={() => handleVisitAthor(story.userId)}>
-                    點我看作者
-                  </button>
+        <Highlights>
+          {randomStories.map((story, index) => {
+            return (
+              <HighlightPost
+                onClick={() => handleVisitAthor(story.userId)}
+                key={index}
+              >
+                <div>
+                  <h1>{index + 1}</h1>
+                  <h2>疼痛暗號：{story.title}</h2>
+                  <h2>@{story.location.name}</h2>
+                  <p>{story.story}</p>
                 </div>
-              );
-            })}
-          </div>
-        </div>
+              </HighlightPost>
+            );
+          })}
+        </Highlights>
+        <FeatureTitles>
+          <p>疼痛光譜</p>
+        </FeatureTitles>
+        <ChartSection>
+          <TypesChartsSection>
+            <Chart />
+            <h1>故事類別統計</h1>
+          </TypesChartsSection>
+          <PostsCounts>
+            <h1>文章累積數量</h1>
+            <p> {stories.length} </p>
+          </PostsCounts>
+          <FigureChartSection>
+            <FigureChart />
+            <h1>故事關係人統計</h1>
+          </FigureChartSection>
+        </ChartSection>
+        {/* 
+
 
         <div>
           <button
@@ -431,7 +540,7 @@ function App() {
         </div>
 
         <div>
-          <button className="bg-blue-600 text-white mt-3">情緒光譜</button>
+
           <div className="flex justify-center ">
             <div className="">
               <FigureChart />
