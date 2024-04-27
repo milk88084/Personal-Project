@@ -6,13 +6,13 @@ import { signOut } from "firebase/auth";
 import { useLoginState } from "./utils/zustand.js";
 import { collection, query, getDocs } from "firebase/firestore";
 import { db } from "./utils/firebase/firebase.jsx";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import PostsLocation from "./components/PostLocation.jsx";
 import Chart from "./components/Chart/TypeChart.jsx";
 import FigureChart from "./components/Chart/FigureChart.jsx";
 import backgroundImg1 from "./assets/img/disagreeImg1.jpg";
 import logoImg from "./assets/img/logoImg.png";
-import logoTitle from "./assets/img/logoTitle.png";
+import logoTitle from "./assets/img/logoTitle3.png";
 import mainBanner from "./assets/img/mainBanner.jpg";
 import { CarouselDemo } from "./components/Shadcn/CarouselDemo";
 import aboutpainsectionimg from "./assets/img/aboutpainsection1.jpg";
@@ -254,6 +254,12 @@ const FeatureTitles = styled.div`
   padding-bottom: 50px;
 `;
 
+const FeatureSubTitles = styled.div`
+  font-size: 30px;
+  text-align: center;
+  color: white;
+`;
+
 const Highlights = styled.div`
   display: flex;
   justify-content: space-around;
@@ -334,13 +340,33 @@ const TypesChartsSection = styled.div`
   }
 `;
 
+const MapSection = styled.div`
+  width: 1280px;
+  margin: 0 auto;
+  margin-left: 250px;
+`;
+
 function App() {
   const navigate = useNavigate();
   const [stories, setStories] = useState([]);
   const { online, offline, logout } = useLoginState();
   const localStorageUserId = window.localStorage.getItem("userId");
   const localStorageLogin = window.localStorage.getItem("loginStatus");
+
   // const login = getLoginStatus();
+
+  //按鈕指定到區域
+  const about = useRef(null);
+  const highlight = useRef(null);
+  const chart = useRef(null);
+  const map = useRef(null);
+
+  const scrollSection = (elementRef) => {
+    window.scrollTo({
+      top: elementRef.current.offsetTop,
+      behavior: "smooth",
+    });
+  };
 
   //登出按鈕
   const handleLogout = () => {
@@ -450,10 +476,11 @@ function App() {
 
         <Banner>
           <Categories>
-            <button>關於疼痛</button>
+            <button onClick={() => scrollSection(about)}>關於疼痛</button>
+
+            <button onClick={() => scrollSection(chart)}>疼痛光譜</button>
+            <button onClick={() => scrollSection(map)}>疼痛地圖</button>
             <button>疼痛日記室</button>
-            <button>疼痛光譜</button>
-            <button>疼痛地圖</button>
             <button>心靈緊急按鈕</button>
             <button>關於我們</button>
             <button>登出</button>
@@ -465,7 +492,7 @@ function App() {
           <SubTitle>PAINSHELTER</SubTitle>
         </Banner>
 
-        <AboutPain>
+        <AboutPain ref={about}>
           <AboutPainTitle>
             <h1>關於疼痛</h1>
             <p>About Pain</p>
@@ -493,7 +520,7 @@ function App() {
           <p>精選文章</p>
         </FeatureTitles>
 
-        <Highlights>
+        <Highlights ref={highlight}>
           {randomStories.map((story, index) => {
             return (
               <HighlightPost
@@ -511,7 +538,7 @@ function App() {
           })}
         </Highlights>
         <FeatureTitles>
-          <p>疼痛光譜</p>
+          <p ref={chart}>疼痛光譜</p>
         </FeatureTitles>
         <ChartSection>
           <TypesChartsSection>
@@ -527,10 +554,16 @@ function App() {
             <h1>故事關係人統計</h1>
           </FigureChartSection>
         </ChartSection>
-        {/* 
 
+        <FeatureTitles ref={map}>
+          <p>疼痛地圖</p>
+          <FeatureSubTitles>點擊玻璃瓶查看那裡的故事</FeatureSubTitles>
+        </FeatureTitles>
+        <MapSection>
+          <PostsLocation />
+        </MapSection>
 
-        <div>
+        {/* <div>
           <button
             className="bg-blue-600 text-white  mt-3"
             onClick={() => navigate("/history")}
@@ -539,31 +572,6 @@ function App() {
           </button>
         </div>
 
-        <div>
-
-          <div className="flex justify-center ">
-            <div className="">
-              <FigureChart />
-              <p className="text-4xl text-center">關係人類型統計</p>
-            </div>
-            <div className="">
-              <h1 className="text-4xl text-center ">文章累積數量</h1>
-              <p className="text-9xl text-center items-center mt-16">
-                {stories.length}
-              </p>
-            </div>
-            <div className="">
-              <Chart />
-              <p className="text-4xl text-center">類型統計</p>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <button className="bg-blue-600 text-white mt-3">疼痛地圖</button>
-
-          <PostsLocation />
-        </div>
 
         <button
           onClick={() => navigate("/help")}
