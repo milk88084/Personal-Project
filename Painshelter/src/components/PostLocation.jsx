@@ -95,7 +95,7 @@ const PostsLocation = () => {
       <MapContainer
         center={center}
         zoom={7}
-        style={{ height: "500px", width: "80%" }}
+        style={{ height: "400px", width: "100%" }}
       >
         <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png" />
         {sanmeNameLocation.map((item, index) => (

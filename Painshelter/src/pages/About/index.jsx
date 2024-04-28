@@ -1,4 +1,4 @@
-function Home() {
+function About() {
   return (
     <>
       <p>555555555555555555</p>
@@ -6,4 +6,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default About;

@@ -72,6 +72,7 @@ const MainSection = styled.div`
     left: 0;
     right: 0;
     margin: 0 auto;
+    height: 350px;
   }
 `;
 
@@ -212,7 +213,7 @@ const Login = () => {
                 <button type="button" onClick={onLogin}>
                   登入
                 </button>
-                <button>
+                <button type="button">
                   <NavLink to="/signup">註冊會員</NavLink>
                 </button>
               </ButtonSection>

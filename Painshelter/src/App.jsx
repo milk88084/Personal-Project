@@ -348,7 +348,8 @@ const FeatureTitles = styled.div`
 
 const FeatureSubTitles = styled.div`
   font-size: 30px;
-  text-align: center;
+  text-align: end;
+  opacity: 0.6;
   color: white;
 `;
 
@@ -469,6 +470,7 @@ const FigureChartSection = styled.div`
     text-align: center;
   }
   @media screen and (max-width: 1279px) {
+    margin-left: -30px;
     h1 {
       font-size: 30px;
       opacity: 0.7;
@@ -482,6 +484,7 @@ const TypesChartsSection = styled.div`
     text-align: center;
   }
   @media screen and (max-width: 1279px) {
+    margin-left: -30px;
     h1 {
       font-size: 30px;
       opacity: 0.7;
@@ -492,17 +495,25 @@ const TypesChartsSection = styled.div`
 const MapSection = styled.div`
   width: 1280px;
   margin: 0 auto;
-  margin-left: 250px;
+  height: 100vh;
+
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+  }
 `;
 
 const FooterSection = styled.div`
   display: flex;
   width: 100%;
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
+  }
 `;
 
 const FooterImg = styled.div`
   width: 1000px;
-  img {
+  @media screen and (max-width: 1279px) {
+    width: 100%;
   }
 `;
 
@@ -512,7 +523,6 @@ const FooterContent = styled.div`
   color: white;
   font-size: 40px;
   letter-spacing: 5px;
-  /* margin-left: 50px; */
 
   button {
     color: white;
@@ -531,6 +541,26 @@ const FooterContent = styled.div`
   span:hover {
     color: #ffbb28;
     text-shadow: 1px 1px 20px white;
+  }
+
+  img {
+    position: absolute;
+    width: 100px;
+    padding: 10px;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 1279px) {
+    margin-top: 30px;
+    font-size: 20px;
+    letter-spacing: 3px;
+    padding: 10px;
+    button {
+      font-size: 40px;
+      letter-spacing: 4px;
+    }
   }
 `;
 
@@ -668,10 +698,10 @@ function App() {
             <button onClick={() => scrollSection(about)}>關於疼痛</button>
             <button onClick={() => scrollSection(chart)}>疼痛光譜</button>
             <button onClick={() => scrollSection(map)}>疼痛地圖</button>
-            <button>疼痛日記室</button>
-            <button>心靈緊急按鈕</button>
+            <button onClick={() => navigate("/history")}>疼痛日記室</button>
+            <button onClick={() => navigate("/help")}>心靈緊急按鈕</button>
             <button>關於我們</button>
-            <button>登出</button>
+            <button onClick={handleLogout}>登出</button>
           </Categories>
           <Logo>
             <img src={logoImg} alt="Logo" />
@@ -688,10 +718,14 @@ function App() {
           <AboutPaintContent>
             <span>「</span>
             <p>
-              疼痛讓我們揭開了生活的另一面，那里沒有華麗的掩飾，只有原始的、真實的自我。我們學會在這悲傷的碎片中搜尋意義，學會讓淚水洗凈心靈的創傷。
+              疼痛讓我們揭開了生活的另一面，那裡沒有華麗的掩飾，只有原始的、真實的自我。我們學會在這悲傷的碎片中找尋意義。
             </p>
             <span>」</span>
-            <img src={aboutpainsectionimg} alt="" />
+            <img
+              src={aboutpainsectionimg}
+              alt=" 
+Monochrome img"
+            />
           </AboutPaintContent>
         </AboutPain>
         <AboutPain>
@@ -700,7 +734,11 @@ function App() {
             <h2>關於收容所</h2>
           </AboutPainTitle>
           <AboutPaintContent>
-            <img src={aboutpainsectionimg2} alt="" />
+            <img
+              src={aboutpainsectionimg2}
+              alt="
+Monochrome img"
+            />
             <span>「</span>
             <p>
               疼痛收容所是一個放置任意程度大小疼痛的故事空間，在這裡將不問對錯、不批判，期待達成自我療癒
@@ -751,31 +789,24 @@ function App() {
           </ChartSection>
         </ChartFeature>
 
-        {/* 
-
-
-
-
-
-       
         <FeatureTitles ref={map}>
           <p>疼痛地圖</p>
-          <FeatureSubTitles>點擊玻璃瓶查看那裡的故事</FeatureSubTitles>
+          <FeatureSubTitles>觸碰玻璃瓶，解鎖被時間遺忘的故事</FeatureSubTitles>
         </FeatureTitles>
         <MapSection>
-          <p>疼痛地圖</p>
           <PostsLocation />
         </MapSection>
 
         <FooterSection>
           <FooterImg>
-            <img src={footer1} alt="" />
+            <img src={footer1} alt="footer img" />
           </FooterImg>
           <FooterContent>
             <AccordionDemo></AccordionDemo>
             <button onClick={handleLogout}>登出</button>
+            <img onClick={() => scrollSection(top)} src={logoImg} alt="logo" />
           </FooterContent>
-        </FooterSection> */}
+        </FooterSection>
       </Background>
     </>
   );
