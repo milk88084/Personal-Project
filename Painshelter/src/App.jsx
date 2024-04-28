@@ -17,6 +17,8 @@ import mainBanner from "./assets/img/mainBanner.jpg";
 import { CarouselDemo } from "./components/Shadcn/CarouselDemo";
 import aboutpainsectionimg from "./assets/img/aboutpainsection1.jpg";
 import aboutpainsectionimg2 from "./assets/img/aboutpainsection2.jpg";
+import footer1 from "./assets/img/mainFooter1.jpg";
+import footer2 from "./assets/img/mainFooter2.jpg";
 
 const Background = styled.div`
   background-color: #1a1a1a;
@@ -346,6 +348,35 @@ const MapSection = styled.div`
   margin-left: 250px;
 `;
 
+const FooterSection = styled.div`
+  display: flex;
+  width: 100%;
+`;
+
+const FooterImg = styled.div`
+  width: 800px;
+  img {
+  }
+`;
+
+const FooterContent = styled.div`
+  width: 100%;
+  button {
+    color: white;
+    display: block;
+    text-align: end;
+    font-size: 40px;
+    letter-spacing: 5px;
+    padding-top: 30px;
+    font-weight: 600;
+  }
+
+  hr1 {
+    border: 1px solid;
+    width: auto;
+  }
+`;
+
 function App() {
   const navigate = useNavigate();
   const [stories, setStories] = useState([]);
@@ -360,6 +391,7 @@ function App() {
   const highlight = useRef(null);
   const chart = useRef(null);
   const map = useRef(null);
+  const top = useRef(null);
 
   const scrollSection = (elementRef) => {
     window.scrollTo({
@@ -383,6 +415,7 @@ function App() {
       });
     offline();
     logout();
+    scrollSection(top);
   };
 
   //同意進入頁面按鈕
@@ -475,7 +508,7 @@ function App() {
         )}
 
         <Banner>
-          <Categories>
+          <Categories ref={top}>
             <button onClick={() => scrollSection(about)}>關於疼痛</button>
 
             <button onClick={() => scrollSection(chart)}>疼痛光譜</button>
@@ -560,8 +593,21 @@ function App() {
           <FeatureSubTitles>點擊玻璃瓶查看那裡的故事</FeatureSubTitles>
         </FeatureTitles>
         <MapSection>
+          <p>疼痛地圖</p>
           <PostsLocation />
         </MapSection>
+        <FooterSection>
+          <FooterImg>
+            <img src={footer1} alt="" />
+          </FooterImg>
+          <FooterContent>
+            <button>疼痛日記室</button>
+            <hr></hr>
+            <button>心靈緊急按鈕</button>
+            <button>關於我們</button>
+            <button>登出</button>
+          </FooterContent>
+        </FooterSection>
 
         {/* <div>
           <button
