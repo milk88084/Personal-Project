@@ -70,10 +70,21 @@ export default function FigureChart() {
     "pink",
   ];
 
+  const [width, setWidth] = useState(520);
+  useEffect(() => {
+    const handleResizes = () => {
+      setWidth(window.innerWidth <= 1279 ? 480 : 520);
+    };
+    window.addEventListener("resize", handleResizes);
+    return () => {
+      window.removeEventListener("resize", handleResizes);
+    };
+  }, []);
+
   return (
     <div>
       <ScatterChart
-        width={520}
+        width={width}
         height={350}
         margin={{
           top: 20,

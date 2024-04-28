@@ -63,6 +63,16 @@ export default function TypeChart() {
 
   // console.log(chartData);
 
+  //監聽視窗大小，去調整地圖的寬度
+  const [width, setWidth] = useState(520);
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth <= 1279 ? 480 : 520);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const COLORS = [
     "#FFF0AC",
     "#FFED97",
@@ -75,7 +85,7 @@ export default function TypeChart() {
   return (
     <div>
       <ScatterChart
-        width={520}
+        width={width}
         height={350}
         margin={{
           top: 20,

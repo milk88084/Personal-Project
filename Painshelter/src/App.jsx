@@ -15,10 +15,10 @@ import logoImg from "./assets/img/logoImg.png";
 import logoTitle from "./assets/img/logoTitle3.png";
 import mainBanner from "./assets/img/mainBanner.jpg";
 import { CarouselDemo } from "./components/Shadcn/CarouselDemo";
+import { AccordionDemo } from "./components/Shadcn/Accordion";
 import aboutpainsectionimg from "./assets/img/aboutpainsection1.jpg";
 import aboutpainsectionimg2 from "./assets/img/aboutpainsection2.jpg";
 import footer1 from "./assets/img/mainFooter1.jpg";
-import footer2 from "./assets/img/mainFooter2.jpg";
 
 const Background = styled.div`
   background-color: #1a1a1a;
@@ -132,6 +132,7 @@ const Banner = styled.div`
   background-image: url(${mainBanner});
   height: 100vh;
   @media screen and (max-width: 1279px) {
+    height: 600px;
   }
 `;
 
@@ -157,6 +158,19 @@ const Categories = styled.div`
     transform: scale(1.1);
     text-shadow: 1px 1px 20px white;
   }
+
+  @media screen and (max-width: 1279px) {
+    font-size: 20px;
+    letter-spacing: 1px;
+    font-weight: 500;
+    padding-top: 0px;
+
+    button {
+      margin: 3px;
+      margin-right: 0px;
+      opacity: 10%;
+    }
+  }
 `;
 
 const Logo = styled.div`
@@ -164,7 +178,6 @@ const Logo = styled.div`
   position: absolute;
   left: 0;
   top: 0;
-
   margin-top: 180px;
   margin-left: 180px;
 
@@ -177,6 +190,20 @@ const Logo = styled.div`
     width: 500px;
     object-fit: contain;
   }
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
+    align-items: center;
+    margin-left: 0px;
+    right: 0;
+    margin: 50 auto;
+    img:nth-of-type(1) {
+      width: 150px;
+    }
+
+    img:nth-of-type(2) {
+      width: 250px;
+    }
+  }
 `;
 
 const SubTitle = styled.div`
@@ -186,37 +213,72 @@ const SubTitle = styled.div`
   font-family: sans-serif;
   opacity: 5%;
   margin-top: -150px;
+  @media screen and (max-width: 1279px) {
+    display: none;
+  }
 `;
 
 const AboutPain = styled.div`
-  background: linear-gradient(#1a1a1a, #000d15);
   color: white;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  @media screen and (max-width: 1279px) {
+    height: 100%;
+    width: 100%;
+  }
 `;
 
 const AboutPainTitle = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 50px;
+  font-style: oblique;
   h1 {
-    font-style: oblique;
     margin-left: 50px;
     font-size: 80px;
+    font-weight: 600;
   }
   h2 {
-    font-style: oblique;
     margin-right: 50px;
     font-size: 80px;
+    font-weight: 600;
   }
   p {
-    font-style: oblique;
     font-size: 50px;
     margin-right: 50px;
+    opacity: 50%;
   }
   span {
-    font-style: oblique;
     font-size: 50px;
     margin-left: 50px;
+    opacity: 50%;
+  }
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
+    align-items: start;
+    margin-top: 50px;
+    h1 {
+      margin-left: 15px;
+      font-size: 60px;
+      font-weight: 500;
+    }
+    h2 {
+      margin-right: 0px;
+      font-size: 60px;
+      font-weight: 500;
+      margin-left: 15px;
+    }
+    p {
+      font-size: 30px;
+      margin-right: 0px;
+      margin-left: 15px;
+    }
+    span {
+      font-size: 30px;
+      margin-left: 15px;
+    }
   }
 `;
 
@@ -230,9 +292,9 @@ const AboutPaintContent = styled.div`
     opacity: 65%;
   }
   span {
-    width: 600px;
-    margin-right: 50px;
     opacity: 65%;
+    font-size: 50px;
+    font-weight: 300;
   }
   img {
     margin-right: 50px;
@@ -244,16 +306,44 @@ const AboutPaintContent = styled.div`
     filter: grayscale(100%);
     filter: gray;
   }
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
+    align-items: flex-end;
+    position: relative;
+    p {
+      width: 100%;
+      margin-left: 0px;
+      padding: 15px;
+    }
+    span {
+      display: none;
+    }
+
+    img {
+      margin: 0 auto;
+      width: 100%;
+    }
+  }
 `;
 
 const FeatureTitles = styled.div`
-  background-color: #000d15;
+  width: 1280px;
   color: white;
-  font-style: oblique;
   font-size: 80px;
-  text-align: center;
-  padding-top: 150px;
-  padding-bottom: 50px;
+  padding-bottom: 30px;
+  position: relative;
+  font-weight: 600;
+  margin-left: 50px;
+  font-style: oblique;
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+    font-size: 60px;
+    padding-bottom: 30px;
+    font-weight: 500;
+    margin-left: 0px;
+    text-align: center;
+    margin-top: 50px;
+  }
 `;
 
 const FeatureSubTitles = styled.div`
@@ -267,7 +357,6 @@ const Highlights = styled.div`
   justify-content: space-around;
   gap: 30px;
   flex-wrap: wrap;
-  background: linear-gradient(#000d15, #001420);
 `;
 
 const HighlightPost = styled.div`
@@ -276,6 +365,7 @@ const HighlightPost = styled.div`
   width: 400px;
   border-radius: 20px;
   font-size: 18px;
+  box-shadow: 3px 3px 15px 3px rgba(255, 238, 3, 0.2);
 
   div {
     padding: 30px;
@@ -303,10 +393,41 @@ const HighlightPost = styled.div`
   }
 
   &:hover {
-    background-color: #65747b;
+    background: linear-gradient(
+      315deg,
+      rgba(219, 180, 0, 1) 0%,
+      rgba(233, 212, 148, 1) 69%,
+      rgba(238, 235, 174, 1) 100%
+    );
     cursor: pointer;
     transform: scale(1.1);
     color: white;
+  }
+`;
+
+const ChartFeature = styled.div`
+  height: 100vh;
+  p {
+    color: white;
+    font-size: 80px;
+    font-weight: 600;
+    margin-left: 50px;
+    font-style: oblique;
+    margin-top: 50px;
+  }
+
+  @media screen and (max-width: 1279px) {
+    height: 100%;
+    width: 100%;
+    p {
+      width: 100%;
+      font-size: 60px;
+      padding-bottom: 5px;
+      font-weight: 500;
+      margin-left: 0px;
+      text-align: center;
+      margin-top: 50px;
+    }
   }
 `;
 
@@ -314,6 +435,12 @@ const ChartSection = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  position: relative;
+  margin-top: 30px;
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
+    justify-content: center;
+  }
 `;
 
 const PostsCounts = styled.div`
@@ -325,6 +452,14 @@ const PostsCounts = styled.div`
     font-size: 180px;
     font-weight: 700;
   }
+  @media screen and (max-width: 1279px) {
+    margin-top: 30px;
+
+    p {
+      font-size: 160px;
+      font-weight: 700;
+    }
+  }
 `;
 
 const FigureChartSection = styled.div`
@@ -333,12 +468,24 @@ const FigureChartSection = styled.div`
     font-size: 40px;
     text-align: center;
   }
+  @media screen and (max-width: 1279px) {
+    h1 {
+      font-size: 30px;
+      opacity: 0.7;
+    }
+  }
 `;
 const TypesChartsSection = styled.div`
   color: white;
   h1 {
     font-size: 40px;
     text-align: center;
+  }
+  @media screen and (max-width: 1279px) {
+    h1 {
+      font-size: 30px;
+      opacity: 0.7;
+    }
   }
 `;
 
@@ -354,26 +501,36 @@ const FooterSection = styled.div`
 `;
 
 const FooterImg = styled.div`
-  width: 800px;
+  width: 1000px;
   img {
   }
 `;
 
 const FooterContent = styled.div`
+  margin-top: 50px;
   width: 100%;
+  color: white;
+  font-size: 40px;
+  letter-spacing: 5px;
+  /* margin-left: 50px; */
+
   button {
     color: white;
-    display: block;
-    text-align: end;
+    opacity: 80%;
     font-size: 40px;
     letter-spacing: 5px;
     padding-top: 30px;
     font-weight: 600;
   }
 
-  hr1 {
-    border: 1px solid;
-    width: auto;
+  span {
+    color: #fff0ac;
+    cursor: pointer;
+  }
+
+  span:hover {
+    color: #ffbb28;
+    text-shadow: 1px 1px 20px white;
   }
 `;
 
@@ -506,11 +663,9 @@ function App() {
             </Opacity>
           </ModalBackground>
         )}
-
         <Banner>
           <Categories ref={top}>
             <button onClick={() => scrollSection(about)}>關於疼痛</button>
-
             <button onClick={() => scrollSection(chart)}>疼痛光譜</button>
             <button onClick={() => scrollSection(map)}>疼痛地圖</button>
             <button>疼痛日記室</button>
@@ -531,24 +686,31 @@ function App() {
             <p>About Pain</p>
           </AboutPainTitle>
           <AboutPaintContent>
+            <span>「</span>
             <p>
               疼痛讓我們揭開了生活的另一面，那里沒有華麗的掩飾，只有原始的、真實的自我。我們學會在這悲傷的碎片中搜尋意義，學會讓淚水洗凈心靈的創傷。
             </p>
+            <span>」</span>
             <img src={aboutpainsectionimg} alt="" />
           </AboutPaintContent>
+        </AboutPain>
+        <AboutPain>
           <AboutPainTitle>
             <span>About Shelter</span>
             <h2>關於收容所</h2>
           </AboutPainTitle>
           <AboutPaintContent>
             <img src={aboutpainsectionimg2} alt="" />
-            <span>
+            <span>「</span>
+            <p>
               疼痛收容所是一個放置任意程度大小疼痛的故事空間，在這裡將不問對錯、不批判，期待達成自我療癒
               / 你可以在這裡分享任何大小的疼痛故事、不能說的秘密到平台上 /
               我們期待在這個微小的樹洞中，可以安置你的故事，或在瀏覽或傾聽他人的故事中，讓悲傷的故事或許不會那麼令人心碎。
-            </span>
+            </p>
+            <span>」</span>
           </AboutPaintContent>
         </AboutPain>
+
         <FeatureTitles>
           <p>精選文章</p>
         </FeatureTitles>
@@ -570,24 +732,32 @@ function App() {
             );
           })}
         </Highlights>
-        <FeatureTitles>
-          <p ref={chart}>疼痛光譜</p>
-        </FeatureTitles>
-        <ChartSection>
-          <TypesChartsSection>
-            <Chart />
-            <h1>故事類別統計</h1>
-          </TypesChartsSection>
-          <PostsCounts>
-            <h1>文章累積數量</h1>
-            <p> {stories.length} </p>
-          </PostsCounts>
-          <FigureChartSection>
-            <FigureChart />
-            <h1>故事關係人統計</h1>
-          </FigureChartSection>
-        </ChartSection>
 
+        <ChartFeature>
+          <p ref={chart}>疼痛光譜</p>
+          <ChartSection>
+            <TypesChartsSection>
+              <Chart />
+              <h1>故事類別統計</h1>
+            </TypesChartsSection>
+            <PostsCounts>
+              <h1>文章累積數量</h1>
+              <p> {stories.length} </p>
+            </PostsCounts>
+            <FigureChartSection>
+              <FigureChart />
+              <h1>故事關係人統計</h1>
+            </FigureChartSection>
+          </ChartSection>
+        </ChartFeature>
+
+        {/* 
+
+
+
+
+
+       
         <FeatureTitles ref={map}>
           <p>疼痛地圖</p>
           <FeatureSubTitles>點擊玻璃瓶查看那裡的故事</FeatureSubTitles>
@@ -596,44 +766,16 @@ function App() {
           <p>疼痛地圖</p>
           <PostsLocation />
         </MapSection>
+
         <FooterSection>
           <FooterImg>
             <img src={footer1} alt="" />
           </FooterImg>
           <FooterContent>
-            <button>疼痛日記室</button>
-            <hr></hr>
-            <button>心靈緊急按鈕</button>
-            <button>關於我們</button>
-            <button>登出</button>
+            <AccordionDemo></AccordionDemo>
+            <button onClick={handleLogout}>登出</button>
           </FooterContent>
-        </FooterSection>
-
-        {/* <div>
-          <button
-            className="bg-blue-600 text-white  mt-3"
-            onClick={() => navigate("/history")}
-          >
-            疼痛日記室
-          </button>
-        </div>
-
-
-        <button
-          onClick={() => navigate("/help")}
-          className="bg-blue-600 text-white mt-3"
-        >
-          心靈緊急按鈕
-        </button> */}
-
-        {/* 登出 */}
-        <button className="mt-5">
-          <div>
-            <button onClick={handleLogout} className=" border-2 border-black ">
-              登出
-            </button>
-          </div>
-        </button>
+        </FooterSection> */}
       </Background>
     </>
   );
