@@ -51,6 +51,32 @@ const Background = styled.div`
       color: white;
     }
   }
+
+  @media screen and (max-width: 1279px) {
+    width: 70%;
+    height: 80%;
+    padding: 15px;
+    border-radius: 12px;
+    h1 {
+      font-size: 25px;
+    }
+
+    h2 {
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    p {
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 7px;
+      border-radius: 10px;
+      margin: 20px;
+    }
+  }
 `;
 
 export default function Modal() {

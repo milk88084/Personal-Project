@@ -8,6 +8,7 @@ import moment from "moment";
 import styled from "styled-components";
 import backgroundImg from "../../assets/img/historyBanner.jpg";
 import logoImg from "../../assets/img/logoImg.png";
+import logoTitle from "../../assets/img/logoTitle.png";
 import { HistoryModal } from "../../utils/zustand.js";
 import ModalHistory from "../../components/ModalHistory.jsx";
 import follower from "../../assets/icon/follower.png";
@@ -28,6 +29,7 @@ const Background = styled.div`
     rgba(38, 45, 37, 1) 100%
   );
   color: white;
+  position: relative;
 `;
 
 const TopSection = styled.div`
@@ -49,6 +51,16 @@ const TopSection = styled.div`
     margin-bottom: 30px;
     opacity: 0.2;
   }
+
+  @media screen and (max-width: 1279px) {
+    p {
+      font-size: 20px;
+      font-weight: 400;
+      text-shadow: 2px 3px 4px white;
+      margin-right: 20px;
+      margin-bottom: 15px;
+    }
+  }
 `;
 
 const TopSectionName = styled.div`
@@ -68,6 +80,21 @@ const TopSectionName = styled.div`
     width: 140px;
     height: 140px;
   }
+
+  @media screen and (max-width: 1279px) {
+    margin-left: 50px;
+    margin-top: 200px;
+    h1 {
+      font-size: 44px;
+      font-weight: 700;
+      text-shadow: 2px 4px 4px white;
+    }
+
+    img {
+      width: 70px;
+      height: 70px;
+    }
+  }
 `;
 
 const Categories = styled.div`
@@ -77,6 +104,10 @@ const Categories = styled.div`
   font-size: 50px;
   padding: 20px;
   font-weight: 500;
+  @media screen and (max-width: 1279px) {
+    padding: 15px;
+    margin-top: 20px;
+  }
 `;
 
 const CategoriesSection = styled.div`
@@ -123,6 +154,39 @@ const CategoriesSection = styled.div`
       color: black;
     }
   }
+
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+    display: flex;
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    p {
+      font-size: 50px;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: 15px;
+      margin-left: 7px;
+    }
+
+    img {
+      width: 20px;
+      height: 20px;
+    }
+
+    button {
+      padding: 6px;
+      border-radius: 10px;
+      font-weight: 400;
+      margin: 15px;
+      font-size: 10px;
+    }
+  }
 `;
 
 const Title = styled.p`
@@ -131,28 +195,26 @@ const Title = styled.p`
   align-items: center;
   font-size: 100px;
   height: 300px;
+  @media screen and (max-width: 1279px) {
+    font-size: 50px;
+    height: 150px;
+  }
 `;
 
 const StorySection = styled.div`
   width: 1280px;
-
   margin: 0 auto;
   position: relative;
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+  }
 `;
 
 const EachStory = styled.div`
   height: 300px;
-  background: #8e9eab; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #eef2f3,
-    #8e9eab
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #eef2f3,
-    #8e9eab
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #8e9eab;
+  background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);
+  background: linear-gradient(to right, #eef2f3, #8e9eab);
 
   color: #555555;
   border-radius: 20px 20px 0 0px;
@@ -222,6 +284,48 @@ const EachStory = styled.div`
       color: black;
     }
   }
+
+  @media screen and (max-width: 1279px) {
+    height: 250px;
+
+    div:nth-of-type(1) {
+      width: 65px;
+      height: 150px;
+      font-size: 70px;
+    }
+    div:nth-of-type(2) {
+      width: 65%;
+      padding: 10px;
+
+      p {
+        -webkit-line-clamp: 1;
+        margin-top: 10px;
+      }
+    }
+
+    div:nth-of-type(3) {
+      width: 9%;
+      display: block;
+    }
+
+    h1 {
+      font-size: 12px;
+    }
+
+    span {
+      margin-right: 7px;
+      padding: 2px;
+      border-radius: 5px;
+      font-size: 10px;
+    }
+
+    button {
+      padding: 4px;
+      border-radius: 5px;
+      font-size: 11px;
+      margin-top: 8px;
+    }
+  }
 `;
 
 const Heart = styled.div`
@@ -234,12 +338,77 @@ const Heart = styled.div`
   img {
     width: 30px;
   }
+  @media screen and (max-width: 1279px) {
+    p {
+      font-size: 15px;
+      margin-left: 5px;
+    }
+    img {
+      width: 20px;
+    }
+  }
 `;
 
 const Comment = styled.div`
   position: absolute;
   margin-left: 367px;
   margin-top: 260px;
+`;
+
+const FAB = styled.div`
+  width: 100%;
+  height: 150px;
+  color: black;
+  border-radius: 20%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  button {
+    padding: 10px;
+    border-radius: 7px;
+    font-weight: 300;
+    font-size: 15px;
+    background-color: #19242b;
+    color: white;
+    margin-top: 10px;
+
+    &:hover,
+    &:focus {
+      background-color: #9ca3af;
+      color: black;
+    }
+  }
+
+  div {
+    display: flex;
+  }
+
+  img {
+    width: 50px;
+    height: 50px;
+  }
+
+  img:nth-of-type(2) {
+    width: 120px;
+  }
+
+  @media screen and (max-width: 1279px) {
+    button {
+      padding: 7px;
+      border-radius: 5px;
+      font-size: 12px;
+    }
+
+    img {
+      width: 40px;
+      height: 40px;
+    }
+
+    img:nth-of-type(2) {
+      width: 100px;
+    }
+  }
 `;
 
 //#endregion
@@ -421,6 +590,7 @@ export default function History() {
             <button>瀏覽他人文章</button>
           </CategoriesSection>
         </Categories>
+
         <Title>歷史文章</Title>
         <StorySection>
           {sortTimeOfStory &&
@@ -460,7 +630,9 @@ export default function History() {
                       </p>
                     </Heart>
                   </div>
-                  {/* <Comment>
+
+                  {/* 
+                  <Comment>
                     {story.userComments ? (
                       <p>
                         留言內容：
@@ -476,6 +648,16 @@ export default function History() {
               );
             })}
         </StorySection>
+
+        <FAB>
+          <button onClick={() => navigate("/")}>點我回首頁</button>
+          <div>
+            <img src={logoImg} alt={logoImg} />
+            <img src={logoTitle} alt={logoTitle}></img>
+          </div>
+
+          <button onClick={showModal}>看小故事</button>
+        </FAB>
       </Background>
 
       {modal ? <ModalHistory /> : null}
@@ -485,50 +667,6 @@ export default function History() {
         {authors &&
           authors.map((name, index) => <p key={index}>{name.name}</p>)}
       </div> */}
-
-      {/* {stories &&
-        stories.map((story, index) => {
-          return (
-            <div className="bg-blue-600 text-white mt-3" key={index}>
-              <p>標題：{story.title}</p>
-              <p>時間：{story.time}</p>
-              <p>地點：{story.location.name}</p>
-              <p>類型：{story.type}</p>
-              <p>人物：{story.figure}</p>
-              <p>內文：{story.story}</p>
-              <p>
-                按讚數量：
-                {story.likedAuthorId?.length > 0
-                  ? story.likedAuthorId.length
-                  : 0}
-              </p>
-              {story.userComments ? (
-                <p>
-                  留言內容：
-                  {story.userComments?.map((comment, index) => (
-                    <p key={index}>{comment.comment}</p>
-                  ))}
-                </p>
-              ) : (
-                ""
-              )}
-
-              <button
-                className="bg-red-600 text-white mt-3 m-2"
-                onClick={() => modifiedClick(story.storyId)}
-              >
-                編輯
-              </button>
-            </div>
-          );
-        })} */}
-      <button
-        className="bg-pink-600 text-white mt-3 m-2"
-        onClick={() => navigate("/")}
-      >
-        點我回首頁
-      </button>
-      <button onClick={showModal}>看小故事</button>
     </div>
   );
 }
