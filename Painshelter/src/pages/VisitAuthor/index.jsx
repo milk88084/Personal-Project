@@ -272,7 +272,7 @@ const VisitAuthor = () => {
             <p>類型：{story.type}</p>
             <p>人物：{story.figure}</p>
             <p>內容：{story.story}</p>
-            <div className="bg-yellow-300 flex justify-evenly text-black ">
+            <div className="bg-green-300 flex justify-evenly text-black ">
               <span>
                 按讚數量：
                 {story.likedAuthorId?.length > 0

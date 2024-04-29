@@ -20,6 +20,7 @@ import aboutpainsectionimg from "./assets/img/aboutpainsection1.jpg";
 import aboutpainsectionimg2 from "./assets/img/aboutpainsection2.jpg";
 import footer1 from "./assets/img/mainFooter1.jpg";
 
+//#region
 const Background = styled.div`
   background-color: #1a1a1a;
   position: relative;
@@ -563,6 +564,7 @@ const FooterContent = styled.div`
     }
   }
 `;
+//#endregion
 
 function App() {
   const navigate = useNavigate();

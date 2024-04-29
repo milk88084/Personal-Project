@@ -28,7 +28,7 @@ export function AccordionDemo() {
         <AccordionTrigger>關於我們</AccordionTrigger>
         <AccordionContent>
           這裡彙集了那些勇於分享的靈魂們的聲音，每段故事都是一盞燈塔，照亮著相似道路上的旅人。每一段遭遇，每一個感受，在這裡，都會發現與之共鳴的回音。記住，每一段經歷，無論喜悅或是痛苦，都不應該孤獨承擔。
-          <span onClick={() => navigate("/history")}>點擊進入</span>
+          <span onClick={() => navigate("/about")}>點擊進入</span>
         </AccordionContent>
       </AccordionItem>
     </Accordion>

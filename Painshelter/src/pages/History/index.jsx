@@ -1,9 +1,86 @@
 import { useNavigate } from "react-router-dom";
 import { db } from "../../utils/firebase/firebase.jsx";
+import { auth } from "../../utils/firebase/auth.jsx";
 import { collection, query, getDocs, where } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import poem from "../../utils/data/poem.json";
 import { modifiedData } from "../../utils/zustand.js";
+import moment from "moment";
+import styled from "styled-components";
+import backgroundImg from "../../assets/img/historyBanner.jpg";
+import logoImg from "../../assets/img/logoImg.png";
+import { HistoryModal } from "../../utils/zustand.js";
+import ModalHistory from "../../components/ModalHistory.jsx";
+
+//#region
+const Background = styled.div`
+  background: linear-gradient(
+    90deg,
+    rgba(0, 2, 0, 1) 0%,
+    rgba(2, 3, 1, 1) 15%,
+    rgba(9, 14, 8, 1) 34%,
+    rgba(16, 23, 15, 1) 51%,
+    rgba(23, 30, 22, 1) 69%,
+    rgba(26, 33, 25, 1) 83%,
+    rgba(38, 45, 37, 1) 100%
+  );
+  color: white;
+`;
+
+const TopSection = styled.div`
+  background-image: url(${backgroundImg});
+  width: 100%;
+  height: 100vh;
+  position: relative;
+
+  p {
+    position: absolute;
+    text-align: end;
+    font-size: 40px;
+    font-weight: 600;
+    color: white;
+    text-shadow: 3px 4px 6px white;
+    bottom: 0;
+    right: 0;
+    margin-right: 30px;
+    margin-bottom: 30px;
+    opacity: 0.2;
+  }
+`;
+
+const TopSectionName = styled.div`
+  display: flex;
+  align-items: center;
+  position: absolute;
+  margin-left: 100px;
+  margin-top: 200px;
+  h1 {
+    font-size: 120px;
+    font-weight: 1000;
+    color: white;
+    text-shadow: 3px 6px 6px white;
+  }
+
+  img {
+    width: 140px;
+    height: 140px;
+  }
+`;
+
+const Categories = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 50px;
+  padding: 20px;
+  font-weight: 500;
+`;
+
+const CategoriesSection = styled.div`
+  text-align: center;
+`;
+
+//#endregion
 
 export default function History() {
   const [stories, setStories] = useState([]);
@@ -15,6 +92,9 @@ export default function History() {
   const { setSelectedStoryId } = modifiedData();
   const [followList, setFollowList] = useState();
   const [authors, setAuthors] = useState();
+  const [pressure, setPressure] = useState();
+  const [lastPressure, setLastPressure] = useState();
+  const { modal } = HistoryModal();
 
   useEffect(() => {
     async function getStories() {
@@ -42,6 +122,10 @@ export default function History() {
           .map((doc) => doc.data().followAuthor)
           .flat();
         setFollowList(followListData);
+        const pressureCount = querySnapshotA.docs
+          .map((doc) => doc.data().stressRecord)
+          .flat();
+        setPressure(pressureCount);
       } catch (e) {
         console.log(e);
       }
@@ -49,8 +133,16 @@ export default function History() {
     getStories();
   }, []);
 
+  // console.log(pressure);
   // console.log(followList);
   // console.log(stories);
+  let getLastPressureNumber = {};
+  if (pressure && pressure.length > 0) {
+    getLastPressureNumber = pressure[pressure?.length - 1];
+  } else {
+    console.log("沒有測驗過");
+  }
+  console.log(getLastPressureNumber.number);
 
   const modifiedClick = (storyId) => {
     navigate(`/edit/${storyId}`);
@@ -82,16 +174,76 @@ export default function History() {
     }
     getAuthors();
   }, [db, followList]);
+  // console.log(authors);
 
-  console.log(authors);
+  //拿到作者本人的名字
+  const [name, setName] = useState();
+  useEffect(() => {
+    async function getAuthor() {
+      try {
+        const authorData = collection(db, "users");
+        const q = query(authorData, where("id", "==", localStorageUserId));
+        const querySnapshot = await getDocs(q);
+        const author = querySnapshot.docs.map((doc) => ({
+          name: doc.data().name,
+        }));
+        setName(author);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    getAuthor();
+  }, []);
+  // console.log(name[0]?.name);
+
+  //拿到user的加入日期
+
+  const [createUserTime, setCreateUserTime] = useState("");
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      const creationTime = user.metadata.creationTime;
+      setCreateUserTime(creationTime);
+    } else {
+      console.log("No user is signed in.");
+    }
+  }, []);
+  const showCreation = moment(createUserTime).format("YYYY-MM-DD");
 
   return (
     <div>
-      <h2 className="text-6xl font-sans font-black tracking-wider text-center ">
+      <Background>
+        <TopSection>
+          <TopSectionName>
+            <img src={logoImg} alt="logo" />
+            <h1>{name && name[0]?.name}</h1>
+          </TopSectionName>
+          <p>{showCreation}</p>
+        </TopSection>
+
+        {/* <Categories>
+          <CategoriesSection>
+            <p>文章數量</p>
+            <p>{stories.length}篇</p>
+          </CategoriesSection>
+          <CategoriesSection>
+            <p>壓力指數</p>
+            <p>{getLastPressureNumber.number}分</p>
+          </CategoriesSection>
+          <CategoriesSection>
+            <p>關注作者</p>
+            <p>{authors && authors.length}位</p>
+          </CategoriesSection>
+        </Categories> */}
+      </Background>
+
+      {modal ? <ModalHistory /> : null}
+
+      {/* <h2 className="text-6xl font-sans font-black tracking-wider text-center ">
         暖心小語
       </h2>
       <p className="m-3 bg-yellow-300">標題：{randPoem.title}</p>
-      <p className="m-3 bg-green-300">內文：{randPoem.content}</p>
+      <p className="m-3 bg-green-300">內文：{randPoem.content}</p> */}
       <button
         className="bg-blue-600 text-white mt-3"
         onClick={() => navigate("/post")}
@@ -99,14 +251,14 @@ export default function History() {
         點我撰寫日記
       </button>
 
-      <div>
+      {/* <div>
         <h1 className="m-3 bg-yellow-300">關注列表</h1>
         {authors &&
           authors.map((name, index) => <p key={index}>{name.name}</p>)}
-      </div>
+      </div> */}
 
       <p className="m-3 bg-yellow-300">歷史日記</p>
-      {stories &&
+      {/* {stories &&
         stories.map((story, index) => {
           return (
             <div className="bg-blue-600 text-white mt-3" key={index}>
@@ -141,7 +293,7 @@ export default function History() {
               </button>
             </div>
           );
-        })}
+        })} */}
       <button
         className="bg-pink-600 text-white mt-3 m-2"
         onClick={() => navigate("/")}
