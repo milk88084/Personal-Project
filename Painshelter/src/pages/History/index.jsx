@@ -3,7 +3,6 @@ import { db } from "../../utils/firebase/firebase.jsx";
 import { auth } from "../../utils/firebase/auth.jsx";
 import { collection, query, getDocs, where } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import poem from "../../utils/data/poem.json";
 import { modifiedData } from "../../utils/zustand.js";
 import moment from "moment";
 import styled from "styled-components";
@@ -11,6 +10,10 @@ import backgroundImg from "../../assets/img/historyBanner.jpg";
 import logoImg from "../../assets/img/logoImg.png";
 import { HistoryModal } from "../../utils/zustand.js";
 import ModalHistory from "../../components/ModalHistory.jsx";
+import follower from "../../assets/icon/follower.png";
+import pressureIcon from "../../assets/icon/pressure.png";
+import write from "../../assets/icon/write.png";
+import pill from "../../assets/icon/pill.png";
 
 //#region
 const Background = styled.div`
@@ -77,7 +80,166 @@ const Categories = styled.div`
 `;
 
 const CategoriesSection = styled.div`
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  p {
+    font-size: 100px;
+    font-weight: 900;
+  }
+
+  h1 {
+    font-size: 30px;
+    margin-left: 30px;
+    opacity: 0.6;
+  }
+
+  img {
+    width: 40px;
+    height: 40px;
+    opacity: 0.6;
+  }
+
+  button {
+    padding: 6px;
+    border-radius: 10px;
+    font-weight: 400;
+    margin: 24px;
+    font-size: 20px;
+    background-color: #19242b;
+    color: white;
+
+    &:hover,
+    &:focus {
+      background-color: #9ca3af;
+      color: black;
+    }
+  }
+`;
+
+const Title = styled.p`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 100px;
+  height: 300px;
+`;
+
+const StorySection = styled.div`
+  width: 1280px;
+
+  margin: 0 auto;
+  position: relative;
+`;
+
+const EachStory = styled.div`
+  height: 300px;
+  background: #8e9eab; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #eef2f3,
+    #8e9eab
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #eef2f3,
+    #8e9eab
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  color: #555555;
+  border-radius: 20px 20px 0 0px;
+  box-shadow: 20px -10px 20px 10px rgba(0, 0, 0, 0.2);
+  margin-top: -30px;
+  display: flex;
+
+  div:nth-of-type(1) {
+    width: 350px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 200px;
+    font-weight: bold;
+    opacity: 0.6;
+    color: #8e9eab;
+    text-shadow: 3px 1px 6px white;
+  }
+  div:nth-of-type(2) {
+    width: 60%;
+    padding: 20px;
+
+    p {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 15px;
+    }
+  }
+
+  div:nth-of-type(3) {
+    width: 10%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  h1 {
+    font-size: 30px;
+    font-weight: bold;
+  }
+
+  span {
+    background: #8e9eab;
+    margin-right: 10px;
+    padding: 3px;
+    border-radius: 8px;
+    color: white;
+    font-size: 13px;
+  }
+
+  button {
+    padding: 6px;
+    border-radius: 7px;
+    font-weight: 300;
+    font-size: 15px;
+    background-color: #19242b;
+    color: white;
+    margin-top: 10px;
+
+    &:hover,
+    &:focus {
+      background-color: #9ca3af;
+      color: black;
+    }
+  }
+`;
+
+const Heart = styled.div`
+  p {
+    font-size: 20px;
+    color: black;
+    text-shadow: none;
+    margin-left: 10px;
+  }
+  img {
+    width: 30px;
+  }
+`;
+
+const Comment = styled.div`
+  position: absolute;
+  margin-left: 367px;
+  margin-top: 260px;
 `;
 
 //#endregion
@@ -85,16 +247,12 @@ const CategoriesSection = styled.div`
 export default function History() {
   const [stories, setStories] = useState([]);
   const navigate = useNavigate();
-  const poemData = poem;
-  const rand = Math.floor(Math.random() * poemData.length);
-  const randPoem = poemData[rand];
   const localStorageUserId = window.localStorage.getItem("userId");
   const { setSelectedStoryId } = modifiedData();
   const [followList, setFollowList] = useState();
   const [authors, setAuthors] = useState();
   const [pressure, setPressure] = useState();
-  const [lastPressure, setLastPressure] = useState();
-  const { modal } = HistoryModal();
+  const { modal, showModal } = HistoryModal();
 
   useEffect(() => {
     async function getStories() {
@@ -142,7 +300,7 @@ export default function History() {
   } else {
     console.log("沒有測驗過");
   }
-  console.log(getLastPressureNumber.number);
+  // console.log(getLastPressureNumber.number);
 
   const modifiedClick = (storyId) => {
     navigate(`/edit/${storyId}`);
@@ -197,7 +355,6 @@ export default function History() {
   // console.log(name[0]?.name);
 
   //拿到user的加入日期
-
   const [createUserTime, setCreateUserTime] = useState("");
   useEffect(() => {
     const user = auth.currentUser;
@@ -210,6 +367,11 @@ export default function History() {
   }, []);
   const showCreation = moment(createUserTime).format("YYYY-MM-DD");
 
+  //將文章按照時間順序排序
+  const sortTimeOfStory = stories.sort((a, b) => b.time.localeCompare(a.time));
+
+  console.log(stories);
+
   return (
     <div>
       <Background>
@@ -221,35 +383,102 @@ export default function History() {
           <p>{showCreation}</p>
         </TopSection>
 
-        {/* <Categories>
+        <Categories>
           <CategoriesSection>
-            <p>文章數量</p>
-            <p>{stories.length}篇</p>
+            {stories.length ? <p>{stories.length}篇</p> : <p>0篇</p>}
+            <div>
+              <img src={write} alt={write} />
+              <h1>文章數量</h1>
+            </div>
+            <button onClick={() => navigate("/post")}>撰寫文章</button>
           </CategoriesSection>
+
           <CategoriesSection>
-            <p>壓力指數</p>
-            <p>{getLastPressureNumber.number}分</p>
+            {getLastPressureNumber?.number ? (
+              <p>{getLastPressureNumber?.number}分</p>
+            ) : (
+              <p>0分</p>
+            )}
+
+            <div>
+              <img src={pressureIcon} alt={pressureIcon} />
+              <h1>壓力分數</h1>
+            </div>
+            <button onClick={() => navigate("/help")}>測量壓力</button>
           </CategoriesSection>
+
           <CategoriesSection>
-            <p>關注作者</p>
-            <p>{authors && authors.length}位</p>
+            {authors && authors.length ? (
+              <p>{authors && authors.length}位</p>
+            ) : (
+              <p>0位</p>
+            )}
+
+            <div>
+              <img src={follower} alt={follower} />
+              <h1>關注作者</h1>
+            </div>
+            <button>瀏覽他人文章</button>
           </CategoriesSection>
-        </Categories> */}
+        </Categories>
+        <Title>歷史文章</Title>
+        <StorySection>
+          {sortTimeOfStory &&
+            sortTimeOfStory.map((story, index) => {
+              return (
+                <EachStory key={index}>
+                  <div>
+                    <p>{index + 1}</p>
+                  </div>
+                  <div>
+                    <h1>疼痛暗號：{story.title}</h1>
+                    <h2>
+                      {story.time}@{story.location.name}
+                    </h2>
+                    <h2>
+                      {story.type.map((item, index) => (
+                        <span key={index}>{item}</span>
+                      ))}
+                    </h2>
+                    <h2>
+                      {story.figure.map((item, index) => (
+                        <span key={index}>{item}</span>
+                      ))}
+                    </h2>
+                    <p>{story.story}</p>
+                    <button onClick={() => modifiedClick(story.storyId)}>
+                      編輯
+                    </button>
+                  </div>
+                  <div>
+                    <Heart>
+                      <img src={pill} alt={pill} />
+                      <p>
+                        {story.likedAuthorId?.length > 0
+                          ? story.likedAuthorId.length
+                          : 0}
+                      </p>
+                    </Heart>
+                  </div>
+                  {/* <Comment>
+                    {story.userComments ? (
+                      <p>
+                        留言內容：
+                        {story.userComments?.map((comment, index) => (
+                          <p key={index}>{comment.comment}</p>
+                        ))}
+                      </p>
+                    ) : (
+                      ""
+                    )}
+                  </Comment> */}
+                </EachStory>
+              );
+            })}
+        </StorySection>
       </Background>
 
       {modal ? <ModalHistory /> : null}
-
-      {/* <h2 className="text-6xl font-sans font-black tracking-wider text-center ">
-        暖心小語
-      </h2>
-      <p className="m-3 bg-yellow-300">標題：{randPoem.title}</p>
-      <p className="m-3 bg-green-300">內文：{randPoem.content}</p> */}
-      <button
-        className="bg-blue-600 text-white mt-3"
-        onClick={() => navigate("/post")}
-      >
-        點我撰寫日記
-      </button>
 
       {/* <div>
         <h1 className="m-3 bg-yellow-300">關注列表</h1>
@@ -257,7 +486,6 @@ export default function History() {
           authors.map((name, index) => <p key={index}>{name.name}</p>)}
       </div> */}
 
-      <p className="m-3 bg-yellow-300">歷史日記</p>
       {/* {stories &&
         stories.map((story, index) => {
           return (
@@ -300,6 +528,7 @@ export default function History() {
       >
         點我回首頁
       </button>
+      <button onClick={showModal}>看小故事</button>
     </div>
   );
 }

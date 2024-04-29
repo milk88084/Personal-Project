@@ -7,10 +7,9 @@ export default function Backdrop() {
     width: 100%;
     height: 100%;
     position: fixed;
-    background-color: pink;
+    background-color: #686868;
     top: 0;
     left: 0;
-    opacity: 0.9;
   `;
 
   return (

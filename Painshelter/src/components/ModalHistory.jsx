@@ -12,7 +12,7 @@ const Background = styled.div`
   display: flex;
   padding: 30px;
   flex-direction: column;
-  box-shadow: 1px 1px 20px 20px whtie;
+  box-shadow: 1px 1px 30px 15px #ffd4f4;
   opacity: 0.8;
   top: 0;
   left: 0;
