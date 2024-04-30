@@ -36,6 +36,12 @@ export const modifiedData = create((set, get) => ({
   setSelectedStoryId: (id) => set({ selectedStoryId: id }),
 }));
 
+export const useAuthorfiedData = create((set, get) => ({
+  selectedStoryId: "",
+  getSelectedStoryId: () => get().selectedStoryId,
+  setSelectedStoryId: (id) => set({ selectedStoryId: id }),
+}));
+
 export const HistoryModal = create((set, get) => ({
   modal: true,
   showModal: () => set({ modal: true }),

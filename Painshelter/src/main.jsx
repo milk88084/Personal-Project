@@ -14,6 +14,7 @@ import Openrouteservice from "./components/LocationSearch.jsx";
 import FigureType from "./components/Chart/FigureChart.jsx";
 import SinglePostPage from "./pages/SinglePostPage/index.jsx";
 import Edit from "./pages/Edit/index.jsx";
+import AuthorSpecificPost from "./pages/AuthorSpecificPost/index.jsx";
 import About from "./pages/About/index.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -33,6 +34,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="post/:id" element={<SinglePostPage />} />
         <Route path="edit/:id" element={<Edit />} />
         <Route path="about" element={<About />} />
+        <Route path="authorpost/:id" element={<AuthorSpecificPost />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

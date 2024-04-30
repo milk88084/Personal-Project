@@ -74,6 +74,10 @@ const EditSections = styled.div`
   margin: 0 auto;
   border-radius: 50px 50px 0px 0px;
   padding: 50px;
+  @media screen and (max-width: 1279px) {
+    width: 80%;
+    padding: 30px;
+  }
 `;
 
 const EditCategories = styled.div`
@@ -81,6 +85,9 @@ const EditCategories = styled.div`
   align-items: center;
   margin-bottom: 30px;
   color: #353535;
+  @media screen and (max-width: 1279px) {
+    display: block;
+  }
 `;
 
 const EditTitle = styled.div`
@@ -88,6 +95,10 @@ const EditTitle = styled.div`
   font-weight: 600;
   margin-right: 50px;
   color: #353535;
+  @media screen and (max-width: 1279px) {
+    margin-right: 0px;
+    font-size: 25px;
+  }
 `;
 
 const EditTitleInput = styled.div`
@@ -96,12 +107,22 @@ const EditTitleInput = styled.div`
     width: 400px;
     color: black;
   }
+  @media screen and (max-width: 1279px) {
+    border: 1px solid black;
+    input {
+      width: 100%;
+    }
+  }
 `;
 
 const PreviewTitle = styled.div`
   width: 400px;
   color: #838383;
   font-size: 20px;
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+    font-size: 15px;
+  }
 `;
 
 const EditDateInput = styled.div`
@@ -109,6 +130,12 @@ const EditDateInput = styled.div`
   input {
     width: 400px;
     color: black;
+  }
+  @media screen and (max-width: 1279px) {
+    border: 1px solid black;
+    input {
+      width: 100%;
+    }
   }
 `;
 
@@ -121,6 +148,17 @@ const EditTypesInput = styled.div`
   li {
     margin-right: 30px;
   }
+  @media screen and (max-width: 1279px) {
+    font-size: 15px;
+    ul {
+      display: block;
+    }
+
+    li {
+      margin-right: 0px;
+      padding: 5px;
+    }
+  }
 `;
 
 const PreviewType = styled.div`
@@ -129,6 +167,10 @@ const PreviewType = styled.div`
   display: flex;
   p {
     margin-right: 20px;
+  }
+  @media screen and (max-width: 1279px) {
+    font-size: 15px;
+    display: block;
   }
 `;
 
@@ -146,6 +188,19 @@ const EditTextArea = styled.div`
     height: 300px;
     margin-top: 50px;
     color: black;
+  }
+  @media screen and (max-width: 1279px) {
+    margin-top: 30px;
+    p {
+      font-size: 25px;
+      margin-right: 0px;
+    }
+
+    textarea {
+      border: 1px solid black;
+      height: 300px;
+      margin-top: 25px;
+    }
   }
 `;
 
@@ -185,6 +240,20 @@ const ButtonSection = styled.div`
       color: black;
     }
   }
+  @media screen and (max-width: 1279px) {
+    margin-top: 25px;
+    display: block;
+    justify-content: space-between;
+    width: 100%;
+
+    button {
+      font-weight: 300;
+      font-size: 15px;
+      margin-right: 0px;
+      width: 100%;
+      margin: 10px;
+    }
+  }
 `;
 
 const CommentsSection = styled.div`
@@ -210,17 +279,21 @@ const CommentPart = styled.div`
     color: gray;
   }
 
-  h1 {
-    background-color: gray;
-    width: 30px;
-    height: 30px;
-    border-radius: 20px;
-    text-align: center;
-  }
-
   h2 {
     margin-left: 15px;
     font-weight: 600;
+  }
+  @media screen and (max-width: 1279px) {
+    margin-left: 5px;
+    p {
+      padding: 0px;
+      font-size: 12px;
+    }
+
+    h2 {
+      margin-left: 0px;
+      font-weight: 600;
+    }
   }
 `;
 
@@ -228,6 +301,11 @@ const AvatarPart = styled.div`
   width: 60px;
   height: 60px;
   padding: 5px;
+  @media screen and (max-width: 1279px) {
+    width: 40px;
+    height: 40px;
+    padding: 2px;
+  }
 `;
 //#endregion
 
@@ -407,17 +485,17 @@ export default function Edit() {
             <EditTextArea>
               <p>故事留言</p>
               <CommentsSection>
-                <AvatarPart>
-                  {" "}
-                  <img src={pill} alt={pill} />
-                </AvatarPart>
-
                 {comments && comments.length > 0
                   ? comments.map((data, index) => (
-                      <CommentPart key={index}>
-                        <h2>{data.name}</h2>
-                        <p>#{data.comment}</p>
-                      </CommentPart>
+                      <>
+                        <AvatarPart>
+                          <img src={pill} alt={pill} />
+                        </AvatarPart>
+                        <CommentPart key={index}>
+                          <h2>{data.name}</h2>
+                          <p>#{data.comment}</p>
+                        </CommentPart>
+                      </>
                     ))
                   : null}
               </CommentsSection>

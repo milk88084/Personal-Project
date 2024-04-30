@@ -666,6 +666,7 @@ function App() {
   //進入到該作者的文章頁面
   const handleVisitAthor = (id) => {
     navigate("/visit", { state: { data: id } });
+    window.scrollTo(0, 0);
   };
 
   console.log(randomStories);
