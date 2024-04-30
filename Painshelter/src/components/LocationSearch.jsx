@@ -1,8 +1,16 @@
 import { useFormInput } from "../utils/hooks/useFormInput";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useLoginState } from "../utils/zustand";
+import styled from "styled-components";
+
+const Input = styled.div`
+  width: 100%;
+  input {
+    border: 2px solid black;
+  }
+`;
 
 const LocationSearch = () => {
   const { locationSerach, setLocationSearch } = useLoginState();
@@ -35,19 +43,17 @@ const LocationSearch = () => {
 
   return (
     <div>
-      <input
-        type="text"
-        value={storyLocation.value}
-        onChange={storyLocation.onChange}
-        placeholder="請輸入地點，如：花蓮市美崙"
-      />
-      <button
-        type="button"
-        className="bg-gray-800 p-1 rounded-md  text-white hover:bg-red-900  mr-6 ml-2"
-        onClick={handleSearch}
-      >
-        搜尋
-      </button>
+      <Input>
+        <input
+          type="text"
+          value={storyLocation.value}
+          onChange={storyLocation.onChange}
+          placeholder="請輸入地點，如：花蓮市美崙"
+        />
+        <button type="button" onClick={handleSearch}>
+          搜尋
+        </button>
+      </Input>
 
       {locationState &&
         !isNaN(locationState.lat) &&

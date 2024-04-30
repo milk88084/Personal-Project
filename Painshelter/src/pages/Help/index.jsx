@@ -17,6 +17,62 @@ import {
 import videoSrc from "../../assets/video/helpbanner.mp4";
 import feature3Banner from "../../assets/img/feature3Banner.png";
 import json from "../../utils/data/survey.json";
+import styled from "styled-components";
+
+const Background = styled.div`
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const TopSection = styled.div`
+  position: relative;
+  img {
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    z-index: 100;
+    padding-right: 5rem;
+    width: 50%;
+  }
+`;
+
+const Title = styled.div`
+  text-align: center;
+  font-size: 80px;
+  letter-spacing: 0.05em;
+`;
+
+const SubSection = styled.div`
+  width: 800px;
+  height: 500px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h2 {
+    font-size: 90px;
+    margin-bottom: 40px;
+  }
+  p {
+    width: 500px;
+  }
+`;
+
+const SurveySection = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 800px;
+
+  div:nth-of-type(1) {
+    width: 30%;
+    padding: 20px;
+  }
+`;
 
 function SurveyComponent() {
   const navigate = useNavigate();
@@ -116,32 +172,39 @@ function SurveyComponent() {
 
   return (
     <>
-      <div className="bg-oceanblack text-white">
-        <div className="relative">
+      <Background>
+        <TopSection>
           <video src={videoSrc} loop height="480px" autoPlay muted></video>
-          <img
-            className="absolute left-1/2  bottom-1/2 z-100 w-1/2 pr-20"
-            src={feature3Banner}
-            alt=""
-          />
-        </div>
+          <img src={feature3Banner} alt={feature3Banner} />
+        </TopSection>
 
-        <div className="relative">
-          <div className="flex flex-col justify-center items-center my-16">
-            <h1 className="text-center text-6xl  tracking-wider">
-              關於心情低落
-            </h1>
-            <p className="w-1/3 mt-10 text-gray-300">
-              世界衛生組織估計，到2030年，憂鬱症會是造成全球社會經濟負擔第一名的疾病。隨著國人罹患憂鬱症的比例逐漸增高，社會大眾慢慢理解罹患「憂鬱症」是生病，但也因為理解的程度不一，容易把「憂鬱情緒」和「憂鬱症」混為一談。今天的文章帶你認識憂鬱症檢測的工具，讓我們繼續看下去吧！
+        <SubSection>
+          <h2> 關於心情低落</h2>
+          <p>
+            世界衛生組織估計，到2030年，憂鬱症會是造成全球社會經濟負擔第一名的疾病。隨著國人罹患憂鬱症的比例逐漸增高，社會大眾慢慢理解罹患「憂鬱症」是生病，但也因為理解的程度不一，容易把「憂鬱情緒」和「憂鬱症」混為一談。今天的文章帶你認識憂鬱症檢測的工具，讓我們繼續看下去吧！
+          </p>
+        </SubSection>
+        <SubSection>
+          <h2> 難過的情緒</h2>
+          <p>
+            「憂鬱情緒」是正常的情緒反應之一，當我們遇到挫敗或事情不如意時，難免會悶悶不樂，心情不好。就如同天氣，一天的陰雨並不會造成太大的影響，但連日的豪雨就有可能造成嚴重的災害。如果憂鬱的情緒嚴重，持續兩周以上，無法正常上班上學，無法正常生活，那就是「憂鬱症」。
+          </p>
+        </SubSection>
+        <SurveySection>
+          <div>
+            <h3>根據統計</h3>
+            <p>2,000,000</p>
+          </div>
+          <div>
+            <h3>我有憂鬱的情緒嗎？</h3>
+            <p>
+              一旦發現憂鬱情緒已經嚴重到無法調節和掌控，並且影響到生活，就要懷疑自己是否得了憂鬱症。憂鬱症篩檢量表可用來做初步的憂鬱症檢測，看看自己是否是高風險族群，如果分數過高就有罹患憂鬱症的風險，應該進一步接受專業精神科醫師的評估來確立「憂鬱症」診斷。
             </p>
           </div>
-          <div className="flex flex-col justify-center items-center my-16">
-            <h1 className="text-center text-6xl  tracking-wider">難過的情緒</h1>
-            <p className="w-1/3 mt-10 text-gray-300">
-              「憂鬱情緒」是正常的情緒反應之一，當我們遇到挫敗或事情不如意時，難免會悶悶不樂，心情不好。就如同天氣，一天的陰雨並不會造成太大的影響，但連日的豪雨就有可能造成嚴重的災害。如果憂鬱的情緒嚴重，持續兩周以上，無法正常上班上學，無法正常生活，那就是「憂鬱症」。
-            </p>
-          </div>
-        </div>
+        </SurveySection>
+      </Background>
+      <div className="bg-oceanblack text-white">
+        <div className="relative"></div>
         <div className="flex justify-center items-center my-16">
           <div className="flex w-4/6 justify-center mt-16">
             <div className="w-2/6 ">

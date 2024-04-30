@@ -594,7 +594,7 @@ const VisitAuthor = () => {
       <Background>
         <TopSection>
           {isUserStories ? (
-            <p>這是你自己的頁面</p>
+            <p>My own page</p>
           ) : (
             <div>
               <TopSectionName>

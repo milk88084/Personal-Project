@@ -540,6 +540,16 @@ export default function History() {
   const sortTimeOfStory = stories.sort((a, b) => b.time.localeCompare(a.time));
   // console.log(stories);
 
+  const handlePost = () => {
+    navigate("/post");
+    window.scrollTo(0, 0);
+  };
+
+  const handleHelp = () => {
+    navigate("/help");
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div>
       <Background>
@@ -558,7 +568,7 @@ export default function History() {
               <img src={write} alt={write} />
               <h1>文章數量</h1>
             </div>
-            <button onClick={() => navigate("/post")}>撰寫文章</button>
+            <button onClick={handlePost}>撰寫文章</button>
           </CategoriesSection>
 
           <CategoriesSection>
@@ -572,7 +582,7 @@ export default function History() {
               <img src={pressureIcon} alt={pressureIcon} />
               <h1>壓力分數</h1>
             </div>
-            <button onClick={() => navigate("/help")}>測量壓力</button>
+            <button onClick={handleHelp}>測量壓力</button>
           </CategoriesSection>
 
           <CategoriesSection>
