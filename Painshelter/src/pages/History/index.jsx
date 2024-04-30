@@ -430,7 +430,6 @@ export default function History() {
         const authorData = collection(db, "users");
         const q = query(postsData, where("userId", "==", localStorageUserId));
         const qA = query(authorData, where("id", "==", localStorageUserId));
-
         const querySnapshot = await getDocs(q);
         const userStoryList = querySnapshot.docs.map((doc) => ({
           title: doc.data().title,
@@ -474,6 +473,7 @@ export default function History() {
   const modifiedClick = (storyId) => {
     navigate(`/edit/${storyId}`);
     setSelectedStoryId(storyId);
+    window.scroll(0, 0);
   };
 
   //用作者id去對應到相對的名稱
@@ -538,8 +538,7 @@ export default function History() {
 
   //將文章按照時間順序排序
   const sortTimeOfStory = stories.sort((a, b) => b.time.localeCompare(a.time));
-
-  console.log(stories);
+  // console.log(stories);
 
   return (
     <div>
@@ -607,7 +606,7 @@ export default function History() {
                     </h2>
                     <h2>
                       {story.type.map((item, index) => (
-                        <span key={index}>{item}</span>
+                        <span key={index}>#{item}</span>
                       ))}
                     </h2>
                     <h2>
