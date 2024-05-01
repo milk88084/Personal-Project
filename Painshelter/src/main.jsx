@@ -15,7 +15,7 @@ import FigureType from "./components/Chart/FigureChart.jsx";
 import SinglePostPage from "./pages/SinglePostPage/index.jsx";
 import Edit from "./pages/Edit/index.jsx";
 import AuthorSpecificPost from "./pages/AuthorSpecificPost/index.jsx";
-import About from "./pages/About/index.jsx";
+import MusicHeal from "./pages/MusicHeal/index.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -33,7 +33,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="type" element={<FigureType />} />
         <Route path="post/:id" element={<SinglePostPage />} />
         <Route path="edit/:id" element={<Edit />} />
-        <Route path="about" element={<About />} />
+        <Route path="heal" element={<MusicHeal />} />
         <Route path="authorpost/:id" element={<AuthorSpecificPost />} />
       </Routes>
     </BrowserRouter>
