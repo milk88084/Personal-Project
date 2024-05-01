@@ -724,11 +724,7 @@ function App() {
               疼痛讓我們揭開了生活的另一面，那裡沒有華麗的掩飾，只有原始的、真實的自我。我們學會在這悲傷的碎片中找尋意義。
             </p>
             <span>」</span>
-            <img
-              src={aboutpainsectionimg}
-              alt=" 
-Monochrome img"
-            />
+            <img src={aboutpainsectionimg} alt="Monochrome img" />
           </AboutPaintContent>
         </AboutPain>
         <AboutPain>
@@ -737,11 +733,7 @@ Monochrome img"
             <h2>關於收容所</h2>
           </AboutPainTitle>
           <AboutPaintContent>
-            <img
-              src={aboutpainsectionimg2}
-              alt="
-Monochrome img"
-            />
+            <img src={aboutpainsectionimg2} alt="Monochrome img" />
             <span>「</span>
             <p>
               疼痛收容所是一個放置任意程度大小疼痛的故事空間，在這裡將不問對錯、不批判，期待達成自我療癒
