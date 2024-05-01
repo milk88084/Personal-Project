@@ -1,5 +1,5 @@
 import "survey-core/defaultV2.min.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Model } from "survey-core";
 import { themeJson } from "../../assets/survey";
@@ -16,11 +16,17 @@ import {
 } from "firebase/firestore";
 import videoSrc from "../../assets/video/helpbanner.mp4";
 import feature3Banner from "../../assets/img/feature3Banner.png";
+import zero from "../../assets/img/help_zero.png";
+import one from "../../assets/img/help_one.png";
+import two from "../../assets/img/help_two.png";
+import four from "../../assets/img/help_four.png";
 import json from "../../utils/data/survey.json";
 import styled from "styled-components";
+import AnimatedNumber from "../../components/AnimatedNumber";
 
+//#region
 const Background = styled.div`
-  background-color: black;
+  background-color: #11120f;
   color: white;
   display: flex;
   flex-direction: column;
@@ -38,41 +44,230 @@ const TopSection = styled.div`
     padding-right: 5rem;
     width: 50%;
   }
-`;
-
-const Title = styled.div`
-  text-align: center;
-  font-size: 80px;
-  letter-spacing: 0.05em;
+  @media screen and (max-width: 1279px) {
+    img {
+      left: 30%;
+      bottom: 40%;
+      width: 60%;
+      padding-right: 0;
+    }
+  }
 `;
 
 const SubSection = styled.div`
   width: 800px;
-  height: 500px;
-  color: white;
+  height: 400px;
+  color: #cecece;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   h2 {
     font-size: 90px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+    font-weight: 600;
   }
   p {
-    width: 500px;
+    width: 700px;
+    color: #e6e6e6e6;
+  }
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+    padding: 20px;
+    height: 100%;
+    h2 {
+      font-size: 45px;
+    }
+    p {
+      width: 100%;
+    }
   }
 `;
 
 const SurveySection = styled.div`
   display: flex;
-  justify-content: center;
-  width: 800px;
+  color: #cecece;
+  margin-top: 60px;
+  h3 {
+    font-size: 40px;
+    text-align: center;
+    height: 60px;
+  }
+  p {
+    height: 150px;
+    color: #e6e6e6e6;
+  }
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
 
-  div:nth-of-type(1) {
-    width: 30%;
-    padding: 20px;
+    h3 {
+      font-size: 30px;
+      height: 30px;
+    }
+    p {
+      height: 100%;
+    }
   }
 `;
+
+const AccordingSection = styled.div`
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  p {
+    font-size: 50px;
+    margin-top: 30px;
+  }
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+  }
+`;
+
+const ComfirmSection = styled.div`
+  width: 650px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 35px;
+  p {
+    margin-top: 30px;
+  }
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+    margin-left: 0px;
+    padding: 15px;
+    height: 100%;
+  }
+`;
+
+const ButtonSection = styled.div`
+  button {
+    padding: 6px;
+    border-radius: 10px;
+    font-weight: 400;
+    margin: 24px;
+    font-size: 20px;
+    background-color: #19242b;
+    color: white;
+    margin-right: 20px;
+    &:hover,
+    &:focus {
+      background-color: #9ca3af;
+      color: black;
+    }
+  }
+  @media screen and (max-width: 1279px) {
+    button {
+      margin: 0px;
+      margin-right: 20px;
+    }
+  }
+`;
+
+const SurveyDialog = styled.div`
+  .sv_window {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100% !important;
+    height: 80% !important;
+    max-width: 100% !important;
+    max-height: 80vh !important;
+    overflow: none !important;
+  }
+
+  .sd-body {
+    width: 100% !important;
+  }
+
+  .sv_window_buttons_container {
+    position: static !important;
+  }
+`;
+
+const ResualtSection = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 20px;
+  width: 1100px;
+  margin-bottom: 30px;
+  background-color: rgb(255, 255, 255, 0.3);
+  padding: 30px;
+  @media screen and (max-width: 1279px) {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+`;
+
+const ResualtImg = styled.div`
+  img {
+    width: 300px;
+    border-radius: 20px;
+  }
+  @media screen and (max-width: 1279px) {
+    img {
+      width: 100%;
+    }
+  }
+`;
+const ResualtContent = styled.div`
+  width: 600px;
+  h2 {
+    font-size: 60px;
+    font-weight: 600;
+  }
+
+  span {
+    color: #a4eaff;
+  }
+
+  h3 {
+    font-size: 35px;
+  }
+
+  p {
+    font-size: 20px;
+    opacity: 0.6;
+  }
+  button {
+    padding: 6px;
+    border-radius: 10px;
+    font-weight: 400;
+    font-size: 20px;
+    background-color: #19242b;
+    color: white;
+    margin-right: 20px;
+    margin-top: 30px;
+
+    &:hover,
+    &:focus {
+      background-color: #9ca3af;
+      color: black;
+    }
+  }
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+    h2 {
+      font-size: 35px;
+    }
+
+    h3 {
+      font-size: 25px;
+    }
+
+    p {
+      font-size: 15px;
+    }
+  }
+`;
+
+const ResualtButton = styled.div``;
+//#endregion
 
 function SurveyComponent() {
   const navigate = useNavigate();
@@ -80,11 +275,20 @@ function SurveyComponent() {
   const [surveyData, setSurveyData] = useState([]);
   const [complete, setComplete] = useState(false);
   const survey = new Model(json);
+  const result = useRef(null);
   survey.applyTheme(themeJson);
 
   const handleClick = () => {
     setShow(true);
     setComplete(false);
+  };
+
+  //測驗完移動到結果
+  const scrollSection = (elementRef) => {
+    window.scrollTo({
+      top: elementRef.current.offsetTop,
+      behavior: "smooth",
+    });
   };
 
   //監聽彈跳視窗叉叉按鈕的狀態
@@ -107,6 +311,7 @@ function SurveyComponent() {
       setSurveyData(results);
       setShow(false);
       setComplete(true);
+      scrollSection(result);
     }
   });
   // console.log(surveyData);
@@ -191,204 +396,136 @@ function SurveyComponent() {
           </p>
         </SubSection>
         <SurveySection>
-          <div>
+          <AccordingSection>
             <h3>根據統計</h3>
-            <p>2,000,000</p>
-          </div>
-          <div>
+            <p>
+              <AnimatedNumber end={1250000} />
+            </p>
+          </AccordingSection>
+          <ComfirmSection>
             <h3>我有憂鬱的情緒嗎？</h3>
             <p>
+              台灣約8.95% (約200萬人) 的人口有憂鬱症狀，約5.2% (約125萬人)
+              的人符合憂鬱症診斷，
               一旦發現憂鬱情緒已經嚴重到無法調節和掌控，並且影響到生活，就要懷疑自己是否得了憂鬱症。憂鬱症篩檢量表可用來做初步的憂鬱症檢測，看看自己是否是高風險族群，如果分數過高就有罹患憂鬱症的風險，應該進一步接受專業精神科醫師的評估來確立「憂鬱症」診斷。
             </p>
-          </div>
+            <ButtonSection ref={result}>
+              <button onClick={handleClick}>點我測驗</button>
+              <button onClick={() => navigate("/")}>回首頁</button>
+            </ButtonSection>
+          </ComfirmSection>
         </SurveySection>
-      </Background>
-      <div className="bg-oceanblack text-white">
-        <div className="relative"></div>
-        <div className="flex justify-center items-center my-16">
-          <div className="flex w-4/6 justify-center mt-16">
-            <div className="w-2/6 ">
-              <h1 className="text-4xl text-center">根據統計</h1>
-              <p className="text-center text-4xl mt-12 text-gray-300">
-                2,000,000
-              </p>
-            </div>
-            <div className="w-4/6">
-              <h1 className=" text-4xl   text-center">我有憂鬱的情緒嗎？</h1>
-              <p className=" mt-10 text-gray-300 ">
-                一旦發現憂鬱情緒已經嚴重到無法調節和掌控，並且影響到生活，就要懷疑自己是否得了憂鬱症。憂鬱症篩檢量表可用來做初步的憂鬱症檢測，看看自己是否是高風險族群，如果分數過高就有罹患憂鬱症的風險，應該進一步接受專業精神科醫師的評估來確立「憂鬱症」診斷。
-              </p>
-              <button
-                className="bg-gray-800 p-3 rounded-md mr-4 mt-6 hover:bg-red-900"
-                onClick={handleClick}
-              >
-                點我測驗
-              </button>
-              <button
-                className="bg-gray-800 p-3 rounded-md mr-4 mt-6 hover:bg-red-900"
-                onClick={() => navigate("/")}
-              >
-                回首頁
-              </button>
-            </div>
-          </div>
-        </div>
 
-        {show ? (
-          <PopupSurvey
-            model={survey}
-            isExpanded={true}
-            closeOnCompleteTimeout={-1}
-            allowClose={true}
-            onHide={() => setShow(false)}
-          />
-        ) : null}
+        <SurveyDialog>
+          {show ? (
+            <PopupSurvey
+              model={survey}
+              isExpanded={true}
+              closeOnCompleteTimeout={-1}
+              allowClose={true}
+              onHide={() => setShow(false)}
+            />
+          ) : null}
+        </SurveyDialog>
+
         {surveyData && score ? (
           score <= 8 ? (
-            <div className="flex justify-center items-center my-16 rounded border-gray-100">
-              <div className="flex w-4/6 justify-center ">
-                <img
-                  src="https://favim.com/pd/s11/orig/8/897/8978/89780/aesthetic-cute-sad-cartoon-Favim.com-8978093.jpg"
-                  alt=""
-                  className="m-4"
-                />
-                <div className="m-4 flex flex-col justify-around font-black">
-                  <h2 className="text-5xl">
-                    測驗結果：<span className="text-blue-300">{score}</span>
-                  </h2>
-                  <h3 className="text-2xl">目前你的狀態</h3>
-                  <p className="text-gray-300">
-                    你目前的情緒狀態很穩定，是個懂得適時調整情緒及紓解壓力的人。
-                  </p>
-                  <div>
-                    <button
-                      className="bg-gray-800 p-3 rounded-md mr-4 hover:bg-red-900"
-                      onClick={() => navigate("/post")}
-                    >
-                      撰寫日記
-                    </button>
-                    <button
-                      className="bg-gray-800 p-3 rounded-md mr-4 hover:bg-red-900"
-                      onClick={handleClick}
-                    >
-                      重新測驗
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ResualtSection>
+              <ResualtImg>
+                <img src={zero} alt={zero} />
+              </ResualtImg>
+              <ResualtContent>
+                <h2>
+                  測驗結果：
+                  <span>
+                    <AnimatedNumber end={score} />
+                  </span>
+                </h2>
+                <h3>目前你的狀態</h3>
+                <p>
+                  你目前的情緒狀態很穩定，是個懂得適時調整情緒及紓解壓力的人。
+                </p>
+                <ResualtButton>
+                  <button onClick={() => navigate("/post")}>撰寫日記</button>
+                  <button onClick={handleClick}>重新測驗</button>
+                </ResualtButton>
+              </ResualtContent>
+            </ResualtSection>
           ) : 9 <= score <= 18 ? (
-            <div className="flex justify-center items-center my-16 rounded border-gray-100">
-              <div className="flex w-4/6 justify-center ">
-                <img
-                  src="https://favim.com/pd/s11/orig/8/897/8978/89780/aesthetic-cute-sad-cartoon-Favim.com-8978093.jpg"
-                  alt=""
-                  className="m-4"
-                />
-                <div className="m-4 flex flex-col justify-around font-black">
-                  <h2 className="text-5xl">
-                    測驗結果：<span className="text-blue-300">{score}</span>
-                  </h2>
-                  <h3 className="text-2xl">目前你的狀態</h3>
-                  <p className="text-gray-300">
-                    現在的你可能感到不太順心，無法展露笑容，一肚子苦惱及煩悶，連朋友也不知道如何幫你，
-                    建議你可以找找看，有沒有相關的資源可以幫助你控制這樣不舒服的感受，如果煩悶的感受一直沒有消失，就要去找專業的醫生來幫忙唷。
-                  </p>
-                  <div>
-                    <button
-                      className="bg-gray-800 p-3 rounded-md mr-4 hover:bg-red-900"
-                      onClick={() => navigate("/post")}
-                    >
-                      撰寫日記
-                    </button>
-                    <button
-                      className="bg-gray-800 p-3 rounded-md mr-4 hover:bg-red-900"
-                      onClick={handleClick}
-                    >
-                      重新測驗
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ResualtSection>
+              <ResualtImg>
+                <img src={one} alt={one} />
+              </ResualtImg>
+              <ResualtContent>
+                <h2>
+                  測驗結果：
+                  <span>
+                    <AnimatedNumber end={score} />
+                  </span>
+                </h2>
+                <h3>目前你的狀態</h3>
+                <p>
+                  現在的你可能感到不太順心，無法展露笑容，一肚子苦惱及煩悶，連朋友也不知道如何幫你，
+                  建議你可以找找看，有沒有相關的資源可以幫助你控制這樣不舒服的感受，如果煩悶的感受一直沒有消失，就要去找專業的醫生來幫忙唷。
+                </p>
+                <ResualtButton>
+                  <button onClick={() => navigate("/post")}>撰寫日記</button>
+                  <button onClick={handleClick}>重新測驗</button>
+                </ResualtButton>
+              </ResualtContent>
+            </ResualtSection>
           ) : 19 < score <= 28 ? (
-            <div className="flex justify-center items-center my-16 rounded border-gray-100">
-              <div className="flex w-4/6 justify-center ">
-                <img
-                  src="https://favim.com/pd/s11/orig/8/897/8978/89780/aesthetic-cute-sad-cartoon-Favim.com-8978093.jpg"
-                  alt=""
-                  className="m-4"
-                />
-                <div className="m-4 flex flex-col justify-around font-black">
-                  <h2 className="text-5xl">
-                    測驗結果：<span className="text-blue-300">{score}</span>
-                  </h2>
-                  <h3 className="text-2xl">目前你的狀態</h3>
-                  <p className="text-gray-300">
-                    {" "}
-                    你是否感覺有許多事壓在心上，肩上總覺得很沉重 ?
-                    因為你的壓力負荷量已到臨界點了，千萬別再『撐』了 !
-                    趕快找個有相同經驗的朋友聊聊，給心情找個出口，把肩上的重擔放下，這樣才不會陷入鬱卒的漩渦
-                    !
-                    如果你不知道該找誰傾訴，建議可以找一些專業的醫療資源協助你。
-                  </p>
-                  <div>
-                    <button
-                      className="bg-gray-800 p-3 rounded-md mr-4 hover:bg-red-900"
-                      onClick={() => navigate("/post")}
-                    >
-                      撰寫日記
-                    </button>
-                    <button
-                      className="bg-gray-800 p-3 rounded-md mr-4 hover:bg-red-900"
-                      onClick={handleClick}
-                    >
-                      重新測驗
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ResualtSection>
+              <ResualtImg>
+                <img src={two} alt={two} />
+              </ResualtImg>
+              <ResualtContent>
+                <h2>
+                  測驗結果：
+                  <span>
+                    <AnimatedNumber end={score} />
+                  </span>
+                </h2>
+                <h3>目前你的狀態</h3>
+                <p>
+                  你是否感覺有許多事壓在心上，肩上總覺得很沉重 ?
+                  因為你的壓力負荷量已到臨界點了，千萬別再『撐』了 !
+                  趕快找個有相同經驗的朋友聊聊，給心情找個出口，把肩上的重擔放下，這樣才不會陷入鬱卒的漩渦
+                  ! 如果你不知道該找誰傾訴，建議可以找一些專業的醫療資源協助你。
+                </p>
+                <ResualtButton>
+                  <button onClick={() => navigate("/post")}>撰寫日記</button>
+                  <button onClick={handleClick}>重新測驗</button>
+                </ResualtButton>
+              </ResualtContent>
+            </ResualtSection>
           ) : (
-            <div className="flex justify-center items-center my-16 rounded border-gray-100">
-              <div className="flex w-4/6 justify-center ">
-                <img
-                  src="https://favim.com/pd/s11/orig/8/897/8978/89780/aesthetic-cute-sad-cartoon-Favim.com-8978093.jpg"
-                  alt=""
-                  className="m-4"
-                />
-                <div className="m-4 flex flex-col justify-around font-black">
-                  <h2 className="text-5xl">
-                    測驗結果：<span className="text-blue-300">{score}</span>
-                  </h2>
-                  <h3 className="text-2xl">目前你的狀態</h3>
-                  <p className="text-gray-300">
-                    你是不是感到相當的不舒服，會不由自主的沮喪、難過，無法掙脫?
-                    可能你目前的身心狀況不太穩定，建議可以到最近的醫院去找專業的醫生做診斷，透過他們的診療與治療，你也許會有意想不到的回饋，
-                    不要抗拒去尋求資源，希望透過這樣的處理，可以讓自己慢慢降低這種不舒服的感受！
-                  </p>
-                  <div>
-                    <button
-                      className="bg-gray-800 p-3 rounded-md mr-4 hover:bg-red-900"
-                      onClick={() => navigate("/post")}
-                    >
-                      撰寫日記
-                    </button>
-                    <button
-                      className="bg-gray-800 p-3 rounded-md mr-4 hover:bg-red-900"
-                      onClick={handleClick}
-                    >
-                      重新測驗
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ResualtSection>
+              <ResualtImg>
+                <img src={four} alt={four} />
+              </ResualtImg>
+              <ResualtContent>
+                <h2>
+                  測驗結果：
+                  <span>
+                    <AnimatedNumber end={score} />
+                  </span>
+                </h2>
+                <h3>目前你的狀態</h3>
+                <p>
+                  你是不是感到相當的不舒服，會不由自主的沮喪、難過，無法掙脫?
+                  可能你目前的身心狀況不太穩定，建議可以到最近的醫院去找專業的醫生做診斷，透過他們的診療與治療，你也許會有意想不到的回饋，
+                  不要抗拒去尋求資源，希望透過這樣的處理，可以讓自己慢慢降低這種不舒服的感受！
+                </p>
+                <ResualtButton>
+                  <button onClick={() => navigate("/post")}>撰寫日記</button>
+                  <button onClick={handleClick}>重新測驗</button>
+                </ResualtButton>
+              </ResualtContent>
+            </ResualtSection>
           )
         ) : null}
-
-        <p>?</p>
-      </div>
+      </Background>
     </>
   );
 }

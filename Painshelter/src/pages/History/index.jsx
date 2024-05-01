@@ -15,6 +15,7 @@ import follower from "../../assets/icon/follower.png";
 import pressureIcon from "../../assets/icon/pressure.png";
 import write from "../../assets/icon/write.png";
 import pill from "../../assets/icon/pill.png";
+import AnimatedNumber from "../../components/AnimatedNumber.jsx";
 
 //#region
 const Background = styled.div`
@@ -125,6 +126,8 @@ const CategoriesSection = styled.div`
   p {
     font-size: 100px;
     font-weight: 900;
+    display: flex;
+    justify-content: center;
   }
 
   h1 {
@@ -215,58 +218,60 @@ const EachStory = styled.div`
   background: #8e9eab;
   background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);
   background: linear-gradient(to right, #eef2f3, #8e9eab);
-
   color: #555555;
   border-radius: 20px 20px 0 0px;
   box-shadow: 20px -10px 20px 10px rgba(0, 0, 0, 0.2);
   margin-top: -30px;
   display: flex;
 
-  div:nth-of-type(1) {
-    width: 350px;
-    height: 300px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 200px;
-    font-weight: bold;
-    opacity: 0.6;
-    color: #8e9eab;
-    text-shadow: 3px 1px 6px white;
+  @media screen and (max-width: 1279px) {
+    height: 280px;
   }
-  div:nth-of-type(2) {
-    width: 60%;
-    padding: 20px;
+`;
 
-    p {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-top: 15px;
-    }
+const PostIndex = styled.div`
+  width: 350px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 200px;
+  font-weight: bold;
+  opacity: 0.6;
+  color: #8e9eab;
+  text-shadow: 3px 1px 6px white;
+  @media screen and (max-width: 1279px) {
+    display: none;
   }
+`;
 
-  div:nth-of-type(3) {
-    width: 10%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+const MainContent = styled.div`
+  width: 60%;
+  padding: 20px;
+  p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 15px;
   }
 
   h1 {
-    font-size: 30px;
     font-weight: bold;
+    font-size: 20px;
+  }
+
+  h3 {
+    display: flex;
+    color: white;
   }
 
   span {
+    margin-right: 12px;
+    margin-bottom: 12px;
     background: #8e9eab;
-    margin-right: 10px;
     padding: 3px;
     border-radius: 8px;
-    color: white;
-    font-size: 13px;
   }
 
   button {
@@ -284,51 +289,46 @@ const EachStory = styled.div`
       color: black;
     }
   }
-
   @media screen and (max-width: 1279px) {
-    height: 250px;
-
-    div:nth-of-type(1) {
-      width: 65px;
-      height: 150px;
-      font-size: 70px;
-    }
-    div:nth-of-type(2) {
-      width: 65%;
-      padding: 10px;
-
-      p {
-        -webkit-line-clamp: 1;
-        margin-top: 10px;
-      }
-    }
-
-    div:nth-of-type(3) {
-      width: 9%;
-      display: block;
-    }
-
-    h1 {
-      font-size: 12px;
+    width: 80%;
+    padding: 10px;
+    p {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 13px;
+      margin-top: 4px;
     }
 
     span {
-      margin-right: 7px;
-      padding: 2px;
-      border-radius: 5px;
-      font-size: 10px;
+      margin-right: 5px;
+      padding: 3px;
+      border-radius: 8px;
+      margin-top: 3px;
+    }
+
+    h3 {
+      font-size: 12px;
     }
 
     button {
-      padding: 4px;
-      border-radius: 5px;
-      font-size: 11px;
-      margin-top: 8px;
+      padding: 5px;
+
+      font-weight: 200;
+      font-size: 12px;
+
+      margin-top: 6px;
     }
   }
 `;
 
 const Heart = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 50px;
   p {
     font-size: 20px;
     color: black;
@@ -339,6 +339,7 @@ const Heart = styled.div`
     width: 30px;
   }
   @media screen and (max-width: 1279px) {
+    margin-left: 15px;
     p {
       font-size: 15px;
       margin-left: 5px;
@@ -563,7 +564,13 @@ export default function History() {
 
         <Categories>
           <CategoriesSection>
-            {stories.length ? <p>{stories.length}篇</p> : <p>0篇</p>}
+            {stories.length ? (
+              <p>
+                <AnimatedNumber end={stories.length} />篇
+              </p>
+            ) : (
+              <p>0篇</p>
+            )}
             <div>
               <img src={write} alt={write} />
               <h1>文章數量</h1>
@@ -573,7 +580,9 @@ export default function History() {
 
           <CategoriesSection>
             {getLastPressureNumber?.number ? (
-              <p>{getLastPressureNumber?.number}分</p>
+              <p>
+                <AnimatedNumber end={getLastPressureNumber?.number} />分
+              </p>
             ) : (
               <p>0分</p>
             )}
@@ -587,7 +596,9 @@ export default function History() {
 
           <CategoriesSection>
             {authors && authors.length ? (
-              <p>{authors && authors.length}位</p>
+              <p>
+                <AnimatedNumber end={authors && authors.length} />位
+              </p>
             ) : (
               <p>0位</p>
             )}
@@ -606,39 +617,37 @@ export default function History() {
             sortTimeOfStory.map((story, index) => {
               return (
                 <EachStory key={index}>
-                  <div>
+                  <PostIndex>
                     <p>{index + 1}</p>
-                  </div>
-                  <div>
+                  </PostIndex>
+                  <MainContent>
                     <h1>疼痛暗號：{story.title}</h1>
-                    <h2>
+                    <h1>
                       {story.time}@{story.location.name}
-                    </h2>
-                    <h2>
+                    </h1>
+                    <h3>
                       {story.type.map((item, index) => (
                         <span key={index}>#{item}</span>
                       ))}
-                    </h2>
-                    <h2>
+                    </h3>
+                    <h3>
                       {story.figure.map((item, index) => (
                         <span key={index}>{item}</span>
                       ))}
-                    </h2>
+                    </h3>
                     <p>{story.story}</p>
                     <button onClick={() => modifiedClick(story.storyId)}>
                       編輯
                     </button>
-                  </div>
-                  <div>
-                    <Heart>
-                      <img src={pill} alt={pill} />
-                      <p>
-                        {story.likedAuthorId?.length > 0
-                          ? story.likedAuthorId.length
-                          : 0}
-                      </p>
-                    </Heart>
-                  </div>
+                  </MainContent>
+                  <Heart>
+                    <img src={pill} alt={pill} />
+                    <p>
+                      {story.likedAuthorId?.length > 0
+                        ? story.likedAuthorId.length
+                        : 0}
+                    </p>
+                  </Heart>
 
                   {/* 
                   <Comment>

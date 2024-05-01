@@ -19,6 +19,7 @@ import { AccordionDemo } from "./components/Shadcn/Accordion";
 import aboutpainsectionimg from "./assets/img/aboutpainsection1.jpg";
 import aboutpainsectionimg2 from "./assets/img/aboutpainsection2.jpg";
 import footer1 from "./assets/img/mainFooter1.jpg";
+import AnimatedNumber from "../src/components/AnimatedNumber.jsx";
 
 //#region
 const Background = styled.div`
@@ -581,7 +582,6 @@ function App() {
   const chart = useRef(null);
   const map = useRef(null);
   const top = useRef(null);
-
   const scrollSection = (elementRef) => {
     window.scrollTo({
       top: elementRef.current.offsetTop,
@@ -783,7 +783,9 @@ Monochrome img"
             </TypesChartsSection>
             <PostsCounts>
               <h1>文章累積數量</h1>
-              <p> {stories.length} </p>
+              <p>
+                <AnimatedNumber end={stories.length} />{" "}
+              </p>
             </PostsCounts>
             <FigureChartSection>
               <FigureChart />

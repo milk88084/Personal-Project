@@ -7,7 +7,7 @@ import styled from "styled-components";
 const Background = styled.div`
   background-image: url(${modalpoem});
   width: 50%;
-  height: 50%;
+  height: 58%;
   position: fixed;
   display: flex;
   padding: 30px;
