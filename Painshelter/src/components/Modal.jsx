@@ -7,6 +7,7 @@ import { useLoginState } from "../utils/zustand.js";
 import html2canvas from "html2canvas";
 import backgroundImg from "../assets/img/outputimg.jpg";
 import styled from "styled-components";
+import { toPng } from "html-to-image";
 
 //#region
 const Wrapper = styled.div`
@@ -214,13 +215,16 @@ export default function Modal({ comebinedArray, clickTitle }) {
   const captureRef = useRef(null);
   const handleCaptureClick = () => {
     if (captureRef.current) {
-      html2canvas(captureRef.current).then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const link = document.createElement("a");
-        link.download = "capture.png";
-        link.href = imgData;
-        link.click();
-      });
+      toPng(captureRef.current)
+        .then((dataUrl) => {
+          const link = document.createElement("a");
+          link.download = "captured-image.png";
+          link.href = dataUrl;
+          link.click();
+        })
+        .catch((error) => {
+          console.error("Failed to capture the image", error);
+        });
     }
   };
   console.log(captureRef.current);
@@ -230,7 +234,7 @@ export default function Modal({ comebinedArray, clickTitle }) {
       <Backdrop />
       {modal ? (
         <Wrapper>
-          <Main>
+          <Main ref={captureRef}>
             <Capture ref={captureRef}>
               <img src={backgroundImg} alt={backgroundImg} />
               <ContentSections>
@@ -239,18 +243,18 @@ export default function Modal({ comebinedArray, clickTitle }) {
                 <p>{modalPost.story}</p>
               </ContentSections>
             </Capture>
-            <ButtonSections>
-              <button
-                onClick={() => {
-                  handleVisitAthor(modalPost.userId);
-                }}
-              >
-                觀看作者
-              </button>
-              <button onClick={handleCaptureClick}>儲存成圖片</button>
-              <button onClick={closeModal}>關閉</button>
-            </ButtonSections>
           </Main>
+          <ButtonSections>
+            <button
+              onClick={() => {
+                handleVisitAthor(modalPost.userId);
+              }}
+            >
+              觀看作者
+            </button>
+            <button onClick={handleCaptureClick}>儲存成圖片</button>
+            <button onClick={closeModal}>關閉</button>
+          </ButtonSections>
         </Wrapper>
       ) : null}
     </div>
