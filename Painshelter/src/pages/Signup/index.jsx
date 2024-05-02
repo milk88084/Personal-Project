@@ -9,14 +9,17 @@ import logoImg from "../../assets/img/logoImg2.png";
 import logoTitle from "../../assets/img/logoTitle2.png";
 import backgroundVideo from "../../assets/video/login.mp4";
 import { useRef, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+//#region
 const Background = styled.div`
   height: 100vh;
 `;
 
 const BackgroundVideo = styled.video`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   object-fit: cover;
 `;
 
@@ -129,6 +132,7 @@ const Alert = styled.div`
   color: #9e1818;
   font-size: 15px;
 `;
+//#endregion
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -154,14 +158,34 @@ const Signup = () => {
           displayName: nameInput.value,
         }).then(() => {
           console.log(user);
-          alert("註冊成功，請至登入頁面進行登入");
-          navigate("/login");
-          // ...
+          toast.success("註冊成功，請至登入頁面進行登入", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          setTimeout(() => {
+            navigate("/login");
+          }, 3000);
         });
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        toast.error("註冊不成功", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
         console.log(errorCode, errorMessage);
       });
 
@@ -230,7 +254,7 @@ const Signup = () => {
               <InputSection>
                 <label htmlFor="password">輸入密碼</label>
                 <input
-                  type="{password}"
+                  type="password"
                   label="Create password"
                   {...passwordInput}
                   required
@@ -248,6 +272,21 @@ const Signup = () => {
             </FormSection>
           </form>
         </MainSection>
+        <div>
+          <ToastContainer
+            position="top-center"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+            transition:Bounce
+          />
+        </div>
       </Background>
     </>
   );

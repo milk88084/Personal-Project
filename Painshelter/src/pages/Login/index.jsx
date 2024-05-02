@@ -7,14 +7,17 @@ import { useLoginState } from "../../utils/zustand.js";
 import logoImg from "../../assets/img/logoImg.png";
 import logoTitle from "../../assets/img/logoTitle.png";
 import backgroundVideo from "../../assets/video/login.mp4";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+//#region
 const Background = styled.div`
   height: 100vh;
 `;
 
 const BackgroundVideo = styled.video`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   object-fit: cover;
 `;
 
@@ -132,6 +135,8 @@ const ButtonSection = styled.div`
   }
 `;
 
+//#endregion
+
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -151,19 +156,39 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        navigate("/");
+        toast.success("登入成功", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
         console.log(user);
         online();
         setLoginUserId(user.uid);
         window.localStorage.setItem("userId", user.uid);
         window.localStorage.setItem("loginStatus", loginStatus);
-        alert("登入成功");
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
-        alert("登入失敗，重確認信箱或密碼是否正確");
+        toast.error("密碼輸入錯誤", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       });
   };
 
@@ -213,6 +238,7 @@ const Login = () => {
                 <button type="button" onClick={onLogin}>
                   登入
                 </button>
+
                 <button type="button">
                   <NavLink to="/signup">註冊會員</NavLink>
                 </button>
@@ -220,6 +246,21 @@ const Login = () => {
             </FormSection>
           </form>
         </MainSection>
+        <div>
+          <ToastContainer
+            position="top-center"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+            transition:Bounce
+          />
+        </div>
       </Background>
     </>
   );
