@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import { useLoginState } from "../../utils/zustand.js";
 import { useEditFormInput } from "../../utils/hooks/useEditFormInput.jsx";
 import { useEditCheckboxInput } from "../../utils/hooks/useEditCheckboxInput.jsx";
-
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { db } from "../../utils/firebase/firebase.jsx";
 import pill from "../../assets/icon/pill.png";
 import {
@@ -328,6 +327,12 @@ export default function Edit() {
   const storyFigure = useEditCheckboxInput(storyFigureData);
   const [locationName, setLocationName] = useState();
   const [comments, setComments] = useState();
+  const location = useLocation();
+
+  //回到網頁最上方
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   //取得db資料
   useEffect(() => {

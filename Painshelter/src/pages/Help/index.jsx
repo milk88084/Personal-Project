@@ -1,6 +1,6 @@
 import "survey-core/defaultV2.min.css";
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Model } from "survey-core";
 import { themeJson } from "../../assets/survey";
 import { PopupSurvey } from "survey-react-ui";
@@ -276,7 +276,13 @@ function SurveyComponent() {
   const [complete, setComplete] = useState(false);
   const survey = new Model(json);
   const result = useRef(null);
+  const location = useLocation();
   survey.applyTheme(themeJson);
+
+  //回到網頁最上方
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   const handleClick = () => {
     setShow(true);

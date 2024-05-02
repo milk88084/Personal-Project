@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { db } from "../../utils/firebase/firebase.jsx";
 import { auth } from "../../utils/firebase/auth.jsx";
 import { collection, query, getDocs, where } from "firebase/firestore";
@@ -423,6 +423,12 @@ export default function History() {
   const [authors, setAuthors] = useState();
   const [pressure, setPressure] = useState();
   const { modal, showModal } = HistoryModal();
+  const location = useLocation();
+
+  //監聽到網頁最上方
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
   useEffect(() => {
     async function getStories() {

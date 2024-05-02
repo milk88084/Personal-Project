@@ -20,6 +20,7 @@ import aboutpainsectionimg from "./assets/img/aboutpainsection1.jpg";
 import aboutpainsectionimg2 from "./assets/img/aboutpainsection2.jpg";
 import footer1 from "./assets/img/mainFooter1.jpg";
 import AnimatedNumber from "../src/components/AnimatedNumber.jsx";
+import { useLocation } from "react-router-dom";
 
 //#region
 const Background = styled.div`
@@ -573,6 +574,7 @@ function App() {
   const { online, offline, logout } = useLoginState();
   const localStorageUserId = window.localStorage.getItem("userId");
   const localStorageLogin = window.localStorage.getItem("loginStatus");
+  const location = useLocation();
 
   // const login = getLoginStatus();
 
@@ -588,6 +590,11 @@ function App() {
       behavior: "smooth",
     });
   };
+
+  //監聽回到網頁最上面
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   //登出按鈕
   const handleLogout = () => {
@@ -703,7 +710,7 @@ function App() {
             <button onClick={() => scrollSection(map)}>疼痛地圖</button>
             <button onClick={() => navigate("/history")}>疼痛日記室</button>
             <button onClick={() => navigate("/help")}>心靈緊急按鈕</button>
-            <button>關於我們</button>
+            <button onClick={() => navigate("/heal")}>有一種疼痛</button>
             <button onClick={handleLogout}>登出</button>
           </Categories>
           <Logo>

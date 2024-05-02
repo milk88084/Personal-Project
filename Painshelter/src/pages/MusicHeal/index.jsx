@@ -1,13 +1,15 @@
 import youtube from "../../utils/api/youtube";
 import styled from "styled-components";
 import { useFormInput } from "../../utils/hooks/useFormInputNoSetValue";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import heal1 from "../../assets/img/heal1.jpg";
 import heal2 from "../../assets/img/heal2.jpg";
 import heal3 from "../../assets/img/heal3.jpg";
 import { useNavigate } from "react-router-dom";
 import continueIcon from "../../assets/icon/continue.png";
+import { useLocation } from "react-router-dom";
 
+//#region
 const Lyric = styled.div`
   position: relative;
   img {
@@ -193,6 +195,7 @@ const ButtonSection = styled.div`
     }
   }
 `;
+//#endregion
 
 function MusicHeal() {
   const SearchInput = useFormInput();
@@ -203,6 +206,12 @@ function MusicHeal() {
   const section3 = useRef(null);
   const section4 = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  //監聽在網頁最上方
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   const scrollSection = (elementRef) => {
     window.scrollTo({
