@@ -21,6 +21,7 @@ import aboutpainsectionimg2 from "./assets/img/aboutpainsection2.jpg";
 import footer1 from "./assets/img/mainFooter1.jpg";
 import AnimatedNumber from "../src/components/AnimatedNumber.jsx";
 import { useLocation } from "react-router-dom";
+import { gsap } from "gsap";
 
 //#region
 const Background = styled.div`
@@ -152,7 +153,7 @@ const Categories = styled.div`
 
   button {
     margin: 12px;
-    margin-right: 50px;
+    margin-right: 100px;
     opacity: 10%;
   }
 
@@ -170,7 +171,7 @@ const Categories = styled.div`
 
     button {
       margin: 3px;
-      margin-right: 0px;
+      margin-right: 60px;
       opacity: 10%;
     }
   }
@@ -185,12 +186,13 @@ const Logo = styled.div`
   margin-left: 180px;
 
   img:nth-of-type(1) {
-    width: 180px;
+    width: 150px;
     object-fit: contain;
+    margin-right: 20px;
   }
 
   img:nth-of-type(2) {
-    width: 500px;
+    width: 450px;
     object-fit: contain;
   }
   @media screen and (max-width: 1279px) {
@@ -198,13 +200,14 @@ const Logo = styled.div`
     align-items: center;
     margin-left: 0px;
     right: 0;
-    margin: 50 auto;
+    margin-top: 250px;
     img:nth-of-type(1) {
       width: 150px;
     }
 
     img:nth-of-type(2) {
       width: 250px;
+      margin-top: 20px;
     }
   }
 `;
@@ -528,12 +531,17 @@ const FooterContent = styled.div`
   letter-spacing: 5px;
 
   button {
-    color: white;
+    color: #fffed6;
     opacity: 80%;
     font-size: 40px;
     letter-spacing: 5px;
     padding-top: 30px;
     font-weight: 600;
+  }
+
+  button:hover {
+    color: #ffd16e;
+    text-shadow: 1px 1px 20px white;
   }
 
   span {
@@ -577,6 +585,34 @@ function App() {
   const location = useLocation();
 
   // const login = getLoginStatus();
+
+  //#region,GSAP
+  const firstRef = useRef(null);
+  const thirdRef = useRef(null);
+  const fifthRef = useRef(null);
+  const seventhRef = useRef(null);
+  const imageRef = useRef(null);
+  const logoRef = useRef(null);
+  useEffect(() => {
+    gsap.to(firstRef.current, { duration: 1, x: 50 });
+    gsap.to(thirdRef.current, { duration: 1, x: 50 });
+    gsap.to(fifthRef.current, { duration: 1, x: 50 });
+    gsap.to(seventhRef.current, { duration: 1, x: 50 });
+    gsap.to(imageRef.current, {
+      duration: 0.7,
+      scale: 1.2,
+      filter: "drop-shadow(0 0 20px rgba(0, 0, 0, 0.8))",
+    });
+    gsap.to(logoRef.current, {
+      duration: 3,
+      rotation: 360,
+      scale: 1.2,
+      ease: "power4.inOut",
+      repeat: -1,
+      yoyo: true,
+    });
+  }, []);
+  //#endregion
 
   //按鈕指定到區域
   const about = useRef(null);
@@ -705,22 +741,30 @@ function App() {
         )}
         <Banner>
           <Categories ref={top}>
-            <button onClick={() => scrollSection(about)}>關於疼痛</button>
+            <button ref={firstRef} onClick={() => scrollSection(about)}>
+              關於疼痛
+            </button>
             <button onClick={() => scrollSection(chart)}>疼痛光譜</button>
-            <button onClick={() => scrollSection(map)}>疼痛地圖</button>
+            <button ref={thirdRef} onClick={() => scrollSection(map)}>
+              疼痛地圖
+            </button>
             <button onClick={() => navigate("/history")}>疼痛日記室</button>
-            <button onClick={() => navigate("/help")}>心靈緊急按鈕</button>
+            <button ref={fifthRef} onClick={() => navigate("/help")}>
+              心靈緊急按鈕
+            </button>
             <button onClick={() => navigate("/heal")}>有一種疼痛</button>
-            <button onClick={handleLogout}>登出</button>
+            <button ref={seventhRef} onClick={handleLogout}>
+              登出
+            </button>
           </Categories>
           <Logo>
-            <img src={logoImg} alt="Logo" />
-            <img src={logoTitle} alt="Logo title" />
+            <img ref={logoRef} src={logoImg} alt="Logo" />
+            <img ref={imageRef} src={logoTitle} alt="Logo title" />
           </Logo>
           <SubTitle>PAINSHELTER</SubTitle>
         </Banner>
 
-        {/* <AboutPain ref={about}>
+        <AboutPain ref={about}>
           <AboutPainTitle>
             <h1>關於疼痛</h1>
             <p>About Pain</p>
@@ -810,7 +854,7 @@ function App() {
             <button onClick={handleLogout}>登出</button>
             <img onClick={() => scrollSection(top)} src={logoImg} alt="logo" />
           </FooterContent>
-        </FooterSection> */}
+        </FooterSection>
       </Background>
     </>
   );
