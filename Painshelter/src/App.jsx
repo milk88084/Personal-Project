@@ -720,7 +720,7 @@ function App() {
           <SubTitle>PAINSHELTER</SubTitle>
         </Banner>
 
-        <AboutPain ref={about}>
+        {/* <AboutPain ref={about}>
           <AboutPainTitle>
             <h1>關於疼痛</h1>
             <p>About Pain</p>
@@ -810,7 +810,7 @@ function App() {
             <button onClick={handleLogout}>登出</button>
             <img onClick={() => scrollSection(top)} src={logoImg} alt="logo" />
           </FooterContent>
-        </FooterSection>
+        </FooterSection> */}
       </Background>
     </>
   );

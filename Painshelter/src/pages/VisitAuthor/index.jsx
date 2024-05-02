@@ -22,6 +22,7 @@ import submitIcon from "../../assets/icon/paper-plane.png";
 // import backgroundImg from "../../assets/img/backgroundImg.jpg";
 import { useAuthorfiedData } from "../../utils/zustand.js";
 
+//#region
 const Background = styled.div`
   background: linear-gradient(
     90deg,
@@ -107,6 +108,9 @@ const Title = styled.p`
   align-items: center;
   font-size: 100px;
   height: 300px;
+  font-weight: 600;
+  opacity: 0.6;
+  font-style: italic;
   @media screen and (max-width: 1279px) {
     font-size: 50px;
     height: 150px;
@@ -359,6 +363,42 @@ const FAB = styled.div`
   }
 `;
 
+const Owned = styled.div`
+  position: absolute;
+  font-size: 100px;
+  font-weight: 1000;
+  color: white;
+  text-shadow: 3px 6px 4px white;
+  top: 120px;
+
+  button {
+    padding: 6px;
+    border-radius: 10px;
+    font-weight: 400;
+    margin: 24px;
+    font-size: 20px;
+    background-color: #19242b;
+    color: white;
+
+    &:hover,
+    &:focus {
+      background-color: #9ca3af;
+      color: black;
+    }
+  }
+  @media screen and (max-width: 1279px) {
+    font-size: 45px;
+
+    button {
+      padding: 6px;
+      border-radius: 10px;
+      font-weight: 400;
+      margin: 15px;
+      font-size: 10px;
+    }
+  }
+`;
+
 //#endregion
 
 const VisitAuthor = () => {
@@ -589,12 +629,21 @@ const VisitAuthor = () => {
     }
   };
 
+  //將文章按照時間順序排序
+  const sortTimeOfStory = stories.sort((a, b) => b.time.localeCompare(a.time));
+  // console.log(stories);
+
   return (
     <>
       <Background>
         <TopSection>
           {isUserStories ? (
-            <p>My own page</p>
+            <>
+              <Owned>
+                <p>My own page</p>
+                <button onClick={() => navigate("/post")}>撰寫故事</button>
+              </Owned>
+            </>
           ) : (
             <div>
               <TopSectionName>
@@ -613,8 +662,8 @@ const VisitAuthor = () => {
         </TopSection>
         <Title>歷史文章</Title>
         <StorySection>
-          {stories &&
-            stories.map((story, index) => {
+          {sortTimeOfStory &&
+            sortTimeOfStory.map((story, index) => {
               return (
                 <EachStory key={index} id={stories.storyId}>
                   <PostIndex>
