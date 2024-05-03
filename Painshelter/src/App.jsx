@@ -1,4 +1,5 @@
 // import "./App.css";
+import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { auth } from "./utils/firebase/firebase.jsx";
@@ -22,8 +23,22 @@ import footer1 from "./assets/img/mainFooter1.jpg";
 import AnimatedNumber from "../src/components/AnimatedNumber.jsx";
 import { useLocation } from "react-router-dom";
 import { gsap } from "gsap";
+import CopyRight from "./components/CopyRight.jsx";
+import { createGlobalStyle } from "styled-components";
 
 //#region
+const GlobalStyle = createGlobalStyle`
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+
+
+`;
+
 const Background = styled.div`
   background-color: #1a1a1a;
   position: relative;
@@ -620,6 +635,7 @@ function App() {
   const chart = useRef(null);
   const map = useRef(null);
   const top = useRef(null);
+  const footer = useRef(null);
   const scrollSection = (elementRef) => {
     window.scrollTo({
       top: elementRef.current.offsetTop,
@@ -716,6 +732,7 @@ function App() {
 
   return (
     <>
+      <GlobalStyle />
       <Background>
         {localStorageLogin ? null : (
           <ModalBackground>
@@ -748,11 +765,11 @@ function App() {
             <button ref={thirdRef} onClick={() => scrollSection(map)}>
               疼痛地圖
             </button>
-            <button onClick={() => navigate("/history")}>疼痛日記室</button>
-            <button ref={fifthRef} onClick={() => navigate("/help")}>
+            <button onClick={() => scrollSection(footer)}>疼痛日記室</button>
+            <button ref={fifthRef} onClick={() => scrollSection(footer)}>
               心靈緊急按鈕
             </button>
-            <button onClick={() => navigate("/heal")}>有一種疼痛</button>
+            <button onClick={() => scrollSection(footer)}>或是一首歌</button>
             <button ref={seventhRef} onClick={handleLogout}>
               登出
             </button>
@@ -822,7 +839,7 @@ function App() {
           <ChartSection>
             <TypesChartsSection>
               <Chart />
-              <h1>故事類別統計</h1>
+              <h1>故事類型</h1>
             </TypesChartsSection>
             <PostsCounts>
               <h1>文章累積數量</h1>
@@ -832,7 +849,7 @@ function App() {
             </PostsCounts>
             <FigureChartSection>
               <FigureChart />
-              <h1>故事關係人統計</h1>
+              <h1>故事關係人</h1>
             </FigureChartSection>
           </ChartSection>
         </ChartFeature>
@@ -849,12 +866,17 @@ function App() {
           <FooterImg>
             <img src={footer1} alt="footer img" />
           </FooterImg>
-          <FooterContent>
+          <FooterContent ref={footer}>
             <AccordionDemo></AccordionDemo>
             <button onClick={handleLogout}>登出</button>
-            <img onClick={() => scrollSection(top)} src={logoImg} alt="logo" />
+            <img
+              onClick={() => scrollSection(top)}
+              src={logoImg}
+              alt={logoImg}
+            />
           </FooterContent>
         </FooterSection>
+        <CopyRight></CopyRight>
       </Background>
     </>
   );

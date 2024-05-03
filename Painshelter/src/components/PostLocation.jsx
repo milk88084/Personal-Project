@@ -91,7 +91,6 @@ const PostsLocation = () => {
   return (
     <div>
       <Modal comebinedArray={comebinedArray} clickTitle={clickTitle} />
-
       <MapContainer
         center={center}
         zoom={7}

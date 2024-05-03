@@ -70,8 +70,8 @@ const TopSectionName = styled.div`
     font-weight: 400;
     margin: 24px;
     font-size: 20px;
-    background-color: ${(props) => (props.followd ? "#19242b" : "#9ca3af")};
-    color: ${(props) => (props.followed ? "white" : "black")};
+    background-color: #19242b;
+    color: white;
 
     &:hover,
     &:focus {
@@ -95,6 +95,52 @@ const TopSectionName = styled.div`
     }
 
     button {
+      font-size: 10px;
+      margin-right: 0px;
+      margin-bottom: 0px;
+    }
+  }
+`;
+
+const IsFollowed = styled.div`
+  button {
+    padding: 6px;
+    border-radius: 10px;
+    font-weight: 400;
+    margin: 24px;
+    font-size: 20px;
+    background-color: #19242b;
+    color: white;
+
+    &:hover,
+    &:focus {
+      background-color: #9ca3af;
+      color: black;
+    }
+  }
+
+  @media screen and (max-width: 1279px) {
+    button {
+      font-size: 10px;
+      margin-right: 0px;
+      margin-bottom: 0px;
+    }
+  }
+`;
+
+const IsFollowAuthor = styled.div`
+  span {
+    padding: 6px;
+    border-radius: 10px;
+    font-weight: 400;
+    margin: 24px;
+    font-size: 20px;
+    background-color: #ffffff;
+    color: #19242b;
+  }
+
+  @media screen and (max-width: 1279px) {
+    span {
       font-size: 10px;
       margin-right: 0px;
       margin-bottom: 0px;
@@ -411,7 +457,7 @@ const VisitAuthor = () => {
   const { setSelectedStoryId } = useAuthorfiedData();
 
   // console.log("這裡是這個作者的歷史文章", state.data);
-  // console.log("現在登入的人是：" + localStorageUserId);
+  console.log("現在登入的人是：" + localStorageUserId);
 
   //從firestore讀取posts資料
   useEffect(() => {
@@ -573,7 +619,7 @@ const VisitAuthor = () => {
     window.scroll(0, 0);
   };
 
-  console.log(stories);
+  // console.log(stories);
 
   const [isFollow, setIsFollow] = useState(false);
 
@@ -588,9 +634,9 @@ const VisitAuthor = () => {
         const querySnapshot = await getDocs(q);
         const docData = querySnapshot.docs[0].data().followAuthor;
         if (docData.includes(state.data)) {
-          setIsFollow(false);
-        } else {
           setIsFollow(true);
+        } else {
+          setIsFollow(false);
         }
       } catch (e) {
         console.log(e);
@@ -649,12 +695,14 @@ const VisitAuthor = () => {
               <TopSectionName>
                 <img src={logoImg} alt={logoImg} />
                 <h1>{author[0]?.name}</h1>
-                {isFollow ? (
-                  <button onClick={handleFollow}>關注作者</button>
+                {!isFollow ? (
+                  <IsFollowed>
+                    <button onClick={handleFollow}>關注作者</button>
+                  </IsFollowed>
                 ) : (
-                  <button followed={false} disabled>
-                    已關注作者
-                  </button>
+                  <IsFollowAuthor>
+                    <span disabled>已關注作者</span>
+                  </IsFollowAuthor>
                 )}
               </TopSectionName>
             </div>

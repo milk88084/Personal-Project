@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useLoginState } from "../utils/zustand";
 import styled from "styled-components";
+import icon from "../assets/img/logoImg3.png";
 
 const Input = styled.div`
   width: 100%;
@@ -11,6 +12,13 @@ const Input = styled.div`
     border: 2px solid black;
   }
 `;
+
+const painIcon = L.icon({
+  iconUrl: icon,
+  iconSize: [35, 45], //icon大小
+  iconAnchor: [25, 20], //圖標中心點位置
+  popupAnchor: [0, 0], //popup視窗位置
+});
 
 const LocationSearch = () => {
   const { locationSerach, setLocationSearch } = useLoginState();
@@ -64,7 +72,10 @@ const LocationSearch = () => {
             style={{ height: "400px", width: "100%" }}
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <Marker position={[locationState.lat, locationState.lon]}>
+            <Marker
+              position={[locationState.lat, locationState.lon]}
+              icon={painIcon}
+            >
               <Popup>{storyLocation.value}</Popup>
             </Marker>
           </MapContainer>

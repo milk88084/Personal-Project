@@ -75,6 +75,7 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
   @media screen and (max-width: 1279px) {
     flex-direction: column;
     height: 100%;
@@ -207,6 +208,7 @@ function MusicHeal() {
   const section4 = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
 
   //監聽在網頁最上方
   useEffect(() => {
@@ -223,6 +225,7 @@ function MusicHeal() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      setIsLoading(true);
       const response = await youtube.get("/search", {
         params: {
           q: SearchInput.value,
@@ -231,6 +234,7 @@ function MusicHeal() {
         },
       });
       setVideos(response.data.items);
+      setIsLoading(false);
     } catch (error) {
       console.error("Search failed:", error);
     }
@@ -290,6 +294,7 @@ function MusicHeal() {
         </Intro>
         <MainSection>
           <Video>
+            {isLoading ? "Loading..." : "Loading..."}
             {videos.map((video) => (
               <VideoItem
                 key={video.id.videoId}

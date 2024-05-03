@@ -454,6 +454,7 @@ function SurveyComponent() {
                 <ResualtButton>
                   <button onClick={() => navigate("/post")}>撰寫日記</button>
                   <button onClick={handleClick}>重新測驗</button>
+                  <button onClick={() => navigate("/")}>回到首頁</button>
                 </ResualtButton>
               </ResualtContent>
             </ResualtSection>
@@ -477,6 +478,7 @@ function SurveyComponent() {
                 <ResualtButton>
                   <button onClick={() => navigate("/post")}>撰寫日記</button>
                   <button onClick={handleClick}>重新測驗</button>
+                  <button onClick={() => navigate("/")}>回到首頁</button>
                 </ResualtButton>
               </ResualtContent>
             </ResualtSection>
@@ -502,6 +504,7 @@ function SurveyComponent() {
                 <ResualtButton>
                   <button onClick={() => navigate("/post")}>撰寫日記</button>
                   <button onClick={handleClick}>重新測驗</button>
+                  <button onClick={() => navigate("/")}>回到首頁</button>
                 </ResualtButton>
               </ResualtContent>
             </ResualtSection>
@@ -526,6 +529,7 @@ function SurveyComponent() {
                 <ResualtButton>
                   <button onClick={() => navigate("/post")}>撰寫日記</button>
                   <button onClick={handleClick}>重新測驗</button>
+                  <button onClick={() => navigate("/")}>回到首頁</button>
                 </ResualtButton>
               </ResualtContent>
             </ResualtSection>

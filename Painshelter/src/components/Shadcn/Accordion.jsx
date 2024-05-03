@@ -25,7 +25,7 @@ export function AccordionDemo() {
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-3">
-        <AccordionTrigger>有一種疼痛</AccordionTrigger>
+        <AccordionTrigger>或是一首歌</AccordionTrigger>
         <AccordionContent>
           那些文字與旋律共同組合而成的聲音，每一次聆聽都像是一盞燈塔，照亮著相似道路上的旅人。每一段遭遇，每一個感受，在這裡，都會發現與之共鳴的回音。記住，每一段經歷，無論喜悅或是痛苦，都不應該孤獨承擔。
           <span onClick={() => navigate("/heal")}>點擊進入</span>
