@@ -5,7 +5,7 @@ import { collection, query, getDocs, where } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { modifiedData } from "../../utils/zustand.js";
 import moment from "moment";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import backgroundImg from "../../assets/img/historyBanner.jpg";
 import logoImg from "../../assets/img/logoImg.png";
 import logoTitle from "../../assets/img/logoTitle.png";
@@ -17,7 +17,6 @@ import write from "../../assets/icon/write.png";
 import pill from "../../assets/icon/pill.png";
 import AnimatedNumber from "../../components/AnimatedNumber.jsx";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
-
 //#region
 const Background = styled.div`
   background: linear-gradient(
@@ -191,6 +190,33 @@ const CategoriesSection = styled.div`
       margin: 15px;
       font-size: 10px;
     }
+  }
+`;
+
+const glowing = keyframes`
+  0% { box-shadow: 0 0 5px white; }
+  50% { box-shadow: 0 0 20px white; }
+  100% { box-shadow: 0 0 5px white; }
+`;
+
+const WriteButton = styled.span`
+  padding: 6px;
+
+  cursor: pointer;
+
+  animation: ${glowing} 2s infinite ease-in-out;
+
+  padding: 6px;
+  border-radius: 10px;
+  font-weight: 400;
+  margin: 24px;
+  font-size: 20px;
+  background-color: #19242b;
+  color: white;
+  &:hover,
+  &:focus {
+    background-color: #9ca3af;
+    color: black;
   }
 `;
 
@@ -478,7 +504,7 @@ export default function History() {
   if (pressure && pressure.length > 0) {
     getLastPressureNumber = pressure[pressure?.length - 1];
   } else {
-    console.log("沒有測驗過");
+    // console.log("沒有測驗過");
   }
   // console.log(getLastPressureNumber.number);
 
@@ -579,21 +605,6 @@ export default function History() {
 
             <Categories>
               <CategoriesSection>
-                {stories.length ? (
-                  <p>
-                    <AnimatedNumber end={stories.length} />篇
-                  </p>
-                ) : (
-                  <p>0篇</p>
-                )}
-                <div>
-                  <img src={write} alt={write} />
-                  <h1>文章數量</h1>
-                </div>
-                <button onClick={handlePost}>撰寫文章</button>
-              </CategoriesSection>
-
-              <CategoriesSection>
                 {getLastPressureNumber?.number ? (
                   <p>
                     <AnimatedNumber end={getLastPressureNumber?.number} />分
@@ -607,6 +618,25 @@ export default function History() {
                   <h1>壓力分數</h1>
                 </div>
                 <button onClick={handleHelp}>測量壓力</button>
+              </CategoriesSection>
+
+              <CategoriesSection>
+                {stories.length ? (
+                  <p>
+                    <AnimatedNumber end={stories.length} />篇
+                  </p>
+                ) : (
+                  <p>0篇</p>
+                )}
+                <div>
+                  <img src={write} alt={write} />
+                  <h1>文章數量</h1>
+                </div>
+                <WriteButton>
+                  <div>
+                    <span onClick={handlePost}>撰寫文章</span>
+                  </div>
+                </WriteButton>
               </CategoriesSection>
 
               <CategoriesSection>

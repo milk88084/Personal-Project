@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginState } from "../../utils/zustand.js";
 import { useFormInput } from "../../utils/hooks/useFormInput.jsx";
@@ -100,6 +101,7 @@ const EditTitleInput = styled.div`
   input {
     width: 400px;
     color: black;
+    padding-left: 10px;
   }
   @media screen and (max-width: 1279px) {
     border: 1px solid black;
@@ -120,6 +122,25 @@ const EditDateInput = styled.div`
     input {
       width: 100%;
     }
+  }
+`;
+
+const Tag = styled.li`
+  border: 2px solid #000; // 黑色邊框
+  border-radius: 5px; // 輕微的圓角
+  padding: 8px 16px; // 內部空間
+  display: inline-block; // 讓列表項目水平顯示
+  margin: 5px; // 留出間隙
+  cursor: pointer; // 滑鼠懸停時顯示指針
+  background-color: ${(props) =>
+    props.selected ? "#000" : "#fff"}; // 根據是否選中改變背景顏色
+  color: ${(props) =>
+    props.selected ? "#fff" : "#000"}; // 根據是否選中改變文字顏色
+
+  &:hover,
+  &:focus {
+    background-color: #000;
+    color: #fff;
   }
 `;
 
@@ -159,6 +180,8 @@ const EditTextArea = styled.div`
     height: 300px;
     margin-top: 50px;
     color: black;
+    padding-left: 10px;
+    padding-top: 10px;
   }
   @media screen and (max-width: 1279px) {
     margin-top: 30px;
@@ -237,9 +260,16 @@ export default function Edit() {
   ];
   const storyType = useCheckboxInput(storyTypeData);
   const storyFigure = useCheckboxInput(storyFigureData);
+  const [selectedTypes, setSelectedTypes] = useState([]);
 
   const storyLocation = locationSerach[0];
   console.log(storyLocation);
+
+  const toggleType = (type) => {
+    setSelectedTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
+    );
+  };
 
   const handleSubmit = async (event) => {
     // alert("Your favorite flavor is: ");
@@ -255,7 +285,7 @@ export default function Edit() {
         title: storyTitle.value,
         time: storyTime.value,
         location: storyLocation,
-        type: storyType.getSortedCheckedValues(),
+        type: selectedTypes,
         figure: storyFigure.getSortedCheckedValues(),
         story: postStory.value,
         userId: localStorageUserId,
@@ -333,46 +363,15 @@ export default function Edit() {
               <EditTitle>故事類型</EditTitle>
               <EditTypesInput>
                 <ul>
-                  <li>
-                    <input
-                      type="checkbox"
-                      onChange={storyType.onChange}
-                      value="成長軌跡"
-                    />
-                    成長軌跡
-                  </li>
-                  <li>
-                    <input
-                      type="checkbox"
-                      onChange={storyType.onChange}
-                      value="情感關係"
-                    />
-                    情感關係
-                  </li>
-                  <li>
-                    <input
-                      type="checkbox"
-                      onChange={storyType.onChange}
-                      value="人際交流"
-                    />
-                    人際交流
-                  </li>
-                  <li>
-                    <input
-                      type="checkbox"
-                      onChange={storyType.onChange}
-                      value="生命經歷"
-                    />
-                    生命經歷
-                  </li>
-                  <li>
-                    <input
-                      type="checkbox"
-                      onChange={storyType.onChange}
-                      value="職場發展"
-                    />
-                    職場發展
-                  </li>
+                  {storyTypeData.map((type) => (
+                    <Tag
+                      key={type}
+                      selected={selectedTypes.includes(type)}
+                      onClick={() => toggleType(type)}
+                    >
+                      {type}
+                    </Tag>
+                  ))}
                 </ul>
               </EditTypesInput>
             </EditCategories>

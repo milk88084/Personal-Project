@@ -311,6 +311,7 @@ const AboutPaintContent = styled.div`
     width: 600px;
     margin-left: 50px;
     opacity: 65%;
+    font-size: 18px;
   }
   span {
     opacity: 65%;

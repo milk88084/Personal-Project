@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.1",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-dialog": "^1.0.5",
@@ -23,7 +24,6 @@
     "embla-carousel-react": "^8.0.2",
     "firebase": "^10.10.0",
     "firebaseui": "^6.1.0",
-    "gsap": "^3.12.5",
     "html-to-image": "^1.11.11",
     "html2canvas": "^1.4.1",
     "ldrs": "^1.0.1",
@@ -40,6 +40,7 @@
     "styled-components": "^6.1.8",
     "survey-react": "^1.9.139",
     "survey-react-ui": "^1.9.139",
+    "sweetalert2": "^11.10.8",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "zustand": "^4.5.2"

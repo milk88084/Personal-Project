@@ -9,6 +9,7 @@ import { db } from "../../utils/firebase/firebase.jsx";
 import pill from "../../assets/icon/pill.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
 import {
   Timestamp,
   collection,
