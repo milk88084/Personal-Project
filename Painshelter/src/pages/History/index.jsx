@@ -16,6 +16,7 @@ import pressureIcon from "../../assets/icon/pressure.png";
 import write from "../../assets/icon/write.png";
 import pill from "../../assets/icon/pill.png";
 import AnimatedNumber from "../../components/AnimatedNumber.jsx";
+import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 
 //#region
 const Background = styled.div`
@@ -31,6 +32,7 @@ const Background = styled.div`
   );
   color: white;
   position: relative;
+  font-family: "Noto Sans TC", sans-serif;
 `;
 
 const TopSection = styled.div`
@@ -423,6 +425,7 @@ export default function History() {
   const [authors, setAuthors] = useState();
   const [pressure, setPressure] = useState();
   const { modal, showModal } = HistoryModal();
+  const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
 
   //監聽到網頁最上方
@@ -433,6 +436,7 @@ export default function History() {
   useEffect(() => {
     async function getStories() {
       try {
+        setIsLoading(true);
         const postsData = collection(db, "posts");
         const authorData = collection(db, "users");
         const q = query(postsData, where("userId", "==", localStorageUserId));
@@ -459,6 +463,7 @@ export default function History() {
           .map((doc) => doc.data().stressRecord)
           .flat();
         setPressure(pressureCount);
+        setIsLoading(false);
       } catch (e) {
         console.log(e);
       }
@@ -559,103 +564,107 @@ export default function History() {
 
   return (
     <div>
-      <Background>
-        <TopSection>
-          <TopSectionName>
-            <img src={logoImg} alt="logo" />
-            <h1>{name && name[0]?.name}</h1>
-          </TopSectionName>
-          <p>{showCreation}</p>
-        </TopSection>
+      {isLoading ? (
+        <IsLoadingPage />
+      ) : (
+        <>
+          <Background>
+            <TopSection>
+              <TopSectionName>
+                <img src={logoImg} alt="logo" />
+                <h1>{name && name[0]?.name}</h1>
+              </TopSectionName>
+              <p>{showCreation}</p>
+            </TopSection>
 
-        <Categories>
-          <CategoriesSection>
-            {stories.length ? (
-              <p>
-                <AnimatedNumber end={stories.length} />篇
-              </p>
-            ) : (
-              <p>0篇</p>
-            )}
-            <div>
-              <img src={write} alt={write} />
-              <h1>文章數量</h1>
-            </div>
-            <button onClick={handlePost}>撰寫文章</button>
-          </CategoriesSection>
+            <Categories>
+              <CategoriesSection>
+                {stories.length ? (
+                  <p>
+                    <AnimatedNumber end={stories.length} />篇
+                  </p>
+                ) : (
+                  <p>0篇</p>
+                )}
+                <div>
+                  <img src={write} alt={write} />
+                  <h1>文章數量</h1>
+                </div>
+                <button onClick={handlePost}>撰寫文章</button>
+              </CategoriesSection>
 
-          <CategoriesSection>
-            {getLastPressureNumber?.number ? (
-              <p>
-                <AnimatedNumber end={getLastPressureNumber?.number} />分
-              </p>
-            ) : (
-              <p>0分</p>
-            )}
+              <CategoriesSection>
+                {getLastPressureNumber?.number ? (
+                  <p>
+                    <AnimatedNumber end={getLastPressureNumber?.number} />分
+                  </p>
+                ) : (
+                  <p>0分</p>
+                )}
 
-            <div>
-              <img src={pressureIcon} alt={pressureIcon} />
-              <h1>壓力分數</h1>
-            </div>
-            <button onClick={handleHelp}>測量壓力</button>
-          </CategoriesSection>
+                <div>
+                  <img src={pressureIcon} alt={pressureIcon} />
+                  <h1>壓力分數</h1>
+                </div>
+                <button onClick={handleHelp}>測量壓力</button>
+              </CategoriesSection>
 
-          <CategoriesSection>
-            {authors && authors.length ? (
-              <p>
-                <AnimatedNumber end={authors && authors.length} />位
-              </p>
-            ) : (
-              <p>0位</p>
-            )}
+              <CategoriesSection>
+                {authors && authors.length ? (
+                  <p>
+                    <AnimatedNumber end={authors && authors.length} />位
+                  </p>
+                ) : (
+                  <p>0位</p>
+                )}
 
-            <div>
-              <img src={follower} alt={follower} />
-              <h1>關注作者</h1>
-            </div>
-            <button>瀏覽他人文章</button>
-          </CategoriesSection>
-        </Categories>
+                <div>
+                  <img src={follower} alt={follower} />
+                  <h1>關注作者</h1>
+                </div>
+                <button>瀏覽他人文章</button>
+              </CategoriesSection>
+            </Categories>
 
-        <Title>歷史文章</Title>
-        <StorySection>
-          {sortTimeOfStory &&
-            sortTimeOfStory.map((story, index) => {
-              return (
-                <EachStory key={index}>
-                  <PostIndex>
-                    <p>{index + 1}</p>
-                  </PostIndex>
-                  <MainContent>
-                    <h1>疼痛暗號：{story.title}</h1>
-                    <h1>
-                      {story.time}@{story.location.name}
-                    </h1>
-                    <h3>
-                      {story.type.map((item, index) => (
-                        <span key={index}>#{item}</span>
-                      ))}
-                    </h3>
-                    <h3>
-                      {story.figure.map((item, index) => (
-                        <span key={index}>{item}</span>
-                      ))}
-                    </h3>
-                    <p>{story.story}</p>
-                    <button onClick={() => modifiedClick(story.storyId)}>
-                      編輯
-                    </button>
-                  </MainContent>
-                  <Heart>
-                    <img src={pill} alt={pill} />
-                    <p>
-                      {story.likedAuthorId?.length > 0
-                        ? story.likedAuthorId.length
-                        : 0}
-                    </p>
-                  </Heart>
+            <Title>歷史文章</Title>
+            <StorySection>
+              {sortTimeOfStory &&
+                sortTimeOfStory.map((story, index) => {
+                  return (
+                    <EachStory key={index}>
+                      <PostIndex>
+                        <p>{index + 1}</p>
+                      </PostIndex>
+                      <MainContent>
+                        <h1>疼痛暗號：{story.title}</h1>
+                        <h1>
+                          {story.time}@{story.location.name}
+                        </h1>
+                        <h3>
+                          {story.type.map((item, index) => (
+                            <span key={index}>#{item}</span>
+                          ))}
+                        </h3>
+                        <h3>
+                          {story.figure.map((item, index) => (
+                            <span key={index}>{item}</span>
+                          ))}
+                        </h3>
+                        <p>{story.story}</p>
+                        <button onClick={() => modifiedClick(story.storyId)}>
+                          編輯
+                        </button>
+                      </MainContent>
+                      <Heart>
+                        <img src={pill} alt={pill} />
+                        <p>
+                          {story.likedAuthorId?.length > 0
+                            ? story.likedAuthorId.length
+                            : 0}
+                        </p>
+                      </Heart>
 
-                  {/* 
+                      {/* 
                   <Comment>
                     {story.userComments ? (
                       <p>
@@ -668,29 +677,31 @@ export default function History() {
                       ""
                     )}
                   </Comment> */}
-                </EachStory>
-              );
-            })}
-        </StorySection>
+                    </EachStory>
+                  );
+                })}
+            </StorySection>
 
-        <FAB>
-          <button onClick={() => navigate("/")}>點我回首頁</button>
-          <div>
-            <img src={logoImg} alt={logoImg} />
-            <img src={logoTitle} alt={logoTitle}></img>
-          </div>
+            <FAB>
+              <button onClick={() => navigate("/")}>點我回首頁</button>
+              <div>
+                <img src={logoImg} alt={logoImg} />
+                <img src={logoTitle} alt={logoTitle}></img>
+              </div>
 
-          <button onClick={showModal}>看小故事</button>
-        </FAB>
-      </Background>
+              <button onClick={showModal}>看小故事</button>
+            </FAB>
+          </Background>
 
-      {modal ? <ModalHistory /> : null}
+          {modal ? <ModalHistory /> : null}
 
-      {/* <div>
+          {/* <div>
         <h1 className="m-3 bg-yellow-300">關注列表</h1>
         {authors &&
           authors.map((name, index) => <p key={index}>{name.name}</p>)}
       </div> */}
+        </>
+      )}
     </div>
   );
 }

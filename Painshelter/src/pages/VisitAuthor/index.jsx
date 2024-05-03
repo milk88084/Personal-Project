@@ -21,9 +21,11 @@ import heartIcon from "../../assets/icon/heart.png";
 import submitIcon from "../../assets/icon/paper-plane.png";
 // import backgroundImg from "../../assets/img/backgroundImg.jpg";
 import { useAuthorfiedData } from "../../utils/zustand.js";
+import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 
 //#region
 const Background = styled.div`
+  font-family: "Noto Sans TC", sans-serif;
   background: linear-gradient(
     90deg,
     rgba(0, 2, 0, 1) 0%,
@@ -455,6 +457,7 @@ const VisitAuthor = () => {
   const { closeModal } = useLoginState();
   const localStorageUserId = window.localStorage.getItem("userId");
   const { setSelectedStoryId } = useAuthorfiedData();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // console.log("這裡是這個作者的歷史文章", state.data);
   console.log("現在登入的人是：" + localStorageUserId);
@@ -463,6 +466,7 @@ const VisitAuthor = () => {
   useEffect(() => {
     async function getStories() {
       try {
+        setIsLoggedIn(true);
         const postsData = collection(db, "posts");
         const q = query(postsData, where("userId", "==", state.data));
 
@@ -481,6 +485,7 @@ const VisitAuthor = () => {
           userComments: doc.data().userComments,
         }));
         setStories(userStoryList);
+        setIsLoggedIn(false);
       } catch (e) {
         console.log(e);
       }
@@ -681,121 +686,125 @@ const VisitAuthor = () => {
 
   return (
     <>
-      <Background>
-        <TopSection>
-          {isUserStories ? (
-            <>
-              <Owned>
-                <p>My own page</p>
-                <button onClick={() => navigate("/post")}>撰寫故事</button>
-              </Owned>
-            </>
-          ) : (
-            <div>
-              <TopSectionName>
-                <img src={logoImg} alt={logoImg} />
-                <h1>{author[0]?.name}</h1>
-                {!isFollow ? (
-                  <IsFollowed>
-                    <button onClick={handleFollow}>關注作者</button>
-                  </IsFollowed>
-                ) : (
-                  <IsFollowAuthor>
-                    <span disabled>已關注作者</span>
-                  </IsFollowAuthor>
-                )}
-              </TopSectionName>
-            </div>
-          )}
-        </TopSection>
-        <Title>歷史文章</Title>
-        <StorySection>
-          {sortTimeOfStory &&
-            sortTimeOfStory.map((story, index) => {
-              return (
-                <EachStory key={index} id={stories.storyId}>
-                  <PostIndex>
-                    <p>{index + 1}</p>
-                  </PostIndex>
-                  <MainContent>
-                    <h1>疼痛暗號：{story.title}</h1>
-                    <h2>
-                      {story.time}@{story.location.name}
-                    </h2>
-                    <h3>
-                      {story.type.map((item, index) => (
-                        <span key={index}>#{item}</span>
-                      ))}
-                    </h3>
-                    <h3>
-                      {story.figure.map((item, index) => (
-                        <span key={index}>{item}</span>
-                      ))}
-                    </h3>
-                    <p>{story.story}</p>
+      {isLoggedIn ? (
+        <IsLoadingPage />
+      ) : (
+        <Background>
+          <TopSection>
+            {isUserStories ? (
+              <>
+                <Owned>
+                  <p>My own page</p>
+                  <button onClick={() => navigate("/post")}>撰寫故事</button>
+                </Owned>
+              </>
+            ) : (
+              <div>
+                <TopSectionName>
+                  <img src={logoImg} alt={logoImg} />
+                  <h1>{author[0]?.name}</h1>
+                  {!isFollow ? (
+                    <IsFollowed>
+                      <button onClick={handleFollow}>關注作者</button>
+                    </IsFollowed>
+                  ) : (
+                    <IsFollowAuthor>
+                      <span disabled>已關注作者</span>
+                    </IsFollowAuthor>
+                  )}
+                </TopSectionName>
+              </div>
+            )}
+          </TopSection>
+          <Title>歷史文章</Title>
+          <StorySection>
+            {sortTimeOfStory &&
+              sortTimeOfStory.map((story, index) => {
+                return (
+                  <EachStory key={index} id={stories.storyId}>
+                    <PostIndex>
+                      <p>{index + 1}</p>
+                    </PostIndex>
+                    <MainContent>
+                      <h1>疼痛暗號：{story.title}</h1>
+                      <h2>
+                        {story.time}@{story.location.name}
+                      </h2>
+                      <h3>
+                        {story.type.map((item, index) => (
+                          <span key={index}>#{item}</span>
+                        ))}
+                      </h3>
+                      <h3>
+                        {story.figure.map((item, index) => (
+                          <span key={index}>{item}</span>
+                        ))}
+                      </h3>
+                      <p>{story.story}</p>
 
-                    {!isUserStories ? (
-                      <>
-                        <InterActiveSection>
-                          <h4>給作者一句話</h4>
-                          <form
-                            onSubmit={(event) =>
-                              handleSubmit(event, story.storyId)
-                            }
-                          >
-                            <select name="replySelect">
-                              {replyData.map((item, index) => {
-                                return (
-                                  <option key={index} value={item}>
-                                    {item}
-                                  </option>
-                                );
-                              })}
-                            </select>
-                            <button type="submit">送出</button>
-                          </form>
-                        </InterActiveSection>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                  </MainContent>
+                      {!isUserStories ? (
+                        <>
+                          <InterActiveSection>
+                            <h4>給作者一句話</h4>
+                            <form
+                              onSubmit={(event) =>
+                                handleSubmit(event, story.storyId)
+                              }
+                            >
+                              <select name="replySelect">
+                                {replyData.map((item, index) => {
+                                  return (
+                                    <option key={index} value={item}>
+                                      {item}
+                                    </option>
+                                  );
+                                })}
+                              </select>
+                              <button type="submit">送出</button>
+                            </form>
+                          </InterActiveSection>
+                        </>
+                      ) : (
+                        ""
+                      )}
+                    </MainContent>
 
-                  <LikerAccount>
-                    <img src={pill} alt={pill} />
-                    <span>
-                      按讚數：
-                      {story.likedAuthorId?.length > 0
-                        ? story.likedAuthorId.length
-                        : 0}
-                    </span>
+                    <LikerAccount>
+                      <img src={pill} alt={pill} />
+                      <span>
+                        按讚數：
+                        {story.likedAuthorId?.length > 0
+                          ? story.likedAuthorId.length
+                          : 0}
+                      </span>
 
-                    <span>
-                      留言數：
-                      {story.userComments?.length > 0
-                        ? story.userComments.length
-                        : 0}
-                    </span>
+                      <span>
+                        留言數：
+                        {story.userComments?.length > 0
+                          ? story.userComments.length
+                          : 0}
+                      </span>
 
-                    {!isUserStories ? (
-                      <button onClick={() => handleLike(story.storyId)}>
-                        按讚
+                      {!isUserStories ? (
+                        <button onClick={() => handleLike(story.storyId)}>
+                          按讚
+                        </button>
+                      ) : (
+                        ""
+                      )}
+                      <button onClick={() => modifiedClick(story.storyId)}>
+                        完整文章
                       </button>
-                    ) : (
-                      ""
-                    )}
-                    <button onClick={() => modifiedClick(story.storyId)}>
-                      完整文章
-                    </button>
-                  </LikerAccount>
-                </EachStory>
-              );
-            })}
-        </StorySection>
-        <FAB>
-          <button onClick={handleBack}>回首頁</button>
-        </FAB>
-      </Background>
+                    </LikerAccount>
+                  </EachStory>
+                );
+              })}
+          </StorySection>
+          <FAB>
+            <button onClick={handleBack}>回首頁</button>
+          </FAB>
+        </Background>
+      )}
     </>
   );
 };

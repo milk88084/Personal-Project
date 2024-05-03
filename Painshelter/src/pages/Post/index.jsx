@@ -6,10 +6,13 @@ import { useCheckboxInput } from "../../utils/hooks/useCheckboxInput.jsx";
 import { db } from "../../utils/firebase/firebase.jsx";
 import { Timestamp, addDoc, collection, updateDoc } from "firebase/firestore";
 import LocationSearch from "../../components/LocationSearch.jsx";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 import pill from "../../assets/icon/pill.png";
 
 //#region
 const Background = styled.div`
+  font-family: "Noto Sans TC", sans-serif;
   background: linear-gradient(
     90deg,
     rgba(0, 2, 0, 1) 0%,
@@ -261,12 +264,32 @@ export default function Edit() {
       await updateDoc(docRef, { storyId: docRef.id });
       console.log("Document written with ID: ", docRef.id);
       console.log(getLoginUserId());
-      alert("成功提交：" + storyTitle.value + "故事");
+      toast.success("成功提交：" + storyTitle.value + "故事", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     } catch (error) {
       console.error("Error adding document: ", error);
-      alert("投稿失敗");
+      toast.error("註冊不成功", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
-    navigate("/history");
+    setTimeout(() => {
+      navigate("/history");
+    }, 3000);
   };
 
   return (
@@ -439,6 +462,19 @@ export default function Edit() {
           <button onClick={() => navigate("/")}>回到首頁</button>
           <button onClick={() => navigate("/history")}>回到歷史文章</button>
         </ButtonSection>
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          transition:Bounce
+        />
       </Background>
     </>
   );

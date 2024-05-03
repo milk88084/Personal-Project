@@ -10,7 +10,10 @@ import backgroundImg4 from "../../assets/img/disagreeImg4.png";
 import backgroundImg5 from "../../assets/img/disagreeImg5.png";
 import logoImg from "../../assets/img/logoImg.png";
 import logoTitle from "../../assets/img/logoTitle.png";
+
+//#region
 const Background = styled.div`
+  font-family: "Noto Sans TC", sans-serif;
   background-color: #1a1a1a;
   background-image: url(${backgroundImg1});
   background-repeat: repeat;
@@ -129,6 +132,7 @@ const LogoSection = styled.div`
     }
   }
 `;
+//#endregion
 
 export default function Disagree() {
   const navigate = useNavigate();

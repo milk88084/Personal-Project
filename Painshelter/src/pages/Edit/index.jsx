@@ -7,6 +7,8 @@ import EditLocationSearch from "../../components/EditLocationSearch.jsx";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { db } from "../../utils/firebase/firebase.jsx";
 import pill from "../../assets/icon/pill.png";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Timestamp,
   collection,
@@ -38,6 +40,7 @@ const storyFigureData = [
 
 //#region
 const Background = styled.div`
+  font-family: "Noto Sans TC", sans-serif;
   background: linear-gradient(
     90deg,
     rgba(0, 2, 0, 1) 0%,
@@ -394,14 +397,41 @@ export default function Edit() {
           story: postStory.value,
           modifiedAt: Timestamp.fromDate(new Date()),
         });
-        alert("成功修改：" + storyTitle.value + "故事");
+        toast.success("成功修改：" + storyTitle.value + "故事", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       } else {
         console.error("No document found with the given storyId");
-        alert("修改失敗");
+        toast.error("修改失敗", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       }
     } catch (error) {
       console.error("Error updating document: ", error);
-      alert("修改失敗");
+      toast.error("修改失敗", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
 
@@ -415,14 +445,33 @@ export default function Edit() {
         console.log("delete");
         await deleteDoc(q);
         console.log("finish");
+        toast.success("成功刪除：" + storyTitle.value + "故事", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        setTimeout(() => navigate("/history"), 3000);
       } catch (error) {
         console.error("Error updating document: ", error);
-        alert("刪除失敗");
+        toast.error("刪除失敗", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       }
     } else {
       console.log("取消刪除動作");
     }
-    navigate("/history");
   };
 
   //編輯按鈕來決定state狀態
@@ -695,6 +744,19 @@ export default function Edit() {
           </EditSections>
         </>
       )}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition:Bounce
+      />
     </Background>
   );
 }

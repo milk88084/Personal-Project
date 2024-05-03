@@ -8,6 +8,9 @@ import heal3 from "../../assets/img/heal3.jpg";
 import { useNavigate } from "react-router-dom";
 import continueIcon from "../../assets/icon/continue.png";
 import { useLocation } from "react-router-dom";
+import { zoomies } from "ldrs";
+
+// Default values shown
 
 //#region
 const Lyric = styled.div`
@@ -68,6 +71,13 @@ const Lyric = styled.div`
   }
 `;
 
+const Loadingstate = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Background = styled.div`
   background-color: #0c0c0c;
   height: 100vh;
@@ -75,7 +85,7 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
+  font-family: "Noto Sans TC", sans-serif;
   @media screen and (max-width: 1279px) {
     flex-direction: column;
     height: 100%;
@@ -210,6 +220,9 @@ function MusicHeal() {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
 
+  //loading state
+  zoomies.register();
+
   //監聽在網頁最上方
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -236,6 +249,7 @@ function MusicHeal() {
       setVideos(response.data.items);
       setIsLoading(false);
     } catch (error) {
+      setIsLoading(true);
       console.error("Search failed:", error);
     }
   };
@@ -294,8 +308,31 @@ function MusicHeal() {
         </Intro>
         <MainSection>
           <Video>
-            {isLoading ? "Loading..." : "Loading..."}
-            {videos.map((video) => (
+            {isLoading ? (
+              <Loadingstate>
+                <l-zoomies
+                  size="500"
+                  stroke="5"
+                  bg-opacity="0.1"
+                  speed="1.4"
+                  color="white"
+                ></l-zoomies>
+              </Loadingstate>
+            ) : (
+              videos.map((video) => (
+                <VideoItem
+                  key={video.id.videoId}
+                  onClick={() => handleVideoSelect(video)}
+                >
+                  <h3>{video.snippet.title}</h3>
+                  <img
+                    src={video.snippet.thumbnails.default.url}
+                    alt={video.snippet.description}
+                  />
+                </VideoItem>
+              ))
+            )}
+            {/* {videos.map((video) => (
               <VideoItem
                 key={video.id.videoId}
                 onClick={() => handleVideoSelect(video)}
@@ -306,7 +343,7 @@ function MusicHeal() {
                   alt={video.snippet.description}
                 />
               </VideoItem>
-            ))}
+            ))} */}
           </Video>
           {currentVideo && (
             <SearchVideo>

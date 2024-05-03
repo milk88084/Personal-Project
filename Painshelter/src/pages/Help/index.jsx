@@ -23,9 +23,11 @@ import four from "../../assets/img/help_four.png";
 import json from "../../utils/data/survey.json";
 import styled from "styled-components";
 import AnimatedNumber from "../../components/AnimatedNumber";
+import { bouncy } from "ldrs";
 
 //#region
 const Background = styled.div`
+  font-family: "Noto Sans TC", sans-serif;
   background-color: #11120f;
   color: white;
   display: flex;
@@ -267,6 +269,11 @@ const ResualtContent = styled.div`
 `;
 
 const ResualtButton = styled.div``;
+const LoadingSection = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 //#endregion
 
 function SurveyComponent() {
@@ -277,8 +284,9 @@ function SurveyComponent() {
   const survey = new Model(json);
   const result = useRef(null);
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
   survey.applyTheme(themeJson);
-
+  bouncy.register();
   //回到網頁最上方
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -370,9 +378,11 @@ function SurveyComponent() {
           return;
         } else if (complete) {
           const docRef = querySnapshot.docs[0].ref;
+          setIsLoading(true);
           await updateDoc(docRef, {
             stressRecord: arrayUnion(recordArray),
           });
+          setIsLoading(false);
         }
       } catch (err) {
         console.log(err);
@@ -434,107 +444,136 @@ function SurveyComponent() {
           ) : null}
         </SurveyDialog>
 
-        {surveyData && score ? (
-          score <= 8 ? (
-            <ResualtSection>
-              <ResualtImg>
-                <img src={zero} alt={zero} />
-              </ResualtImg>
-              <ResualtContent>
-                <h2>
-                  測驗結果：
-                  <span>
-                    <AnimatedNumber end={score} />
-                  </span>
-                </h2>
-                <h3>目前你的狀態</h3>
-                <p>
-                  你目前的情緒狀態很穩定，是個懂得適時調整情緒及紓解壓力的人。
-                </p>
-                <ResualtButton>
-                  <button onClick={() => navigate("/post")}>撰寫日記</button>
-                  <button onClick={handleClick}>重新測驗</button>
-                  <button onClick={() => navigate("/")}>回到首頁</button>
-                </ResualtButton>
-              </ResualtContent>
-            </ResualtSection>
-          ) : 9 <= score <= 18 ? (
-            <ResualtSection>
-              <ResualtImg>
-                <img src={one} alt={one} />
-              </ResualtImg>
-              <ResualtContent>
-                <h2>
-                  測驗結果：
-                  <span>
-                    <AnimatedNumber end={score} />
-                  </span>
-                </h2>
-                <h3>目前你的狀態</h3>
-                <p>
-                  現在的你可能感到不太順心，無法展露笑容，一肚子苦惱及煩悶，連朋友也不知道如何幫你，
-                  建議你可以找找看，有沒有相關的資源可以幫助你控制這樣不舒服的感受，如果煩悶的感受一直沒有消失，就要去找專業的醫生來幫忙唷。
-                </p>
-                <ResualtButton>
-                  <button onClick={() => navigate("/post")}>撰寫日記</button>
-                  <button onClick={handleClick}>重新測驗</button>
-                  <button onClick={() => navigate("/")}>回到首頁</button>
-                </ResualtButton>
-              </ResualtContent>
-            </ResualtSection>
-          ) : 19 < score <= 28 ? (
-            <ResualtSection>
-              <ResualtImg>
-                <img src={two} alt={two} />
-              </ResualtImg>
-              <ResualtContent>
-                <h2>
-                  測驗結果：
-                  <span>
-                    <AnimatedNumber end={score} />
-                  </span>
-                </h2>
-                <h3>目前你的狀態</h3>
-                <p>
-                  你是否感覺有許多事壓在心上，肩上總覺得很沉重 ?
-                  因為你的壓力負荷量已到臨界點了，千萬別再『撐』了 !
-                  趕快找個有相同經驗的朋友聊聊，給心情找個出口，把肩上的重擔放下，這樣才不會陷入鬱卒的漩渦
-                  ! 如果你不知道該找誰傾訴，建議可以找一些專業的醫療資源協助你。
-                </p>
-                <ResualtButton>
-                  <button onClick={() => navigate("/post")}>撰寫日記</button>
-                  <button onClick={handleClick}>重新測驗</button>
-                  <button onClick={() => navigate("/")}>回到首頁</button>
-                </ResualtButton>
-              </ResualtContent>
-            </ResualtSection>
-          ) : (
-            <ResualtSection>
-              <ResualtImg>
-                <img src={four} alt={four} />
-              </ResualtImg>
-              <ResualtContent>
-                <h2>
-                  測驗結果：
-                  <span>
-                    <AnimatedNumber end={score} />
-                  </span>
-                </h2>
-                <h3>目前你的狀態</h3>
-                <p>
-                  你是不是感到相當的不舒服，會不由自主的沮喪、難過，無法掙脫?
-                  可能你目前的身心狀況不太穩定，建議可以到最近的醫院去找專業的醫生做診斷，透過他們的診療與治療，你也許會有意想不到的回饋，
-                  不要抗拒去尋求資源，希望透過這樣的處理，可以讓自己慢慢降低這種不舒服的感受！
-                </p>
-                <ResualtButton>
-                  <button onClick={() => navigate("/post")}>撰寫日記</button>
-                  <button onClick={handleClick}>重新測驗</button>
-                  <button onClick={() => navigate("/")}>回到首頁</button>
-                </ResualtButton>
-              </ResualtContent>
-            </ResualtSection>
-          )
-        ) : null}
+        {isLoading ? (
+          <LoadingSection>
+            <l-bouncy size="60" speed="1.75" color="white"></l-bouncy>
+          </LoadingSection>
+        ) : (
+          <>
+            {surveyData && score ? (
+              score <= 8 ? (
+                <ResualtSection>
+                  <ResualtImg>
+                    <img src={zero} alt={zero} />
+                  </ResualtImg>
+                  <ResualtContent>
+                    <h2>
+                      測驗結果：
+                      <span>
+                        <AnimatedNumber end={score} />
+                      </span>
+                    </h2>
+                    <h3>目前你的狀態</h3>
+                    <p>
+                      你目前的情緒狀態很穩定，是個懂得適時調整情緒及紓解壓力的人。
+                    </p>
+                    <ResualtButton>
+                      <button onClick={() => navigate("/post")}>
+                        撰寫日記
+                      </button>
+                      <button onClick={handleClick}>重新測驗</button>
+                      <button onClick={() => navigate("/history")}>
+                        疼痛日記室
+                      </button>
+                      <button onClick={() => navigate("/")}>回到首頁</button>
+                    </ResualtButton>
+                  </ResualtContent>
+                </ResualtSection>
+              ) : 9 <= score <= 18 ? (
+                <ResualtSection>
+                  <ResualtImg>
+                    <img src={one} alt={one} />
+                  </ResualtImg>
+                  <ResualtContent>
+                    <h2>
+                      測驗結果：
+                      <span>
+                        <AnimatedNumber end={score} />
+                      </span>
+                    </h2>
+                    <h3>目前你的狀態</h3>
+                    <p>
+                      現在的你可能感到不太順心，無法展露笑容，一肚子苦惱及煩悶，連朋友也不知道如何幫你，
+                      建議你可以找找看，有沒有相關的資源可以幫助你控制這樣不舒服的感受，如果煩悶的感受一直沒有消失，就要去找專業的醫生來幫忙唷。
+                    </p>
+                    <ResualtButton>
+                      <button onClick={() => navigate("/post")}>
+                        撰寫日記
+                      </button>
+                      <button onClick={handleClick}>重新測驗</button>
+                      <button onClick={() => navigate("/history")}>
+                        疼痛日記室
+                      </button>
+                      <button onClick={() => navigate("/")}>回到首頁</button>
+                    </ResualtButton>
+                  </ResualtContent>
+                </ResualtSection>
+              ) : 19 < score <= 28 ? (
+                <ResualtSection>
+                  <ResualtImg>
+                    <img src={two} alt={two} />
+                  </ResualtImg>
+                  <ResualtContent>
+                    <h2>
+                      測驗結果：
+                      <span>
+                        <AnimatedNumber end={score} />
+                      </span>
+                    </h2>
+                    <h3>目前你的狀態</h3>
+                    <p>
+                      你是否感覺有許多事壓在心上，肩上總覺得很沉重 ?
+                      因為你的壓力負荷量已到臨界點了，千萬別再『撐』了 !
+                      趕快找個有相同經驗的朋友聊聊，給心情找個出口，把肩上的重擔放下，這樣才不會陷入鬱卒的漩渦
+                      !
+                      如果你不知道該找誰傾訴，建議可以找一些專業的醫療資源協助你。
+                    </p>
+                    <ResualtButton>
+                      <button onClick={() => navigate("/post")}>
+                        撰寫日記
+                      </button>
+                      <button onClick={handleClick}>重新測驗</button>
+                      <button onClick={() => navigate("/history")}>
+                        疼痛日記室
+                      </button>
+                      <button onClick={() => navigate("/")}>回到首頁</button>
+                    </ResualtButton>
+                  </ResualtContent>
+                </ResualtSection>
+              ) : (
+                <ResualtSection>
+                  <ResualtImg>
+                    <img src={four} alt={four} />
+                  </ResualtImg>
+                  <ResualtContent>
+                    <h2>
+                      測驗結果：
+                      <span>
+                        <AnimatedNumber end={score} />
+                      </span>
+                    </h2>
+                    <h3>目前你的狀態</h3>
+                    <p>
+                      你是不是感到相當的不舒服，會不由自主的沮喪、難過，無法掙脫?
+                      可能你目前的身心狀況不太穩定，建議可以到最近的醫院去找專業的醫生做診斷，透過他們的診療與治療，你也許會有意想不到的回饋，
+                      不要抗拒去尋求資源，希望透過這樣的處理，可以讓自己慢慢降低這種不舒服的感受！
+                    </p>
+                    <ResualtButton>
+                      <button onClick={() => navigate("/post")}>
+                        撰寫日記
+                      </button>
+                      <button onClick={handleClick}>重新測驗</button>
+                      <button onClick={() => navigate("/history")}>
+                        疼痛日記室
+                      </button>
+                      <button onClick={() => navigate("/")}>回到首頁</button>
+                    </ResualtButton>
+                  </ResualtContent>
+                </ResualtSection>
+              )
+            ) : null}
+          </>
+        )}
       </Background>
     </>
   );

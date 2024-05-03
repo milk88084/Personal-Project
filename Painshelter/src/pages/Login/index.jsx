@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 //#region
 const Background = styled.div`
   height: 100vh;
+  font-family: "Noto Sans TC", sans-serif;
 `;
 
 const BackgroundVideo = styled.video`

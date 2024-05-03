@@ -6,6 +6,7 @@ import { useEditCheckboxInput } from "../../utils/hooks/useEditCheckboxInput.jsx
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { db } from "../../utils/firebase/firebase.jsx";
 import pill from "../../assets/icon/pill.png";
+import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 import {
   collection,
   query,
@@ -34,6 +35,7 @@ const storyFigureData = [
 
 //#region
 const Background = styled.div`
+  font-family: "Noto Sans TC", sans-serif;
   background: linear-gradient(
     90deg,
     rgba(0, 2, 0, 1) 0%,
@@ -328,6 +330,7 @@ export default function Edit() {
   const [locationName, setLocationName] = useState();
   const [comments, setComments] = useState();
   const location = useLocation();
+  const [issloading, setIsLoading] = useState(false);
 
   //回到網頁最上方
   useEffect(() => {
@@ -338,6 +341,7 @@ export default function Edit() {
   useEffect(() => {
     async function getStories() {
       try {
+        setIsLoading(true);
         const postsData = collection(db, "posts");
         const q = query(postsData, where("storyId", "==", params.id));
         const querySnapshot = await getDocs(q);
@@ -359,10 +363,12 @@ export default function Edit() {
             })
           );
           setComments(commentsWithNames);
+          setIsLoading(false);
         } else {
           console.log("No document found with the given storyId");
         }
       } catch (e) {
+        setIsLoading(true);
         console.error("Error fetching document: ", e);
       }
     }
@@ -371,67 +377,71 @@ export default function Edit() {
 
   return (
     <Background>
-      <>
-        <Title ref={top}>文章預覽</Title>
-        <EditSections>
-          <EditCategories>
-            <EditTitle>疼痛暗號</EditTitle>
-            <PreviewTitle>{storyTitle.value}</PreviewTitle>
-          </EditCategories>
-          <EditCategories>
-            <EditTitle>故事時間</EditTitle>
-            <PreviewTitle>{storyTime.value}</PreviewTitle>
-          </EditCategories>
-          <EditCategories>
-            <EditTitle>發生地點</EditTitle>
-            <PreviewTitle>{locationName}</PreviewTitle>
-          </EditCategories>
-          <EditCategories>
-            <EditTitle>故事類型</EditTitle>
-            <PreviewType>
-              {storyType?.checkedValues.map((item, index) => (
-                <p key={index}>#{item}</p>
-              ))}
-            </PreviewType>
-          </EditCategories>
-          <EditCategories>
-            <EditTitle>故事對象</EditTitle>
-            <PreviewType>
-              {storyFigure?.checkedValues.map((item, index) => (
-                <p key={index}>#{item}</p>
-              ))}
-            </PreviewType>
-          </EditCategories>
-          <EditTextArea>
-            <p>故事內容</p>
-            <PreviewTextArea>{postStory.value}</PreviewTextArea>
-          </EditTextArea>
-          <EditTextArea>
-            <p>故事留言</p>
+      {issloading ? (
+        <IsLoadingPage />
+      ) : (
+        <>
+          <Title ref={top}>文章預覽</Title>
+          <EditSections>
+            <EditCategories>
+              <EditTitle>疼痛暗號</EditTitle>
+              <PreviewTitle>{storyTitle.value}</PreviewTitle>
+            </EditCategories>
+            <EditCategories>
+              <EditTitle>故事時間</EditTitle>
+              <PreviewTitle>{storyTime.value}</PreviewTitle>
+            </EditCategories>
+            <EditCategories>
+              <EditTitle>發生地點</EditTitle>
+              <PreviewTitle>{locationName}</PreviewTitle>
+            </EditCategories>
+            <EditCategories>
+              <EditTitle>故事類型</EditTitle>
+              <PreviewType>
+                {storyType?.checkedValues.map((item, index) => (
+                  <p key={index}>#{item}</p>
+                ))}
+              </PreviewType>
+            </EditCategories>
+            <EditCategories>
+              <EditTitle>故事對象</EditTitle>
+              <PreviewType>
+                {storyFigure?.checkedValues.map((item, index) => (
+                  <p key={index}>#{item}</p>
+                ))}
+              </PreviewType>
+            </EditCategories>
+            <EditTextArea>
+              <p>故事內容</p>
+              <PreviewTextArea>{postStory.value}</PreviewTextArea>
+            </EditTextArea>
+            <EditTextArea>
+              <p>故事留言</p>
 
-            <CommentsSection>
-              {comments && comments.length > 0
-                ? comments.map((data, index) => (
-                    <>
-                      <Reply>
-                        <AvatarPart>
-                          <img src={pill} alt={pill} />
-                        </AvatarPart>
-                        <CommentPart key={index}>
-                          <h2>{data.name}</h2>
-                          <p>#{data.comment}</p>
-                        </CommentPart>
-                      </Reply>
-                    </>
-                  ))
-                : null}
-            </CommentsSection>
-          </EditTextArea>
-          <ButtonSection>
-            <button onClick={() => navigate("/")}>回首頁</button>
-          </ButtonSection>
-        </EditSections>
-      </>
+              <CommentsSection>
+                {comments && comments.length > 0
+                  ? comments.map((data, index) => (
+                      <>
+                        <Reply>
+                          <AvatarPart>
+                            <img src={pill} alt={pill} />
+                          </AvatarPart>
+                          <CommentPart key={index}>
+                            <h2>{data.name}</h2>
+                            <p>#{data.comment}</p>
+                          </CommentPart>
+                        </Reply>
+                      </>
+                    ))
+                  : null}
+              </CommentsSection>
+            </EditTextArea>
+            <ButtonSection>
+              <button onClick={() => navigate("/")}>回首頁</button>
+            </ButtonSection>
+          </EditSections>
+        </>
+      )}
     </Background>
   );
 }
