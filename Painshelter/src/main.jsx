@@ -16,12 +16,13 @@ import SinglePostPage from "./pages/SinglePostPage/index.jsx";
 import Edit from "./pages/Edit/index.jsx";
 import AuthorSpecificPost from "./pages/AuthorSpecificPost/index.jsx";
 import MusicHeal from "./pages/MusicHeal/index.jsx";
+import LandingPage from "./pages/LandingPage/index.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
+        <Route path="main" element={<App />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
         <Route path="history" element={<History />} />
@@ -35,6 +36,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="edit/:id" element={<Edit />} />
         <Route path="heal" element={<MusicHeal />} />
         <Route path="authorpost/:id" element={<AuthorSpecificPost />} />
+        <Route path="/" element={<LandingPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

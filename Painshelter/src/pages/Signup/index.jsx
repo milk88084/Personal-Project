@@ -268,7 +268,7 @@ const Signup = () => {
                 ""
               )}
               <ButtonSection>
-                <button type="submit">註冊</button>
+                <button type="button">註冊</button>
               </ButtonSection>
             </FormSection>
           </form>

@@ -3,8 +3,11 @@ import styled from "styled-components";
 import { useFormInput } from "../../utils/hooks/useFormInputNoSetValue";
 import { useState, useRef, useEffect } from "react";
 import heal1 from "../../assets/img/heal1.jpg";
+import healtext1 from "../../assets/img/healtext1.png";
 import heal2 from "../../assets/img/heal2.jpg";
+import healtext2 from "../../assets/img/healtext2.png";
 import heal3 from "../../assets/img/heal3.jpg";
+import healtext3 from "../../assets/img/healtext3.png";
 import { useNavigate } from "react-router-dom";
 import continueIcon from "../../assets/icon/continue.png";
 import { useLocation } from "react-router-dom";
@@ -15,10 +18,20 @@ import { zoomies } from "ldrs";
 //#region
 const Lyric = styled.div`
   position: relative;
-  img {
+  img:nth-of-type(1) {
     height: 100vh;
     width: 100vw;
     object-fit: cover;
+  }
+  img:nth-of-type(2) {
+    width: 800px;
+    object-fit: cover;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-right: 50px;
+    margin-top: 100px;
+    opacity: 0.9;
   }
   div {
     position: absolute;
@@ -45,8 +58,10 @@ const Lyric = styled.div`
     }
   }
   @media screen and (max-width: 1279px) {
-    img {
-      position: relative;
+    img:nth-of-type(2) {
+      width: 100%;
+      margin-right: 0px;
+      margin-top: 70px;
     }
     div {
       width: 100%;
@@ -262,6 +277,7 @@ function MusicHeal() {
     <>
       <Lyric ref={section1}>
         <img src={heal1} alt={heal1} />
+        <img src={healtext1} alt={healtext1} />
         <div>
           <p>你不是真正的快樂，你的傷從不肯完全的癒合</p>
           <p>我站在你左側，卻像隔著銀河，</p>
@@ -273,6 +289,7 @@ function MusicHeal() {
 
       <Lyric ref={section2}>
         <img src={heal3} alt={heal3} />
+        <img src={healtext3} alt={healtext3} />
         <div>
           <p>如果你被她傷的很痛，請感謝她好心折磨，</p>
           <p>如果你對她感到愧疚，請感謝她慷慨淚流，</p>
@@ -282,6 +299,7 @@ function MusicHeal() {
       </Lyric>
       <Lyric ref={section3}>
         <img src={heal2} alt={heal2} />
+        <img src={healtext2} alt={healtext2} />
         <div>
           <p>我在夜裡大聲呼喊，夢太沈重，無力也無法動彈，</p>
           <p>一樣的，一樣的，不安又將我捆綁，直到天亮</p>

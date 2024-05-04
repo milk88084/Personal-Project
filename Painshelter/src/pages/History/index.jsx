@@ -437,6 +437,70 @@ const FAB = styled.div`
   }
 `;
 
+const OtherAuthorList = styled.div`
+  width: 500px;
+  height: auto;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
+  background: linear-gradient(125deg, #eef2f3, #8e9eab);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Noto Sans TC", sans-serif;
+  color: #19242b;
+  div {
+    display: flex;
+  }
+  button {
+    padding: 10px;
+    border-radius: 7px;
+    font-weight: 300;
+    font-size: 15px;
+    background-color: #9ca3af;
+    color: #19242b;
+    margin: 20px 0px 20px 0px;
+
+    &:hover,
+    &:focus {
+      background-color: #19242b;
+      color: white;
+    }
+  }
+  h1 {
+    font-size: 40px;
+    font-weight: 900;
+    margin: 20px 0px 20px 0px;
+  }
+  p {
+    font-size: 18px;
+    border-radius: 15px;
+    padding: 10px;
+    display: inline-block;
+    margin: 2px;
+    cursor: pointer;
+    background-color: #19242b;
+    color: #fff;
+
+    &:hover {
+      background-color: #9ca3af;
+      color: #19242b;
+    }
+  }
+  @media screen and (max-width: 1279px) {
+    width: 70%;
+    height: 90%;
+    margin: 0 auto;
+    background: linear-gradient(125deg, #eef2f3, #8e9eab);
+    border-radius: 20px;
+    margin-top: 30px;
+  }
+`;
+
 //#endregion
 
 export default function History() {
@@ -450,6 +514,7 @@ export default function History() {
   const { modal, showModal } = HistoryModal();
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
+  const [showFriendsList, setShowFriendsList] = useState(false);
 
   //監聽到網頁最上方
   useEffect(() => {
@@ -585,6 +650,13 @@ export default function History() {
     window.scrollTo(0, 0);
   };
 
+  //追蹤list去其他作者的頁面
+  const handleAuthor = (id) => {
+    navigate("/visit", { state: { data: id } });
+    window.scrollTo(0, 0);
+  };
+  console.log(authors);
+
   return (
     <div>
       {isLoading ? (
@@ -649,7 +721,9 @@ export default function History() {
                   <img src={follower} alt={follower} />
                   <h1>關注作者</h1>
                 </div>
-                <button>瀏覽他人文章</button>
+                <button onClick={() => setShowFriendsList(true)}>
+                  瀏覽他人文章
+                </button>
               </CategoriesSection>
             </Categories>
 
@@ -721,12 +795,20 @@ export default function History() {
           </Background>
 
           {modal ? <ModalHistory /> : null}
-
-          {/* <div>
-        <h1 className="m-3 bg-yellow-300">關注列表</h1>
-        {authors &&
-          authors.map((name, index) => <p key={index}>{name.name}</p>)}
-      </div> */}
+          {showFriendsList ? (
+            <OtherAuthorList>
+              <h1>關注列表</h1>
+              <div>
+                {authors &&
+                  authors.map((name, index) => (
+                    <p onClick={() => handleAuthor(name.id)} key={index}>
+                      {name.name}
+                    </p>
+                  ))}
+              </div>
+              <button onClick={() => setShowFriendsList(false)}>關閉</button>
+            </OtherAuthorList>
+          ) : null}
         </>
       )}
     </div>

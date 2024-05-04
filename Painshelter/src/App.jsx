@@ -610,7 +610,7 @@ function App() {
   const imageRef = useRef(null);
   const logoRef = useRef(null);
   useEffect(() => {
-    gsap.to(firstRef.current, { duration: 1, x: 50 });
+    // gsap.to(firstRef.current, { duration: 1, x: 50 });
     gsap.to(thirdRef.current, { duration: 1, x: 50 });
     gsap.to(fifthRef.current, { duration: 1, x: 50 });
     gsap.to(seventhRef.current, { duration: 1, x: 50 });
@@ -619,6 +619,22 @@ function App() {
       scale: 1.2,
       filter: "drop-shadow(0 0 20px rgba(0, 0, 0, 0.8))",
     });
+    gsap.to(
+      firstRef.current,
+      {
+        skewX: -3,
+        skewY: 0,
+      },
+      {
+        skewX: 3,
+        skewY: 0,
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        stagger: 0.1, // 如果
+      }
+    );
     gsap.to(logoRef.current, {
       duration: 3,
       rotation: 360,
