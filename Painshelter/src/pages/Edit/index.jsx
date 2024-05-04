@@ -107,9 +107,12 @@ const EditTitle = styled.div`
 
 const EditTitleInput = styled.div`
   border: 2px solid black;
+  border-radius: 7px;
   input {
     width: 400px;
-    color: black;
+    color: #353535;
+    padding-left: 10px;
+    border-radius: 15px;
   }
   @media screen and (max-width: 1279px) {
     border: 1px solid black;
@@ -131,9 +134,12 @@ const PreviewTitle = styled.div`
 
 const EditDateInput = styled.div`
   border: 2px solid black;
+  border-radius: 7px;
   input {
     width: 400px;
-    color: black;
+    color: #353535;
+    padding-left: 10px;
+    border-radius: 15px;
   }
   @media screen and (max-width: 1279px) {
     border: 1px solid black;
@@ -180,10 +186,12 @@ const PreviewType = styled.div`
 
 const EditTextArea = styled.div`
   margin-top: 50px;
+
   p {
     font-size: 30px;
     font-weight: 600;
     margin-right: 50px;
+    border-radius: 7px;
   }
 
   textarea {
@@ -191,7 +199,10 @@ const EditTextArea = styled.div`
     width: 100%;
     height: 300px;
     margin-top: 50px;
-    color: black;
+    color: #353535;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-top: 10px;
   }
   @media screen and (max-width: 1279px) {
     margin-top: 30px;
@@ -222,7 +233,7 @@ const PreviewTextArea = styled.div`
     width: 100%;
     height: 300px;
     margin-top: 30px;
-    color: black;
+    color: #353535;
   }
 `;
 
@@ -241,7 +252,7 @@ const ButtonSection = styled.div`
     &:hover,
     &:focus {
       background-color: #9ca3af;
-      color: black;
+      color: #353535;
     }
   }
   @media screen and (max-width: 1279px) {

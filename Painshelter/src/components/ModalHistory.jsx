@@ -2,7 +2,13 @@ import BackdropHistory from "./BackdropHHistory";
 import { HistoryModal } from "../utils/zustand.js";
 import poem from "../utils/data/poem.json";
 import modalpoem from "../assets/img/modalpoem.jpg";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const glowing = keyframes`
+  0% { box-shadow: 0 0 5px #ffd4f4; }
+  50% { box-shadow: 0 0 20px #ffd4f4; }
+  100% { box-shadow: 0 0 5px #ffd4f4; }
+`;
 
 const Background = styled.div`
   background-image: url(${modalpoem});
@@ -12,7 +18,8 @@ const Background = styled.div`
   display: flex;
   padding: 30px;
   flex-direction: column;
-  box-shadow: 1px 1px 30px 15px #ffd4f4;
+  font-family: "Noto Sans TC", sans-serif;
+  animation: ${glowing} 2s infinite ease-in-out;
   opacity: 0.8;
   top: 0;
   left: 0;

@@ -8,8 +8,14 @@ import icon from "../assets/img/logoImg3.png";
 
 const Input = styled.div`
   width: 100%;
+  border-radius: 7px;
   input {
     border: 2px solid black;
+    border-radius: 7px;
+    padding-left: 10px;
+  }
+  button {
+    margin-left: 15px;
   }
 `;
 

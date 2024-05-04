@@ -88,7 +88,7 @@ const EditCategories = styled.div`
 const EditTitle = styled.div`
   font-size: 30px;
   font-weight: 600;
-  margin-right: 50px;
+  margin-right: 60px;
   color: #353535;
   @media screen and (max-width: 1279px) {
     margin-right: 0px;
@@ -98,10 +98,12 @@ const EditTitle = styled.div`
 
 const EditTitleInput = styled.div`
   border: 2px solid black;
+  border-radius: 7px;
   input {
     width: 400px;
-    color: black;
+    color: #19242b;
     padding-left: 10px;
+    border-radius: 15px;
   }
   @media screen and (max-width: 1279px) {
     border: 1px solid black;
@@ -113,9 +115,12 @@ const EditTitleInput = styled.div`
 
 const EditDateInput = styled.div`
   border: 2px solid black;
+  border-radius: 7px;
   input {
     width: 400px;
-    color: black;
+    padding-left: 10px;
+    color: #19242b;
+    border-radius: 7px;
   }
   @media screen and (max-width: 1279px) {
     border: 1px solid black;
@@ -126,21 +131,46 @@ const EditDateInput = styled.div`
 `;
 
 const Tag = styled.li`
-  border: 2px solid #000; // 黑色邊框
-  border-radius: 5px; // 輕微的圓角
-  padding: 8px 16px; // 內部空間
-  display: inline-block; // 讓列表項目水平顯示
-  margin: 5px; // 留出間隙
-  cursor: pointer; // 滑鼠懸停時顯示指針
-  background-color: ${(props) =>
-    props.selected ? "#000" : "#fff"}; // 根據是否選中改變背景顏色
-  color: ${(props) =>
-    props.selected ? "#fff" : "#000"}; // 根據是否選中改變文字顏色
+  font-size: 18px;
+  border-radius: 15px;
+  padding: 5px 8px;
+  display: inline-block;
+  margin: 2px;
+  cursor: pointer;
+  background-color: ${(props) => (props.selected ? "#19242b" : "#fff")};
+  color: ${(props) => (props.selected ? "#fff" : "#19242b")};
 
   &:hover,
   &:focus {
-    background-color: #000;
+    background-color: #19242b;
     color: #fff;
+  }
+  @media screen and (max-width: 1279px) {
+    border-radius: 10px;
+    font-size: 18px;
+    margin: 5px;
+  }
+`;
+
+const FigureTag = styled.li`
+  font-size: 18px;
+  border-radius: 15px;
+  padding: 5px 8px;
+  display: inline-block;
+  margin: 2px;
+  cursor: pointer;
+  background-color: ${(props) => (props.selected ? "#19242b" : "#fff")};
+  color: ${(props) => (props.selected ? "#fff" : "#19242b")};
+
+  &:hover,
+  &:focus {
+    background-color: #19242b;
+    color: #fff;
+  }
+  @media screen and (max-width: 1279px) {
+    border-radius: 10px;
+    font-size: 18px;
+    margin: 5px;
   }
 `;
 
@@ -168,6 +198,7 @@ const EditTypesInput = styled.div`
 
 const EditTextArea = styled.div`
   margin-top: 50px;
+
   p {
     font-size: 30px;
     font-weight: 600;
@@ -182,6 +213,7 @@ const EditTextArea = styled.div`
     color: black;
     padding-left: 10px;
     padding-top: 10px;
+    border-radius: 20px;
   }
   @media screen and (max-width: 1279px) {
     margin-top: 30px;
@@ -260,17 +292,24 @@ export default function Edit() {
   ];
   const storyType = useCheckboxInput(storyTypeData);
   const storyFigure = useCheckboxInput(storyFigureData);
-  const [selectedTypes, setSelectedTypes] = useState([]);
 
   const storyLocation = locationSerach[0];
   console.log(storyLocation);
 
+  //調整成不用select方式的選擇人物和主題類型
+  const [selectedTypes, setSelectedTypes] = useState([]);
   const toggleType = (type) => {
     setSelectedTypes((prev) =>
       prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
     );
   };
 
+  const [selectedFigure, setSelectedFigure] = useState([]);
+  const toggleFigure = (type) => {
+    setSelectedFigure((prev) =>
+      prev.incclude(type) ? prev.filter((t) => t !== type) : [...prev, type]
+    );
+  };
   const handleSubmit = async (event) => {
     // alert("Your favorite flavor is: ");
     event.preventDefault();
@@ -286,7 +325,7 @@ export default function Edit() {
         time: storyTime.value,
         location: storyLocation,
         type: selectedTypes,
-        figure: storyFigure.getSortedCheckedValues(),
+        figure: selectedFigure,
         story: postStory.value,
         userId: localStorageUserId,
         createdAt: Timestamp.fromDate(new Date()),
@@ -379,63 +418,15 @@ export default function Edit() {
               <EditTitle>故事對象</EditTitle>
               <EditTypesInput>
                 <ul>
-                  <li>
-                    <input
-                      type="checkbox"
-                      onChange={storyFigure.onChange}
-                      value="親人"
-                    />
-                    親人
-                  </li>
-                  <li>
-                    <input
-                      type="checkbox"
-                      onChange={storyFigure.onChange}
-                      value="伴侶"
-                    />
-                    伴侶
-                  </li>
-                  <li>
-                    <input
-                      type="checkbox"
-                      onChange={storyFigure.onChange}
-                      value="朋友"
-                    />
-                    朋友
-                  </li>
-                  <li>
-                    <input
-                      type="checkbox"
-                      onChange={storyFigure.onChange}
-                      value="關係人"
-                    />
-                    關係人
-                  </li>
-
-                  <li>
-                    <input
-                      type="checkbox"
-                      onChange={storyFigure.onChange}
-                      value="陌生人"
-                    />
-                    陌生人
-                  </li>
-                  <li>
-                    <input
-                      type="checkbox"
-                      onChange={storyFigure.onChange}
-                      value="那個他"
-                    />
-                    那個他
-                  </li>
-                  <li>
-                    <input
-                      type="checkbox"
-                      onChange={storyFigure.onChange}
-                      value="內在自我"
-                    />
-                    內在自我
-                  </li>
+                  {storyFigureData.map((type) => (
+                    <FigureTag
+                      key={type}
+                      selected={selectedFigure.includes(type)}
+                      onClick={() => toggleFigure(type)}
+                    >
+                      {type}
+                    </FigureTag>
+                  ))}
                 </ul>
               </EditTypesInput>
             </EditCategories>

@@ -201,11 +201,8 @@ const glowing = keyframes`
 
 const WriteButton = styled.span`
   padding: 6px;
-
   cursor: pointer;
-
   animation: ${glowing} 2s infinite ease-in-out;
-
   padding: 6px;
   border-radius: 10px;
   font-weight: 400;
