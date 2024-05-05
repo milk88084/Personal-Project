@@ -427,7 +427,7 @@ function SurveyComponent() {
             </p>
             <ButtonSection ref={result}>
               <button onClick={handleClick}>點我測驗</button>
-              <button onClick={() => navigate("/")}>回首頁</button>
+              <button onClick={() => navigate("/main")}>回首頁</button>
             </ButtonSection>
           </ComfirmSection>
         </SurveySection>

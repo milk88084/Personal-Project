@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import video from "../../assets/video/background (4).mp4";
-import video2 from "../../assets/video/background (2).mp4";
+import video from "../../assets/video/landingPage.mp4";
+import video2 from "../../assets/video/landingPage2.mp4";
 import logo from "../../assets/img/logoTitle.png";
 import { ScrollText } from "lucide-react";
 import { ChevronRight } from "lucide-react";

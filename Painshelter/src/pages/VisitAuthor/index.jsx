@@ -287,16 +287,7 @@ const InterActiveSection = styled.section`
   img {
     width: 40px;
   }
-  h4 {
-    padding: 5px;
-    border-radius: 7px;
-    font-weight: 300;
-    font-size: 15px;
-    background-color: #19242b;
-    color: white;
-    width: 120px;
-    text-align: center;
-  }
+
   button {
     margin-left: 15px;
     font-size: 20px;
@@ -307,12 +298,6 @@ const InterActiveSection = styled.section`
     button {
       margin-left: 0px;
       font-size: 13px;
-    }
-    h4 {
-      padding: 5px;
-      font-size: 12px;
-      width: 90px;
-      margin-bottom: 12px;
     }
 
     select {
@@ -613,7 +598,7 @@ const VisitAuthor = () => {
 
   //回到首頁
   const handleBack = () => {
-    navigate("/");
+    navigate("/main");
     closeModal();
   };
 
@@ -745,13 +730,15 @@ const VisitAuthor = () => {
                       {!isUserStories ? (
                         <>
                           <InterActiveSection>
-                            <h4>給作者一句話</h4>
                             <form
                               onSubmit={(event) =>
                                 handleSubmit(event, story.storyId)
                               }
                             >
-                              <select name="replySelect">
+                              <select name="replySelect" defaultValue="">
+                                <option value="" disabled hidden>
+                                  給作者一句話...
+                                </option>
                                 {replyData.map((item, index) => {
                                   return (
                                     <option key={index} value={item}>
@@ -802,6 +789,7 @@ const VisitAuthor = () => {
           </StorySection>
           <FAB>
             <button onClick={handleBack}>回首頁</button>
+            <button onClick={() => navigate(-1)}>返回</button>
           </FAB>
         </Background>
       )}

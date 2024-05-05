@@ -9,15 +9,16 @@ import healtext2 from "../../assets/img/healtext2.png";
 import heal3 from "../../assets/img/heal3.jpg";
 import healtext3 from "../../assets/img/healtext3.png";
 import { useNavigate } from "react-router-dom";
-import continueIcon from "../../assets/icon/continue.png";
 import { useLocation } from "react-router-dom";
 import { zoomies } from "ldrs";
+import { gsap } from "gsap";
 
 // Default values shown
 
 //#region
 const Lyric = styled.div`
   position: relative;
+  overflow: hidden;
   img:nth-of-type(1) {
     height: 100vh;
     width: 100vw;
@@ -52,6 +53,7 @@ const Lyric = styled.div`
     text-align: center;
     color: white;
     opacity: 0.6;
+    margin-bottom: 50px;
     cursor: pointer;
     span:hover {
       transform: scale(1.1);
@@ -228,8 +230,11 @@ function MusicHeal() {
   const [videos, setVideos] = useState([]);
   const [currentVideo, setCurrentVideo] = useState(null);
   const section1 = useRef(null);
+  const section1Continue = useRef(null);
   const section2 = useRef(null);
+  const section2Continue = useRef(null);
   const section3 = useRef(null);
+  const section3Continue = useRef(null);
   const section4 = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -273,6 +278,29 @@ function MusicHeal() {
     setCurrentVideo(video);
   };
 
+  //GSAP動畫
+
+  useEffect(() => {
+    [
+      section1Continue.current,
+      section2Continue.current,
+      section3Continue.current,
+    ].forEach((el) => {
+      gsap.to(el, {
+        opacity: 1,
+        duration: 1,
+        delay: 0.5,
+      });
+      gsap.to(el, {
+        y: 20,
+        duration: 0.8,
+        ease: "power1.inOut",
+        yoyo: true,
+        repeat: -1,
+      });
+    });
+  }, []);
+
   return (
     <>
       <Lyric ref={section1}>
@@ -284,7 +312,9 @@ function MusicHeal() {
           <p>難道就真的，抱著遺憾一直到老了，然後才後悔著。</p>
           <p>然後才後悔著。</p>
         </div>
-        <span onClick={() => scrollSection(section2)}> ▼</span>
+        <span ref={section1Continue} onClick={() => scrollSection(section2)}>
+          ▼
+        </span>
       </Lyric>
 
       <Lyric ref={section2}>
@@ -295,7 +325,9 @@ function MusicHeal() {
           <p>如果你對她感到愧疚，請感謝她慷慨淚流，</p>
           <p>在我們相遇相愛之前，多虧有她讓你成熟。</p>
         </div>
-        <span onClick={() => scrollSection(section3)}> ▼</span>
+        <span ref={section2Continue} onClick={() => scrollSection(section3)}>
+          ▼
+        </span>
       </Lyric>
       <Lyric ref={section3}>
         <img src={heal2} alt={heal2} />
@@ -304,7 +336,9 @@ function MusicHeal() {
           <p>我在夜裡大聲呼喊，夢太沈重，無力也無法動彈，</p>
           <p>一樣的，一樣的，不安又將我捆綁，直到天亮</p>
         </div>
-        <span onClick={() => scrollSection(section4)}> ▼</span>
+        <span ref={section3Continue} onClick={() => scrollSection(section4)}>
+          ▼
+        </span>
       </Lyric>
       <Background>
         <Intro ref={section4}>
@@ -378,7 +412,7 @@ function MusicHeal() {
         </MainSection>
       </Background>
       <ButtonSection>
-        <button onClick={() => navigate("/")}>回首頁</button>
+        <button onClick={() => navigate("/main")}>回首頁</button>
         <button onClick={() => scrollSection(section1)}>回最上層</button>
         <button onClick={() => navigate("/history")}>疼痛日記室</button>
         <button onClick={() => navigate("/help")}>心靈緊急按鈕</button>

@@ -101,6 +101,7 @@ const InputSection = styled.div`
     border: none;
     border-bottom: 1px solid #202020;
     background-color: rgba(255, 255, 255, 0);
+    padding: 4px;
   }
 `;
 

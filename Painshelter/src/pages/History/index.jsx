@@ -1,7 +1,15 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { db } from "../../utils/firebase/firebase.jsx";
 import { auth } from "../../utils/firebase/auth.jsx";
-import { collection, query, getDocs, where } from "firebase/firestore";
+import {
+  collection,
+  query,
+  getDocs,
+  where,
+  doc,
+  arrayRemove,
+  updateDoc,
+} from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { modifiedData } from "../../utils/zustand.js";
 import moment from "moment";
@@ -17,6 +25,8 @@ import write from "../../assets/icon/write.png";
 import pill from "../../assets/icon/pill.png";
 import AnimatedNumber from "../../components/AnimatedNumber.jsx";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
+import { UserRoundX } from "lucide-react";
+import { ToastContainer, toast } from "react-toastify";
 //#region
 const Background = styled.div`
   background: linear-gradient(
@@ -454,7 +464,12 @@ const OtherAuthorList = styled.div`
   font-family: "Noto Sans TC", sans-serif;
   color: #19242b;
   div {
+    width: 300px;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 15px;
+    margin-bottom: 10px;
   }
   button {
     padding: 10px;
@@ -485,6 +500,23 @@ const OtherAuthorList = styled.div`
     cursor: pointer;
     background-color: #19242b;
     color: #fff;
+
+    &:hover {
+      background-color: #9ca3af;
+      color: #19242b;
+    }
+  }
+
+  span {
+    font-size: 18px;
+    border-radius: 15px;
+    padding: 10px;
+    display: flex;
+    margin: 2px;
+    cursor: pointer;
+    border: 1px solid #707070;
+    background-color: white;
+    color: #19242b;
 
     &:hover {
       background-color: #9ca3af;
@@ -657,6 +689,44 @@ export default function History() {
   };
   console.log(authors);
 
+  //取消追蹤
+  const deleteFollower = async (id) => {
+    if (window.confirm("確定要取消追蹤嗎?")) {
+      try {
+        const userRef = doc(db, "users", localStorageUserId);
+        console.log("delete");
+        await updateDoc(userRef, {
+          followAuthor: arrayRemove(id),
+        });
+        console.log("finish");
+        toast.success("成功取消追蹤", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } catch (error) {
+        console.error("Error updating document: ", error);
+        toast.error("刪除失敗", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+    } else {
+      console.log("取消刪除動作");
+    }
+  };
+
   return (
     <div>
       {isLoading ? (
@@ -784,7 +854,7 @@ export default function History() {
             </StorySection>
 
             <FAB>
-              <button onClick={() => navigate("/")}>點我回首頁</button>
+              <button onClick={() => navigate("/main")}>點我回首頁</button>
               <div>
                 <img src={logoImg} alt={logoImg} />
                 <img src={logoTitle} alt={logoTitle}></img>
@@ -801,9 +871,15 @@ export default function History() {
               <div>
                 {authors &&
                   authors.map((name, index) => (
-                    <p onClick={() => handleAuthor(name.id)} key={index}>
-                      {name.name}
-                    </p>
+                    <>
+                      <p onClick={() => handleAuthor(name.id)} key={index}>
+                        {index + 1}.{name.name}
+                      </p>
+                      <span onClick={() => deleteFollower(name.id)}>
+                        <UserRoundX />
+                        取消追蹤
+                      </span>
+                    </>
                   ))}
               </div>
               <button onClick={() => setShowFriendsList(false)}>關閉</button>
@@ -811,6 +887,19 @@ export default function History() {
           ) : null}
         </>
       )}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition:Bounce
+      />
     </div>
   );
 }

@@ -5,17 +5,21 @@ import "leaflet/dist/leaflet.css";
 import { useLoginState } from "../utils/zustand";
 import styled from "styled-components";
 import icon from "../assets/img/logoImg3.png";
+import { Search } from "lucide-react";
 
 const Input = styled.div`
   width: 100%;
   border-radius: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   input {
     border: 2px solid black;
     border-radius: 7px;
     padding-left: 10px;
   }
   button {
-    margin-left: 15px;
+    margin-left: 10px;
   }
 `;
 
@@ -65,6 +69,7 @@ const LocationSearch = () => {
           placeholder="請輸入地點，如：花蓮市美崙"
         />
         <button type="button" onClick={handleSearch}>
+          <Search />
           搜尋
         </button>
       </Input>

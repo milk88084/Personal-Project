@@ -64,12 +64,12 @@ const LogoSection = styled.div`
 
 const MainSection = styled.div`
   position: absolute;
-  top: 40%;
+  top: 35%;
   left: 38%;
   z-index: 40;
   background-color: rgba(255, 255, 255, 0.8);
   width: 25%;
-  height: 50%;
+  height: 55%;
   border-radius: 20px;
 
   @media screen and (max-width: 1279px) {
@@ -102,6 +102,7 @@ const InputSection = styled.div`
     border: none;
     border-bottom: 1px solid #202020;
     background-color: rgba(255, 255, 255, 0);
+    padding: 4px;
   }
 `;
 

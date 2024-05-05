@@ -437,7 +437,8 @@ export default function Edit() {
               </CommentsSection>
             </EditTextArea>
             <ButtonSection>
-              <button onClick={() => navigate("/")}>回首頁</button>
+              <button onClick={() => navigate("/main")}>回首頁</button>
+              <button onClick={() => navigate(-1)}>返回</button>
             </ButtonSection>
           </EditSections>
         </>

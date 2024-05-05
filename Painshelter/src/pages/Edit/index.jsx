@@ -9,7 +9,8 @@ import { db } from "../../utils/firebase/firebase.jsx";
 import pill from "../../assets/icon/pill.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Swal from "sweetalert2";
+import { Undo2, ScanSearch, Trash2, Save } from "lucide-react";
+
 import {
   Timestamp,
   collection,
@@ -186,7 +187,7 @@ const PreviewType = styled.div`
 
 const EditTextArea = styled.div`
   margin-top: 50px;
-
+  color: #353535;
   p {
     font-size: 30px;
     font-weight: 600;
@@ -239,21 +240,30 @@ const PreviewTextArea = styled.div`
 
 const ButtonSection = styled.div`
   margin-top: 50px;
+  display: flex;
+  align-items: center;
 
   button {
-    padding: 10px;
-    border-radius: 10px;
+    padding: 5px 8px;
+    border-radius: 15px;
     font-weight: 300;
-    font-size: 20px;
+    font-size: 18px;
     background-color: #19242b;
     color: white;
     margin-right: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     &:hover,
     &:focus {
       background-color: #9ca3af;
       color: #353535;
     }
+  }
+
+  p {
+    margin-left: 7px;
   }
   @media screen and (max-width: 1279px) {
     margin-top: 25px;
@@ -743,14 +753,22 @@ export default function Edit() {
                 />
               </EditTextArea>
               <ButtonSection>
-                <button onClick={handleSubmit}>儲存內容</button>
+                <button onClick={handleSubmit}>
+                  <Save />
+                  <p>儲存</p>
+                </button>
                 <button type="button" onClick={deleteStory}>
-                  刪除文章
+                  <Trash2 />
+                  <p>刪除</p>
                 </button>
                 <button type="button" onClick={handleBackToPreview}>
-                  預覽文章
+                  <ScanSearch />
+                  <p>預覽</p>
                 </button>
-                <button onClick={backPreviewPage}>回到上一頁</button>
+                <button onClick={backPreviewPage}>
+                  <Undo2 />
+                  <p>上一頁</p>
+                </button>
               </ButtonSection>
             </form>
           </EditSections>

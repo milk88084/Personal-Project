@@ -9,6 +9,7 @@ import { Timestamp, addDoc, collection, updateDoc } from "firebase/firestore";
 import LocationSearch from "../../components/LocationSearch.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
+import { Send } from "lucide-react";
 import pill from "../../assets/icon/pill.png";
 
 //#region
@@ -51,25 +52,33 @@ const EditSections = styled.div`
   border-radius: 50px 50px 0px 0px;
   padding: 50px;
   button {
-    padding: 6px;
-    border-radius: 10px;
+    padding: 5px 8px;
+    border-radius: 15px;
     font-weight: 300;
-    font-size: 20px;
+    font-size: 18px;
     background-color: #19242b;
     color: white;
+    margin-right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     &:hover,
     &:focus {
       background-color: #9ca3af;
-      color: black;
+      color: #353535;
     }
+  }
+
+  p {
+    margin-left: 7px;
   }
   @media screen and (max-width: 1279px) {
     width: 80%;
     padding: 30px;
 
     button {
-      padding: 4px;
+      padding: 6px;
       font-size: 15px;
     }
   }
@@ -104,7 +113,9 @@ const EditTitleInput = styled.div`
     color: #19242b;
     padding-left: 10px;
     border-radius: 15px;
+    outline: black;
   }
+
   @media screen and (max-width: 1279px) {
     border: 1px solid black;
     input {
@@ -198,6 +209,7 @@ const EditTypesInput = styled.div`
 
 const EditTextArea = styled.div`
   margin-top: 50px;
+  color: #353535;
 
   p {
     font-size: 30px;
@@ -245,12 +257,19 @@ const ButtonSection = styled.div`
     background-color: #19242b;
     color: white;
     margin-right: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     &:hover,
     &:focus {
       background-color: #9ca3af;
-      color: black;
+      color: #353535;
     }
+  }
+
+  p {
+    margin-left: 7px;
   }
   @media screen and (max-width: 1279px) {
     margin-top: 25px;
@@ -290,8 +309,8 @@ export default function Edit() {
     "那個他",
     "內在自我",
   ];
-  const storyType = useCheckboxInput(storyTypeData);
-  const storyFigure = useCheckboxInput(storyFigureData);
+  // const storyType = useCheckboxInput(storyTypeData);
+  // const storyFigure = useCheckboxInput(storyFigureData);
 
   const storyLocation = locationSerach[0];
   console.log(storyLocation);
@@ -307,17 +326,16 @@ export default function Edit() {
   const [selectedFigure, setSelectedFigure] = useState([]);
   const toggleFigure = (type) => {
     setSelectedFigure((prev) =>
-      prev.incclude(type) ? prev.filter((t) => t !== type) : [...prev, type]
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
     );
   };
   const handleSubmit = async (event) => {
-    // alert("Your favorite flavor is: ");
     event.preventDefault();
     console.log(storyTitle.value);
     console.log(storyTime.value);
-    console.log(storyType.getSortedCheckedValues());
-    console.log(storyFigure.getSortedCheckedValues());
     console.log(postStory.value);
+    console.log(selectedTypes);
+    console.log(selectedFigure);
 
     try {
       const docRef = await addDoc(collection(db, "posts"), {
@@ -444,12 +462,13 @@ export default function Edit() {
               />
             </EditTextArea>
             <button onSubmit={handleSubmit} type="submit">
-              送出
+              <Send />
+              <p> 送出</p>
             </button>
           </form>
         </EditSections>
         <ButtonSection>
-          <button onClick={() => navigate("/")}>回到首頁</button>
+          <button onClick={() => navigate("/main")}>回到首頁</button>
           <button onClick={() => navigate("/history")}>回到歷史文章</button>
         </ButtonSection>
         <ToastContainer
