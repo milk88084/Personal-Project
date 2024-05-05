@@ -575,18 +575,6 @@ function App() {
     scrollSection(top);
   };
 
-  //同意進入頁面按鈕
-  const handleAgree = () => {
-    navigate("/login");
-    online();
-  };
-
-  //不同意進入不同意頁面按鈕
-  const handleDisagree = () => {
-    navigate("/disagree");
-    offline();
-  };
-
   console.log("目前登錄狀態：" + localStorageLogin);
   console.log("目前登入使用者ID：" + localStorageUserId);
 

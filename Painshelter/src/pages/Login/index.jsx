@@ -173,7 +173,7 @@ const Login = () => {
         window.localStorage.setItem("userId", user.uid);
         window.localStorage.setItem("loginStatus", loginStatus);
         setTimeout(() => {
-          navigate("/");
+          navigate("/main");
         }, 3000);
       })
       .catch((error) => {
