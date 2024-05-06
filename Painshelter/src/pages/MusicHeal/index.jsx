@@ -135,6 +135,7 @@ const SearchBar = styled.div`
     height: 30px;
     border-radius: 7px;
     color: black;
+    padding-left: 7px;
   }
 `;
 

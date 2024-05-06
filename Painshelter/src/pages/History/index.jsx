@@ -25,8 +25,15 @@ import write from "../../assets/icon/write.png";
 import pill from "../../assets/icon/pill.png";
 import AnimatedNumber from "../../components/AnimatedNumber.jsx";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
-import { UserRoundX } from "lucide-react";
+import { UserRoundX, User, StickyNote } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import Swal from "sweetalert2";
+
 //#region
 const Background = styled.div`
   background: linear-gradient(
@@ -463,14 +470,7 @@ const OtherAuthorList = styled.div`
   justify-content: center;
   font-family: "Noto Sans TC", sans-serif;
   color: #19242b;
-  div {
-    width: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 15px;
-    margin-bottom: 10px;
-  }
+
   button {
     padding: 10px;
     border-radius: 7px;
@@ -491,38 +491,7 @@ const OtherAuthorList = styled.div`
     font-weight: 900;
     margin: 20px 0px 20px 0px;
   }
-  p {
-    font-size: 18px;
-    border-radius: 15px;
-    padding: 10px;
-    display: inline-block;
-    margin: 2px;
-    cursor: pointer;
-    background-color: #19242b;
-    color: #fff;
 
-    &:hover {
-      background-color: #9ca3af;
-      color: #19242b;
-    }
-  }
-
-  span {
-    font-size: 18px;
-    border-radius: 15px;
-    padding: 10px;
-    display: flex;
-    margin: 2px;
-    cursor: pointer;
-    border: 1px solid #707070;
-    background-color: white;
-    color: #19242b;
-
-    &:hover {
-      background-color: #9ca3af;
-      color: #19242b;
-    }
-  }
   @media screen and (max-width: 1279px) {
     width: 70%;
     height: 90%;
@@ -530,6 +499,43 @@ const OtherAuthorList = styled.div`
     background: linear-gradient(125deg, #eef2f3, #8e9eab);
     border-radius: 20px;
     margin-top: 30px;
+  }
+`;
+
+const StyledUser = styled(User)`
+  width: 30px;
+  height: 30px;
+`;
+
+const FollowerList = styled.div`
+  background-color: white;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+  padding: 10px;
+  margin-bottom: 20px;
+  div {
+    display: flex;
+    align-items: center;
+  }
+
+  p {
+    font-size: 18px;
+    margin-left: 10px;
+  }
+
+  span {
+    padding: 10px;
+    display: flex;
+    margin: 2px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #9ca3af;
+      color: #19242b;
+      border-radius: 15px;
+    }
   }
 `;
 
@@ -691,24 +697,31 @@ export default function History() {
 
   //取消追蹤
   const deleteFollower = async (id) => {
-    if (window.confirm("確定要取消追蹤嗎?")) {
+    const result = await Swal.fire({
+      title: "確定取消追蹤？",
+      text: "取消後無法恢復",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#363636",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "確定取消",
+    });
+
+    if (result.isConfirmed) {
       try {
+        const localStorageUserId = localStorage.getItem("userId");
         const userRef = doc(db, "users", localStorageUserId);
         console.log("delete");
         await updateDoc(userRef, {
           followAuthor: arrayRemove(id),
         });
         console.log("finish");
-        toast.success("成功取消追蹤", {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
+        Swal.fire({
+          title: "取消追蹤!",
+          text: "此作者已取消追蹤",
+          icon: "success",
         });
+        navigate("/history");
       } catch (error) {
         console.error("Error updating document: ", error);
         toast.error("刪除失敗", {
@@ -722,8 +735,6 @@ export default function History() {
           theme: "dark",
         });
       }
-    } else {
-      console.log("取消刪除動作");
     }
   };
 
@@ -868,20 +879,39 @@ export default function History() {
           {showFriendsList ? (
             <OtherAuthorList>
               <h1>關注列表</h1>
-              <div>
+              <section>
                 {authors &&
                   authors.map((name, index) => (
                     <>
-                      <p onClick={() => handleAuthor(name.id)} key={index}>
-                        {index + 1}.{name.name}
-                      </p>
-                      <span onClick={() => deleteFollower(name.id)}>
-                        <UserRoundX />
-                        取消追蹤
-                      </span>
+                      <FollowerList>
+                        <div>
+                          <StyledUser />
+                          <p key={index}>{name.name}</p>
+                        </div>
+                        <div>
+                          <span onClick={() => handleAuthor(name.id)}>
+                            <HoverCard>
+                              <HoverCardTrigger>
+                                <StickyNote />
+                              </HoverCardTrigger>
+                              <HoverCardContent>
+                                前往作者文章列表
+                              </HoverCardContent>
+                            </HoverCard>
+                          </span>
+                          <span onClick={() => deleteFollower(name.id)}>
+                            <HoverCard>
+                              <HoverCardTrigger>
+                                <UserRoundX />
+                              </HoverCardTrigger>
+                              <HoverCardContent>取消追蹤作者</HoverCardContent>
+                            </HoverCard>
+                          </span>
+                        </div>
+                      </FollowerList>
                     </>
                   ))}
-              </div>
+              </section>
               <button onClick={() => setShowFriendsList(false)}>關閉</button>
             </OtherAuthorList>
           ) : null}

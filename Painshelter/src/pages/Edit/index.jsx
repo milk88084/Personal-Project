@@ -10,6 +10,7 @@ import pill from "../../assets/icon/pill.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Undo2, ScanSearch, Trash2, Save } from "lucide-react";
+import Swal from "sweetalert2";
 
 import {
   Timestamp,
@@ -460,24 +461,28 @@ export default function Edit() {
   //刪除文章
   const deleteStory = async () => {
     console.log(params.id);
+    const result = await Swal.fire({
+      title: "確定刪除故事？",
+      text: "刪除後將無法恢復",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#363636",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "確定刪除",
+    });
 
-    if (window.confirm("確定要刪除此篇投稿故事嗎?")) {
+    if (result.isConfirmed) {
       try {
         const q = doc(db, "posts", params.id);
         console.log("delete");
         await deleteDoc(q);
         console.log("finish");
-        toast.success("成功刪除：" + storyTitle.value + "故事", {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
+        Swal.fire({
+          title: "刪除故事",
+          text: "此篇故事已被刪除",
+          icon: "success",
         });
-        setTimeout(() => navigate("/history"), 3000);
+        setTimeout(() => navigate("/history"), 2000);
       } catch (error) {
         console.error("Error updating document: ", error);
         toast.error("刪除失敗", {

@@ -10,7 +10,7 @@ import LocationSearch from "../../components/LocationSearch.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { Send } from "lucide-react";
-import pill from "../../assets/icon/pill.png";
+import Swal from "sweetalert2";
 
 //#region
 const Background = styled.div`
@@ -337,42 +337,54 @@ export default function Edit() {
     console.log(selectedTypes);
     console.log(selectedFigure);
 
-    try {
-      const docRef = await addDoc(collection(db, "posts"), {
-        title: storyTitle.value,
-        time: storyTime.value,
-        location: storyLocation,
-        type: selectedTypes,
-        figure: selectedFigure,
-        story: postStory.value,
-        userId: localStorageUserId,
-        createdAt: Timestamp.fromDate(new Date()),
-      });
-      await updateDoc(docRef, { storyId: docRef.id });
-      console.log("Document written with ID: ", docRef.id);
-      console.log(getLoginUserId());
-      toast.success("成功提交：" + storyTitle.value + "故事", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-    } catch (error) {
-      console.error("Error adding document: ", error);
-      toast.error("註冊不成功", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+    const result = await Swal.fire({
+      title: "確定提交故事?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#363636",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "提交",
+      cancelButtonText: "取消",
+    });
+    if (result.isConfirmed) {
+      try {
+        const docRef = await addDoc(collection(db, "posts"), {
+          title: storyTitle.value,
+          time: storyTime.value,
+          location: storyLocation,
+          type: selectedTypes,
+          figure: selectedFigure,
+          story: postStory.value,
+          userId: localStorageUserId,
+          createdAt: Timestamp.fromDate(new Date()),
+        });
+        await updateDoc(docRef, { storyId: docRef.id });
+        console.log("Document written with ID: ", docRef.id);
+        console.log(getLoginUserId());
+        toast.success("成功提交：" + storyTitle.value + "故事", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } catch (error) {
+        console.error("Error adding document: ", error);
+        toast.error("投稿失敗", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        navigate("/post");
+      }
     }
     setTimeout(() => {
       navigate("/history");
