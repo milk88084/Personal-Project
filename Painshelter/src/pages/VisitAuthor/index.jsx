@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import replyData from "../../utils/data/reply.json";
 import { useLoginState } from "../../utils/zustand.js";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import pill from "../../assets/icon/pill.png";
 import logoImg from "../../assets/img/logoImg.png";
 import logoTitle from "../../assets/img/logoTitle.png";
@@ -22,94 +22,149 @@ import submitIcon from "../../assets/icon/paper-plane.png";
 // import backgroundImg from "../../assets/img/backgroundImg.jpg";
 import { useAuthorfiedData } from "../../utils/zustand.js";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
-
+import { AlignJustify } from "lucide-react";
 //#region
+const flowAnimation = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
+
 const Background = styled.div`
-  font-family: "Noto Sans TC", sans-serif;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 2, 0, 1) 0%,
-    rgba(2, 3, 1, 1) 15%,
-    rgba(9, 14, 8, 1) 34%,
-    rgba(16, 23, 15, 1) 51%,
-    rgba(23, 30, 22, 1) 69%,
-    rgba(26, 33, 25, 1) 83%,
-    rgba(38, 45, 37, 1) 100%
-  );
   color: white;
   position: relative;
-  background-size: cover;
+  font-family: "Noto Sans TC", sans-serif;
+  height: 100%;
 `;
 
 const TopSection = styled.div`
-  background-image: url(${backgroundImg});
-  width: 100%;
-  height: 100vh;
-  position: relative;
+  display: none;
+  @media screen and (max-width: 1279px) {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    height: 40px;
+    z-index: 200;
+    width: 100%;
+    background-color: #353535;
+  }
+`;
+const ShowLeftSection = styled.div``;
+const LeftSection = styled.div`
+  background-image: url(${(props) => props.backgroundImg});
+  width: 330px;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  @media screen and (max-width: 1279px) {
+    z-index: 30;
+    display: none;
+  }
 `;
 
-const TopSectionName = styled.div`
-  display: flex;
-  align-items: center;
-  position: absolute;
-  margin-left: 100px;
-  margin-top: 200px;
-  h1 {
-    font-size: 120px;
-    font-weight: 1000;
-    color: white;
-    text-shadow: 3px 6px 6px white;
+const LeftSectionMobile = styled.div`
+  display: none;
+  @media screen and (max-width: 1279px) {
+    z-index: 300;
+    background-image: url(${(props) => props.backgroundImg});
+    width: 330px;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
   }
+`;
 
-  img {
-    width: 140px;
-    height: 140px;
+const LeftNameSection = styled.div`
+  font-size: 50px;
+  font-weight: bolder;
+  @media screen and (max-width: 1279px) {
+    font-size: 40px;
+    padding: 20px;
+    margin-top: 30px;
   }
+`;
+
+const CloseButton = styled.div`
+  @media screen and (max-width: 1279px) {
+    font-size: 30px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-right: 20px;
+  }
+`;
+
+const LeftButtonSection = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 
   button {
-    padding: 6px;
-    border-radius: 10px;
-    font-weight: 400;
-    margin: 24px;
-    font-size: 20px;
-    background-color: #19242b;
-    color: white;
+    font-size: 25px;
+    margin: 7px;
+    opacity: 0.3;
+    text-shadow: 1px 1px 20px white;
+  }
 
-    &:hover,
-    &:focus {
-      background-color: #9ca3af;
-      color: black;
-    }
+  button:nth-child(1) {
+    opacity: 0.6;
+  }
+
+  button:hover {
+    font-size: 32px;
+    margin: 8px;
+    opacity: 1;
+    font-weight: 600;
   }
 
   @media screen and (max-width: 1279px) {
-    margin-left: 30px;
-    margin-top: 200px;
-    h1 {
-      font-size: 44px;
-      font-weight: 700;
-      text-shadow: 2px 4px 4px white;
-    }
-
-    img {
-      width: 70px;
-      height: 70px;
-    }
-
+    padding: 20px;
     button {
-      font-size: 10px;
-      margin-right: 0px;
-      margin-bottom: 0px;
+      font-size: 25px;
+      margin: 0px;
+      opacity: 0.3;
+    }
+
+    button:hover {
+      font-size: 20px;
+      margin: 4px;
     }
   }
 `;
 
+const RightSection = styled.div`
+  width: calc(100vw - 330px);
+  position: absolute;
+  right: 0;
+  background: linear-gradient(45deg, #464646 34%, #546377 51%, #060708 69%);
+  background-size: 400% 400%;
+  animation: ${flowAnimation} 10s ease infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+    margin-top: 30px;
+    position: relative;
+  }
+`;
+
+//
 const IsFollowed = styled.div`
   button {
-    padding: 6px;
+    padding: 8px;
     border-radius: 10px;
     font-weight: 400;
-    margin: 24px;
     font-size: 20px;
     background-color: #19242b;
     color: white;
@@ -135,7 +190,6 @@ const IsFollowAuthor = styled.div`
     padding: 6px;
     border-radius: 10px;
     font-weight: 400;
-    margin: 24px;
     font-size: 20px;
     background-color: #ffffff;
     color: #19242b;
@@ -150,27 +204,13 @@ const IsFollowAuthor = styled.div`
   }
 `;
 
-const Title = styled.p`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 100px;
-  height: 300px;
-  font-weight: 600;
-  opacity: 0.6;
-  font-style: italic;
-  @media screen and (max-width: 1279px) {
-    font-size: 50px;
-    height: 150px;
-  }
-`;
-
 const StorySection = styled.div`
-  width: 1280px;
+  width: 90%;
   margin: 0 auto;
   position: relative;
+  margin-top: 100px;
   @media screen and (max-width: 1279px) {
-    width: 100%;
+    margin-top: 60px;
   }
 `;
 
@@ -207,7 +247,7 @@ const EachStory = styled.div`
 `;
 
 const PostIndex = styled.div`
-  width: 350px;
+  width: 230px;
   height: 300px;
   display: flex;
   justify-content: center;
@@ -669,6 +709,8 @@ const VisitAuthor = () => {
   const sortTimeOfStory = stories.sort((a, b) => b.time.localeCompare(a.time));
   // console.log(stories);
 
+  const [isMobileSize, setIsMobileSize] = useState(false);
+
   return (
     <>
       {isLoggedIn ? (
@@ -676,18 +718,64 @@ const VisitAuthor = () => {
       ) : (
         <Background>
           <TopSection>
-            {isUserStories ? (
-              <>
-                <Owned>
-                  <p>My own page</p>
-                  <button onClick={() => navigate("/post")}>撰寫故事</button>
-                </Owned>
-              </>
-            ) : (
-              <div>
-                <TopSectionName>
-                  <img src={logoImg} alt={logoImg} />
-                  <h1>{author[0]?.name}</h1>
+            <AlignJustify onClick={() => setIsMobileSize(true)} />
+          </TopSection>
+          {isMobileSize ? (
+            <ShowLeftSection>
+              <LeftSectionMobile backgroundImg={backgroundImg}>
+                <CloseButton>
+                  <button onClick={() => setIsMobileSize(false)}>x</button>
+                </CloseButton>
+
+                <LeftNameSection>
+                  {isUserStories ? (
+                    <>
+                      <h1>Hey</h1>
+                    </>
+                  ) : (
+                    <>
+                      <h1>{`${author[0]?.name}'s`}</h1>
+                      <h1>歷史文章</h1>
+                      {!isFollow ? (
+                        <IsFollowed>
+                          <button onClick={handleFollow}>關注作者</button>
+                        </IsFollowed>
+                      ) : (
+                        <IsFollowAuthor>
+                          <span disabled>已關注作者</span>
+                        </IsFollowAuthor>
+                      )}
+                    </>
+                  )}
+                  <h1>{name && name[0]?.name}</h1>
+                </LeftNameSection>
+                <LeftButtonSection>
+                  {/* <button onClick={handlePost}>撰寫文章</button>
+                   */}
+
+                  <button onClick={() => navigate("/main")}>返回首頁</button>
+                  <button onClick={() => navigate(-1)}>返回</button>
+                </LeftButtonSection>
+
+                <FAB>
+                  <div>
+                    <img src={logoImg} alt={logoImg} />
+                    <img src={logoTitle} alt={logoTitle}></img>
+                  </div>
+                </FAB>
+              </LeftSectionMobile>
+            </ShowLeftSection>
+          ) : null}
+          <LeftSection backgroundImg={backgroundImg}>
+            <LeftNameSection>
+              {isUserStories ? (
+                <>
+                  <h1>Hey</h1>
+                </>
+              ) : (
+                <>
+                  <h1>{`${author[0]?.name}'s`}</h1>
+                  <h1>歷史文章</h1>
                   {!isFollow ? (
                     <IsFollowed>
                       <button onClick={handleFollow}>關注作者</button>
@@ -697,100 +785,108 @@ const VisitAuthor = () => {
                       <span disabled>已關注作者</span>
                     </IsFollowAuthor>
                   )}
-                </TopSectionName>
+                </>
+              )}
+            </LeftNameSection>
+            <LeftButtonSection>
+              <button onClick={() => navigate("/history")}>撰寫文章</button>
+              <button onClick={() => navigate("/main")}>返回首頁</button>
+            </LeftButtonSection>
+
+            <FAB>
+              <div>
+                <img src={logoImg} alt={logoImg} />
+                <img src={logoTitle} alt={logoTitle}></img>
               </div>
-            )}
-          </TopSection>
-          <Title>歷史文章</Title>
-          <StorySection>
-            {sortTimeOfStory &&
-              sortTimeOfStory.map((story, index) => {
-                return (
-                  <EachStory key={index} id={stories.storyId}>
-                    <PostIndex>
-                      <p>{index + 1}</p>
-                    </PostIndex>
-                    <MainContent>
-                      <h1>疼痛暗號：{story.title}</h1>
-                      <h2>
-                        {story.time}@{story.location.name}
-                      </h2>
-                      <h3>
-                        {story.type.map((item, index) => (
-                          <span key={index}>#{item}</span>
-                        ))}
-                      </h3>
-                      <h3>
-                        {story.figure.map((item, index) => (
-                          <span key={index}>{item}</span>
-                        ))}
-                      </h3>
-                      <p>{story.story}</p>
+            </FAB>
+          </LeftSection>
+          <RightSection>
+            <StorySection>
+              {sortTimeOfStory &&
+                sortTimeOfStory.map((story, index) => {
+                  return (
+                    <EachStory key={index} id={stories.storyId}>
+                      <PostIndex>
+                        <p>{index + 1}</p>
+                      </PostIndex>
+                      <MainContent>
+                        <h1>疼痛暗號：{story.title}</h1>
+                        <h2>
+                          {story.time}@{story.location.name}
+                        </h2>
+                        <h3>
+                          {story.type.map((item, index) => (
+                            <span key={index}>#{item}</span>
+                          ))}
+                        </h3>
+                        <h3>
+                          {story.figure.map((item, index) => (
+                            <span key={index}>{item}</span>
+                          ))}
+                        </h3>
+                        <p>{story.story}</p>
 
-                      {!isUserStories ? (
-                        <>
-                          <InterActiveSection>
-                            <form
-                              onSubmit={(event) =>
-                                handleSubmit(event, story.storyId)
-                              }
-                            >
-                              <select name="replySelect" defaultValue="">
-                                <option value="" disabled hidden>
-                                  給作者一句話...
-                                </option>
-                                {replyData.map((item, index) => {
-                                  return (
-                                    <option key={index} value={item}>
-                                      {item}
-                                    </option>
-                                  );
-                                })}
-                              </select>
-                              <button type="submit">送出</button>
-                            </form>
-                          </InterActiveSection>
-                        </>
-                      ) : (
-                        ""
-                      )}
-                    </MainContent>
+                        {!isUserStories ? (
+                          <>
+                            <InterActiveSection>
+                              <form
+                                onSubmit={(event) =>
+                                  handleSubmit(event, story.storyId)
+                                }
+                              >
+                                <select name="replySelect" defaultValue="">
+                                  <option value="" disabled hidden>
+                                    給作者一句話...
+                                  </option>
+                                  {replyData.map((item, index) => {
+                                    return (
+                                      <option key={index} value={item}>
+                                        {item}
+                                      </option>
+                                    );
+                                  })}
+                                </select>
+                                <button type="submit">送出</button>
+                              </form>
+                            </InterActiveSection>
+                          </>
+                        ) : (
+                          ""
+                        )}
+                      </MainContent>
 
-                    <LikerAccount>
-                      <img src={pill} alt={pill} />
-                      <span>
-                        按讚數：
-                        {story.likedAuthorId?.length > 0
-                          ? story.likedAuthorId.length
-                          : 0}
-                      </span>
+                      <LikerAccount>
+                        <img src={pill} alt={pill} />
+                        <span>
+                          按讚數：
+                          {story.likedAuthorId?.length > 0
+                            ? story.likedAuthorId.length
+                            : 0}
+                        </span>
 
-                      <span>
-                        留言數：
-                        {story.userComments?.length > 0
-                          ? story.userComments.length
-                          : 0}
-                      </span>
+                        <span>
+                          留言數：
+                          {story.userComments?.length > 0
+                            ? story.userComments.length
+                            : 0}
+                        </span>
 
-                      {!isUserStories ? (
-                        <button onClick={() => handleLike(story.storyId)}>
-                          按讚
+                        {!isUserStories ? (
+                          <button onClick={() => handleLike(story.storyId)}>
+                            按讚
+                          </button>
+                        ) : (
+                          ""
+                        )}
+                        <button onClick={() => modifiedClick(story.storyId)}>
+                          完整文章
                         </button>
-                      ) : (
-                        ""
-                      )}
-                      <button onClick={() => modifiedClick(story.storyId)}>
-                        完整文章
-                      </button>
-                    </LikerAccount>
-                  </EachStory>
-                );
-              })}
-          </StorySection>
-          <FAB>
-            <button onClick={handleBack}>回首頁</button>
-            <button onClick={() => navigate(-1)}>返回</button>
-          </FAB>
+                      </LikerAccount>
+                    </EachStory>
+                  );
+                })}
+            </StorySection>
+          </RightSection>
         </Background>
       )}
     </>

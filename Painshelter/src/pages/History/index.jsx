@@ -14,18 +14,20 @@ import { useState, useEffect } from "react";
 import { modifiedData } from "../../utils/zustand.js";
 import moment from "moment";
 import styled, { keyframes } from "styled-components";
-import backgroundImg from "../../assets/img/historyBanner.jpg";
+import backgroundImg from "../../assets/img/hitsoryLeft.jpg";
 import logoImg from "../../assets/img/logoImg.png";
 import logoTitle from "../../assets/img/logoTitle.png";
 import { HistoryModal } from "../../utils/zustand.js";
 import ModalHistory from "../../components/ModalHistory.jsx";
 import follower from "../../assets/icon/follower.png";
 import pressureIcon from "../../assets/icon/pressure.png";
-import write from "../../assets/icon/write.png";
+import jar from "../../assets/img/historyJar.png";
+import pillImg from "../../assets/img/historyPill.png";
+import broke from "../../assets/img/historyBroke.png";
 import pill from "../../assets/icon/pill.png";
 import AnimatedNumber from "../../components/AnimatedNumber.jsx";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
-import { UserRoundX, User, StickyNote } from "lucide-react";
+import { UserRoundX, User, StickyNote, AlignJustify } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import {
   HoverCard,
@@ -35,179 +37,17 @@ import {
 import Swal from "sweetalert2";
 
 //#region
+const flowAnimation = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
+
 const Background = styled.div`
-  background: linear-gradient(
-    90deg,
-    rgba(0, 2, 0, 1) 0%,
-    rgba(2, 3, 1, 1) 15%,
-    rgba(9, 14, 8, 1) 34%,
-    rgba(16, 23, 15, 1) 51%,
-    rgba(23, 30, 22, 1) 69%,
-    rgba(26, 33, 25, 1) 83%,
-    rgba(38, 45, 37, 1) 100%
-  );
   color: white;
   position: relative;
   font-family: "Noto Sans TC", sans-serif;
-`;
-
-const TopSection = styled.div`
-  background-image: url(${backgroundImg});
-  width: 100%;
-  height: 100vh;
-  position: relative;
-
-  p {
-    position: absolute;
-    text-align: end;
-    font-size: 40px;
-    font-weight: 600;
-    color: white;
-    text-shadow: 3px 4px 6px white;
-    bottom: 0;
-    right: 0;
-    margin-right: 30px;
-    margin-bottom: 30px;
-    opacity: 0.2;
-  }
-
-  @media screen and (max-width: 1279px) {
-    p {
-      font-size: 20px;
-      font-weight: 400;
-      text-shadow: 2px 3px 4px white;
-      margin-right: 20px;
-      margin-bottom: 15px;
-    }
-  }
-`;
-
-const TopSectionName = styled.div`
-  display: flex;
-  align-items: center;
-  position: absolute;
-  margin-left: 100px;
-  margin-top: 200px;
-  h1 {
-    font-size: 120px;
-    font-weight: 1000;
-    color: white;
-    text-shadow: 3px 6px 6px white;
-  }
-
-  img {
-    width: 140px;
-    height: 140px;
-  }
-
-  @media screen and (max-width: 1279px) {
-    margin-left: 50px;
-    margin-top: 200px;
-    h1 {
-      font-size: 44px;
-      font-weight: 700;
-      text-shadow: 2px 4px 4px white;
-    }
-
-    img {
-      width: 70px;
-      height: 70px;
-    }
-  }
-`;
-
-const Categories = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  font-size: 50px;
-  padding: 20px;
-  font-weight: 500;
-  @media screen and (max-width: 1279px) {
-    padding: 15px;
-    margin-top: 20px;
-  }
-`;
-
-const CategoriesSection = styled.div`
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  p {
-    font-size: 100px;
-    font-weight: 900;
-    display: flex;
-    justify-content: center;
-  }
-
-  h1 {
-    font-size: 30px;
-    margin-left: 30px;
-    opacity: 0.6;
-  }
-
-  img {
-    width: 40px;
-    height: 40px;
-    opacity: 0.6;
-  }
-
-  button {
-    padding: 6px;
-    border-radius: 10px;
-    font-weight: 400;
-    margin: 24px;
-    font-size: 20px;
-    background-color: #19242b;
-    color: white;
-
-    &:hover,
-    &:focus {
-      background-color: #9ca3af;
-      color: black;
-    }
-  }
-
-  @media screen and (max-width: 1279px) {
-    width: 100%;
-    display: flex;
-    div {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    p {
-      font-size: 50px;
-      font-weight: 600;
-    }
-
-    h1 {
-      font-size: 15px;
-      margin-left: 7px;
-    }
-
-    img {
-      width: 20px;
-      height: 20px;
-    }
-
-    button {
-      padding: 6px;
-      border-radius: 10px;
-      font-weight: 400;
-      margin: 15px;
-      font-size: 10px;
-    }
-  }
+  height: 100%;
 `;
 
 const glowing = keyframes`
@@ -216,43 +56,247 @@ const glowing = keyframes`
   100% { box-shadow: 0 0 5px white; }
 `;
 
-const WriteButton = styled.span`
-  padding: 6px;
-  cursor: pointer;
-  animation: ${glowing} 2s infinite ease-in-out;
-  padding: 6px;
-  border-radius: 10px;
-  font-weight: 400;
-  margin: 24px;
-  font-size: 20px;
-  background-color: #19242b;
-  color: white;
-  &:hover,
-  &:focus {
-    background-color: #9ca3af;
-    color: black;
+const TopSection = styled.div`
+  display: none;
+  @media screen and (max-width: 1279px) {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    height: 40px;
+    z-index: 200;
+    width: 100%;
+    background-color: #353535;
   }
 `;
 
-const Title = styled.p`
+const ShowLeftSection = styled.div``;
+
+const LeftSection = styled.div`
+  background-image: url(${(props) => props.backgroundImg});
+  width: 330px;
+  height: 100%;
+  position: fixed;
+  left: 0;
   display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  @media screen and (max-width: 1279px) {
+    z-index: 30;
+    display: none;
+  }
+`;
+const LeftSectionMobile = styled.div`
+  display: none;
+  @media screen and (max-width: 1279px) {
+    z-index: 300;
+    background-image: url(${(props) => props.backgroundImg});
+    width: 330px;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+`;
+
+const CloseButton = styled.div`
+  @media screen and (max-width: 1279px) {
+    font-size: 30px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-right: 20px;
+  }
+`;
+
+const LeftNameSection = styled.div`
+  font-size: 50px;
+  font-weight: bolder;
+  h2 {
+    font-size: 30px;
+  }
+  @media screen and (max-width: 1279px) {
+    font-size: 40px;
+    padding: 20px;
+    margin-top: 30px;
+  }
+`;
+
+const LeftButtonSection = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  button {
+    font-size: 25px;
+    margin: 7px;
+    opacity: 0.3;
+    text-shadow: 1px 1px 20px white;
+  }
+
+  button:nth-child(1) {
+    opacity: 0.6;
+  }
+
+  button:hover {
+    font-size: 32px;
+    margin: 8px;
+    opacity: 1;
+    font-weight: 600;
+  }
+
+  @media screen and (max-width: 1279px) {
+    padding: 20px;
+    button {
+      font-size: 25px;
+      margin: 0px;
+      opacity: 0.3;
+    }
+
+    button:hover {
+      font-size: 20px;
+      margin: 4px;
+    }
+  }
+`;
+
+const LeftDateSection = styled.div`
+  opacity: 0.5;
+`;
+
+const RightSection = styled.div`
+  width: calc(100vw - 330px);
+  position: absolute;
+  right: 0;
+  background: linear-gradient(45deg, #464646 34%, #546377 51%, #060708 69%);
+  background-size: 400% 400%;
+  animation: ${flowAnimation} 10s ease infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+    margin-top: 30px;
+    position: relative;
+  }
+`;
+
+const Categories = styled.div`
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 100px;
-  height: 300px;
+  padding: 15px;
+  height: 100vh;
   @media screen and (max-width: 1279px) {
-    font-size: 50px;
-    height: 150px;
+    padding: 0px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+  }
+`;
+
+const CategoriesSection = styled.div`
+  width: 100%;
+  height: 180px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(255, 255, 255, 0.4);
+  padding: 30px;
+  border-radius: 20px;
+  margin: 15px;
+
+  h1 {
+    font-size: 25px;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    width: 650px;
+    font-size: 15px;
+  }
+
+  img {
+    width: 100px;
+    margin: 30px;
+  }
+
+  button {
+    padding: 4px;
+    border-radius: 8px;
+    font-weight: 400;
+    font-size: 16px;
+    margin-top: 10px;
+    background-color: #19242b;
+    color: white;
+    animation: ${glowing} 2s infinite ease-in-out;
+
+    &:hover,
+    &:focus {
+      background-color: #9ca3af;
+      color: black;
+    }
+  }
+
+  div:nth-child(3) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 90px;
+    width: 200px;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 1279px) {
+    width: 400px;
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+
+    div:nth-child(1) {
+      width: 80px;
+    }
+
+    div:nth-child(2) {
+      width: 300px;
+    }
+
+    div:nth-child(3) {
+      width: 70px;
+      font-size: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      width: 260px;
+      font-size: 12px;
+    }
+
+    img {
+      width: 60px;
+      margin: 0px;
+    }
   }
 `;
 
 const StorySection = styled.div`
-  width: 1280px;
-  margin: 0 auto;
-  position: relative;
-  @media screen and (max-width: 1279px) {
-    width: 100%;
-  }
+  width: 100%;
+  padding: 45px;
 `;
 
 const EachStory = styled.div`
@@ -265,22 +309,23 @@ const EachStory = styled.div`
   box-shadow: 20px -10px 20px 10px rgba(0, 0, 0, 0.2);
   margin-top: -30px;
   display: flex;
-
+  justify-content: space-around;
+  position: relative;
   @media screen and (max-width: 1279px) {
     height: 280px;
   }
 `;
 
 const PostIndex = styled.div`
-  width: 350px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   font-size: 200px;
+  line-height: 220px;
   font-weight: bold;
   opacity: 0.6;
   color: #8e9eab;
   text-shadow: 3px 1px 6px white;
+  display: flex;
+  margin-left: 30px;
+
   @media screen and (max-width: 1279px) {
     display: none;
   }
@@ -390,12 +435,6 @@ const Heart = styled.div`
       width: 20px;
     }
   }
-`;
-
-const Comment = styled.div`
-  position: absolute;
-  margin-left: 367px;
-  margin-top: 260px;
 `;
 
 const FAB = styled.div`
@@ -704,7 +743,8 @@ export default function History() {
       showCancelButton: true,
       confirmButtonColor: "#363636",
       cancelButtonColor: "#d33",
-      confirmButtonText: "確定取消",
+      confirmButtonText: "確定",
+      cancelButtonText: "取消",
     });
 
     if (result.isConfirmed) {
@@ -738,6 +778,8 @@ export default function History() {
     }
   };
 
+  const [isMobileSize, setIsMobileSize] = useState(false);
+
   return (
     <div>
       {isLoading ? (
@@ -746,133 +788,195 @@ export default function History() {
         <>
           <Background>
             <TopSection>
+              <AlignJustify onClick={() => setIsMobileSize(true)} />
+            </TopSection>
+            {isMobileSize ? (
+              <ShowLeftSection>
+                <LeftSectionMobile backgroundImg={backgroundImg}>
+                  <CloseButton>
+                    <button onClick={() => setIsMobileSize(false)}>x</button>
+                  </CloseButton>
+                  <LeftNameSection>
+                    <h1>{`${name && name[0]?.name}'s`}</h1>
+                    <h2>個人頁面</h2>
+                  </LeftNameSection>
+                  <LeftButtonSection>
+                    <button onClick={handlePost}>撰寫文章</button>
+                    <button onClick={handleHelp}>測量壓力</button>
+                    <button onClick={() => setShowFriendsList(true)}>
+                      關注作者
+                    </button>
+                    <button onClick={showModal}>點選詩篇</button>
+                    <button onClick={() => navigate("/main")}>返回首頁</button>
+                  </LeftButtonSection>
+                  <LeftDateSection>
+                    <p>Join in {showCreation}</p>
+                  </LeftDateSection>
+                  <FAB>
+                    <div>
+                      <img src={logoImg} alt={logoImg} />
+                      <img src={logoTitle} alt={logoTitle}></img>
+                    </div>
+                  </FAB>
+                </LeftSectionMobile>
+              </ShowLeftSection>
+            ) : null}
+
+            <LeftSection backgroundImg={backgroundImg}>
+              <LeftNameSection>
+                <h1>{`${name && name[0]?.name}'s`}</h1>
+                <h2>個人頁面</h2>
+              </LeftNameSection>
+              <LeftButtonSection>
+                <button onClick={handlePost}>撰寫文章</button>
+                <button onClick={handleHelp}>測量壓力</button>
+                <button onClick={() => setShowFriendsList(true)}>
+                  關注作者
+                </button>
+                <button onClick={showModal}>點選詩篇</button>
+                <button onClick={() => navigate("/main")}>返回首頁</button>
+              </LeftButtonSection>
+              <LeftDateSection>
+                <p>Join in {showCreation}</p>
+              </LeftDateSection>
+              <FAB>
+                <div>
+                  <img src={logoImg} alt={logoImg} />
+                  <img src={logoTitle} alt={logoTitle}></img>
+                </div>
+              </FAB>
+            </LeftSection>
+            <RightSection>
+              <Categories>
+                <CategoriesSection>
+                  <div>
+                    <img src={broke} alt={broke} />
+                  </div>
+                  <div>
+                    <h1>「那些藍色的標籤」</h1>
+                    <h2>
+                      你現在的狀態還好嗎？有沒有可以安全表達和正視自己情緒的地方？
+                    </h2>
+                    <h2>
+                      找到那些微小卻堅強的希望光芒，每一次紀錄自己的狀況，都將激勵更多人勇敢面對自己。
+                    </h2>
+                  </div>
+                  <div>
+                    {getLastPressureNumber?.number ? (
+                      <>
+                        <p>
+                          <AnimatedNumber end={getLastPressureNumber?.number} />
+                        </p>
+                        <p>分</p>
+                      </>
+                    ) : (
+                      <p>0分</p>
+                    )}
+                  </div>
+                </CategoriesSection>
+                <CategoriesSection>
+                  <div>
+                    <img src={jar} alt={jar} />
+                  </div>
+                  <div>
+                    <h1>「理解與共情」</h1>
+                    <h2>
+                      紀錄自己的同時，去閱讀其他每一個獨立的故事，表達同情與支持。
+                    </h2>
+                    <h2>
+                      每段經歷都值得被聽見與看見，或許我們能從中得到一些力量。
+                    </h2>
+                  </div>
+                  <div onClick={() => setShowFriendsList(true)}>
+                    {authors && authors.length ? (
+                      <>
+                        <p>
+                          <AnimatedNumber end={authors && authors.length} />
+                        </p>
+                        <p>位</p>
+                      </>
+                    ) : (
+                      <p>0位</p>
+                    )}
+                  </div>
+                </CategoriesSection>
+                <CategoriesSection>
+                  <div>
+                    <img src={logoImg} alt={logoImg} />
+                  </div>
+                  <div>
+                    <h1>「你的疼痛都保留在這裡」</h1>
+                    <h2>
+                      無論是失落、孤獨還是挫折，故事都值得被記錄下來，寫下你的故事，分享疼痛。
+                    </h2>
+                    <h2>
+                      每個人的疼痛都將被看見和理解，在這個安全的地方，你可以毫無保留地表達自己。
+                    </h2>
+                    <button onClick={handlePost}>撰寫文章</button>
+                  </div>
+                  <div>
+                    {stories.length ? (
+                      <>
+                        <p>
+                          <AnimatedNumber end={stories.length} />
+                        </p>
+                        <p>篇</p>
+                      </>
+                    ) : (
+                      <p>0篇</p>
+                    )}
+                  </div>
+                </CategoriesSection>
+              </Categories>
+              <StorySection>
+                {sortTimeOfStory &&
+                  sortTimeOfStory.map((story, index) => {
+                    return (
+                      <EachStory key={index}>
+                        <PostIndex>
+                          <p>{index + 1}</p>
+                        </PostIndex>
+                        <MainContent>
+                          <h1>疼痛暗號：{story.title}</h1>
+                          <h1>
+                            {story.time}@{story.location.name}
+                          </h1>
+                          <h3>
+                            {story.type.map((item, index) => (
+                              <span key={index}>#{item}</span>
+                            ))}
+                          </h3>
+                          <h3>
+                            {story.figure.map((item, index) => (
+                              <span key={index}>{item}</span>
+                            ))}
+                          </h3>
+                          <p>{story.story}</p>
+                          <button onClick={() => modifiedClick(story.storyId)}>
+                            編輯
+                          </button>
+                        </MainContent>
+                        <Heart>
+                          <img src={pill} alt={pill} />
+                          <p>
+                            {story.likedAuthorId?.length > 0
+                              ? story.likedAuthorId.length
+                              : 0}
+                          </p>
+                        </Heart>
+                      </EachStory>
+                    );
+                  })}
+              </StorySection>
+            </RightSection>
+
+            {/* <TopSection>
               <TopSectionName>
                 <img src={logoImg} alt="logo" />
                 <h1>{name && name[0]?.name}</h1>
               </TopSectionName>
               <p>{showCreation}</p>
-            </TopSection>
-
-            <Categories>
-              <CategoriesSection>
-                {getLastPressureNumber?.number ? (
-                  <p>
-                    <AnimatedNumber end={getLastPressureNumber?.number} />分
-                  </p>
-                ) : (
-                  <p>0分</p>
-                )}
-
-                <div>
-                  <img src={pressureIcon} alt={pressureIcon} />
-                  <h1>壓力分數</h1>
-                </div>
-                <button onClick={handleHelp}>測量壓力</button>
-              </CategoriesSection>
-
-              <CategoriesSection>
-                {stories.length ? (
-                  <p>
-                    <AnimatedNumber end={stories.length} />篇
-                  </p>
-                ) : (
-                  <p>0篇</p>
-                )}
-                <div>
-                  <img src={write} alt={write} />
-                  <h1>文章數量</h1>
-                </div>
-                <WriteButton>
-                  <div>
-                    <span onClick={handlePost}>撰寫文章</span>
-                  </div>
-                </WriteButton>
-              </CategoriesSection>
-
-              <CategoriesSection>
-                {authors && authors.length ? (
-                  <p>
-                    <AnimatedNumber end={authors && authors.length} />位
-                  </p>
-                ) : (
-                  <p>0位</p>
-                )}
-
-                <div>
-                  <img src={follower} alt={follower} />
-                  <h1>關注作者</h1>
-                </div>
-                <button onClick={() => setShowFriendsList(true)}>
-                  瀏覽他人文章
-                </button>
-              </CategoriesSection>
-            </Categories>
-
-            <Title>歷史文章</Title>
-            <StorySection>
-              {sortTimeOfStory &&
-                sortTimeOfStory.map((story, index) => {
-                  return (
-                    <EachStory key={index}>
-                      <PostIndex>
-                        <p>{index + 1}</p>
-                      </PostIndex>
-                      <MainContent>
-                        <h1>疼痛暗號：{story.title}</h1>
-                        <h1>
-                          {story.time}@{story.location.name}
-                        </h1>
-                        <h3>
-                          {story.type.map((item, index) => (
-                            <span key={index}>#{item}</span>
-                          ))}
-                        </h3>
-                        <h3>
-                          {story.figure.map((item, index) => (
-                            <span key={index}>{item}</span>
-                          ))}
-                        </h3>
-                        <p>{story.story}</p>
-                        <button onClick={() => modifiedClick(story.storyId)}>
-                          編輯
-                        </button>
-                      </MainContent>
-                      <Heart>
-                        <img src={pill} alt={pill} />
-                        <p>
-                          {story.likedAuthorId?.length > 0
-                            ? story.likedAuthorId.length
-                            : 0}
-                        </p>
-                      </Heart>
-
-                      {/* 
-                  <Comment>
-                    {story.userComments ? (
-                      <p>
-                        留言內容：
-                        {story.userComments?.map((comment, index) => (
-                          <p key={index}>{comment.comment}</p>
-                        ))}
-                      </p>
-                    ) : (
-                      ""
-                    )}
-                  </Comment> */}
-                    </EachStory>
-                  );
-                })}
-            </StorySection>
-
-            <FAB>
-              <button onClick={() => navigate("/main")}>點我回首頁</button>
-              <div>
-                <img src={logoImg} alt={logoImg} />
-                <img src={logoTitle} alt={logoTitle}></img>
-              </div>
-
-              <button onClick={showModal}>看小故事</button>
-            </FAB>
+            </TopSection> */}
           </Background>
 
           {modal ? <ModalHistory /> : null}
