@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { db } from "../../utils/firebase/firebase.jsx";
+import { db, storage } from "../../utils/firebase/firebase.jsx";
 import { auth } from "../../utils/firebase/auth.jsx";
 import {
   collection,
@@ -35,7 +35,12 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import Swal from "sweetalert2";
-
+import defaultImg from "../../assets/img/defaultImg.png";
+import {
+  getDownloadURL,
+  ref as storageRef,
+  uploadBytes,
+} from "firebase/storage";
 //#region
 const flowAnimation = keyframes`
   0% { background-position: 0% 50%; }
@@ -90,9 +95,9 @@ const LeftSection = styled.div`
 const LeftSectionMobile = styled.div`
   display: none;
   @media screen and (max-width: 1279px) {
-    z-index: 300;
+    z-index: 500;
     background-image: url(${(props) => props.backgroundImg});
-    width: 330px;
+    width: 100%;
     height: 100%;
     position: fixed;
     left: 0;
@@ -116,8 +121,24 @@ const CloseButton = styled.div`
 const LeftNameSection = styled.div`
   font-size: 50px;
   font-weight: bolder;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   h2 {
     font-size: 30px;
+  }
+
+  img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  img:hover {
+    scale: 1.5;
   }
   @media screen and (max-width: 1279px) {
     font-size: 40px;
@@ -592,6 +613,7 @@ export default function History() {
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const [showFriendsList, setShowFriendsList] = useState(false);
+  const [profileImg, setProfileImg] = useState(null);
 
   //監聽到網頁最上方
   useEffect(() => {
@@ -690,8 +712,10 @@ export default function History() {
         const querySnapshot = await getDocs(q);
         const author = querySnapshot.docs.map((doc) => ({
           name: doc.data().name,
+          profileImg: doc.data().profileImg,
         }));
         setName(author);
+        setProfileImg(author[0].profileImg);
       } catch (e) {
         console.log(e);
       }
@@ -787,6 +811,48 @@ export default function History() {
     });
   };
 
+  //上傳圖片
+
+  const inputRef = useRef(null);
+  const [showImg, setShowImg] = useState(null);
+  const [fileName, setFileName] = useState("");
+  const upLoadToStorage = async (e) => {
+    const file = e.target.files[0];
+    setFileName(file.name);
+    const imageRef = storageRef(storage, `authorsImg/${file.name}`);
+    const snapshot = await uploadBytes(imageRef, file);
+    const url = await getDownloadURL(snapshot.ref);
+    setShowImg(url);
+    console.log(showImg);
+    console.log(fileName);
+  };
+
+  useEffect(() => {
+    const updateProfileImage = async () => {
+      if (showImg) {
+        try {
+          const q = query(
+            collection(db, "users"),
+            where("id", "==", localStorageUserId)
+          );
+          const querySnapshot = await getDocs(q);
+          if (!querySnapshot.empty) {
+            const docRef = querySnapshot.docs[0].ref;
+            await updateDoc(docRef, {
+              profileImg: showImg,
+            });
+          }
+        } catch (error) {
+          console.error("Error updating document: ", error);
+        }
+      }
+    };
+
+    updateProfileImage();
+  }, [showImg]);
+
+  const profile = profileImg || showImg || defaultImg;
+
   return (
     <div>
       {isLoading ? (
@@ -804,8 +870,21 @@ export default function History() {
                     <button onClick={() => setIsMobileSize(false)}>x</button>
                   </CloseButton>
                   <LeftNameSection>
-                    <h1>{`${name && name[0]?.name}'s`}</h1>
-                    <h2>個人頁面</h2>
+                    <input
+                      label="Image"
+                      placeholder="Choose image"
+                      accept="image/png,image/jpeg"
+                      type="file"
+                      ref={inputRef}
+                      onChange={upLoadToStorage}
+                      hidden
+                    />
+                    <img
+                      src={profile}
+                      alt={profile}
+                      onClick={() => inputRef.current.click()}
+                    />
+                    <h1>{`${name && name[0]?.name}`}</h1>
                   </LeftNameSection>
                   <LeftButtonSection>
                     <button onClick={handlePost}>撰寫文章</button>
@@ -831,8 +910,21 @@ export default function History() {
 
             <LeftSection backgroundImg={backgroundImg}>
               <LeftNameSection>
-                <h1>{`${name && name[0]?.name}'s`}</h1>
-                <h2>個人頁面</h2>
+                <input
+                  label="Image"
+                  placeholder="Choose image"
+                  accept="image/png,image/jpeg"
+                  type="file"
+                  ref={inputRef}
+                  onChange={upLoadToStorage}
+                  hidden
+                />
+                <img
+                  src={profile}
+                  alt={profile}
+                  onClick={() => inputRef.current.click()}
+                />
+                <h1>{`${name && name[0]?.name}`}</h1>
               </LeftNameSection>
               <LeftButtonSection>
                 <button onClick={handlePost}>撰寫文章</button>

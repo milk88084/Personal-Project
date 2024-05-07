@@ -10,6 +10,7 @@ import pill from "../../assets/icon/pill.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Undo2, ScanSearch, Trash2, Save, Image } from "lucide-react";
+
 import Swal from "sweetalert2";
 import {
   getDownloadURL,
@@ -401,8 +402,6 @@ export default function Edit() {
   const top = useRef(null);
   const [comments, setComments] = useState();
   const location = useLocation();
-  const [imageUpload, setImageUpload] = useState(null);
-  const inputRef = useRef(null);
 
   //回到網頁最上方
   useEffect(() => {
@@ -449,6 +448,21 @@ export default function Edit() {
   // console.log(storyType.checkedValues);
   // console.log(comments);
 
+  //上傳照片
+  //上傳圖片
+
+  const inputRef = useRef(null);
+  const [showImg, setShowImg] = useState(null);
+  const [fileName, setFileName] = useState("");
+  const upLoadToStorage = async (e) => {
+    const file = e.target.files[0];
+    setFileName(file.name);
+    const imageRef = storageRef(storage, `postsImg/${fileName}`);
+    const snapshot = await uploadBytes(imageRef, file);
+    const url = await getDownloadURL(snapshot.ref);
+    setShowImg(url);
+  };
+
   //更新db資料
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -478,9 +492,6 @@ export default function Edit() {
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
           const docRef = querySnapshot.docs[0].ref;
-          const imageRef = storageRef(storage, `postsImg/${params.id}`);
-          const snapshot = await uploadBytes(imageRef, imageUpload);
-          const imgUrl = await getDownloadURL(snapshot.ref);
           await updateDoc(docRef, {
             title: storyTitle.value,
             time: storyTime.value,
@@ -835,21 +846,22 @@ export default function Edit() {
                       accept="image/png,image/jpeg"
                       type="file"
                       ref={inputRef}
-                      onChange={(e) => {
-                        storyImage.setValue(
-                          URL.createObjectURL(e.target.files[0])
-                        );
-                      }}
+                      onChange={upLoadToStorage}
                       hidden
                     />
-                    <Image />
+                    <Image onClick={() => inputRef.current.click()} />
                     <span onClick={() => inputRef.current.click()}>
                       選擇圖片
                     </span>
                   </EditImg>
                 </EditTitle>
                 <PrevImg>
-                  <img src={storyImage.value} alt={imageUpload} />
+                  {showImg ? (
+                    <img src={showImg} />
+                  ) : (
+                    <img src={storyImage.value} />
+                  )}
+                  {/* <img src={storyImage.value} alt="" /> */}
                 </PrevImg>
               </EditCategories>
               <EditTextArea>

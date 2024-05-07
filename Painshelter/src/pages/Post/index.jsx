@@ -544,7 +544,7 @@ export default function Edit() {
             </EditTextArea>
             <button onSubmit={handleSubmit} type="submit">
               <Send />
-              <p> 送出</p>
+              <p>送出</p>
             </button>
           </form>
         </EditSections>
