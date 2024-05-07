@@ -5,12 +5,17 @@ import { useEditFormInput } from "../../utils/hooks/useEditFormInput.jsx";
 import { useEditCheckboxInput } from "../../utils/hooks/useEditCheckboxInput.jsx";
 import EditLocationSearch from "../../components/EditLocationSearch.jsx";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { db } from "../../utils/firebase/firebase.jsx";
+import { db, storage } from "../../utils/firebase/firebase.jsx";
 import pill from "../../assets/icon/pill.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Undo2, ScanSearch, Trash2, Save } from "lucide-react";
+import { Undo2, ScanSearch, Trash2, Save, Image } from "lucide-react";
 import Swal from "sweetalert2";
+import {
+  getDownloadURL,
+  ref as storageRef,
+  uploadBytes,
+} from "firebase/storage";
 
 import {
   Timestamp,
@@ -186,6 +191,51 @@ const PreviewType = styled.div`
   }
 `;
 
+const PrevImg = styled.div`
+  width: 600px;
+  img {
+    border-radius: 20px;
+  }
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+    img {
+      margin-top: 20px;
+    }
+  }
+`;
+
+const EditImg = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 5px 8px;
+  border-radius: 15px;
+  font-weight: 300;
+  font-size: 18px;
+  background-color: #19242b;
+  color: white;
+  margin-right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background-color: #9ca3af;
+    color: #353535;
+  }
+  span {
+    margin-left: 7px;
+  }
+  @media screen and (max-width: 1279px) {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    width: 100%;
+  }
+`;
+
 const EditTextArea = styled.div`
   margin-top: 50px;
   color: #353535;
@@ -342,6 +392,7 @@ export default function Edit() {
   const postStory = useEditFormInput();
   const storyTitle = useEditFormInput();
   const storyTime = useEditFormInput();
+  const storyImage = useEditFormInput();
   const storyType = useEditCheckboxInput(storyTypeData);
   const storyFigure = useEditCheckboxInput(storyFigureData);
   const storyLocation = locationSerach[0];
@@ -350,6 +401,8 @@ export default function Edit() {
   const top = useRef(null);
   const [comments, setComments] = useState();
   const location = useLocation();
+  const [imageUpload, setImageUpload] = useState(null);
+  const inputRef = useRef(null);
 
   //回到網頁最上方
   useEffect(() => {
@@ -364,13 +417,14 @@ export default function Edit() {
         const q = query(postsData, where("storyId", "==", params.id));
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
-          const data = querySnapshot.docs[0].data(); // 直接取得数据
+          const data = querySnapshot.docs[0].data();
           storyTitle.setValue(data.title);
           postStory.setValue(data.story);
           storyTime.setValue(data.time);
           storyType.setCheckedValues(data.type);
           storyFigure.setCheckedValues(data.figure);
           setLocationName(data.location.name);
+          storyImage.setValue(data.imgUrl);
           const commentsWithNames = await Promise.all(
             data.userComments.map(async (comment) => {
               const userRef = doc(db, "users", comment.id);
@@ -424,10 +478,13 @@ export default function Edit() {
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
           const docRef = querySnapshot.docs[0].ref;
+          const imageRef = storageRef(storage, `postsImg/${params.id}`);
+          const snapshot = await uploadBytes(imageRef, imageUpload);
+          const imgUrl = await getDownloadURL(snapshot.ref);
           await updateDoc(docRef, {
             title: storyTitle.value,
             time: storyTime.value,
-            // location: storyLocation,
+            imgUrl: storyImage.value,
             type: storyType.getSortedCheckedValues(),
             figure: storyFigure.getSortedCheckedValues(),
             story: postStory.value,
@@ -443,6 +500,7 @@ export default function Edit() {
             progress: undefined,
             theme: "dark",
           });
+          setIsEdit(true);
         } else {
           console.error("No document found with the given storyId");
           toast.error("修改失敗", {
@@ -573,6 +631,12 @@ export default function Edit() {
                   <p key={index}>#{item}</p>
                 ))}
               </PreviewType>
+            </EditCategories>
+            <EditCategories>
+              <EditTitle>記憶照片</EditTitle>
+              <PrevImg>
+                <img src={storyImage.value} alt={storyImage.value} />
+              </PrevImg>
             </EditCategories>
             <EditTextArea>
               <p>故事內容</p>
@@ -761,7 +825,33 @@ export default function Edit() {
                   </ul>
                 </EditTypesInput>
               </EditCategories>
-
+              <EditCategories>
+                <EditTitle>
+                  <p>記憶照片</p>
+                  <EditImg>
+                    <input
+                      label="Image"
+                      placeholder="Choose image"
+                      accept="image/png,image/jpeg"
+                      type="file"
+                      ref={inputRef}
+                      onChange={(e) => {
+                        storyImage.setValue(
+                          URL.createObjectURL(e.target.files[0])
+                        );
+                      }}
+                      hidden
+                    />
+                    <Image />
+                    <span onClick={() => inputRef.current.click()}>
+                      選擇圖片
+                    </span>
+                  </EditImg>
+                </EditTitle>
+                <PrevImg>
+                  <img src={storyImage.value} alt={imageUpload} />
+                </PrevImg>
+              </EditCategories>
               <EditTextArea>
                 <p>請輸入故事內容</p>
                 <textarea

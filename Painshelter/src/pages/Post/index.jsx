@@ -67,6 +67,7 @@ const EditSections = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 15px;
 
     &:hover,
     &:focus {
@@ -259,8 +260,8 @@ const EditTextArea = styled.div`
     height: 300px;
     margin-top: 50px;
     color: black;
-    padding-left: 10px;
-    padding-top: 10px;
+    padding-left: 25px;
+    padding-top: 20px;
     border-radius: 20px;
   }
   @media screen and (max-width: 1279px) {
@@ -345,8 +346,6 @@ export default function Edit() {
     "那個他",
     "內在自我",
   ];
-  const [imageUpload, setImageUpload] = useState(null);
-  const inputRef = useRef(null);
 
   // const storyType = useCheckboxInput(storyTypeData);
   // const storyFigure = useCheckboxInput(storyFigureData);
@@ -368,6 +367,24 @@ export default function Edit() {
       prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
     );
   };
+
+  //上傳圖片
+
+  const inputRef = useRef(null);
+  const [showImg, setShowImg] = useState(null);
+  const [fileName, setFileName] = useState("");
+  const upLoadToStorage = async (e) => {
+    const file = e.target.files[0];
+    setFileName(file.name);
+    const imageRef = storageRef(storage, `postsImg/${fileName}`);
+    const snapshot = await uploadBytes(imageRef, file);
+    const url = await getDownloadURL(snapshot.ref);
+    setShowImg(url);
+    console.log(showImg);
+    console.log(fileName);
+  };
+
+  //提交
   const handleSubmit = async (event) => {
     event.preventDefault();
     const result = await Swal.fire({
@@ -380,10 +397,6 @@ export default function Edit() {
       cancelButtonText: "取消",
     });
     if (result.isConfirmed) {
-      if (imageUpload === null) {
-        alert("請選擇一張圖片");
-        return;
-      }
       try {
         const docRef = await addDoc(collection(db, "posts"), {
           title: storyTitle.value,
@@ -395,10 +408,7 @@ export default function Edit() {
           userId: localStorageUserId,
           createdAt: Timestamp.fromDate(new Date()),
         });
-        const imageRef = storageRef(storage, `postsImg/${docRef.id}`);
-        const snapshot = await uploadBytes(imageRef, imageUpload);
-        const imgUrl = await getDownloadURL(snapshot.ref);
-        await updateDoc(docRef, { storyId: docRef.id, imgUrl: imgUrl });
+        await updateDoc(docRef, { storyId: docRef.id, imgUrl: showImg });
         console.log("Document written with ID: ", docRef.id);
         console.log(getLoginUserId());
         toast.success("成功提交：" + storyTitle.value + "故事", {
@@ -430,8 +440,6 @@ export default function Edit() {
       }
     }
   };
-
-  //上傳圖片
 
   return (
     <>
@@ -511,17 +519,15 @@ export default function Edit() {
                   accept="image/png,image/jpeg"
                   type="file"
                   ref={inputRef}
-                  onChange={(e) => {
-                    setImageUpload(URL.createObjectURL(e.target.files[0]));
-                  }}
+                  onChange={upLoadToStorage}
                   hidden
                 />
-                <Image />
+                <Image onClick={() => inputRef.current.click()} />
                 <span onClick={() => inputRef.current.click()}>選擇圖片</span>
               </EditImg>
             </EditCategories>
             <UploadImg>
-              <img src={imageUpload}></img>
+              <img src={showImg}></img>
             </UploadImg>
             <EditTextArea>
               <p>請輸入故事內容</p>
