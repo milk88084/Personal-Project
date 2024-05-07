@@ -346,7 +346,7 @@ export default function Edit() {
   const storyFigure = useEditCheckboxInput(storyFigureData);
   const storyLocation = locationSerach[0];
   const [locationName, setLocationName] = useState();
-  const [isEdit, setIsEdit] = useState(false);
+  const [isEdit, setIsEdit] = useState(true);
   const top = useRef(null);
   const [comments, setComments] = useState();
   const location = useLocation();

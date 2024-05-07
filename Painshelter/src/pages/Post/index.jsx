@@ -1,15 +1,20 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginState } from "../../utils/zustand.js";
 import { useFormInput } from "../../utils/hooks/useFormInput.jsx";
 import { useCheckboxInput } from "../../utils/hooks/useCheckboxInput.jsx";
-import { db } from "../../utils/firebase/firebase.jsx";
+import { db, storage } from "../../utils/firebase/firebase.jsx";
+import {
+  getDownloadURL,
+  ref as storageRef,
+  uploadBytes,
+} from "firebase/storage";
 import { Timestamp, addDoc, collection, updateDoc } from "firebase/firestore";
 import LocationSearch from "../../components/LocationSearch.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
-import { Send } from "lucide-react";
+import { Send, Image } from "lucide-react";
 import Swal from "sweetalert2";
 
 //#region
@@ -140,6 +145,37 @@ const EditDateInput = styled.div`
     }
   }
 `;
+
+const EditImg = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 5px 8px;
+  border-radius: 15px;
+  font-weight: 300;
+  font-size: 18px;
+  background-color: #19242b;
+  color: white;
+  margin-right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 7px;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background-color: #9ca3af;
+    color: #353535;
+  }
+  span {
+    margin-left: 7px;
+  }
+  @media screen and (max-width: 1279px) {
+    margin-top: 20px;
+  }
+`;
+
+const UploadImg = styled.div``;
 
 const Tag = styled.li`
   font-size: 18px;
@@ -309,6 +345,9 @@ export default function Edit() {
     "那個他",
     "內在自我",
   ];
+  const [imageUpload, setImageUpload] = useState(null);
+  const inputRef = useRef(null);
+
   // const storyType = useCheckboxInput(storyTypeData);
   // const storyFigure = useCheckboxInput(storyFigureData);
 
@@ -331,12 +370,6 @@ export default function Edit() {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(storyTitle.value);
-    console.log(storyTime.value);
-    console.log(postStory.value);
-    console.log(selectedTypes);
-    console.log(selectedFigure);
-
     const result = await Swal.fire({
       title: "確定提交故事?",
       icon: "question",
@@ -347,6 +380,10 @@ export default function Edit() {
       cancelButtonText: "取消",
     });
     if (result.isConfirmed) {
+      if (imageUpload === null) {
+        alert("請選擇一張圖片");
+        return;
+      }
       try {
         const docRef = await addDoc(collection(db, "posts"), {
           title: storyTitle.value,
@@ -358,7 +395,10 @@ export default function Edit() {
           userId: localStorageUserId,
           createdAt: Timestamp.fromDate(new Date()),
         });
-        await updateDoc(docRef, { storyId: docRef.id });
+        const imageRef = storageRef(storage, `postsImg/${docRef.id}`);
+        const snapshot = await uploadBytes(imageRef, imageUpload);
+        const imgUrl = await getDownloadURL(snapshot.ref);
+        await updateDoc(docRef, { storyId: docRef.id, imgUrl: imgUrl });
         console.log("Document written with ID: ", docRef.id);
         console.log(getLoginUserId());
         toast.success("成功提交：" + storyTitle.value + "故事", {
@@ -371,6 +411,9 @@ export default function Edit() {
           progress: undefined,
           theme: "dark",
         });
+        setTimeout(() => {
+          navigate("/history");
+        }, 3000);
       } catch (error) {
         console.error("Error adding document: ", error);
         toast.error("投稿失敗", {
@@ -386,10 +429,9 @@ export default function Edit() {
         navigate("/post");
       }
     }
-    setTimeout(() => {
-      navigate("/history");
-    }, 3000);
   };
+
+  //上傳圖片
 
   return (
     <>
@@ -460,6 +502,27 @@ export default function Edit() {
                 </ul>
               </EditTypesInput>
             </EditCategories>
+            <EditCategories>
+              <EditTitle>上傳圖片</EditTitle>
+              <EditImg>
+                <input
+                  label="Image"
+                  placeholder="Choose image"
+                  accept="image/png,image/jpeg"
+                  type="file"
+                  ref={inputRef}
+                  onChange={(e) => {
+                    setImageUpload(URL.createObjectURL(e.target.files[0]));
+                  }}
+                  hidden
+                />
+                <Image />
+                <span onClick={() => inputRef.current.click()}>選擇圖片</span>
+              </EditImg>
+            </EditCategories>
+            <UploadImg>
+              <img src={imageUpload}></img>
+            </UploadImg>
             <EditTextArea>
               <p>請輸入故事內容</p>
               <textarea
