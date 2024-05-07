@@ -403,35 +403,61 @@ export default function Edit() {
     console.log(storyType.getSortedCheckedValues());
     console.log(storyFigure.getSortedCheckedValues());
     console.log(postStory.value);
-    try {
-      const q = query(
-        collection(db, "posts"),
-        where("storyId", "==", params.id)
-      );
-      const querySnapshot = await getDocs(q);
-      if (!querySnapshot.empty) {
-        const docRef = querySnapshot.docs[0].ref;
-        await updateDoc(docRef, {
-          title: storyTitle.value,
-          time: storyTime.value,
-          // location: storyLocation,
-          type: storyType.getSortedCheckedValues(),
-          figure: storyFigure.getSortedCheckedValues(),
-          story: postStory.value,
-          modifiedAt: Timestamp.fromDate(new Date()),
-        });
-        toast.success("成功修改：" + storyTitle.value + "故事", {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-      } else {
-        console.error("No document found with the given storyId");
+
+    const result = await Swal.fire({
+      title: "確定修改故事？",
+      text: "修改後將無法恢復",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#363636",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "儲存",
+      cancelButtonText: "取消",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const q = query(
+          collection(db, "posts"),
+          where("storyId", "==", params.id)
+        );
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const docRef = querySnapshot.docs[0].ref;
+          await updateDoc(docRef, {
+            title: storyTitle.value,
+            time: storyTime.value,
+            // location: storyLocation,
+            type: storyType.getSortedCheckedValues(),
+            figure: storyFigure.getSortedCheckedValues(),
+            story: postStory.value,
+            modifiedAt: Timestamp.fromDate(new Date()),
+          });
+          toast.success("成功修改：" + storyTitle.value + "故事", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        } else {
+          console.error("No document found with the given storyId");
+          toast.error("修改失敗", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
+      } catch (error) {
+        console.error("Error updating document: ", error);
         toast.error("修改失敗", {
           position: "top-center",
           autoClose: 5000,
@@ -443,18 +469,6 @@ export default function Edit() {
           theme: "dark",
         });
       }
-    } catch (error) {
-      console.error("Error updating document: ", error);
-      toast.error("修改失敗", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
     }
   };
 

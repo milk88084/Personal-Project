@@ -47,6 +47,7 @@ const TopSection = styled.div`
     width: 50%;
   }
   @media screen and (max-width: 1279px) {
+    height: 100vh;
     img {
       left: 30%;
       bottom: 40%;
@@ -75,13 +76,14 @@ const SubSection = styled.div`
   }
   @media screen and (max-width: 1279px) {
     width: 100%;
-    padding: 20px;
+    padding: 0px;
     height: 100%;
+    margin-bottom: 50px;
     h2 {
       font-size: 45px;
     }
     p {
-      width: 100%;
+      width: 70%;
     }
   }
 `;
@@ -101,7 +103,7 @@ const SurveySection = styled.div`
   }
   @media screen and (max-width: 1279px) {
     flex-direction: column;
-
+    align-items: center;
     h3 {
       font-size: 30px;
       height: 30px;
@@ -122,8 +124,16 @@ const AccordingSection = styled.div`
     font-size: 50px;
     margin-top: 30px;
   }
+
+  div {
+    font-size: 65px;
+  }
   @media screen and (max-width: 1279px) {
     width: 100%;
+    padding: 0px;
+  }
+  div {
+    font-size: 65px;
   }
 `;
 
@@ -138,10 +148,14 @@ const ComfirmSection = styled.div`
     margin-top: 30px;
   }
   @media screen and (max-width: 1279px) {
-    width: 100%;
+    width: 80%;
     margin-left: 0px;
-    padding: 15px;
+    padding: 7px;
     height: 100%;
+
+    p {
+      margin-bottom: 50px;
+    }
   }
 `;
 
@@ -162,6 +176,7 @@ const ButtonSection = styled.div`
     }
   }
   @media screen and (max-width: 1279px) {
+    margin-bottom: 30px;
     button {
       margin: 0px;
       margin-right: 20px;
@@ -171,22 +186,33 @@ const ButtonSection = styled.div`
 
 const SurveyDialog = styled.div`
   .sv_window {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100% !important;
-    height: 80% !important;
-    max-width: 100% !important;
-    max-height: 80vh !important;
-    overflow: none !important;
+    max-width: 80% !important;
+    max-height: 80% !important;
+    border: 0px !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin: auto auto !important;
+    bottom: 0 !important;
+    background-color: black !important;
   }
 
-  .sd-body {
-    width: 100% !important;
+  .sd-progress-buttons__page-title {
+    font-size: 20px !important;
+    line-height: 30px !important;
   }
 
-  .sv_window_buttons_container {
-    position: static !important;
+  *,
+  ::before,
+  ::after {
+    box-sizing: none;
+  }
+
+  @media screen and (max-width: 1279px) {
+    .sd-progress-buttons__page-title {
+      font-size: 12px !important;
+      line-height: auto !important;
+    }
   }
 `;
 
@@ -414,9 +440,9 @@ function SurveyComponent() {
         <SurveySection>
           <AccordingSection>
             <h3>根據統計</h3>
-            <p>
+            <div>
               <AnimatedNumber end={1250000} />
-            </p>
+            </div>
           </AccordingSection>
           <ComfirmSection>
             <h3>我有憂鬱的情緒嗎？</h3>
@@ -463,9 +489,9 @@ function SurveyComponent() {
                         <AnimatedNumber end={score} />
                       </span>
                     </h2>
-                    <h3>目前你的狀態</h3>
+                    <h3>橘黃色階段：情緒之光正在溫暖地閃耀</h3>
                     <p>
-                      你目前的情緒狀態很穩定，是個懂得適時調整情緒及紓解壓力的人。
+                      目前的情緒狀態非常穩定，宛如初升的橘黃曙光，溫暖而寧靜。您是那種懂得適時調整自己情緒並有效紓解壓力的人。在這個階段，繼續保持您的正向處理方式，並享受生活中的每一刻光芒。
                     </p>
                     <ResualtButton>
                       <button onClick={() => navigate("/post")}>
@@ -475,11 +501,13 @@ function SurveyComponent() {
                       <button onClick={() => navigate("/history")}>
                         疼痛日記室
                       </button>
-                      <button onClick={() => navigate("/")}>回到首頁</button>
+                      <button onClick={() => navigate("/main")}>
+                        回到首頁
+                      </button>
                     </ResualtButton>
                   </ResualtContent>
                 </ResualtSection>
-              ) : 9 <= score <= 18 ? (
+              ) : 9 <= score && score <= 18 ? (
                 <ResualtSection>
                   <ResualtImg>
                     <img src={one} alt={one} />
@@ -491,10 +519,9 @@ function SurveyComponent() {
                         <AnimatedNumber end={score} />
                       </span>
                     </h2>
-                    <h3>目前你的狀態</h3>
+                    <h3>淺綠色階段：當生活顯得有點不順時</h3>
                     <p>
-                      現在的你可能感到不太順心，無法展露笑容，一肚子苦惱及煩悶，連朋友也不知道如何幫你，
-                      建議你可以找找看，有沒有相關的資源可以幫助你控制這樣不舒服的感受，如果煩悶的感受一直沒有消失，就要去找專業的醫生來幫忙唷。
+                      現在你可能感覺有些低落，笑容不再容易展現，心中充滿了苦惱和煩悶。即使身邊的朋友們也許無法完全理解您的心情。在《悲傷疼痛日記室》中尋找支持，分享感受，或是尋求專業醫生的協助。讓這一抹淺綠帶來一絲清新和希望，幫助您逐漸遠離不舒服的感覺。
                     </p>
                     <ResualtButton>
                       <button onClick={() => navigate("/post")}>
@@ -504,7 +531,9 @@ function SurveyComponent() {
                       <button onClick={() => navigate("/history")}>
                         疼痛日記室
                       </button>
-                      <button onClick={() => navigate("/")}>回到首頁</button>
+                      <button onClick={() => navigate("/main")}>
+                        回到首頁
+                      </button>
                     </ResualtButton>
                   </ResualtContent>
                 </ResualtSection>
@@ -520,13 +549,10 @@ function SurveyComponent() {
                         <AnimatedNumber end={score} />
                       </span>
                     </h2>
-                    <h3>目前你的狀態</h3>
+                    <h3>粉紫到藍色階段：當壓力達到臨界點</h3>
                     <p>
-                      你是否感覺有許多事壓在心上，肩上總覺得很沉重 ?
-                      因為你的壓力負荷量已到臨界點了，千萬別再『撐』了 !
-                      趕快找個有相同經驗的朋友聊聊，給心情找個出口，把肩上的重擔放下，這樣才不會陷入鬱卒的漩渦
-                      !
-                      如果你不知道該找誰傾訴，建議可以找一些專業的醫療資源協助你。
+                      您是否感到心中有太多未解的重擔，肩頭如同被巨石壓住般沉重？這個階段，你的精神負擔可能已經達到了極限。現在是時候停下來，不要再強迫自己「撐下去」了！尋找那些經歷過類似狀況的朋友進行交流，給心情找一個宣洩的出口，讓這些壓力得以釋放。
+                      如果您不確定應該向誰開口，或是需要更專業的幫助，請勇敢尋求專業的醫療資源。就像這片由粉紫逐漸過渡到藍色的天空，讓我們一起步入更寧靜、釋放的境地。
                     </p>
                     <ResualtButton>
                       <button onClick={() => navigate("/post")}>
@@ -536,7 +562,9 @@ function SurveyComponent() {
                       <button onClick={() => navigate("/history")}>
                         疼痛日記室
                       </button>
-                      <button onClick={() => navigate("/")}>回到首頁</button>
+                      <button onClick={() => navigate("/main")}>
+                        回到首頁
+                      </button>
                     </ResualtButton>
                   </ResualtContent>
                 </ResualtSection>
@@ -552,11 +580,10 @@ function SurveyComponent() {
                         <AnimatedNumber end={score} />
                       </span>
                     </h2>
-                    <h3>目前你的狀態</h3>
+                    <h3>紅色警戒階段：當心情進入緊急狀態</h3>
                     <p>
-                      你是不是感到相當的不舒服，會不由自主的沮喪、難過，無法掙脫?
-                      可能你目前的身心狀況不太穩定，建議可以到最近的醫院去找專業的醫生做診斷，透過他們的診療與治療，你也許會有意想不到的回饋，
-                      不要抗拒去尋求資源，希望透過這樣的處理，可以讓自己慢慢降低這種不舒服的感受！
+                      你是否感覺非常不舒服，似乎被持續的沮喪和悲傷所困擾，難以自拔？這可能是一個信號，表明你的身心狀態目前非常不穩定。強烈建議你尋求專業的醫療幫助。前往最近的醫療機構，讓專業醫生進行詳細診斷和治療，他們的專業意見和治療方案可能會為你帶來意想不到的正面影響。
+                      不要猶豫，不要抗拒尋求幫助。讓我們一起努力，逐步減輕那些壓迫您的不舒服感受，恢復到更舒服的狀態。
                     </p>
                     <ResualtButton>
                       <button onClick={() => navigate("/post")}>
@@ -566,7 +593,9 @@ function SurveyComponent() {
                       <button onClick={() => navigate("/history")}>
                         疼痛日記室
                       </button>
-                      <button onClick={() => navigate("/")}>回到首頁</button>
+                      <button onClick={() => navigate("/main")}>
+                        回到首頁
+                      </button>
                     </ResualtButton>
                   </ResualtContent>
                 </ResualtSection>

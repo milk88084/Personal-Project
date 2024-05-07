@@ -10,7 +10,7 @@ import {
   arrayRemove,
   updateDoc,
 } from "firebase/firestore";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { modifiedData } from "../../utils/zustand.js";
 import moment from "moment";
 import styled, { keyframes } from "styled-components";
@@ -779,6 +779,13 @@ export default function History() {
   };
 
   const [isMobileSize, setIsMobileSize] = useState(false);
+  const storyRef = useRef(null);
+  const scrollSection = (elementRef) => {
+    window.scrollTo({
+      top: elementRef.current.offsetTop,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <div>
@@ -861,7 +868,7 @@ export default function History() {
                       找到那些微小卻堅強的希望光芒，每一次紀錄自己的狀況，都將激勵更多人勇敢面對自己。
                     </h2>
                   </div>
-                  <div>
+                  <div onClick={() => navigate("/help")}>
                     {getLastPressureNumber?.number ? (
                       <>
                         <p>
@@ -914,7 +921,7 @@ export default function History() {
                     </h2>
                     <button onClick={handlePost}>撰寫文章</button>
                   </div>
-                  <div>
+                  <div onClick={() => scrollSection(storyRef)}>
                     {stories.length ? (
                       <>
                         <p>
@@ -928,7 +935,7 @@ export default function History() {
                   </div>
                 </CategoriesSection>
               </Categories>
-              <StorySection>
+              <StorySection ref={storyRef}>
                 {sortTimeOfStory &&
                   sortTimeOfStory.map((story, index) => {
                     return (
