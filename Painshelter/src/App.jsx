@@ -23,7 +23,8 @@ import { useLocation } from "react-router-dom";
 import { gsap } from "gsap";
 import CopyRight from "./components/CopyRight.jsx";
 import { createGlobalStyle } from "styled-components";
-
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 //#region
 const GlobalStyle = createGlobalStyle`
   * {
@@ -42,6 +43,8 @@ const Background = styled.div`
 const Banner = styled.div`
   background-image: url(${mainBanner});
   height: 100vh;
+  object-fit: cover;
+
   @media screen and (max-width: 1279px) {
     height: 600px;
   }
@@ -487,20 +490,22 @@ const FooterContent = styled.div`
 function App() {
   const navigate = useNavigate();
   const [stories, setStories] = useState([]);
-  const { online, offline, logout } = useLoginState();
+  const { offline, logout } = useLoginState();
   const localStorageUserId = window.localStorage.getItem("userId");
   const localStorageLogin = window.localStorage.getItem("loginStatus");
   const location = useLocation();
 
   // const login = getLoginStatus();
 
-  //#region,GSAP
+  //#region
+  //上面GSAP
   const firstRef = useRef(null);
   const thirdRef = useRef(null);
   const fifthRef = useRef(null);
   const seventhRef = useRef(null);
   const imageRef = useRef(null);
   const logoRef = useRef(null);
+  const subtitle = useRef(null);
   useEffect(() => {
     // gsap.to(firstRef.current, { duration: 1, x: 50 });
     gsap.to(thirdRef.current, { duration: 1, x: 50 });
@@ -524,7 +529,7 @@ function App() {
         repeat: -1,
         yoyo: true,
         ease: "sine.inOut",
-        stagger: 0.1, // 如果
+        stagger: 0.1,
       }
     );
     gsap.to(logoRef.current, {
@@ -545,6 +550,7 @@ function App() {
   const map = useRef(null);
   const top = useRef(null);
   const footer = useRef(null);
+
   const scrollSection = (elementRef) => {
     window.scrollTo({
       top: elementRef.current.offsetTop,
@@ -653,7 +659,7 @@ function App() {
             <img ref={logoRef} src={logoImg} alt="Logo" />
             <img ref={imageRef} src={logoTitle} alt="Logo title" />
           </Logo>
-          <SubTitle>PAINSHELTER</SubTitle>
+          <SubTitle ref={subtitle}>PAINSHELTER</SubTitle>
         </Banner>
 
         <AboutPain ref={about}>

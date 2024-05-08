@@ -24,6 +24,10 @@ import json from "../../utils/data/survey.json";
 import styled from "styled-components";
 import AnimatedNumber from "../../components/AnimatedNumber";
 import { bouncy } from "ldrs";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+gsap.registerPlugin(useGSAP);
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 //#region
 const Background = styled.div`
@@ -44,7 +48,7 @@ const TopSection = styled.div`
     bottom: 50%;
     z-index: 100;
     padding-right: 5rem;
-    width: 50%;
+    width: 40%;
   }
   @media screen and (max-width: 1279px) {
     height: 100vh;
@@ -417,26 +421,72 @@ function SurveyComponent() {
     getUser();
   }, [complete]);
 
+  //GSAP
+  let imgText = useRef(null);
+  let titleSection1 = useRef(null);
+  let titleSection2 = useRef(null);
+
+  useGSAP(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.to(imgText.current, {
+      duration: 3,
+      scale: 1.2,
+      repeat: -1,
+      yoyo: true,
+      ease: "power1.inOut",
+    });
+    gsap.from(imgText.current, {
+      duration: 1,
+      y: 100,
+      opacity: 0,
+      ease: "power1.out",
+    });
+    gsap.from(titleSection1.current, {
+      x: 200,
+      ease: "back.out",
+      duration: 4,
+      opacity: 0,
+      scrollTrigger: {
+        toggleActions: "play resume resume reset",
+        trigger: titleSection2.current,
+        start: "top 100%",
+        scrub: 1,
+      },
+    });
+    gsap.from(titleSection2.current, {
+      x: -200,
+      ease: "back.out",
+      duration: 4,
+      opacity: 0,
+      scrollTrigger: {
+        toggleActions: "play resume resume  reset",
+        trigger: titleSection2.current,
+        start: "top center",
+        scrub: 1,
+      },
+    });
+  }, []);
+
   return (
     <>
       <Background>
         <TopSection>
           <video src={videoSrc} loop height="480px" autoPlay muted></video>
-          <img src={feature3Banner} alt={feature3Banner} />
+          <img ref={imgText} src={feature3Banner} alt={feature3Banner} />
         </TopSection>
-
-        <SubSection>
+        <SubSection ref={titleSection1}>
           <h2> 關於心情低落</h2>
           <p>
             世界衛生組織估計，到2030年，憂鬱症會是造成全球社會經濟負擔第一名的疾病。隨著國人罹患憂鬱症的比例逐漸增高，社會大眾慢慢理解罹患「憂鬱症」是生病，但也因為理解的程度不一，容易把「憂鬱情緒」和「憂鬱症」混為一談。今天的文章帶你認識憂鬱症檢測的工具，讓我們繼續看下去吧！
           </p>
         </SubSection>
-        <SubSection>
+        <SubSection ref={titleSection2}>
           <h2> 難過的情緒</h2>
           <p>
             「憂鬱情緒」是正常的情緒反應之一，當我們遇到挫敗或事情不如意時，難免會悶悶不樂，心情不好。就如同天氣，一天的陰雨並不會造成太大的影響，但連日的豪雨就有可能造成嚴重的災害。如果憂鬱的情緒嚴重，持續兩周以上，無法正常上班上學，無法正常生活，那就是「憂鬱症」。
           </p>
         </SubSection>
+
         <SurveySection>
           <AccordingSection>
             <h3>根據統計</h3>

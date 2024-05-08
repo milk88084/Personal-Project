@@ -13,6 +13,7 @@ const Input = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
   input {
     border: 2px solid black;
     border-radius: 7px;
@@ -20,6 +21,7 @@ const Input = styled.div`
   }
   button {
     margin-left: 10px;
+    margin-bottom: 15px;
   }
 `;
 

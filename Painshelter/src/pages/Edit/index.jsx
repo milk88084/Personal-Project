@@ -549,9 +549,9 @@ export default function Edit() {
       text: "刪除後將無法恢復",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#363636",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "確定刪除",
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#363636",
+      confirmButtonText: "刪除",
     });
 
     if (result.isConfirmed) {

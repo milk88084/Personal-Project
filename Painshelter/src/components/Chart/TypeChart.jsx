@@ -94,7 +94,7 @@ export default function TypeChart() {
           left: 10,
         }}
       >
-        <CartesianGrid />
+        <CartesianGrid stroke="transparent" />
         <XAxis type="category" dataKey="name" name="關係人" />
         <YAxis type="number" dataKey="count" name="數量" />
         <Tooltip cursor={{ strokeDasharray: "3 3" }} />

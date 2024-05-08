@@ -86,6 +86,20 @@ const LeftSectionMobile = styled.div`
 const LeftNameSection = styled.div`
   font-size: 50px;
   font-weight: bolder;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  span {
+    width: 80px;
+    font-size: 15px;
+    padding: 7px;
+    font-weight: 300;
+    background-color: #9ca3af;
+    color: black;
+    border-radius: 15px;
+    text-align: center;
+  }
   @media screen and (max-width: 1279px) {
     font-size: 40px;
     padding: 20px;
@@ -730,7 +744,8 @@ const VisitAuthor = () => {
                 <LeftNameSection>
                   {isUserStories ? (
                     <>
-                      <h1>Hey</h1>
+                      <h1>{`${author[0]?.name}`}</h1>
+                      <span>作者本人</span>
                     </>
                   ) : (
                     <>
@@ -770,7 +785,8 @@ const VisitAuthor = () => {
             <LeftNameSection>
               {isUserStories ? (
                 <>
-                  <h1>Hey</h1>
+                  <h1>{`${author[0]?.name}`}</h1>
+                  <span>作者本人</span>
                 </>
               ) : (
                 <>
