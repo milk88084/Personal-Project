@@ -142,7 +142,6 @@ const Signup = () => {
   const passwordInput = useFormInput();
   const nameInput = useFormInput();
   const videoRef = useRef(null);
-
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -162,7 +161,7 @@ const Signup = () => {
           console.log(user);
           toast.success("註冊成功，請至登入頁面進行登入", {
             position: "top-center",
-            autoClose: 3000,
+            autoClose: 1000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -172,7 +171,7 @@ const Signup = () => {
           });
           setTimeout(() => {
             navigate("/login");
-          }, 3000);
+          }, 1000);
         });
       })
       .catch((error) => {
@@ -180,7 +179,7 @@ const Signup = () => {
         const errorMessage = error.message;
         toast.error("註冊不成功", {
           position: "top-center",
-          autoClose: 5000,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -269,7 +268,7 @@ const Signup = () => {
                 ""
               )}
               <ButtonSection>
-                <button type="button">註冊</button>
+                <button type="submit">註冊</button>
               </ButtonSection>
             </FormSection>
           </form>

@@ -14,6 +14,7 @@ import {
 export default function FigureChart() {
   const [typeData, setTypeData] = useState();
   const [types, setTypes] = useState([]);
+
   useEffect(() => {
     async function getType() {
       try {

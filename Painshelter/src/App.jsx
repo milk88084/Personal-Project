@@ -24,6 +24,8 @@ import { gsap } from "gsap";
 import CopyRight from "./components/CopyRight.jsx";
 import { createGlobalStyle } from "styled-components";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+gsap.registerPlugin(useGSAP);
 gsap.registerPlugin(ScrollTrigger);
 //#region
 const GlobalStyle = createGlobalStyle`
@@ -271,24 +273,49 @@ const FeatureSubTitles = styled.div`
 `;
 
 const Highlights = styled.div`
-  display: flex;
-  justify-content: space-around;
-  gap: 30px;
-  flex-wrap: wrap;
+  width: 100vw;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 20px;
+  grid-row-gap: 1rem;
+  gap: 3rem;
+  justify-items: center;
+  align-items: center;
+
+  button {
+    width: 100px;
+    padding: 4px;
+    border-radius: 8px;
+    font-weight: 400;
+    font-size: 16px;
+    margin-top: 10px;
+    background-color: #9ca3af;
+    color: white;
+
+    &:hover,
+    &:focus {
+      background-color: #19242b;
+      color: black;
+    }
+  }
+  @media screen and (max-width: 1279px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const HighlightPost = styled.div`
-  background-color: white;
+  padding: 30px;
   height: 300px;
   width: 400px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background-color: white;
+  box-shadow: 3px 3px 15px 3px rgba(255, 238, 3, 0.2);
   border-radius: 20px;
   font-size: 18px;
-  box-shadow: 3px 3px 15px 3px rgba(255, 238, 3, 0.2);
-
-  div {
-    padding: 30px;
-  }
-
   h1 {
     font-size: 50px;
     font-weight: 800;
@@ -543,6 +570,67 @@ function App() {
   }, []);
   //#endregion
 
+  //#region
+  //中間的GSAP
+  const about2 = useRef(null);
+  useGSAP(() => {
+    gsap.from(about.current, {
+      x: -300,
+      ease: "back.out",
+      duration: 4,
+      opacity: 0,
+      scrollTrigger: {
+        trigger: about.current,
+        start: "top 70%",
+        end: "bottom 50%",
+        scrub: 1,
+      },
+    });
+    gsap.from(about2.current, {
+      x: 300,
+      ease: "back.out",
+      duration: 4,
+      opacity: 0,
+      scrollTrigger: {
+        trigger: about2.current,
+        start: "top 70%",
+        end: "bottom 50%",
+        scrub: 1,
+      },
+    });
+  }, []);
+
+  //#endregion
+
+  //#region
+  //精選文章GSAP
+  const highlightRefs = useRef([]);
+  highlightRefs.current = [];
+
+  const addToRefs = (el) => {
+    if (el && !highlightRefs.current.includes(el)) {
+      highlightRefs.current.push(el);
+    }
+  };
+  useEffect(() => {
+    highlightRefs.current.forEach((el, index) => {
+      gsap.fromTo(
+        el,
+        {
+          autoAlpha: 0,
+          y: 30,
+        }, // 初始狀態，autoAlpha是透明度和可見性的組合
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.6, // 持續時間，單位是秒
+          delay: index * 0.3,
+        }
+      );
+    });
+  }, [stories]);
+  //#endregion
+
   //按鈕指定到區域
   const about = useRef(null);
   const highlight = useRef(null);
@@ -610,6 +698,7 @@ function App() {
   }, []);
 
   //隨機拿到stories的內容
+  const [displayCount, setDisplayCount] = useState(6);
   function getRandomStories(arr, size) {
     const result = [];
     const useIndex = new Set();
@@ -623,7 +712,13 @@ function App() {
     }
     return result;
   }
-  const randomStories = getRandomStories(stories, 6);
+
+  const handleShowMore = () => {
+    const newDisplayCount = displayCount + 6; // 假設每次增加6篇
+    setDisplayCount(newDisplayCount);
+  };
+
+  const randomStories = getRandomStories(stories, displayCount);
 
   //進入到該作者的文章頁面
   const handleVisitAthor = (id) => {
@@ -676,7 +771,7 @@ function App() {
             <img src={aboutpainsectionimg} alt="Monochrome img" />
           </AboutPaintContent>
         </AboutPain>
-        <AboutPain>
+        <AboutPain ref={about2}>
           <AboutPainTitle>
             <span>About Shelter</span>
             <h2>關於收容所</h2>
@@ -701,18 +796,20 @@ function App() {
           {randomStories.map((story, index) => {
             return (
               <HighlightPost
+                ref={addToRefs}
                 onClick={() => handleVisitAthor(story.userId)}
                 key={index}
               >
-                <div>
-                  <h1>{index + 1}</h1>
-                  <h2>疼痛暗號：{story.title}</h2>
-                  <h2>@{story.location.name}</h2>
-                  <p>{story.story}</p>
-                </div>
+                <h1>{index + 1}</h1>
+                <h2>疼痛暗號：{story.title}</h2>
+                <h2>@{story.location.name}</h2>
+                <p>{story.story}</p>
               </HighlightPost>
             );
           })}
+
+          <span></span>
+          <button onClick={handleShowMore}>點我更多</button>
         </Highlights>
 
         <ChartFeature>
@@ -725,7 +822,7 @@ function App() {
             <PostsCounts>
               <h1>文章累積數量</h1>
               <p>
-                <AnimatedNumber end={stories.length} />{" "}
+                <AnimatedNumber end={stories.length} />
               </p>
             </PostsCounts>
             <FigureChartSection>

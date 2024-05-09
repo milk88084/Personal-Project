@@ -160,7 +160,7 @@ const Login = () => {
         const user = userCredential.user;
         toast.success("登入成功", {
           position: "top-center",
-          autoClose: 3000,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -175,7 +175,7 @@ const Login = () => {
         window.localStorage.setItem("loginStatus", loginStatus);
         setTimeout(() => {
           navigate("/main");
-        }, 3000);
+        }, 1000);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -183,7 +183,7 @@ const Login = () => {
         console.log(errorCode, errorMessage);
         toast.error("密碼輸入錯誤", {
           position: "top-center",
-          autoClose: 5000,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,

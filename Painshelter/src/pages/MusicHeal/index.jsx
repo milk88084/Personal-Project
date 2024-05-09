@@ -12,6 +12,10 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { zoomies } from "ldrs";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(ScrollTrigger);
 
 // Default values shown
 
@@ -279,8 +283,7 @@ function MusicHeal() {
     setCurrentVideo(video);
   };
 
-  //GSAP動畫
-
+  //GSAP三角形動畫
   useEffect(() => {
     [
       section1Continue.current,
@@ -302,12 +305,84 @@ function MusicHeal() {
     });
   }, []);
 
+  //GSAP標題和文字
+
+  const lyric1 = useRef(null);
+  const lyric2 = useRef(null);
+  const lyric3 = useRef(null);
+  const smalllyric1 = useRef(null);
+  const smalllyric2 = useRef(null);
+  const smalllyric3 = useRef(null);
+  gsap.registerPlugin();
+  useGSAP(() => {
+    gsap.from(lyric1.current, {
+      x: -300,
+      ease: "back.out",
+      duration: 4,
+      opacity: 0,
+    });
+    gsap.from(lyric2.current, {
+      x: -300,
+      ease: "back.out",
+      duration: 4,
+      opacity: 0,
+      scrollTrigger: {
+        trigger: lyric2.current,
+        start: "top 70%",
+        end: "bottom 50%",
+        scrub: 1,
+      },
+    });
+    gsap.from(lyric3.current, {
+      x: 300,
+      ease: "back.out",
+      duration: 4,
+      opacity: 0,
+      scrollTrigger: {
+        trigger: lyric3.current,
+        start: "top 70%",
+        end: "bottom 50%",
+        scrub: 1,
+      },
+    });
+    gsap.from(smalllyric1.current, {
+      y: -300,
+      ease: "back.out",
+      duration: 4,
+      opacity: 0,
+    });
+    gsap.from(smalllyric2.current, {
+      y: 300,
+      ease: "back.out",
+      duration: 4,
+      opacity: 0,
+      scrollTrigger: {
+        trigger: lyric2.current,
+        start: "top 50%",
+        end: "bottom 50%",
+        scrub: 1,
+      },
+    });
+    gsap.from(smalllyric3.current, {
+      y: 300,
+      ease: "back.out",
+      duration: 4,
+      opacity: 0,
+      scrollTrigger: {
+        trigger: lyric3.current,
+        start: "top 80%",
+        end: "bottom 50%",
+        scrub: 1,
+      },
+    });
+  });
+
   return (
     <>
       <Lyric ref={section1}>
         <img src={heal1} alt={heal1} />
-        <img src={healtext1} alt={healtext1} />
-        <div>
+        <img ref={lyric1} src={healtext1} alt={healtext1} />
+        <div ref={smalllyric1}>
           <p>你不是真正的快樂，你的傷從不肯完全的癒合</p>
           <p>我站在你左側，卻像隔著銀河，</p>
           <p>難道就真的，抱著遺憾一直到老了，然後才後悔著。</p>
@@ -320,8 +395,8 @@ function MusicHeal() {
 
       <Lyric ref={section2}>
         <img src={heal3} alt={heal3} />
-        <img src={healtext3} alt={healtext3} />
-        <div>
+        <img ref={lyric2} src={healtext3} alt={healtext3} />
+        <div ref={smalllyric2}>
           <p>如果你被她傷的很痛，請感謝她好心折磨，</p>
           <p>如果你對她感到愧疚，請感謝她慷慨淚流，</p>
           <p>在我們相遇相愛之前，多虧有她讓你成熟。</p>
@@ -332,8 +407,8 @@ function MusicHeal() {
       </Lyric>
       <Lyric ref={section3}>
         <img src={heal2} alt={heal2} />
-        <img src={healtext2} alt={healtext2} />
-        <div>
+        <img ref={lyric3} src={healtext2} alt={healtext2} />
+        <div ref={smalllyric3}>
           <p>我在夜裡大聲呼喊，夢太沈重，無力也無法動彈，</p>
           <p>一樣的，一樣的，不安又將我捆綁，直到天亮</p>
         </div>

@@ -413,7 +413,7 @@ export default function Edit() {
         console.log(getLoginUserId());
         toast.success("成功提交：" + storyTitle.value + "故事", {
           position: "top-center",
-          autoClose: 3000,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -423,12 +423,12 @@ export default function Edit() {
         });
         setTimeout(() => {
           navigate("/history");
-        }, 3000);
+        }, 1000);
       } catch (error) {
         console.error("Error adding document: ", error);
         toast.error("投稿失敗", {
           position: "top-center",
-          autoClose: 5000,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,

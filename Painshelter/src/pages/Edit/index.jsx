@@ -503,7 +503,7 @@ export default function Edit() {
           });
           toast.success("成功修改：" + storyTitle.value + "故事", {
             position: "top-center",
-            autoClose: 3000,
+            autoClose: 1000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -516,7 +516,7 @@ export default function Edit() {
           console.error("No document found with the given storyId");
           toast.error("修改失敗", {
             position: "top-center",
-            autoClose: 5000,
+            autoClose: 1000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -529,7 +529,7 @@ export default function Edit() {
         console.error("Error updating document: ", error);
         toast.error("修改失敗", {
           position: "top-center",
-          autoClose: 5000,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -570,7 +570,7 @@ export default function Edit() {
         console.error("Error updating document: ", error);
         toast.error("刪除失敗", {
           position: "top-center",
-          autoClose: 5000,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,

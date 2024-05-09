@@ -42,6 +42,13 @@ const Background = styled.div`
 
 const TopSection = styled.div`
   position: relative;
+
+  video {
+    height: 100vh;
+    width: 100vw;
+    object-fit: cover;
+  }
+
   img {
     position: absolute;
     left: 50%;
@@ -51,7 +58,6 @@ const TopSection = styled.div`
     width: 40%;
   }
   @media screen and (max-width: 1279px) {
-    height: 100vh;
     img {
       left: 30%;
       bottom: 40%;
@@ -425,6 +431,7 @@ function SurveyComponent() {
   let imgText = useRef(null);
   let titleSection1 = useRef(null);
   let titleSection2 = useRef(null);
+  let titleSection3 = useRef(null);
 
   useGSAP(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -442,26 +449,38 @@ function SurveyComponent() {
       ease: "power1.out",
     });
     gsap.from(titleSection1.current, {
-      x: 200,
-      ease: "back.out",
-      duration: 4,
-      opacity: 0,
-      scrollTrigger: {
-        toggleActions: "play resume resume reset",
-        trigger: titleSection2.current,
-        start: "top 100%",
-        scrub: 1,
-      },
-    });
-    gsap.from(titleSection2.current, {
       x: -200,
       ease: "back.out",
       duration: 4,
       opacity: 0,
       scrollTrigger: {
-        toggleActions: "play resume resume  reset",
+        trigger: titleSection1.current,
+        start: "top 80%",
+        end: "bottom 50%",
+        scrub: 1,
+      },
+    });
+    gsap.from(titleSection2.current, {
+      x: 200,
+      ease: "back.out",
+      duration: 4,
+      opacity: 0,
+      scrollTrigger: {
         trigger: titleSection2.current,
-        start: "top center",
+        start: "top 60%",
+        end: "bottom 50%",
+        scrub: 1,
+      },
+    });
+    gsap.from(titleSection3.current, {
+      x: -500,
+      ease: "back.out",
+      duration: 4,
+      opacity: 0,
+      scrollTrigger: {
+        trigger: titleSection3.current,
+        start: "top 100%",
+        end: "bottom 70%",
         scrub: 1,
       },
     });
@@ -487,7 +506,7 @@ function SurveyComponent() {
           </p>
         </SubSection>
 
-        <SurveySection>
+        <SurveySection ref={titleSection3}>
           <AccordingSection>
             <h3>根據統計</h3>
             <div>

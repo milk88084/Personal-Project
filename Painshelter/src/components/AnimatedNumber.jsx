@@ -41,7 +41,7 @@ const AnimatedNumber = ({ end }) => {
         start = end;
       }
       setCount(Math.ceil(start));
-    }, 20);
+    }, 5);
 
     return () => clearInterval(timer);
   }, [animate, end]);

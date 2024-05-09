@@ -790,7 +790,7 @@ export default function History() {
         console.error("Error updating document: ", error);
         toast.error("刪除失敗", {
           position: "top-center",
-          autoClose: 5000,
+          autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
