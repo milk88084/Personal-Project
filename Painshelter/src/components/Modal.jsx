@@ -15,115 +15,74 @@ const Wrapper = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 3000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Main = styled.div`
-  height: 100%;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   img {
-    position: absolute;
-    height: 70%;
+    height: 650px;
     border-radius: 15px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  }
+  @media screen and (max-width: 1279px) {
+    img {
+      height: 450px;
+    }
   }
 `;
 
-const Capture = styled.div``;
-
 const ContentSections = styled.div`
-  position: relative;
-  color: #424242;
+  width: 100%;
+  position: absolute;
   opacity: 0.6;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
   h1 {
-    width: 230px;
-    position: absolute;
-    left: 720px;
-    top: 400px;
     font-size: 30px;
     font-weight: 900;
     transform: rotate(-10deg);
+    margin-right: 100px;
   }
   h2 {
-    position: absolute;
     transform: rotate(90deg);
     font-size: 15px;
-    left: 565px;
-    top: 360px;
+    margin-right: 360px;
+    margin-bottom: 30px;
   }
   p {
-    position: absolute;
-    width: 250px;
+    width: 100%;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
     text-overflow: ellipsis;
-    right: 620px;
-    top: 510px;
     font-size: 15px;
+    margin-top: 350px;
   }
   @media screen and (max-width: 1279px) {
     h1 {
-      width: 100px;
-      left: 200px;
-      top: 380px;
-      font-size: 15px;
-      font-weight: 600;
+      margin-right: 30px;
+      margin-bottom: 50px;
     }
     h2 {
-      font-size: 12px;
-      left: 40px;
+      font-size: 15px;
+      margin-right: 200px;
+      margin-bottom: 30px;
     }
     p {
-      width: 250px;
-      right: 78px;
-      top: 450px;
-      font-size: 15px;
-    }
-  }
-  @media screen and (max-width: 1279px) {
-    h1 {
-      width: 150px;
-      left: 200px;
-      top: 330px;
-      font-size: 25px;
-      font-weight: 600;
-    }
-    h2 {
-      font-size: 13px;
-      left: 80px;
-      top: 300px;
-    }
-    p {
-      width: 250px;
-      right: 110px;
-      top: 400px;
-      font-size: 15px;
-    }
-  }
-  @media screen and (max-width: 479px) {
-    h1 {
-      width: 100px;
-      left: 200px;
-      top: 380px;
-      font-size: 15px;
-      font-weight: 600;
-    }
-    h2 {
-      font-size: 12px;
-      left: 40px;
-    }
-    p {
-      width: 250px;
-      right: 78px;
-      top: 450px;
-      font-size: 15px;
+      margin-top: 160px;
     }
   }
 `;
@@ -235,14 +194,12 @@ export default function Modal({ comebinedArray, clickTitle }) {
       {modal ? (
         <Wrapper>
           <Main ref={captureRef}>
-            <Capture ref={captureRef}>
-              <img src={backgroundImg} alt={backgroundImg} />
-              <ContentSections>
-                <h1>{modalPost.title}</h1>
-                <h2> {modalPost.time}</h2>
-                <p>{modalPost.story}</p>
-              </ContentSections>
-            </Capture>
+            <img src={backgroundImg} alt={backgroundImg} />
+            <ContentSections>
+              <h2> {modalPost.time}</h2>
+              <h1>{modalPost.title}</h1>
+              <p>{modalPost.story}</p>
+            </ContentSections>
           </Main>
           <ButtonSections>
             <button

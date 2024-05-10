@@ -47,3 +47,10 @@ export const HistoryModal = create((set, get) => ({
   showModal: () => set({ modal: true }),
   closeModal: () => set({ modal: false }),
 }));
+
+export const useHelpModal = create((set, get) => ({
+  modal: false,
+  showModal: () => set({ modal: true }),
+  closeModal: () => set({ modal: false }),
+  getModal: () => get().modal,
+}));

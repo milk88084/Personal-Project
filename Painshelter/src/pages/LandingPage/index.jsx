@@ -18,6 +18,7 @@ const Background = styled.div`
   background-color: #000000;
   font-family: "Noto Sans TC", sans-serif;
   position: relative;
+  overflow-x: hidden;
   video:nth-child(1) {
     width: 100%;
     height: 100vh;
@@ -339,13 +340,14 @@ export default function LandingPage() {
           <div onClick={() => navigate("/login")}>
             <UsersRound />
             <span>
-              <h1>登入</h1>
+              <h1>登入/註冊</h1>
               <p>投稿你的疼痛故事</p>
             </span>
             <ChevronRight />
           </div>
         </RightSection>
       </div>
+
       {!threeRules ? null : (
         <ModalBackground>
           <Opacity>

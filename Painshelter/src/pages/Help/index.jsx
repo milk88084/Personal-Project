@@ -28,6 +28,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 gsap.registerPlugin(useGSAP);
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useHelpModal } from "../../utils/zustand.js";
 
 //#region
 const Background = styled.div`
@@ -38,6 +39,17 @@ const Background = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+const BlackBackground = styled.div`
+  background-color: #000000;
+  opacity: 0.9;
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 10;
 `;
 
 const TopSection = styled.div`
@@ -53,7 +65,7 @@ const TopSection = styled.div`
     position: absolute;
     left: 50%;
     bottom: 50%;
-    z-index: 100;
+    z-index: 5;
     padding-right: 5rem;
     width: 40%;
   }
@@ -212,10 +224,25 @@ const SurveyDialog = styled.div`
     line-height: 30px !important;
   }
 
-  *,
-  ::before,
-  ::after {
-    box-sizing: none;
+  .sd-progress-buttons__button {
+    width: 40px !important;
+    height: 40px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .sd-progress-buttons__button-background {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .sd-progress-buttons__button-content {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .sd-item__decorator {
+    background-color: #5c5c5c !important;
   }
 
   @media screen and (max-width: 1279px) {
@@ -316,11 +343,13 @@ function SurveyComponent() {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [surveyData, setSurveyData] = useState([]);
+  const [score, setScore] = useState(null);
   const [complete, setComplete] = useState(false);
   const survey = new Model(json);
-  const result = useRef(null);
+  const resultBottom = useRef(null);
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
+  const { modal, showModal, closeModal } = useHelpModal();
   survey.applyTheme(themeJson);
   bouncy.register();
   //回到網頁最上方
@@ -331,14 +360,12 @@ function SurveyComponent() {
   const handleClick = () => {
     setShow(true);
     setComplete(false);
+    showModal();
   };
 
   //測驗完移動到結果
-  const scrollSection = (elementRef) => {
-    window.scrollTo({
-      top: elementRef.current.offsetTop,
-      behavior: "smooth",
-    });
+  const scrollToBottom = () => {
+    resultBottom.current.scrollIntoView({ behavior: "smooth", block: "end" });
   };
 
   //監聽彈跳視窗叉叉按鈕的狀態
@@ -347,21 +374,30 @@ function SurveyComponent() {
     if (closeButton) {
       const handleCustomClose = () => {
         setShow(false);
+        closeModal();
       };
       closeButton.addEventListener("click", handleCustomClose);
       return () => closeButton.removeEventListener("click", handleCustomClose);
     }
   }, [show]);
 
+  useEffect(() => {
+    if (surveyData.length === 0) return;
+    const showResult = staticData(surveyData);
+    const score = totalScore(showResult);
+    setScore(score);
+    scrollToBottom();
+  }, [surveyData]);
+
   //將資料存到state裡面
   survey.onComplete.add(function (result) {
     const surveyData = JSON.stringify(result.data);
     if (surveyData) {
       const results = JSON.parse(surveyData);
+      closeModal();
       setSurveyData(results);
       setShow(false);
       setComplete(true);
-      scrollSection(result);
     }
   });
   // console.log(surveyData);
@@ -380,8 +416,6 @@ function SurveyComponent() {
     }
     return resultsData;
   }
-  const showResult = staticData(surveyData);
-  console.log(showResult);
 
   function totalScore(data) {
     let score = 0;
@@ -396,7 +430,6 @@ function SurveyComponent() {
     }
     return score;
   }
-  const score = totalScore(showResult);
 
   //監聽測驗結果，存到firestore中的users集合
   useEffect(() => {
@@ -488,6 +521,8 @@ function SurveyComponent() {
 
   return (
     <>
+      {modal ? <BlackBackground></BlackBackground> : null}
+
       <Background>
         <TopSection>
           <video src={videoSrc} loop height="480px" autoPlay muted></video>
@@ -520,7 +555,7 @@ function SurveyComponent() {
               的人符合憂鬱症診斷，
               一旦發現憂鬱情緒已經嚴重到無法調節和掌控，並且影響到生活，就要懷疑自己是否得了憂鬱症。憂鬱症篩檢量表可用來做初步的憂鬱症檢測，看看自己是否是高風險族群，如果分數過高就有罹患憂鬱症的風險，應該進一步接受專業精神科醫師的評估來確立「憂鬱症」診斷。
             </p>
-            <ButtonSection ref={result}>
+            <ButtonSection>
               <button onClick={handleClick}>點我測驗</button>
               <button onClick={() => navigate("/main")}>回首頁</button>
             </ButtonSection>
@@ -545,134 +580,137 @@ function SurveyComponent() {
           </LoadingSection>
         ) : (
           <>
-            {surveyData && score ? (
-              score <= 8 ? (
-                <ResualtSection>
-                  <ResualtImg>
-                    <img src={zero} alt={zero} />
-                  </ResualtImg>
-                  <ResualtContent>
-                    <h2>
-                      測驗結果：
-                      <span>
-                        <AnimatedNumber end={score} />
-                      </span>
-                    </h2>
-                    <h3>橘黃色階段：情緒之光正在溫暖地閃耀</h3>
-                    <p>
-                      目前的情緒狀態非常穩定，宛如初升的橘黃曙光，溫暖而寧靜。您是那種懂得適時調整自己情緒並有效紓解壓力的人。在這個階段，繼續保持您的正向處理方式，並享受生活中的每一刻光芒。
-                    </p>
-                    <ResualtButton>
-                      <button onClick={() => navigate("/post")}>
-                        撰寫日記
-                      </button>
-                      <button onClick={handleClick}>重新測驗</button>
-                      <button onClick={() => navigate("/history")}>
-                        疼痛日記室
-                      </button>
-                      <button onClick={() => navigate("/main")}>
-                        回到首頁
-                      </button>
-                    </ResualtButton>
-                  </ResualtContent>
-                </ResualtSection>
-              ) : 9 <= score && score <= 18 ? (
-                <ResualtSection>
-                  <ResualtImg>
-                    <img src={one} alt={one} />
-                  </ResualtImg>
-                  <ResualtContent>
-                    <h2>
-                      測驗結果：
-                      <span>
-                        <AnimatedNumber end={score} />
-                      </span>
-                    </h2>
-                    <h3>淺綠色階段：當生活顯得有點不順時</h3>
-                    <p>
-                      現在你可能感覺有些低落，笑容不再容易展現，心中充滿了苦惱和煩悶。即使身邊的朋友們也許無法完全理解您的心情。在《悲傷疼痛日記室》中尋找支持，分享感受，或是尋求專業醫生的協助。讓這一抹淺綠帶來一絲清新和希望，幫助您逐漸遠離不舒服的感覺。
-                    </p>
-                    <ResualtButton>
-                      <button onClick={() => navigate("/post")}>
-                        撰寫日記
-                      </button>
-                      <button onClick={handleClick}>重新測驗</button>
-                      <button onClick={() => navigate("/history")}>
-                        疼痛日記室
-                      </button>
-                      <button onClick={() => navigate("/main")}>
-                        回到首頁
-                      </button>
-                    </ResualtButton>
-                  </ResualtContent>
-                </ResualtSection>
-              ) : 19 < score <= 28 ? (
-                <ResualtSection>
-                  <ResualtImg>
-                    <img src={two} alt={two} />
-                  </ResualtImg>
-                  <ResualtContent>
-                    <h2>
-                      測驗結果：
-                      <span>
-                        <AnimatedNumber end={score} />
-                      </span>
-                    </h2>
-                    <h3>粉紫到藍色階段：當壓力達到臨界點</h3>
-                    <p>
-                      您是否感到心中有太多未解的重擔，肩頭如同被巨石壓住般沉重？這個階段，你的精神負擔可能已經達到了極限。現在是時候停下來，不要再強迫自己「撐下去」了！尋找那些經歷過類似狀況的朋友進行交流，給心情找一個宣洩的出口，讓這些壓力得以釋放。
-                      如果您不確定應該向誰開口，或是需要更專業的幫助，請勇敢尋求專業的醫療資源。就像這片由粉紫逐漸過渡到藍色的天空，讓我們一起步入更寧靜、釋放的境地。
-                    </p>
-                    <ResualtButton>
-                      <button onClick={() => navigate("/post")}>
-                        撰寫日記
-                      </button>
-                      <button onClick={handleClick}>重新測驗</button>
-                      <button onClick={() => navigate("/history")}>
-                        疼痛日記室
-                      </button>
-                      <button onClick={() => navigate("/main")}>
-                        回到首頁
-                      </button>
-                    </ResualtButton>
-                  </ResualtContent>
-                </ResualtSection>
-              ) : (
-                <ResualtSection>
-                  <ResualtImg>
-                    <img src={four} alt={four} />
-                  </ResualtImg>
-                  <ResualtContent>
-                    <h2>
-                      測驗結果：
-                      <span>
-                        <AnimatedNumber end={score} />
-                      </span>
-                    </h2>
-                    <h3>紅色警戒階段：當心情進入緊急狀態</h3>
-                    <p>
-                      你是否感覺非常不舒服，似乎被持續的沮喪和悲傷所困擾，難以自拔？這可能是一個信號，表明你的身心狀態目前非常不穩定。強烈建議你尋求專業的醫療幫助。前往最近的醫療機構，讓專業醫生進行詳細診斷和治療，他們的專業意見和治療方案可能會為你帶來意想不到的正面影響。
-                      不要猶豫，不要抗拒尋求幫助。讓我們一起努力，逐步減輕那些壓迫您的不舒服感受，恢復到更舒服的狀態。
-                    </p>
-                    <ResualtButton>
-                      <button onClick={() => navigate("/post")}>
-                        撰寫日記
-                      </button>
-                      <button onClick={handleClick}>重新測驗</button>
-                      <button onClick={() => navigate("/history")}>
-                        疼痛日記室
-                      </button>
-                      <button onClick={() => navigate("/main")}>
-                        回到首頁
-                      </button>
-                    </ResualtButton>
-                  </ResualtContent>
-                </ResualtSection>
-              )
-            ) : null}
+            <div ref={resultBottom}>
+              {Object.keys(surveyData).length > 0 ? (
+                score <= 8 ? (
+                  <ResualtSection>
+                    <ResualtImg>
+                      <img src={zero} alt={zero} />
+                    </ResualtImg>
+                    <ResualtContent>
+                      <h2>
+                        測驗結果：
+                        <span>
+                          <AnimatedNumber end={score} />
+                        </span>
+                      </h2>
+                      <h3>橘黃色階段：情緒之光正在溫暖地閃耀</h3>
+                      <p>
+                        目前的情緒狀態非常穩定，宛如初升的橘黃曙光，溫暖而寧靜。您是那種懂得適時調整自己情緒並有效紓解壓力的人。在這個階段，繼續保持您的正向處理方式，並享受生活中的每一刻光芒。
+                      </p>
+                      <ResualtButton>
+                        <button onClick={() => navigate("/post")}>
+                          撰寫日記
+                        </button>
+                        <button onClick={handleClick}>重新測驗</button>
+                        <button onClick={() => navigate("/history")}>
+                          疼痛日記室
+                        </button>
+                        <button onClick={() => navigate("/main")}>
+                          回到首頁
+                        </button>
+                      </ResualtButton>
+                    </ResualtContent>
+                  </ResualtSection>
+                ) : 9 <= score && score <= 18 ? (
+                  <ResualtSection>
+                    <ResualtImg>
+                      <img src={one} alt={one} />
+                    </ResualtImg>
+                    <ResualtContent>
+                      <h2>
+                        測驗結果：
+                        <span>
+                          <AnimatedNumber end={score} />
+                        </span>
+                      </h2>
+                      <h3>淺綠色階段：當生活顯得有點不順時</h3>
+                      <p>
+                        現在你可能感覺有些低落，笑容不再容易展現，心中充滿了苦惱和煩悶。即使身邊的朋友們也許無法完全理解您的心情。在《悲傷疼痛日記室》中尋找支持，分享感受，或是尋求專業醫生的協助。讓這一抹淺綠帶來一絲清新和希望，幫助您逐漸遠離不舒服的感覺。
+                      </p>
+                      <ResualtButton>
+                        <button onClick={() => navigate("/post")}>
+                          撰寫日記
+                        </button>
+                        <button onClick={handleClick}>重新測驗</button>
+                        <button onClick={() => navigate("/history")}>
+                          疼痛日記室
+                        </button>
+                        <button onClick={() => navigate("/main")}>
+                          回到首頁
+                        </button>
+                      </ResualtButton>
+                    </ResualtContent>
+                  </ResualtSection>
+                ) : 19 < score <= 28 ? (
+                  <ResualtSection>
+                    <ResualtImg>
+                      <img src={two} alt={two} />
+                    </ResualtImg>
+                    <ResualtContent>
+                      <h2>
+                        測驗結果：
+                        <span>
+                          <AnimatedNumber end={score} />
+                        </span>
+                      </h2>
+                      <h3>粉紫到藍色階段：當壓力達到臨界點</h3>
+                      <p>
+                        您是否感到心中有太多未解的重擔，肩頭如同被巨石壓住般沉重？這個階段，你的精神負擔可能已經達到了極限。現在是時候停下來，不要再強迫自己「撐下去」了！尋找那些經歷過類似狀況的朋友進行交流，給心情找一個宣洩的出口，讓這些壓力得以釋放。
+                        如果您不確定應該向誰開口，或是需要更專業的幫助，請勇敢尋求專業的醫療資源。就像這片由粉紫逐漸過渡到藍色的天空，讓我們一起步入更寧靜、釋放的境地。
+                      </p>
+                      <ResualtButton>
+                        <button onClick={() => navigate("/post")}>
+                          撰寫日記
+                        </button>
+                        <button onClick={handleClick}>重新測驗</button>
+                        <button onClick={() => navigate("/history")}>
+                          疼痛日記室
+                        </button>
+                        <button onClick={() => navigate("/main")}>
+                          回到首頁
+                        </button>
+                      </ResualtButton>
+                    </ResualtContent>
+                  </ResualtSection>
+                ) : (
+                  <ResualtSection>
+                    <ResualtImg>
+                      <img src={four} alt={four} />
+                    </ResualtImg>
+                    <ResualtContent>
+                      <h2>
+                        測驗結果：
+                        <span>
+                          <AnimatedNumber end={score} />
+                        </span>
+                      </h2>
+                      <h3>紅色警戒階段：當心情進入緊急狀態</h3>
+                      <p>
+                        你是否感覺非常不舒服，似乎被持續的沮喪和悲傷所困擾，難以自拔？這可能是一個信號，表明你的身心狀態目前非常不穩定。強烈建議你尋求專業的醫療幫助。前往最近的醫療機構，讓專業醫生進行詳細診斷和治療，他們的專業意見和治療方案可能會為你帶來意想不到的正面影響。
+                        不要猶豫，不要抗拒尋求幫助。讓我們一起努力，逐步減輕那些壓迫您的不舒服感受，恢復到更舒服的狀態。
+                      </p>
+                      <ResualtButton>
+                        <button onClick={() => navigate("/post")}>
+                          撰寫日記
+                        </button>
+                        <button onClick={handleClick}>重新測驗</button>
+                        <button onClick={() => navigate("/history")}>
+                          疼痛日記室
+                        </button>
+                        <button onClick={() => navigate("/main")}>
+                          回到首頁
+                        </button>
+                      </ResualtButton>
+                    </ResualtContent>
+                  </ResualtSection>
+                )
+              ) : null}
+            </div>
           </>
         )}
       </Background>
+      {/* <div ></div> */}
     </>
   );
 }

@@ -336,12 +336,22 @@ const ButtonSection = styled.div`
 const CommentsSection = styled.div`
   margin-top: 30px;
   font-size: 20px;
-  background-color: rgb(255, 255, 255, 0.6);
+
   width: 100%;
-  border-radius: 20px;
+
   display: flex;
-  align-items: center;
+  align-items: start;
+
+  flex-direction: column;
+`;
+
+const CommentsWrapper = styled.div`
+  display: flex;
+  background-color: rgb(255, 255, 255, 0.6);
+  border-radius: 20px;
+  width: 100%;
   padding: 10px;
+  margin-bottom: 20px;
 `;
 
 const CommentPart = styled.div`
@@ -349,6 +359,7 @@ const CommentPart = styled.div`
   flex-direction: column;
   justify-content: start;
   margin-left: 10px;
+
   p {
     padding: 10px;
     font-size: 15px;
@@ -655,17 +666,20 @@ export default function Edit() {
             </EditTextArea>
             <EditTextArea>
               <p>故事留言</p>
+
               <CommentsSection>
                 {comments && comments.length > 0
                   ? comments.map((data, index) => (
                       <>
-                        <AvatarPart>
-                          <img src={pill} alt={pill} />
-                        </AvatarPart>
-                        <CommentPart key={index}>
-                          <h2>{data.name}</h2>
-                          <p>#{data.comment}</p>
-                        </CommentPart>
+                        <CommentsWrapper>
+                          <AvatarPart>
+                            <img src={pill} alt={pill} />
+                          </AvatarPart>
+                          <CommentPart key={index}>
+                            <h2>{data.name}</h2>
+                            <p>#{data.comment}</p>
+                          </CommentPart>{" "}
+                        </CommentsWrapper>
                       </>
                     ))
                   : null}

@@ -5,6 +5,8 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import Modal from "./Modal.jsx";
 import { useLoginState } from "../utils/zustand.js";
 import icon from "../assets/img/logoImg3.png";
+import { MapPin } from "lucide-react";
+import styled from "styled-components";
 
 //Adjust for invisible Marker after deploying due to webpack building
 import L from "leaflet";
@@ -20,10 +22,35 @@ import L from "leaflet";
 
 const painIcon = L.icon({
   iconUrl: icon,
-  iconSize: [35, 45], //icon大小
-  iconAnchor: [25, 20], //圖標中心點位置
+  iconSize: [24, 32], //icon大小
+  iconAnchor: [10, 20], //圖標中心點位置
   popupAnchor: [0, 0], //popup視窗位置
 });
+
+//#region
+const TopSection = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const BottomSection = styled.div`
+  display: flex;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+
+  button:hover {
+    transform: scale(1.2);
+    color: #021166;
+  }
+
+  button:active {
+    transform: scale(0.95);
+    transition: box-shadow 0.2s;
+  }
+`;
+//#endregion
 
 const PostsLocation = () => {
   const [locations, setLocations] = useState([]);
@@ -100,18 +127,23 @@ const PostsLocation = () => {
         {sanmeNameLocation.map((item, index) => (
           <Marker key={index} position={[item.lat, item.lon]} icon={painIcon}>
             <Popup>
-              <p className=" text-center text-base font-bold">
-                {item.locationName}
-              </p>
-              {item.title.map((item, index) => (
-                <button
-                  className="block text-center"
-                  key={index}
-                  onClick={() => openModal({ item })}
-                >
-                  {item}
-                </button>
-              ))}
+              <TopSection>
+                <MapPin />
+                <p className=" text-center text-base font-bold">
+                  {item.locationName}
+                </p>
+              </TopSection>
+              <BottomSection>
+                {item.title.map((item, index) => (
+                  <button
+                    className="block text-center"
+                    key={index}
+                    onClick={() => openModal({ item })}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </BottomSection>
             </Popup>
           </Marker>
         ))}

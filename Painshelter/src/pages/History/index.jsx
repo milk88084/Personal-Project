@@ -41,6 +41,7 @@ import {
   ref as storageRef,
   uploadBytes,
 } from "firebase/storage";
+
 //#region
 const flowAnimation = keyframes`
   0% { background-position: 0% 50%; }
@@ -1052,7 +1053,7 @@ export default function History() {
                           </h3>
                           <p>{story.story}</p>
                           <button onClick={() => modifiedClick(story.storyId)}>
-                            編輯
+                            完整文章
                           </button>
                         </MainContent>
                         <Heart>

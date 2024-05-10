@@ -40,6 +40,7 @@ const GlobalStyle = createGlobalStyle`
 const Background = styled.div`
   background-color: #1a1a1a;
   position: relative;
+  overflow-x: hidden;
 `;
 
 const Banner = styled.div`
