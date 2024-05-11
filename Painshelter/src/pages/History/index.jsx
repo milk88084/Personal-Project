@@ -19,10 +19,7 @@ import logoImg from "../../assets/img/logoImg.png";
 import logoTitle from "../../assets/img/logoTitle.png";
 import { HistoryModal } from "../../utils/zustand.js";
 import ModalHistory from "../../components/ModalHistory.jsx";
-import follower from "../../assets/icon/follower.png";
-import pressureIcon from "../../assets/icon/pressure.png";
 import jar from "../../assets/img/historyJar.png";
-import pillImg from "../../assets/img/historyPill.png";
 import broke from "../../assets/img/historyBroke.png";
 import pill from "../../assets/icon/pill.png";
 import AnimatedNumber from "../../components/AnimatedNumber.jsx";
@@ -41,6 +38,7 @@ import {
   ref as storageRef,
   uploadBytes,
 } from "firebase/storage";
+import categoryImg from "../../assets/img/categoryImg.jpg";
 
 //#region
 const flowAnimation = keyframes`
@@ -125,9 +123,6 @@ const LeftNameSection = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  h2 {
-    font-size: 30px;
-  }
 
   img {
     width: 50px;
@@ -194,7 +189,7 @@ const RightSection = styled.div`
   width: calc(100vw - 330px);
   position: absolute;
   right: 0;
-  background: linear-gradient(45deg, #464646 34%, #546377 51%, #060708 69%);
+  background: linear-gradient(45deg, #262222 34%, #161a1f 51%, #060708 69%);
   background-size: 400% 400%;
   animation: ${flowAnimation} 10s ease infinite;
   display: flex;
@@ -210,53 +205,120 @@ const RightSection = styled.div`
 const Categories = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
-  padding: 15px;
   height: 100vh;
+  padding: 30px;
+  width: 100%;
+
+  section {
+    width: 100%;
+    display: flex;
+    margin-bottom: 15px;
+  }
+
+  span {
+    width: 100px;
+  }
   @media screen and (max-width: 1279px) {
     padding: 0px;
-    margin-top: 20px;
-    margin-bottom: 30px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    height: 100%;
+
+    section {
+      flex-direction: column;
+      margin: 15px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    span {
+      height: 15px;
+    }
+  }
+`;
+
+const TopCategories = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgb(255, 255, 255, 0.4);
+  border-radius: 20px;
+  height: 180px;
+  font-size: 50px;
+  padding: 10px;
+  cursor: pointer;
+
+  span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  img {
+    height: 100px;
+  }
+
+  @media screen and (max-width: 1279px) {
+    width: 400px;
+    img {
+      height: 60px;
+    }
+  }
+`;
+
+const CategoriesImg = styled.div`
+  border-radius: 20px;
+  margin-bottom: 18px;
+  width: 100%;
+  overflow: hidden;
+  height: 180px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media screen and (max-width: 1279px) {
+    display: none;
   }
 `;
 
 const CategoriesSection = styled.div`
   width: 100%;
-  height: 180px;
+  height: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: rgb(255, 255, 255, 0.4);
-  padding: 30px;
+  padding: 15px;
   border-radius: 20px;
-  margin: 15px;
+
+  img {
+    width: 150px;
+    margin-right: 20px;
+  }
 
   h1 {
     font-size: 25px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
 
   h2 {
-    width: 650px;
     font-size: 15px;
   }
 
-  img {
-    width: 100px;
-    margin: 30px;
-  }
-
   button {
-    padding: 4px;
+    padding: 8px 24px;
     border-radius: 8px;
     font-weight: 400;
     font-size: 16px;
     margin-top: 10px;
+    margin-right: 15px;
     background-color: #19242b;
     color: white;
     animation: ${glowing} 2s infinite ease-in-out;
-
     &:hover,
     &:focus {
       background-color: #9ca3af;
@@ -264,13 +326,16 @@ const CategoriesSection = styled.div`
     }
   }
 
+  div:nth-child(2) {
+    width: 70%;
+  }
+
   div:nth-child(3) {
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 90px;
-    width: 200px;
-    cursor: pointer;
+    margin-right: 50px;
   }
 
   @media screen and (max-width: 1279px) {
@@ -297,6 +362,7 @@ const CategoriesSection = styled.div`
       justify-content: center;
       align-items: center;
       text-align: center;
+      margin-right: 0px;
     }
 
     h1 {
@@ -318,7 +384,7 @@ const CategoriesSection = styled.div`
 
 const StorySection = styled.div`
   width: 100%;
-  padding: 45px;
+  padding: 45px 45px 0 45px;
 `;
 
 const EachStory = styled.div`
@@ -599,7 +665,6 @@ const FollowerList = styled.div`
     }
   }
 `;
-
 //#endregion
 
 export default function History() {
@@ -659,7 +724,7 @@ export default function History() {
     getStories();
   }, []);
 
-  // console.log(pressure);
+  console.log(pressure);
   // console.log(followList);
   // console.log(stories);
   let getLastPressureNumber = {};
@@ -885,6 +950,7 @@ export default function History() {
                       alt={profile}
                       onClick={() => inputRef.current.click()}
                     />
+
                     <h1>{`${name && name[0]?.name}`}</h1>
                   </LeftNameSection>
                   <LeftButtonSection>
@@ -948,73 +1014,68 @@ export default function History() {
             </LeftSection>
             <RightSection>
               <Categories>
-                <CategoriesSection>
-                  <div>
+                <section>
+                  <TopCategories onClick={() => navigate("/help")}>
+                    <h1>
+                      <h2>壓力</h2>
+                      <h2>指數</h2>
+                    </h1>
+                    <span>
+                      {getLastPressureNumber?.number ? (
+                        <>
+                          <p>
+                            <AnimatedNumber
+                              end={getLastPressureNumber?.number}
+                            />
+                          </p>
+                          <p>分</p>
+                        </>
+                      ) : (
+                        <p>0分</p>
+                      )}
+                    </span>
                     <img src={broke} alt={broke} />
-                  </div>
-                  <div>
-                    <h1>「那些藍色的標籤」</h1>
-                    <h2>
-                      你現在的狀態還好嗎？有沒有可以安全表達和正視自己情緒的地方？
-                    </h2>
-                    <h2>
-                      找到那些微小卻堅強的希望光芒，每一次紀錄自己的狀況，都將激勵更多人勇敢面對自己。
-                    </h2>
-                  </div>
-                  <div onClick={() => navigate("/help")}>
-                    {getLastPressureNumber?.number ? (
-                      <>
-                        <p>
-                          <AnimatedNumber end={getLastPressureNumber?.number} />
-                        </p>
-                        <p>分</p>
-                      </>
-                    ) : (
-                      <p>0分</p>
-                    )}
-                  </div>
-                </CategoriesSection>
-                <CategoriesSection>
-                  <div>
+                  </TopCategories>
+                  <span></span>
+                  <TopCategories onClick={() => navigate("/help")}>
+                    <h1>
+                      <h2>關注</h2>
+                      <h2>作者</h2>
+                    </h1>
+                    <span>
+                      {authors && authors.length ? (
+                        <>
+                          <p>
+                            <AnimatedNumber end={authors && authors.length} />
+                          </p>
+                          <p>位</p>
+                        </>
+                      ) : (
+                        <p>0位</p>
+                      )}
+                    </span>
                     <img src={jar} alt={jar} />
-                  </div>
-                  <div>
-                    <h1>「理解與共情」</h1>
-                    <h2>
-                      紀錄自己的同時，去閱讀其他每一個獨立的故事，表達同情與支持。
-                    </h2>
-                    <h2>
-                      每段經歷都值得被聽見與看見，或許我們能從中得到一些力量。
-                    </h2>
-                  </div>
-                  <div onClick={() => setShowFriendsList(true)}>
-                    {authors && authors.length ? (
-                      <>
-                        <p>
-                          <AnimatedNumber end={authors && authors.length} />
-                        </p>
-                        <p>位</p>
-                      </>
-                    ) : (
-                      <p>0位</p>
-                    )}
-                  </div>
-                </CategoriesSection>
+                  </TopCategories>
+                </section>
+                <CategoriesImg>
+                  <img src={categoryImg} alt={categoryImg}></img>
+                </CategoriesImg>
                 <CategoriesSection>
                   <div>
                     <img src={logoImg} alt={logoImg} />
                   </div>
                   <div>
                     <h1>「你的疼痛都保留在這裡」</h1>
+                    <h2>無論是失落、孤獨還是挫折，故事都值得被記錄下來。</h2>
                     <h2>
-                      無論是失落、孤獨還是挫折，故事都值得被記錄下來，寫下你的故事，分享疼痛。
-                    </h2>
-                    <h2>
-                      每個人的疼痛都將被看見和理解，在這個安全的地方，你可以毫無保留地表達自己。
+                      在這個安全的地方，你可以毫無保留地表達自己，寫下你的故事，分享疼痛。
                     </h2>
                     <button onClick={handlePost}>撰寫文章</button>
+                    <button onClick={() => scrollSection(storyRef)}>
+                      歷史文章
+                    </button>
                   </div>
-                  <div onClick={() => scrollSection(storyRef)}>
+                  <div>
                     {stories.length ? (
                       <>
                         <p>

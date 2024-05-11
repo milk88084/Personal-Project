@@ -152,11 +152,13 @@ const Login = () => {
     }
   }, []);
 
+  console.log(loginStatus);
   const onLogin = (e) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
+        online();
         const user = userCredential.user;
         toast.success("登入成功", {
           position: "top-center",
@@ -168,11 +170,9 @@ const Login = () => {
           progress: undefined,
           theme: "dark",
         });
-        console.log(user);
-        online();
         setLoginUserId(user.uid);
         window.localStorage.setItem("userId", user.uid);
-        window.localStorage.setItem("loginStatus", loginStatus);
+        window.localStorage.setItem("loginStatus", true);
         setTimeout(() => {
           navigate("/main");
         }, 1000);

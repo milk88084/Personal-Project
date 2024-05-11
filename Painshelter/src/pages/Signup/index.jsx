@@ -142,6 +142,7 @@ const Signup = () => {
   const passwordInput = useFormInput();
   const nameInput = useFormInput();
   const videoRef = useRef(null);
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -240,6 +241,7 @@ const Signup = () => {
                   required
                   placeholder="王柏傑"
                   className=" border-2 border-black"
+                  maxLength="10"
                 />
               </InputSection>
               <InputSection>

@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { Send, Image } from "lucide-react";
 import Swal from "sweetalert2";
+import { bouncy } from "ldrs";
 
 //#region
 const Background = styled.div`
@@ -176,7 +177,10 @@ const EditImg = styled.div`
   }
 `;
 
-const UploadImg = styled.div``;
+const UploadImg = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 const Tag = styled.li`
   font-size: 18px;
@@ -369,19 +373,29 @@ export default function Edit() {
   };
 
   //上傳圖片
-
+  bouncy.register();
   const inputRef = useRef(null);
   const [showImg, setShowImg] = useState(null);
   const [fileName, setFileName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const upLoadToStorage = async (e) => {
     const file = e.target.files[0];
-    setFileName(file.name);
-    const imageRef = storageRef(storage, `postsImg/${fileName}`);
-    const snapshot = await uploadBytes(imageRef, file);
-    const url = await getDownloadURL(snapshot.ref);
-    setShowImg(url);
-    console.log(showImg);
-    console.log(fileName);
+
+    if (file) {
+      setIsLoading(true);
+      try {
+        setFileName(file.name);
+        const imageRef = storageRef(storage, `postsImg/${fileName}`);
+        const snapshot = await uploadBytes(imageRef, file);
+        const url = await getDownloadURL(snapshot.ref);
+        setIsLoading(false);
+        setShowImg(url);
+        console.log(showImg);
+        console.log(fileName);
+      } catch (e) {
+        console.log(e);
+      }
+    }
   };
 
   //提交
@@ -441,6 +455,11 @@ export default function Edit() {
     }
   };
 
+  //日期不能發生在未來
+  const today = new Date().toISOString().split("T")[0];
+
+  console.log(today);
+
   return (
     <>
       <Background>
@@ -458,6 +477,7 @@ export default function Edit() {
                   {...storyTitle}
                   required
                   placeholder="陽明山的星星"
+                  maxLength="10"
                 />
               </EditTitleInput>
             </EditCategories>
@@ -470,6 +490,7 @@ export default function Edit() {
                   value={storyTime.value}
                   onChange={storyTime.onChange}
                   {...storyTime}
+                  max={today}
                   required
                 />
               </EditDateInput>
@@ -527,7 +548,11 @@ export default function Edit() {
               </EditImg>
             </EditCategories>
             <UploadImg>
-              <img src={showImg}></img>
+              {isLoading ? (
+                <l-bouncy size="60" speed="1.75" color="black"></l-bouncy>
+              ) : (
+                <img src={showImg}></img>
+              )}
             </UploadImg>
             <EditTextArea>
               <p>請輸入故事內容</p>

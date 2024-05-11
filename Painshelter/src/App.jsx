@@ -1,5 +1,4 @@
 // import "./App.css";
-import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { auth } from "./utils/firebase/firebase.jsx";
@@ -12,7 +11,7 @@ import PostsLocation from "./components/PostLocation.jsx";
 import Chart from "./components/Chart/TypeChart.jsx";
 import FigureChart from "./components/Chart/FigureChart.jsx";
 import logoImg from "./assets/img/logoImg.png";
-import logoTitle from "./assets/img/logoTitle3.png";
+import logoTitle from "./assets/img/logoTitle.png";
 import mainBanner from "./assets/img/mainBanner.jpg";
 import { AccordionDemo } from "./components/Shadcn/Accordion";
 import aboutpainsectionimg from "./assets/img/aboutpainsection1.jpg";
@@ -63,6 +62,7 @@ const Categories = styled.div`
   padding-top: 30px;
   font-weight: 600;
   z-index: 500;
+  margin-right: 20px;
 
   button {
     margin: 12px;
@@ -494,12 +494,19 @@ const FooterContent = styled.div`
   }
 
   img {
-    position: absolute;
+    position: fixed;
     width: 100px;
     padding: 10px;
     right: 0;
     bottom: 0;
+    margin: 0px 10px 12px 0px;
+    opacity: 0.4;
     cursor: pointer;
+  }
+
+  img:hover {
+    transform: scale(1.2);
+    opacity: 1;
   }
 
   @media screen and (max-width: 1279px) {
@@ -535,9 +542,9 @@ function App() {
   const logoRef = useRef(null);
   const subtitle = useRef(null);
   useEffect(() => {
-    // gsap.to(firstRef.current, { duration: 1, x: 50 });
+    gsap.to(firstRef.current, { duration: 1, x: 50 });
     gsap.to(thirdRef.current, { duration: 1, x: 50 });
-    gsap.to(fifthRef.current, { duration: 1, x: 50 });
+    gsap.to(fifthRef.current, { duration: 1, x: 70 });
     gsap.to(seventhRef.current, { duration: 1, x: 50 });
     gsap.to(imageRef.current, {
       duration: 0.7,
@@ -656,7 +663,6 @@ function App() {
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        // Sign-out successful.
         navigate("/");
         console.log("Signed out successfully");
         window.localStorage.removeItem("userId");

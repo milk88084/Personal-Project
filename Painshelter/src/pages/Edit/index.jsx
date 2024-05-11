@@ -10,14 +10,12 @@ import pill from "../../assets/icon/pill.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Undo2, ScanSearch, Trash2, Save, Image } from "lucide-react";
-
 import Swal from "sweetalert2";
 import {
   getDownloadURL,
   ref as storageRef,
   uploadBytes,
 } from "firebase/storage";
-
 import {
   Timestamp,
   collection,
@@ -703,6 +701,7 @@ export default function Edit() {
                     type="text"
                     value={storyTitle.value}
                     onChange={storyTitle.onChange}
+                    maxLength="10"
                     required
                   />
                 </EditTitleInput>
