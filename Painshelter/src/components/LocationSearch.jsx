@@ -6,6 +6,7 @@ import { useLoginState } from "../utils/zustand";
 import styled from "styled-components";
 import icon from "../assets/img/logoImg3.png";
 import { Search } from "lucide-react";
+import Buttons from "./Buttons";
 
 const Input = styled.div`
   width: 100%;
@@ -70,10 +71,12 @@ const LocationSearch = () => {
           onChange={storyLocation.onChange}
           placeholder="請輸入地點，如：花蓮市美崙"
         />
-        <button type="button" onClick={handleSearch}>
-          <Search />
-          搜尋
-        </button>
+        <Buttons
+          onClick={handleSearch}
+          type="button"
+          icon={<Search />}
+          title={"搜尋地點"}
+        />
       </Input>
 
       {locationState &&

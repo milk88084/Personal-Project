@@ -7,6 +7,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { db } from "../../utils/firebase/firebase.jsx";
 import pill from "../../assets/icon/pill.png";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
+import defaultImg from "../../assets/img/defaultImg.png";
 import {
   collection,
   query,
@@ -15,6 +16,8 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
+import { comment } from "postcss";
+import Buttons from "../../components/Buttons.jsx";
 
 const storyTypeData = [
   "成長軌跡",
@@ -160,15 +163,18 @@ const EditTypesInput = styled.div`
 `;
 
 const PreviewType = styled.div`
-  color: #838383;
   font-size: 20px;
   display: flex;
   p {
+    background: #8e9eab;
+    padding: 4px 12px;
+    border-radius: 12px;
     margin-right: 20px;
+    color: white;
   }
   @media screen and (max-width: 1279px) {
+    margin-top: 20px;
     font-size: 15px;
-    display: block;
   }
 `;
 
@@ -221,49 +227,43 @@ const PreviewTextArea = styled.div`
 `;
 
 const ButtonSection = styled.div`
-  margin-top: 50px;
+  margin-top: 20px;
+  display: flex;
 
-  button {
-    padding: 10px;
-    border-radius: 10px;
-    font-weight: 300;
-    font-size: 20px;
-    background-color: #19242b;
-    color: white;
-    margin-right: 30px;
-
-    &:hover,
-    &:focus {
-      background-color: #9ca3af;
-      color: black;
-    }
-  }
   @media screen and (max-width: 1279px) {
-    margin-top: 25px;
-    display: block;
     justify-content: space-between;
     width: 100%;
-
-    button {
-      font-weight: 300;
-      font-size: 15px;
-      margin-right: 0px;
-      width: 100%;
-      margin: 10px;
-    }
   }
 `;
 
 const CommentsSection = styled.div`
   margin-top: 30px;
-  font-size: 20px;
   width: 100%;
-  border-radius: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 10px;
+`;
+
+const Reply = styled.div`
+  display: flex;
+  border-radius: 20px;
+  height: 100px;
+  background-color: rgb(255, 255, 255, 0.6);
+  margin-bottom: 30px;
+  align-items: center;
+  padding: 8px 24px;
+  cursor: pointer;
+
+  &:hover {
+    background: #1d1d1d;
+    color: white;
+  }
+  &:active {
+    box-shadow: 2px 2px 5px #666666;
+    transform: scale(0.9);
+  }
   @media screen and (max-width: 1279px) {
+    border-radius: 15px;
   }
 `;
 
@@ -284,7 +284,7 @@ const CommentPart = styled.div`
     font-weight: 600;
   }
   @media screen and (max-width: 1279px) {
-    margin-left: 5px;
+    margin-left: 20px;
     p {
       padding: 0px;
       font-size: 12px;
@@ -300,21 +300,9 @@ const CommentPart = styled.div`
 const AvatarPart = styled.div`
   width: 60px;
   height: 60px;
-  padding: 5px;
   @media screen and (max-width: 1279px) {
     width: 40px;
     height: 40px;
-    padding: 2px;
-  }
-`;
-
-const Reply = styled.div`
-  display: flex;
-  border-radius: 20px;
-  background-color: rgb(255, 255, 255, 0.6);
-  margin-bottom: 30px;
-  @media screen and (max-width: 1279px) {
-    border-radius: 15px;
   }
 `;
 //#endregion
@@ -358,7 +346,12 @@ export default function Edit() {
               const userRef = doc(db, "users", comment.id);
               const userSnap = await getDoc(userRef);
               return userSnap.exists()
-                ? { comment: comment.comment, name: userSnap.data().name }
+                ? {
+                    comment: comment.comment,
+                    name: userSnap.data().name,
+                    img: userSnap.data().profileImg,
+                    id: comment.id,
+                  }
                 : comment;
             })
           );
@@ -374,6 +367,11 @@ export default function Edit() {
     }
     getStories();
   }, [db, params.id]);
+
+  //留言到該作者頁面
+  const handleClikcToCommentAuthor = (id) => {
+    navigate("/visit", { state: { data: id } });
+  };
 
   return (
     <Background>
@@ -422,9 +420,15 @@ export default function Edit() {
                 {comments && comments.length > 0
                   ? comments.map((data, index) => (
                       <>
-                        <Reply>
+                        <Reply
+                          onClick={() => handleClikcToCommentAuthor(data.id)}
+                        >
                           <AvatarPart>
-                            <img src={pill} alt={pill} />
+                            {data.img ? (
+                              <img src={data.img} alt="profileImg" />
+                            ) : (
+                              <img src={defaultImg} alt="profileImg" />
+                            )}
                           </AvatarPart>
                           <CommentPart key={index}>
                             <h2>{data.name}</h2>
@@ -437,8 +441,9 @@ export default function Edit() {
               </CommentsSection>
             </EditTextArea>
             <ButtonSection>
-              <button onClick={() => navigate("/main")}>回首頁</button>
-              <button onClick={() => navigate(-1)}>返回</button>
+              <Buttons onClick={() => navigate(-1)} text="返回" />
+              <Buttons onClick={() => navigate("/main")} text="首頁" />
+              <Buttons onClick={() => navigate("/history")} text="疼痛日記室" />
             </ButtonSection>
           </EditSections>
         </>

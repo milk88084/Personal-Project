@@ -9,7 +9,15 @@ import { db, storage } from "../../utils/firebase/firebase.jsx";
 import pill from "../../assets/icon/pill.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Undo2, ScanSearch, Trash2, Save, Image } from "lucide-react";
+import {
+  Undo2,
+  ScanSearch,
+  Trash2,
+  Save,
+  Image,
+  Pencil,
+  Home,
+} from "lucide-react";
 import Swal from "sweetalert2";
 import {
   getDownloadURL,
@@ -27,6 +35,8 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
+import defaultImg from "../../assets/img/defaultImg.png";
+import Buttons from "../../components/Buttons.jsx";
 
 const storyTypeData = [
   "成長軌跡",
@@ -178,15 +188,18 @@ const EditTypesInput = styled.div`
 `;
 
 const PreviewType = styled.div`
-  color: #838383;
   font-size: 20px;
   display: flex;
   p {
+    background: #8e9eab;
+    padding: 4px 12px;
+    border-radius: 12px;
     margin-right: 20px;
+    color: white;
   }
   @media screen and (max-width: 1279px) {
+    margin-top: 20px;
     font-size: 15px;
-    display: block;
   }
 `;
 
@@ -204,30 +217,6 @@ const PrevImg = styled.div`
 `;
 
 const EditImg = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 5px 8px;
-  border-radius: 15px;
-  font-weight: 300;
-  font-size: 18px;
-  background-color: #19242b;
-  color: white;
-  margin-right: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 15px;
-
-  cursor: pointer;
-
-  &:hover,
-  &:focus {
-    background-color: #9ca3af;
-    color: #353535;
-  }
-  span {
-    margin-left: 7px;
-  }
   @media screen and (max-width: 1279px) {
     margin-top: 20px;
     margin-bottom: 15px;
@@ -289,67 +278,31 @@ const PreviewTextArea = styled.div`
 `;
 
 const ButtonSection = styled.div`
-  margin-top: 50px;
+  margin-top: 20px;
   display: flex;
-  align-items: center;
 
-  button {
-    padding: 5px 8px;
-    border-radius: 15px;
-    font-weight: 300;
-    font-size: 18px;
-    background-color: #19242b;
-    color: white;
-    margin-right: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &:hover,
-    &:focus {
-      background-color: #9ca3af;
-      color: #353535;
-    }
-  }
-
-  p {
-    margin-left: 7px;
-  }
   @media screen and (max-width: 1279px) {
-    margin-top: 25px;
-    display: block;
     justify-content: space-between;
     width: 100%;
-
-    button {
-      font-weight: 300;
-      font-size: 15px;
-      margin-right: 0px;
-      width: 100%;
-      margin: 10px;
-    }
   }
 `;
 
 const CommentsSection = styled.div`
   margin-top: 30px;
-  font-size: 20px;
-
   width: 100%;
-
   display: flex;
-  align-items: start;
-
   flex-direction: column;
+  justify-content: center;
 `;
 
 const CommentsWrapper = styled.div`
   display: flex;
-  background-color: rgb(255, 255, 255, 0.6);
   border-radius: 20px;
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
+  height: 100px;
+  background-color: rgb(255, 255, 255, 0.6);
+  margin-bottom: 30px;
+  align-items: center;
+  padding: 8px 24px;
 `;
 
 const CommentPart = styled.div`
@@ -438,7 +391,11 @@ export default function Edit() {
               const userRef = doc(db, "users", comment.id);
               const userSnap = await getDoc(userRef);
               return userSnap.exists()
-                ? { comment: comment.comment, name: userSnap.data().name }
+                ? {
+                    comment: comment.comment,
+                    name: userSnap.data().name,
+                    img: userSnap.data().profileImg,
+                  }
                 : comment;
             })
           );
@@ -671,12 +628,16 @@ export default function Edit() {
                       <>
                         <CommentsWrapper>
                           <AvatarPart>
-                            <img src={pill} alt={pill} />
+                            {data.img ? (
+                              <img src={data.img} alt="profileImg" />
+                            ) : (
+                              <img src={defaultImg} alt="profileImg" />
+                            )}
                           </AvatarPart>
                           <CommentPart key={index}>
                             <h2>{data.name}</h2>
                             <p>#{data.comment}</p>
-                          </CommentPart>{" "}
+                          </CommentPart>
                         </CommentsWrapper>
                       </>
                     ))
@@ -684,8 +645,21 @@ export default function Edit() {
               </CommentsSection>
             </EditTextArea>
             <ButtonSection>
-              <button onClick={handleHistory}>編輯文章</button>
-              <button onClick={() => navigate("/history")}>回到上一頁</button>
+              <Buttons
+                title={"編輯"}
+                onClick={handleHistory}
+                icon={<Pencil />}
+              />
+              <Buttons
+                title={"上一頁"}
+                onClick={() => navigate(-1)}
+                icon={<Undo2 />}
+              />
+              <Buttons
+                title={"回首頁"}
+                onClick={() => navigate("/main")}
+                icon={<Home />}
+              />
             </ButtonSection>
           </EditSections>
         </>
@@ -862,10 +836,11 @@ export default function Edit() {
                       onChange={upLoadToStorage}
                       hidden
                     />
-                    <Image onClick={() => inputRef.current.click()} />
-                    <span onClick={() => inputRef.current.click()}>
-                      選擇圖片
-                    </span>
+                    <Buttons
+                      title={"插入圖片"}
+                      onClick={() => inputRef.current.click()}
+                      icon={<Image />}
+                    />
                   </EditImg>
                 </EditTitle>
                 <PrevImg>
@@ -887,22 +862,28 @@ export default function Edit() {
                 />
               </EditTextArea>
               <ButtonSection>
-                <button onClick={handleSubmit}>
-                  <Save />
-                  <p>儲存</p>
-                </button>
-                <button type="button" onClick={deleteStory}>
-                  <Trash2 />
-                  <p>刪除</p>
-                </button>
-                <button type="button" onClick={handleBackToPreview}>
-                  <ScanSearch />
-                  <p>預覽</p>
-                </button>
-                <button onClick={backPreviewPage}>
-                  <Undo2 />
-                  <p>上一頁</p>
-                </button>
+                <Buttons
+                  title={"儲存"}
+                  type={"button"}
+                  onClick={handleSubmit}
+                  icon={<Save />}
+                />
+                <Buttons
+                  title={"刪除"}
+                  type={"button"}
+                  onClick={deleteStory}
+                  icon={<Trash2 />}
+                />
+                <Buttons
+                  title={"預覽"}
+                  onClick={handleBackToPreview}
+                  icon={<ScanSearch />}
+                />
+                <Buttons
+                  title={"上一頁"}
+                  onClick={backPreviewPage}
+                  icon={<Undo2 />}
+                />
               </ButtonSection>
             </form>
           </EditSections>

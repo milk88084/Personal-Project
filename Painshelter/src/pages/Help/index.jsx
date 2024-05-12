@@ -29,6 +29,7 @@ import { useGSAP } from "@gsap/react";
 gsap.registerPlugin(useGSAP);
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useHelpModal } from "../../utils/zustand.js";
+import Buttons from "../../components/Buttons.jsx";
 
 //#region
 const Background = styled.div`
@@ -94,7 +95,7 @@ const SubSection = styled.div`
   }
   p {
     width: 700px;
-    color: #e6e6e6e6;
+    color: #b6b6b6e6;
   }
   @media screen and (max-width: 1279px) {
     width: 100%;
@@ -182,27 +183,12 @@ const ComfirmSection = styled.div`
 `;
 
 const ButtonSection = styled.div`
-  button {
-    padding: 6px;
-    border-radius: 10px;
-    font-weight: 400;
-    margin: 24px;
-    font-size: 20px;
-    background-color: #19242b;
-    color: white;
-    margin-right: 20px;
-    &:hover,
-    &:focus {
-      background-color: #9ca3af;
-      color: black;
-    }
-  }
+  margin-top: 20px;
+  display: flex;
   @media screen and (max-width: 1279px) {
-    margin-bottom: 30px;
-    button {
-      margin: 0px;
-      margin-right: 20px;
-    }
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
   }
 `;
 
@@ -259,13 +245,16 @@ const ResualtSection = styled.div`
   align-items: center;
   border-radius: 20px;
   width: 1100px;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
   background-color: rgb(255, 255, 255, 0.3);
   padding: 30px;
+  margin-top: 50px;
   @media screen and (max-width: 1279px) {
     display: flex;
     flex-direction: column;
     width: 100%;
+    margin-top: 30px;
+    margin-bottom: 0px;
   }
 `;
 
@@ -285,6 +274,7 @@ const ResualtContent = styled.div`
   h2 {
     font-size: 60px;
     font-weight: 600;
+    display: flex;
   }
 
   span {
@@ -292,28 +282,14 @@ const ResualtContent = styled.div`
   }
 
   h3 {
+    margin-top: 25px;
     font-size: 35px;
   }
 
   p {
     font-size: 20px;
     opacity: 0.6;
-  }
-  button {
-    padding: 6px;
-    border-radius: 10px;
-    font-weight: 400;
-    font-size: 20px;
-    background-color: #19242b;
-    color: white;
-    margin-right: 20px;
-    margin-top: 30px;
-
-    &:hover,
-    &:focus {
-      background-color: #9ca3af;
-      color: black;
-    }
+    margin-top: 8px;
   }
   @media screen and (max-width: 1279px) {
     width: 100%;
@@ -331,7 +307,18 @@ const ResualtContent = styled.div`
   }
 `;
 
-const ResualtButton = styled.div``;
+const ResualtButton = styled.div`
+  margin-top: 20px;
+  display: flex;
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
+    justify-content: space-between;
+
+    button {
+      width: 100%;
+    }
+  }
+`;
 const LoadingSection = styled.div`
   display: flex;
   justify-content: center;
@@ -556,8 +543,8 @@ function SurveyComponent() {
               一旦發現憂鬱情緒已經嚴重到無法調節和掌控，並且影響到生活，就要懷疑自己是否得了憂鬱症。憂鬱症篩檢量表可用來做初步的憂鬱症檢測，看看自己是否是高風險族群，如果分數過高就有罹患憂鬱症的風險，應該進一步接受專業精神科醫師的評估來確立「憂鬱症」診斷。
             </p>
             <ButtonSection>
-              <button onClick={handleClick}>點我測驗</button>
-              <button onClick={() => navigate("/main")}>回首頁</button>
+              <Buttons onClick={handleClick} text="點我測驗" />
+              <Buttons onClick={() => navigate("/main")} text="首頁" />
             </ButtonSection>
           </ComfirmSection>
         </SurveySection>
@@ -599,16 +586,19 @@ function SurveyComponent() {
                         目前的情緒狀態非常穩定，宛如初升的橘黃曙光，溫暖而寧靜。您是那種懂得適時調整自己情緒並有效紓解壓力的人。在這個階段，繼續保持您的正向處理方式，並享受生活中的每一刻光芒。
                       </p>
                       <ResualtButton>
-                        <button onClick={() => navigate("/post")}>
-                          撰寫日記
-                        </button>
-                        <button onClick={handleClick}>重新測驗</button>
-                        <button onClick={() => navigate("/history")}>
-                          疼痛日記室
-                        </button>
-                        <button onClick={() => navigate("/main")}>
-                          回到首頁
-                        </button>
+                        <Buttons
+                          onClick={() => navigate("/post")}
+                          text="撰寫日記"
+                        />
+                        <Buttons onClick={handleClick} text="重新測驗" />
+                        <Buttons
+                          onClick={() => navigate("/history")}
+                          text="疼痛日記室"
+                        />
+                        <Buttons
+                          onClick={() => navigate("/main")}
+                          text="首頁"
+                        />
                       </ResualtButton>
                     </ResualtContent>
                   </ResualtSection>
@@ -629,16 +619,19 @@ function SurveyComponent() {
                         現在你可能感覺有些低落，笑容不再容易展現，心中充滿了苦惱和煩悶。即使身邊的朋友們也許無法完全理解您的心情。在《悲傷疼痛日記室》中尋找支持，分享感受，或是尋求專業醫生的協助。讓這一抹淺綠帶來一絲清新和希望，幫助您逐漸遠離不舒服的感覺。
                       </p>
                       <ResualtButton>
-                        <button onClick={() => navigate("/post")}>
-                          撰寫日記
-                        </button>
-                        <button onClick={handleClick}>重新測驗</button>
-                        <button onClick={() => navigate("/history")}>
-                          疼痛日記室
-                        </button>
-                        <button onClick={() => navigate("/main")}>
-                          回到首頁
-                        </button>
+                        <Buttons
+                          onClick={() => navigate("/post")}
+                          text="撰寫日記"
+                        />
+                        <Buttons onClick={handleClick} text="重新測驗" />
+                        <Buttons
+                          onClick={() => navigate("/history")}
+                          text="疼痛日記室"
+                        />
+                        <Buttons
+                          onClick={() => navigate("/main")}
+                          text="首頁"
+                        />
                       </ResualtButton>
                     </ResualtContent>
                   </ResualtSection>
@@ -660,16 +653,19 @@ function SurveyComponent() {
                         如果您不確定應該向誰開口，或是需要更專業的幫助，請勇敢尋求專業的醫療資源。就像這片由粉紫逐漸過渡到藍色的天空，讓我們一起步入更寧靜、釋放的境地。
                       </p>
                       <ResualtButton>
-                        <button onClick={() => navigate("/post")}>
-                          撰寫日記
-                        </button>
-                        <button onClick={handleClick}>重新測驗</button>
-                        <button onClick={() => navigate("/history")}>
-                          疼痛日記室
-                        </button>
-                        <button onClick={() => navigate("/main")}>
-                          回到首頁
-                        </button>
+                        <Buttons
+                          onClick={() => navigate("/post")}
+                          text="撰寫日記"
+                        />
+                        <Buttons onClick={handleClick} text="重新測驗" />
+                        <Buttons
+                          onClick={() => navigate("/history")}
+                          text="疼痛日記室"
+                        />
+                        <Buttons
+                          onClick={() => navigate("/main")}
+                          text="首頁"
+                        />
                       </ResualtButton>
                     </ResualtContent>
                   </ResualtSection>
@@ -691,16 +687,19 @@ function SurveyComponent() {
                         不要猶豫，不要抗拒尋求幫助。讓我們一起努力，逐步減輕那些壓迫您的不舒服感受，恢復到更舒服的狀態。
                       </p>
                       <ResualtButton>
-                        <button onClick={() => navigate("/post")}>
-                          撰寫日記
-                        </button>
-                        <button onClick={handleClick}>重新測驗</button>
-                        <button onClick={() => navigate("/history")}>
-                          疼痛日記室
-                        </button>
-                        <button onClick={() => navigate("/main")}>
-                          回到首頁
-                        </button>
+                        <Buttons
+                          onClick={() => navigate("/post")}
+                          text="撰寫日記"
+                        />
+                        <Buttons onClick={handleClick} text="重新測驗" />
+                        <Buttons
+                          onClick={() => navigate("/history")}
+                          text="疼痛日記室"
+                        />
+                        <Buttons
+                          onClick={() => navigate("/main")}
+                          text="首頁"
+                        />
                       </ResualtButton>
                     </ResualtContent>
                   </ResualtSection>

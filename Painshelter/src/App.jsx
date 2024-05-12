@@ -22,6 +22,7 @@ import { useLocation } from "react-router-dom";
 import { gsap } from "gsap";
 import CopyRight from "./components/CopyRight.jsx";
 import { createGlobalStyle } from "styled-components";
+import Buttons from "./components/Buttons.jsx";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 gsap.registerPlugin(useGSAP);
@@ -817,6 +818,7 @@ function App() {
 
           <span></span>
           <button onClick={handleShowMore}>點我更多</button>
+          <Buttons text="點擊我!" />
         </Highlights>
 
         <ChartFeature>

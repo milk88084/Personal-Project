@@ -17,6 +17,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { Send, Image } from "lucide-react";
 import Swal from "sweetalert2";
 import { bouncy } from "ldrs";
+import Buttons from "../../components/Buttons.jsx";
 
 //#region
 const Background = styled.div`
@@ -57,25 +58,6 @@ const EditSections = styled.div`
   margin: 0 auto;
   border-radius: 50px 50px 0px 0px;
   padding: 50px;
-  button {
-    padding: 5px 8px;
-    border-radius: 15px;
-    font-weight: 300;
-    font-size: 18px;
-    background-color: #19242b;
-    color: white;
-    margin-right: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 15px;
-
-    &:hover,
-    &:focus {
-      background-color: #9ca3af;
-      color: #353535;
-    }
-  }
 
   p {
     margin-left: 7px;
@@ -83,11 +65,6 @@ const EditSections = styled.div`
   @media screen and (max-width: 1279px) {
     width: 80%;
     padding: 30px;
-
-    button {
-      padding: 6px;
-      font-size: 15px;
-    }
   }
 `;
 
@@ -148,34 +125,7 @@ const EditDateInput = styled.div`
   }
 `;
 
-const EditImg = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 5px 8px;
-  border-radius: 15px;
-  font-weight: 300;
-  font-size: 18px;
-  background-color: #19242b;
-  color: white;
-  margin-right: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 7px;
-  cursor: pointer;
-
-  &:hover,
-  &:focus {
-    background-color: #9ca3af;
-    color: #353535;
-  }
-  span {
-    margin-left: 7px;
-  }
-  @media screen and (max-width: 1279px) {
-    margin-top: 20px;
-  }
-`;
+const EditImg = styled.div``;
 
 const UploadImg = styled.div`
   display: flex;
@@ -184,7 +134,7 @@ const UploadImg = styled.div`
 
 const Tag = styled.li`
   font-size: 18px;
-  border-radius: 15px;
+  border-radius: 12px;
   padding: 5px 8px;
   display: inline-block;
   margin: 2px;
@@ -206,7 +156,7 @@ const Tag = styled.li`
 
 const FigureTag = styled.li`
   font-size: 18px;
-  border-radius: 15px;
+  border-radius: 12px;
   padding: 5px 8px;
   display: inline-block;
   margin: 2px;
@@ -284,45 +234,13 @@ const EditTextArea = styled.div`
 `;
 
 const ButtonSection = styled.div`
-  margin-top: 50px;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 50px;
+  justify-content: start;
 
-  button {
-    padding: 10px;
-    border-radius: 10px;
-    font-weight: 300;
-    font-size: 20px;
-    background-color: #19242b;
-    color: white;
-    margin-right: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &:hover,
-    &:focus {
-      background-color: #9ca3af;
-      color: #353535;
-    }
-  }
-
-  p {
-    margin-left: 7px;
-  }
   @media screen and (max-width: 1279px) {
     margin-top: 25px;
     display: block;
     width: 100%;
-
-    button {
-      font-size: 15px;
-      margin-right: 0px;
-      width: 100%;
-      margin-bottom: 20px;
-    }
   }
 `;
 //#endregion
@@ -543,8 +461,11 @@ export default function Edit() {
                   onChange={upLoadToStorage}
                   hidden
                 />
-                <Image onClick={() => inputRef.current.click()} />
-                <span onClick={() => inputRef.current.click()}>選擇圖片</span>
+                <Buttons
+                  onClick={() => inputRef.current.click()}
+                  type="button"
+                  text={"選擇圖片"}
+                />
               </EditImg>
             </EditCategories>
             <UploadImg>
@@ -567,16 +488,18 @@ export default function Edit() {
                 onChange={postStory.onChange}
               />
             </EditTextArea>
-            <button onSubmit={handleSubmit} type="submit">
-              <Send />
-              <p>送出</p>
-            </button>
+            <ButtonSection>
+              <Buttons onSubmit={handleSubmit} type="submit" text={"送出"} />
+              <Buttons
+                type="button"
+                onClick={() => navigate("/main")}
+                text="首頁"
+              />
+              <Buttons type="button" onClick={() => navigate(-1)} text="返回" />
+            </ButtonSection>
           </form>
         </EditSections>
-        <ButtonSection>
-          <button onClick={() => navigate("/main")}>回到首頁</button>
-          <button onClick={() => navigate("/history")}>回到歷史文章</button>
-        </ButtonSection>
+
         <ToastContainer
           position="top-center"
           autoClose={3000}

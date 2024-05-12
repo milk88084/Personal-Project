@@ -22,6 +22,7 @@ const BackgroundVideo = styled.video`
   width: 100%;
   height: 100vh;
   object-fit: cover;
+  pointer-events: none;
 `;
 
 const BlackDiv = styled.div`
@@ -114,7 +115,7 @@ const ButtonSection = styled.div`
   button {
     display: block;
     width: 100%;
-    background-color: #001a2a;
+    background-color: #19242b;
     color: white;
     padding: 5px;
     border-radius: 10px;
@@ -122,9 +123,13 @@ const ButtonSection = styled.div`
     margin-top: 15px;
     box-shadow: 0 10px 10px -8px rgba(0, 0, 0, 0.7);
 
-    &:hover,
-    &:focus {
-      background-color: #4c5e67;
+    &:hover {
+      background-color: #9ca3af;
+      color: #19242b;
+    }
+    &:active {
+      box-shadow: 2px 2px 5px #666666;
+      transform: scale(0.9);
     }
   }
 `;

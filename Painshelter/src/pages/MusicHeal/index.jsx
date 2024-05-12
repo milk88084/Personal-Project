@@ -14,6 +14,7 @@ import { zoomies } from "ldrs";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import Buttons from "../../components/Buttons.jsx";
 gsap.registerPlugin(useGSAP);
 gsap.registerPlugin(ScrollTrigger);
 
@@ -200,32 +201,11 @@ const ButtonSection = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  button {
-    padding: 6px;
-    border-radius: 10px;
-    font-weight: 400;
-    margin: 24px;
-    font-size: 20px;
-    background-color: #19242b;
-    color: white;
+  padding-bottom: 30px;
 
-    &:hover,
-    &:focus {
-      background-color: #9ca3af;
-      color: black;
-    }
-  }
   @media screen and (max-width: 1279px) {
     display: flex;
     flex-direction: column;
-    button {
-      padding: 6px;
-      border-radius: 10px;
-      font-weight: 400;
-      margin: 7px;
-      font-size: 20px;
-      width: 100%;
-    }
   }
 `;
 //#endregion
@@ -488,10 +468,10 @@ function MusicHeal() {
         </MainSection>
       </Background>
       <ButtonSection>
-        <button onClick={() => navigate("/main")}>回首頁</button>
-        <button onClick={() => scrollSection(section1)}>回最上層</button>
-        <button onClick={() => navigate("/history")}>疼痛日記室</button>
-        <button onClick={() => navigate("/help")}>心靈緊急按鈕</button>
+        <Buttons onClick={() => scrollSection(section1)} text="最上層" />
+        <Buttons onClick={() => navigate("/history")} text="疼痛日記室" />
+        <Buttons onClick={() => navigate("/help")} text="心靈緊急按鈕" />
+        <Buttons onClick={() => navigate("/main")} text="首頁" />
       </ButtonSection>
     </>
   );

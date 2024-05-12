@@ -39,6 +39,7 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import categoryImg from "../../assets/img/categoryImg.jpg";
+import Buttons from "../../components/Buttons.jsx";
 
 //#region
 const flowAnimation = keyframes`
@@ -77,7 +78,7 @@ const TopSection = styled.div`
 const ShowLeftSection = styled.div``;
 
 const LeftSection = styled.div`
-  background-image: url(${(props) => props.backgroundImg});
+  background-color: #666666;
   width: 330px;
   height: 100%;
   position: fixed;
@@ -95,7 +96,7 @@ const LeftSectionMobile = styled.div`
   display: none;
   @media screen and (max-width: 1279px) {
     z-index: 500;
-    background-image: url(${(props) => props.backgroundImg});
+    background-color: #666666;
     width: 100%;
     height: 100%;
     position: fixed;
@@ -118,7 +119,7 @@ const CloseButton = styled.div`
 `;
 
 const LeftNameSection = styled.div`
-  font-size: 50px;
+  font-size: 40px;
   font-weight: bolder;
   display: flex;
   align-items: center;
@@ -130,6 +131,7 @@ const LeftNameSection = styled.div`
     object-fit: cover;
     margin-right: 20px;
     border-radius: 50%;
+    border: 2px solid #353535;
     cursor: pointer;
   }
 
@@ -151,7 +153,7 @@ const LeftButtonSection = styled.div`
   button {
     font-size: 25px;
     margin: 7px;
-    opacity: 0.3;
+    opacity: 0.5;
     text-shadow: 1px 1px 20px white;
   }
 
@@ -189,7 +191,7 @@ const RightSection = styled.div`
   width: calc(100vw - 330px);
   position: absolute;
   right: 0;
-  background: linear-gradient(45deg, #262222 34%, #161a1f 51%, #060708 69%);
+  background: #29292d;
   background-size: 400% 400%;
   animation: ${flowAnimation} 10s ease infinite;
   display: flex;
@@ -244,12 +246,21 @@ const TopCategories = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: rgb(255, 255, 255, 0.4);
+  border: 4px solid #888888;
   border-radius: 20px;
   height: 180px;
   font-size: 50px;
   padding: 10px;
   cursor: pointer;
+
+  &:hover {
+    background-color: rgb(255, 255, 255, 0.4);
+  }
+
+  &:active {
+    transform: scale(0.9);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
 
   span {
     display: flex;
@@ -309,25 +320,9 @@ const CategoriesSection = styled.div`
     font-size: 15px;
   }
 
-  button {
-    padding: 8px 24px;
-    border-radius: 8px;
-    font-weight: 400;
-    font-size: 16px;
-    margin-top: 10px;
-    margin-right: 15px;
-    background-color: #19242b;
-    color: white;
-    animation: ${glowing} 2s infinite ease-in-out;
-    &:hover,
-    &:focus {
-      background-color: #9ca3af;
-      color: black;
-    }
-  }
-
   div:nth-child(2) {
     width: 70%;
+    margin: 20px 0;
   }
 
   div:nth-child(3) {
@@ -338,69 +333,80 @@ const CategoriesSection = styled.div`
     margin-right: 50px;
   }
 
+  span {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    height: 50px;
+    margin-top: 20px;
+  }
+
+  button {
+    animation: ${glowing} 2s infinite ease-in-out;
+  }
+
   @media screen and (max-width: 1279px) {
     width: 400px;
-    margin: 0px;
-    padding: 0px;
-    height: auto;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 20px;
 
-    div:nth-child(1) {
-      width: 80px;
-    }
-
-    div:nth-child(2) {
-      width: 300px;
-    }
-
-    div:nth-child(3) {
+    img {
       width: 70px;
-      font-size: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
       margin-right: 0px;
+      margin-bottom: 15px;
     }
 
     h1 {
       font-size: 20px;
-      margin-bottom: 20px;
     }
 
     h2 {
-      width: 260px;
       font-size: 12px;
     }
 
-    img {
-      width: 60px;
-      margin: 0px;
+    div:nth-child(2) {
+      width: 70%;
+      margin: 0px 0px;
+    }
+
+    div:nth-child(3) {
+      font-size: 50px;
+      margin-right: 0px;
+    }
+
+    span {
+      height: 100%;
+      margin-top: 20px;
+    }
+
+    button {
+      width: 120px;
+      font-size: 15px;
+      margin: 10px 10px;
     }
   }
 `;
 
 const StorySection = styled.div`
   width: 100%;
-  padding: 45px 45px 0 45px;
+  padding: 45px 30px 0 30px;
 `;
 
 const EachStory = styled.div`
-  height: 300px;
-  background: #8e9eab;
-  background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);
-  background: linear-gradient(to right, #eef2f3, #8e9eab);
+  height: 400px;
+  width: 100%;
+  background-color: #b0b0b2;
   color: #555555;
   border-radius: 20px 20px 0 0px;
   box-shadow: 20px -10px 20px 10px rgba(0, 0, 0, 0.2);
   margin-top: -30px;
   display: flex;
   justify-content: space-around;
+  align-items: center;
   position: relative;
   @media screen and (max-width: 1279px) {
-    height: 280px;
+    height: 380px;
   }
 `;
 
@@ -409,8 +415,8 @@ const PostIndex = styled.div`
   line-height: 220px;
   font-weight: bold;
   opacity: 0.6;
-  color: #8e9eab;
-  text-shadow: 3px 1px 6px white;
+  color: #29292d;
+  text-shadow: 3px 1px 10px white;
   display: flex;
   margin-left: 30px;
 
@@ -421,7 +427,34 @@ const PostIndex = styled.div`
 
 const MainContent = styled.div`
   width: 60%;
-  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  h1 {
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    margin-bottom: 24px;
+  }
+
+  h3 {
+    display: flex;
+  }
+
+  span {
+    background: #19242b;
+    padding: 4px 12px;
+    border-radius: 12px;
+    margin-right: 20px;
+    color: white;
+    margin-bottom: 10px;
+    opacity: 0.9;
+  }
+
   p {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -429,72 +462,23 @@ const MainContent = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 15px;
+    margin-top: 24px;
   }
 
-  h1 {
-    font-weight: bold;
-    font-size: 20px;
-  }
-
-  h3 {
-    display: flex;
-    color: white;
-  }
-
-  span {
-    margin-right: 12px;
-    margin-bottom: 12px;
-    background: #8e9eab;
-    padding: 3px;
-    border-radius: 8px;
-  }
-
-  button {
-    padding: 6px;
-    border-radius: 7px;
-    font-weight: 300;
-    font-size: 15px;
-    background-color: #19242b;
-    color: white;
-    margin-top: 10px;
-
-    &:hover,
-    &:focus {
-      background-color: #9ca3af;
-      color: black;
-    }
-  }
   @media screen and (max-width: 1279px) {
-    width: 80%;
-    padding: 10px;
-    p {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 13px;
-      margin-top: 4px;
+    width: 400px;
+    padding: 15px;
+    h1 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      margin-bottom: 18px;
     }
 
     span {
-      margin-right: 5px;
-      padding: 3px;
-      border-radius: 8px;
-      margin-top: 3px;
-    }
-
-    h3 {
-      font-size: 12px;
-    }
-
-    button {
-      padding: 5px;
-
-      font-weight: 200;
-      font-size: 12px;
-
-      margin-top: 6px;
+      margin-bottom: 7px;
     }
   }
 `;
@@ -503,7 +487,6 @@ const Heart = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 50px;
   p {
     font-size: 20px;
     color: black;
@@ -514,10 +497,9 @@ const Heart = styled.div`
     width: 30px;
   }
   @media screen and (max-width: 1279px) {
-    margin-left: 15px;
     p {
       font-size: 15px;
-      margin-left: 5px;
+      margin-right: 5px;
     }
     img {
       width: 20px;
@@ -1070,10 +1052,13 @@ export default function History() {
                     <h2>
                       在這個安全的地方，你可以毫無保留地表達自己，寫下你的故事，分享疼痛。
                     </h2>
-                    <button onClick={handlePost}>撰寫文章</button>
-                    <button onClick={() => scrollSection(storyRef)}>
-                      歷史文章
-                    </button>
+                    <span>
+                      <Buttons onClick={handlePost} text="投稿故事" />
+                      <Buttons
+                        onClick={() => scrollSection(storyRef)}
+                        text="歷史文章"
+                      />
+                    </span>
                   </div>
                   <div>
                     {stories.length ? (
@@ -1099,9 +1084,10 @@ export default function History() {
                         </PostIndex>
                         <MainContent>
                           <h1>疼痛暗號：{story.title}</h1>
-                          <h1>
+                          <h2>
                             {story.time}@{story.location.name}
-                          </h1>
+                          </h2>
+
                           <h3>
                             {story.type.map((item, index) => (
                               <span key={index}>#{item}</span>
@@ -1113,9 +1099,10 @@ export default function History() {
                             ))}
                           </h3>
                           <p>{story.story}</p>
-                          <button onClick={() => modifiedClick(story.storyId)}>
-                            完整文章
-                          </button>
+                          <Buttons
+                            onClick={() => modifiedClick(story.storyId)}
+                            text="完整文章"
+                          />
                         </MainContent>
                         <Heart>
                           <img src={pill} alt={pill} />
