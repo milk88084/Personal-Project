@@ -42,12 +42,6 @@ import categoryImg from "../../assets/img/categoryImg.jpg";
 import Buttons from "../../components/Buttons.jsx";
 
 //#region
-const flowAnimation = keyframes`
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-`;
-
 const Background = styled.div`
   color: white;
   position: relative;
@@ -193,7 +187,6 @@ const RightSection = styled.div`
   right: 0;
   background: #29292d;
   background-size: 400% 400%;
-  animation: ${flowAnimation} 10s ease infinite;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -300,6 +300,10 @@ const CommentPart = styled.div`
 const AvatarPart = styled.div`
   width: 60px;
   height: 60px;
+  img {
+    border-radius: 50px;
+  }
+
   @media screen and (max-width: 1279px) {
     width: 40px;
     height: 40px;

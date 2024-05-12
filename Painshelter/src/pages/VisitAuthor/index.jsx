@@ -12,8 +12,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import replyData from "../../utils/data/reply.json";
 import { useLoginState } from "../../utils/zustand.js";
-import styled, { keyframes } from "styled-components";
-import pill from "../../assets/icon/pill.png";
+import styled from "styled-components";
 import logoImg from "../../assets/img/logoImg.png";
 import logoTitle from "../../assets/img/logoTitle.png";
 import backgroundImg from "../../assets/img/historyBanner.jpg";
@@ -22,13 +21,9 @@ import submitIcon from "../../assets/icon/paper-plane.png";
 // import backgroundImg from "../../assets/img/backgroundImg.jpg";
 import { useAuthorfiedData } from "../../utils/zustand.js";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
-import { AlignJustify } from "lucide-react";
+import { AlignJustify, Heart, MessageCircle } from "lucide-react";
+import Buttons from "@/components/Buttons.jsx";
 //#region
-const flowAnimation = keyframes`
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-`;
 
 const Background = styled.div`
   color: white;
@@ -52,7 +47,7 @@ const TopSection = styled.div`
 `;
 const ShowLeftSection = styled.div``;
 const LeftSection = styled.div`
-  background-image: url(${(props) => props.backgroundImg});
+  background-color: #666666;
   width: 330px;
   height: 100%;
   position: fixed;
@@ -71,8 +66,8 @@ const LeftSectionMobile = styled.div`
   display: none;
   @media screen and (max-width: 1279px) {
     z-index: 300;
-    background-image: url(${(props) => props.backgroundImg});
-    width: 330px;
+    background-color: #666666;
+    width: 100%;
     height: 100%;
     position: fixed;
     left: 0;
@@ -84,11 +79,10 @@ const LeftSectionMobile = styled.div`
 `;
 
 const LeftNameSection = styled.div`
-  font-size: 50px;
+  font-size: 40px;
   font-weight: bolder;
   display: flex;
   justify-content: center;
-  flex-direction: column;
 
   span {
     width: 80px;
@@ -159,13 +153,11 @@ const RightSection = styled.div`
   width: calc(100vw - 330px);
   position: absolute;
   right: 0;
-  background: linear-gradient(45deg, #464646 34%, #546377 51%, #060708 69%);
+  background: #29292d;
   background-size: 400% 400%;
-  animation: ${flowAnimation} 10s ease infinite;
   display: flex;
   flex-direction: column;
   align-items: center;
-
   @media screen and (max-width: 1279px) {
     width: 100%;
     margin-top: 30px;
@@ -219,58 +211,42 @@ const IsFollowAuthor = styled.div`
 `;
 
 const StorySection = styled.div`
-  width: 90%;
-  margin: 0 auto;
-  position: relative;
-  margin-top: 100px;
+  width: 100%;
+  padding: 45px 30px 0 30px;
+  margin-top: 20px;
   @media screen and (max-width: 1279px) {
-    margin-top: 60px;
+    margin-top: 30px;
   }
 `;
 
 const EachStory = styled.div`
-  height: 350px;
-  background: #8e9eab;
-  background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);
-  background: linear-gradient(to right, #eef2f3, #8e9eab);
+  height: 450px;
+  width: 100%;
+  background-color: #b0b0b2;
   color: #555555;
   border-radius: 20px 20px 0 0px;
   box-shadow: 20px -10px 20px 10px rgba(0, 0, 0, 0.2);
   margin-top: -30px;
   display: flex;
-
-  button {
-    padding: 6px;
-    border-radius: 7px;
-    font-weight: 300;
-    font-size: 15px;
-    background-color: #19242b;
-    color: white;
-    margin-top: 10px;
-
-    &:hover,
-    &:focus {
-      background-color: #9ca3af;
-      color: black;
-    }
-  }
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
 
   @media screen and (max-width: 1279px) {
-    height: 350px;
+    height: 600px;
+    flex-direction: column;
   }
 `;
 
 const PostIndex = styled.div`
-  width: 230px;
-  height: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   font-size: 200px;
+  line-height: 220px;
   font-weight: bold;
   opacity: 0.6;
-  color: #8e9eab;
-  text-shadow: 3px 1px 6px white;
+  color: #29292d;
+  text-shadow: 3px 1px 10px white;
+  display: flex;
+  margin-left: 30px;
   @media screen and (max-width: 1279px) {
     display: none;
   }
@@ -279,6 +255,30 @@ const PostIndex = styled.div`
 const MainContent = styled.div`
   width: 60%;
   padding: 20px;
+  h1 {
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    margin-bottom: 24px;
+  }
+
+  h3 {
+    display: flex;
+  }
+
+  span {
+    background: #19242b;
+    padding: 4px 12px;
+    border-radius: 12px;
+    margin-right: 20px;
+    color: white;
+    margin-bottom: 10px;
+    opacity: 0.9;
+  }
+
   p {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -286,76 +286,59 @@ const MainContent = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 15px;
-  }
-
-  h1 {
-    font-weight: bold;
-    font-size: 20px;
-  }
-
-  h3 {
-    display: flex;
-    color: white;
-  }
-
-  span {
-    margin-right: 12px;
-    margin-bottom: 12px;
-    background: #8e9eab;
-    padding: 3px;
-    border-radius: 8px;
+    margin-top: 24px;
   }
   @media screen and (max-width: 1279px) {
-    width: 80%;
-    padding: 10px;
-    p {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 13px;
-      margin-top: 10px;
+    width: 400px;
+    padding: 15px;
+    h1 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      margin-bottom: 18px;
     }
 
     span {
-      margin-right: 5px;
-      background: #8e9eab;
-      padding: 3px;
-      border-radius: 8px;
-      margin-top: 5px;
-    }
-
-    h3 {
-      font-size: 12px;
-      display: flex;
-      color: white;
+      margin-bottom: 7px;
     }
   }
 `;
 
 const InterActiveSection = styled.section`
-  margin-top: 20px;
+  margin-top: 30px;
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-  img {
-    width: 40px;
+  form {
+    display: flex;
+    justify-content: start;
+    align-items: center;
   }
 
-  button {
-    margin-left: 15px;
-    font-size: 20px;
+  select {
+    width: 250px;
+    border-radius: 12px;
+    padding: 8px 24px;
+    margin-right: 20px;
   }
 
   @media screen and (max-width: 1279px) {
-    margin-top: 7px;
-    button {
-      margin-left: 0px;
-      font-size: 13px;
+    form {
+      flex-direction: column;
+      justify-content: center;
     }
-
     select {
       width: 100%;
+      margin-right: 0px;
+      margin-bottom: 10px;
+    }
+    button {
+      margin: 8px 0px;
+      margin-right: 0px;
     }
   }
 `;
@@ -365,32 +348,30 @@ const LikerAccount = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  span {
-    font-size: 25px;
-    color: black;
-    margin-left: 10px;
-  }
-  img {
-    width: 30px;
+  font-size: 25px;
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  button {
-    font-size: 20px;
+  div:nth-child(1) {
+    &:hover {
+      transform: scale(1.2);
+      color: white;
+      cursor: pointer;
+    }
+
+    &:active {
+      transform: scale(0.9);
+    }
   }
+
   @media screen and (max-width: 1279px) {
-    width: 60px;
-
-    span {
-      font-size: 10px;
-      margin-left: 5px;
-    }
-    img {
-      width: 20px;
-    }
-
-    button {
-      font-size: 10px;
-    }
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 70px;
   }
 `;
 
@@ -862,7 +843,12 @@ const VisitAuthor = () => {
                                     );
                                   })}
                                 </select>
-                                <button type="submit">送出</button>
+                                <Buttons type="submit" text="送出" />
+                                <Buttons
+                                  onClick={() => modifiedClick(story.storyId)}
+                                  text="完整文章"
+                                  type="button"
+                                />
                               </form>
                             </InterActiveSection>
                           </>
@@ -872,31 +858,22 @@ const VisitAuthor = () => {
                       </MainContent>
 
                       <LikerAccount>
-                        <img src={pill} alt={pill} />
-                        <span>
-                          按讚數：
-                          {story.likedAuthorId?.length > 0
-                            ? story.likedAuthorId.length
-                            : 0}
-                        </span>
-
-                        <span>
-                          留言數：
-                          {story.userComments?.length > 0
-                            ? story.userComments.length
-                            : 0}
-                        </span>
-
-                        {!isUserStories ? (
-                          <button onClick={() => handleLike(story.storyId)}>
-                            按讚
-                          </button>
-                        ) : (
-                          ""
-                        )}
-                        <button onClick={() => modifiedClick(story.storyId)}>
-                          完整文章
-                        </button>
+                        <div>
+                          <Heart onClick={() => handleLike(story.storyId)} />
+                          <span>
+                            {story.likedAuthorId?.length > 0
+                              ? story.likedAuthorId.length
+                              : 0}
+                          </span>
+                        </div>
+                        <div>
+                          <MessageCircle />
+                          <span>
+                            {story.userComments?.length > 0
+                              ? story.userComments.length
+                              : 0}
+                          </span>
+                        </div>
                       </LikerAccount>
                     </EachStory>
                   );
