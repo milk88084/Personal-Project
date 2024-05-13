@@ -721,6 +721,7 @@ function App() {
   //隨機拿到stories的內容
   const [displayCount, setDisplayCount] = useState(0);
   const [randomStories, setRandomStories] = useState([]);
+  const gg = useRef(null);
   function getRandomStories(arr, size) {
     const result = [];
     const useIndex = new Set();
