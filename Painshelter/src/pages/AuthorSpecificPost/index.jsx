@@ -18,6 +18,7 @@ import {
 } from "firebase/firestore";
 import { comment } from "postcss";
 import Buttons from "../../components/Buttons.jsx";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 
 const storyTypeData = [
   "成長軌跡",
@@ -323,6 +324,7 @@ export default function Edit() {
   const [comments, setComments] = useState();
   const location = useLocation();
   const [issloading, setIsLoading] = useState(false);
+  useAuthCheck();
 
   //回到網頁最上方
   useEffect(() => {

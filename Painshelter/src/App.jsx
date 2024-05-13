@@ -25,8 +25,10 @@ import { createGlobalStyle } from "styled-components";
 import Buttons from "./components/Buttons.jsx";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { useAuthCheck } from "./utils/hooks/useAuthCheck.jsx";
 gsap.registerPlugin(useGSAP);
 gsap.registerPlugin(ScrollTrigger);
+
 //#region
 const GlobalStyle = createGlobalStyle`
   * {
@@ -44,26 +46,36 @@ const Background = styled.div`
 `;
 
 const Banner = styled.div`
-  background-image: url(${mainBanner});
+  position: relative;
   height: 100vh;
-  object-fit: cover;
 
   @media screen and (max-width: 1279px) {
     height: 600px;
   }
 `;
 
+const BannerImg = styled.div`
+  img {
+    height: 100vh;
+    width: 100%;
+    position: absolute;
+    object-position: center;
+    object-fit: cover;
+  }
+`;
+
 const Categories = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
   align-items: end;
   color: white;
   font-size: 40px;
   letter-spacing: 5px;
-  padding-top: 30px;
   font-weight: 600;
   z-index: 500;
   margin-right: 20px;
+  height: 100vh;
 
   button {
     margin: 12px;
@@ -129,10 +141,11 @@ const Logo = styled.div`
 const SubTitle = styled.div`
   position: absolute;
   color: white;
-  font-size: 170px;
+  font-size: 160px;
   font-family: sans-serif;
   opacity: 5%;
-  margin-top: -150px;
+  bottom: 0;
+  z-index: 400;
   @media screen and (max-width: 1279px) {
     display: none;
   }
@@ -285,22 +298,6 @@ const Highlights = styled.div`
   justify-items: center;
   align-items: center;
 
-  button {
-    width: 100px;
-    padding: 4px;
-    border-radius: 8px;
-    font-weight: 400;
-    font-size: 16px;
-    margin-top: 10px;
-    background-color: #9ca3af;
-    color: white;
-
-    &:hover,
-    &:focus {
-      background-color: #19242b;
-      color: black;
-    }
-  }
   @media screen and (max-width: 1279px) {
     display: flex;
     flex-direction: column;
@@ -376,6 +373,13 @@ const ChartFeature = styled.div`
       margin-top: 50px;
     }
   }
+`;
+
+const MoreButton = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
 `;
 
 const ChartSection = styled.div`
@@ -470,6 +474,10 @@ const FooterContent = styled.div`
   font-size: 40px;
   letter-spacing: 5px;
 
+  div {
+    line-height: 30px;
+  }
+
   button {
     color: #fffed6;
     opacity: 80%;
@@ -485,13 +493,21 @@ const FooterContent = styled.div`
   }
 
   span {
-    color: #fff0ac;
+    color: black;
+    background-color: #fff0ac;
+    border-radius: 6px;
     cursor: pointer;
+    padding: 3px 12px;
+    margin-top: 20px;
   }
 
   span:hover {
     color: #ffbb28;
     text-shadow: 1px 1px 20px white;
+  }
+
+  span:active {
+    transform: scale(0.9);
   }
 
   img {
@@ -530,6 +546,7 @@ function App() {
   const localStorageUserId = window.localStorage.getItem("userId");
   const localStorageLogin = window.localStorage.getItem("loginStatus");
   const location = useLocation();
+  useAuthCheck();
 
   // const login = getLoginStatus();
 
@@ -546,7 +563,7 @@ function App() {
     gsap.to(firstRef.current, { duration: 1, x: 50 });
     gsap.to(thirdRef.current, { duration: 1, x: 50 });
     gsap.to(fifthRef.current, { duration: 1, x: 70 });
-    gsap.to(seventhRef.current, { duration: 1, x: 50 });
+    gsap.to(seventhRef.current, { duration: 1, x: 5 });
     gsap.to(imageRef.current, {
       duration: 0.7,
       scale: 1.2,
@@ -677,8 +694,8 @@ function App() {
     scrollSection(top);
   };
 
-  console.log("目前登錄狀態：" + localStorageLogin);
-  console.log("目前登入使用者ID：" + localStorageUserId);
+  // console.log("目前登錄狀態：" + localStorageLogin);
+  // console.log("目前登入使用者ID：" + localStorageUserId);
 
   //拿取Firestore資料
   useEffect(() => {
@@ -734,13 +751,14 @@ function App() {
     window.scrollTo(0, 0);
   };
 
-  console.log(randomStories);
-
   return (
     <>
       <GlobalStyle />
       <Background>
         <Banner>
+          <BannerImg>
+            <img src={mainBanner} alt="mainBannerr" />
+          </BannerImg>
           <Categories ref={top}>
             <button ref={firstRef} onClick={() => scrollSection(about)}>
               關於疼痛
@@ -815,11 +833,11 @@ function App() {
               </HighlightPost>
             );
           })}
-
-          <span></span>
-          <button onClick={handleShowMore}>點我更多</button>
-          <Buttons text="點擊我!" />
         </Highlights>
+        <MoreButton>
+          {" "}
+          <Buttons onClick={handleShowMore} text="更多" />
+        </MoreButton>
 
         <ChartFeature>
           <p ref={chart}>疼痛光譜</p>

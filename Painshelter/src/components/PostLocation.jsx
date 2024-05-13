@@ -7,6 +7,7 @@ import { useLoginState } from "../utils/zustand.js";
 import icon from "../assets/img/logoImg3.png";
 import { MapPin } from "lucide-react";
 import styled from "styled-components";
+import MarkerClusterGroup from "react-leaflet-cluster";
 
 //Adjust for invisible Marker after deploying due to webpack building
 import L from "leaflet";
@@ -107,7 +108,8 @@ const PostsLocation = () => {
     });
     return Object.values(groups);
   };
-  const sanmeNameLocation = groupLocation(comebinedArray);
+  const sameNameLocation = groupLocation(comebinedArray);
+  console.log(sameNameLocation);
 
   //click Popup button可以連到該作者頁面
   const openModal = (title) => {
@@ -124,7 +126,7 @@ const PostsLocation = () => {
         style={{ height: "400px", width: "100%" }}
       >
         <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png" />
-        {sanmeNameLocation.map((item, index) => (
+        {sameNameLocation.map((item, index) => (
           <Marker key={index} position={[item.lat, item.lon]} icon={painIcon}>
             <Popup>
               <TopSection>

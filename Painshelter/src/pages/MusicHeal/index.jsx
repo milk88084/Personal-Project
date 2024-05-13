@@ -15,6 +15,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Buttons from "../../components/Buttons.jsx";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 gsap.registerPlugin(useGSAP);
 gsap.registerPlugin(ScrollTrigger);
 
@@ -224,6 +225,7 @@ function MusicHeal() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
+  useAuthCheck();
 
   //loading state
   zoomies.register();

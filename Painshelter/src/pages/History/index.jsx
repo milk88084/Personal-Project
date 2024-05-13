@@ -40,6 +40,7 @@ import {
 } from "firebase/storage";
 import categoryImg from "../../assets/img/categoryImg.jpg";
 import Buttons from "../../components/Buttons.jsx";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 
 //#region
 const Background = styled.div`
@@ -655,6 +656,7 @@ export default function History() {
   const location = useLocation();
   const [showFriendsList, setShowFriendsList] = useState(false);
   const [profileImg, setProfileImg] = useState(null);
+  useAuthCheck();
 
   //監聽到網頁最上方
   useEffect(() => {

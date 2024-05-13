@@ -18,6 +18,7 @@ import { Send, Image } from "lucide-react";
 import Swal from "sweetalert2";
 import { bouncy } from "ldrs";
 import Buttons from "../../components/Buttons.jsx";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 
 //#region
 const Background = styled.div`
@@ -252,6 +253,7 @@ export default function Edit() {
   const storyTitle = useFormInput();
   const storyTime = useFormInput();
   const localStorageUserId = window.localStorage.getItem("userId");
+  useAuthCheck();
   const storyTypeData = [
     "成長軌跡",
     "情感關係",

@@ -23,8 +23,11 @@ import { useAuthorfiedData } from "../../utils/zustand.js";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 import { AlignJustify, Heart, MessageCircle } from "lucide-react";
 import Buttons from "@/components/Buttons.jsx";
-//#region
+import defaultImg from "../../assets/img/defaultImg.png";
+import { auth } from "@/utils/firebase/auth.jsx";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 
+//#region
 const Background = styled.div`
   color: white;
   position: relative;
@@ -79,10 +82,27 @@ const LeftSectionMobile = styled.div`
 `;
 
 const LeftNameSection = styled.div`
-  font-size: 40px;
   font-weight: bolder;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+
+  img {
+    width: 60px;
+    border-radius: 50px;
+    height: 60px;
+    margin-bottom: 20px;
+    border: 1px solid white;
+  }
+
+  h1 {
+    font-size: 35px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
 
   span {
     width: 80px;
@@ -478,6 +498,7 @@ const VisitAuthor = () => {
   const localStorageUserId = window.localStorage.getItem("userId");
   const { setSelectedStoryId } = useAuthorfiedData();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useAuthCheck();
 
   // console.log("這裡是這個作者的歷史文章", state.data);
   console.log("現在登入的人是：" + localStorageUserId);
@@ -523,6 +544,7 @@ const VisitAuthor = () => {
         const authorList = querySnapshot.docs.map((doc) => ({
           id: doc.data().id,
           name: doc.data().name,
+          img: doc.data().profileImg,
         }));
         setAuthor(authorList);
       } catch (e) {
@@ -680,10 +702,10 @@ const VisitAuthor = () => {
         where("id", "==", localStorageUserId)
       );
       const querySnapshot = await getDocs(q);
+
       if (!querySnapshot.empty) {
         const docRef = querySnapshot.docs[0].ref;
         const docData = querySnapshot.docs[0].data();
-
         if (docData.followAuthor && docData.followAuthor.includes(state.data)) {
           alert("已關注");
           setIsFollow(false);
@@ -705,6 +727,8 @@ const VisitAuthor = () => {
   // console.log(stories);
 
   const [isMobileSize, setIsMobileSize] = useState(false);
+  const profileImg = author[0]?.img || defaultImg;
+  console.log(author[0]?.img);
 
   return (
     <>
@@ -725,11 +749,13 @@ const VisitAuthor = () => {
                 <LeftNameSection>
                   {isUserStories ? (
                     <>
+                      <img src={profileImg} alt={profileImg} />
                       <h1>{`${author[0]?.name}`}</h1>
                       <span>作者本人</span>
                     </>
                   ) : (
                     <>
+                      <img src={profileImg} alt={profileImg} />
                       <h1>{`${author[0]?.name}'s`}</h1>
                       <h1>歷史文章</h1>
                       {!isFollow ? (
@@ -766,13 +792,14 @@ const VisitAuthor = () => {
             <LeftNameSection>
               {isUserStories ? (
                 <>
+                  <img src={profileImg} alt={profileImg} />
                   <h1>{`${author[0]?.name}`}</h1>
                   <span>作者本人</span>
                 </>
               ) : (
                 <>
-                  <h1>{`${author[0]?.name}'s`}</h1>
-                  <h1>歷史文章</h1>
+                  <img src={profileImg} alt={profileImg} />
+                  <h1>{`${author[0]?.name}`}</h1>
                   {!isFollow ? (
                     <IsFollowed>
                       <button onClick={handleFollow}>關注作者</button>

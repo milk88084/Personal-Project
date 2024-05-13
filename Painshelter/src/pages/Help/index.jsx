@@ -30,6 +30,7 @@ gsap.registerPlugin(useGSAP);
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useHelpModal } from "../../utils/zustand.js";
 import Buttons from "../../components/Buttons.jsx";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 
 //#region
 const Background = styled.div`
@@ -339,6 +340,7 @@ function SurveyComponent() {
   const { modal, showModal, closeModal } = useHelpModal();
   survey.applyTheme(themeJson);
   bouncy.register();
+  useAuthCheck();
   //回到網頁最上方
   useEffect(() => {
     window.scrollTo(0, 0);

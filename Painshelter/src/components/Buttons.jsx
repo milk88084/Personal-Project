@@ -13,6 +13,7 @@ const ButtonStyle = styled.button`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  cursor: pointer;
 
   &:hover {
     background-color: #9ca3af;

@@ -4,12 +4,14 @@ import { collection, query, getDocs, where } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { db } from "../../utils/firebase/firebase.jsx";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 
 export default function SinglePage() {
   const { selectedStoryId } = modifiedData();
   const [story, setStory] = useState();
   const navigate = useNavigate();
   const params = useParams();
+  useAuthCheck();
 
   //拿到firestore的資料
   useEffect(() => {
