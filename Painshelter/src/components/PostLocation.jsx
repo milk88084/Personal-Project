@@ -7,7 +7,7 @@ import { useLoginState } from "../utils/zustand.js";
 import icon from "../assets/img/logoImg3.png";
 import { MapPin } from "lucide-react";
 import styled from "styled-components";
-import MarkerClusterGroup from "react-leaflet-cluster";
+import { MarkerClusterGroup } from "react-leaflet-markercluster";
 
 //Adjust for invisible Marker after deploying due to webpack building
 import L from "leaflet";
@@ -126,6 +126,7 @@ const PostsLocation = () => {
         style={{ height: "400px", width: "100%" }}
       >
         <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png" />
+        {/* <MarkerClusterGroup> */}
         {sameNameLocation.map((item, index) => (
           <Marker key={index} position={[item.lat, item.lon]} icon={painIcon}>
             <Popup>
@@ -149,6 +150,7 @@ const PostsLocation = () => {
             </Popup>
           </Marker>
         ))}
+        {/* </MarkerClusterGroup> */}
       </MapContainer>
     </div>
   );

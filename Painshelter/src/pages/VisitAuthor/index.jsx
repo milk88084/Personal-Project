@@ -6,6 +6,8 @@ import {
   where,
   updateDoc,
   arrayUnion,
+  doc,
+  onSnapshot,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -505,33 +507,24 @@ const VisitAuthor = () => {
 
   //從firestore讀取posts資料
   useEffect(() => {
-    async function getStories() {
-      try {
-        setIsLoggedIn(true);
-        const postsData = collection(db, "posts");
-        const q = query(postsData, where("userId", "==", state.data));
-
-        //原本獲取所有的data資料
-        const querySnapshot = await getDocs(q);
-        const userStoryList = querySnapshot.docs.map((doc) => ({
-          title: doc.data().title,
-          time: doc.data().time,
-          location: doc.data().location,
-          type: doc.data().type,
-          figure: doc.data().figure,
-          story: doc.data().story,
-          userId: doc.data().userId,
-          likedAuthorId: doc.data().likedAuthorId,
-          storyId: doc.data().storyId,
-          userComments: doc.data().userComments,
-        }));
-        setStories(userStoryList);
-        setIsLoggedIn(false);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    getStories();
+    const q = query(collection(db, "posts"), where("userId", "==", state.data));
+    const dataSnapshot = onSnapshot(q, (querySnapshot) => {
+      const stories = querySnapshot.docs.map((doc) => ({
+        title: doc.data().title,
+        time: doc.data().time,
+        location: doc.data().location,
+        type: doc.data().type,
+        figure: doc.data().figure,
+        story: doc.data().story,
+        userId: doc.data().userId,
+        likedAuthorId: doc.data().likedAuthorId,
+        storyId: doc.data().storyId,
+        userComments: doc.data().userComments,
+      }));
+      setStories(stories);
+      setIsLoggedIn(false);
+    });
+    return () => dataSnapshot();
   }, []);
 
   //從firebase讀取users資料
