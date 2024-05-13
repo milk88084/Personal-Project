@@ -53,7 +53,7 @@ const Title = styled.p`
 `;
 
 const EditSections = styled.div`
-  background: linear-gradient(75deg, #e3ffe7 0%, #d9e7ff 100%);
+  background: linear-gradient(60deg, #aeb4c0 0%, #d9e7ff 100%);
   width: 1000px;
   height: 100%;
   margin: 0 auto;

@@ -16,6 +16,11 @@ import "react-toastify/dist/ReactToastify.css";
 const Background = styled.div`
   font-family: "Noto Sans TC", sans-serif;
   height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const BackgroundVideo = styled.video`
@@ -31,54 +36,42 @@ const BlackDiv = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   z-index: 20;
-`;
-
-const LogoSection = styled.div`
-  position: absolute;
-  top: 15%;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 25;
-
-  img {
-    width: 15%;
-  }
-
-  img:first-of-type {
-    width: 7%;
-  }
-
-  @media screen and (max-width: 1279px) {
-    top: 10%;
-    img {
-      width: 40%;
-    }
-    img:first-of-type {
-      width: 20%;
-    }
-  }
 `;
 
 const MainSection = styled.div`
   position: absolute;
-  top: 35%;
-  left: 38%;
+  top: 0;
   z-index: 40;
-  background-color: rgba(255, 255, 255, 0.8);
-  width: 25%;
-  height: 55%;
-  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 80px;
+
+  span:nth-child(1) {
+    display: flex;
+    margin-bottom: 30px;
+  }
+
+  img {
+    height: 100px;
+    cursor: pointer;
+  }
 
   @media screen and (max-width: 1279px) {
-    top: 30%;
-    width: 300px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
+    margin-top: 20px;
+
+    span:nth-child(1) {
+      display: flex;
+      margin-bottom: 30px;
+    }
+
+    img {
+      height: 80px;
+      cursor: pointer;
+    }
   }
 `;
 
@@ -87,10 +80,17 @@ const FormSection = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  width: 400px;
+  height: 450px;
+  @media screen and (max-width: 1279px) {
+    height: 400px;
+  }
 `;
 
 const InputSection = styled.div`
-  width: 60%;
+  width: 300px;
   display: flex;
   flex-direction: column;
 
@@ -111,7 +111,17 @@ const ButtonSection = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   width: 60%;
+  margin-top: 45px;
+
+  p {
+    margin-top: 10px;
+    text-decoration: underline;
+    cursor: pointer;
+    opacity: 0.6;
+  }
+
   button {
     display: block;
     width: 100%;
@@ -131,6 +141,9 @@ const ButtonSection = styled.div`
       box-shadow: 2px 2px 5px #666666;
       transform: scale(0.9);
     }
+  }
+  @media screen and (max-width: 1279px) {
+    margin-top: 20px;
   }
 `;
 
@@ -183,16 +196,29 @@ const Signup = () => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        toast.error("註冊不成功", {
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+        if (errorCode === "auth/email-already-in-use") {
+          toast.error("此信箱已註冊", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        } else {
+          toast.error("註冊不成功", {
+            position: "top-center",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
         console.log(errorCode, errorMessage);
       });
 
@@ -219,10 +245,6 @@ const Signup = () => {
   return (
     <>
       <Background>
-        <LogoSection>
-          <img src={logoImg} alt="logo" />
-          <img src={logoTitle} alt="brandName" />
-        </LogoSection>
         <BackgroundVideo
           src={backgroundVideo}
           ref={videoRef}
@@ -233,53 +255,64 @@ const Signup = () => {
         <BlackDiv></BlackDiv>
 
         <MainSection>
-          <form onSubmit={onSubmit}>
-            <FormSection>
-              <InputSection>
-                <label htmlFor="name">輸入姓名</label>
-                <input
-                  type="text"
-                  label="Name"
-                  {...nameInput}
-                  value={nameInput.value}
-                  onChange={nameInput.onChange}
-                  required
-                  placeholder="王柏傑"
-                  className=" border-2 border-black"
-                  maxLength="10"
-                />
-              </InputSection>
-              <InputSection>
-                <label htmlFor="email-address">輸入信箱</label>
-                <input
-                  type="email"
-                  label="Email address"
-                  {...emailInput}
-                  required
-                  placeholder="example@gmail.com"
-                />
-              </InputSection>
-              <InputSection>
-                <label htmlFor="password">輸入密碼</label>
-                <input
-                  type="password"
-                  label="Create password"
-                  {...passwordInput}
-                  required
-                  placeholder="Password"
-                />
-              </InputSection>
-              {passwordInput.value.length < 6 ? (
-                <Alert>請輸入6位數以上密碼</Alert>
-              ) : (
-                ""
-              )}
-              <ButtonSection>
-                <button type="submit">註冊</button>
-              </ButtonSection>
-            </FormSection>
-          </form>
+          <span>
+            <img onClick={() => navigate("/")} src={logoImg} alt="logo" />
+            <img
+              onClick={() => navigate("/")}
+              src={logoTitle}
+              alt="brandName"
+            />
+          </span>
+          <span>
+            <form onSubmit={onSubmit}>
+              <FormSection>
+                <InputSection>
+                  <label htmlFor="name">輸入姓名</label>
+                  <input
+                    type="text"
+                    label="Name"
+                    value={nameInput.value}
+                    onChange={nameInput.onChange}
+                    required
+                    placeholder="王柏傑"
+                    className=" border-2 border-black"
+                    maxLength="10"
+                  />
+                </InputSection>
+                <InputSection>
+                  <label htmlFor="email-address">輸入信箱</label>
+                  <input
+                    type="email"
+                    label="Email address"
+                    {...emailInput}
+                    required
+                    placeholder="example@gmail.com"
+                  />
+                </InputSection>
+                <InputSection>
+                  <label htmlFor="password">輸入密碼</label>
+                  <input
+                    type="password"
+                    label="Create password"
+                    {...passwordInput}
+                    required
+                    placeholder="Password"
+                  />
+                </InputSection>
+                {passwordInput.value.length < 6 ? (
+                  <Alert>請輸入6位數以上密碼</Alert>
+                ) : (
+                  ""
+                )}
+                <ButtonSection>
+                  <button type="submit">註冊</button>
+                  <p onClick={() => navigate("/login")}>登入</p>
+                </ButtonSection>
+              </FormSection>
+            </form>
+          </span>
         </MainSection>
+
         <div>
           <ToastContainer
             position="top-center"

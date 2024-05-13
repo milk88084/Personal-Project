@@ -28,6 +28,8 @@ import Buttons from "@/components/Buttons.jsx";
 import defaultImg from "../../assets/img/defaultImg.png";
 import { auth } from "@/utils/firebase/auth.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //#region
 const Background = styled.div`
@@ -565,13 +567,31 @@ const VisitAuthor = () => {
 
         // 兩者皆為true表示使用者已經按過讚
         if (docData.likedAuthorId && docData.likedAuthorId.includes(item)) {
-          alert("已按過讚");
+          toast("❗已按過讚", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
           return;
         }
         await updateDoc(docRef, {
           likedAuthorId: arrayUnion(item),
         });
-        console.log("按讚成功");
+        toast("💛按讚成功!", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
 
         // 更新state
         setStories((prev) =>
@@ -616,11 +636,30 @@ const VisitAuthor = () => {
             (auhtorId) => auhtorId.id === localStorageUserId
           )
         ) {
-          alert("已給過評論");
+          toast("❗已給過評論", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
           return;
         }
         await updateDoc(docRef, {
           userComments: arrayUnion(replyArray),
+        });
+        toast("💬留言成功!", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
         });
 
         // 更新state
@@ -700,14 +739,32 @@ const VisitAuthor = () => {
         const docRef = querySnapshot.docs[0].ref;
         const docData = querySnapshot.docs[0].data();
         if (docData.followAuthor && docData.followAuthor.includes(state.data)) {
-          alert("已關注");
+          toast("❗已關注", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
           setIsFollow(false);
           return;
         }
         await updateDoc(docRef, {
           followAuthor: arrayUnion(state.data),
         });
-        console.log("關注成功");
+        toast("➕關注成功!", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
         setIsFollow(true);
       }
     } catch (e) {
@@ -900,6 +957,21 @@ const VisitAuthor = () => {
                 })}
             </StorySection>
           </RightSection>
+          <div>
+            <ToastContainer
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+              transition:Bounce
+            />
+          </div>
         </Background>
       )}
     </>

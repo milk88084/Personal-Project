@@ -186,7 +186,7 @@ export default function Modal({ comebinedArray, clickTitle }) {
         });
     }
   };
-  console.log(captureRef.current);
+  // console.log(captureRef.current);
 
   return (
     <div>

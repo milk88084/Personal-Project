@@ -12,8 +12,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 //#region
 const Background = styled.div`
-  height: 100vh;
   font-family: "Noto Sans TC", sans-serif;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const BackgroundVideo = styled.video`
@@ -33,51 +38,38 @@ const BlackDiv = styled.div`
   z-index: 20;
 `;
 
-const LogoSection = styled.div`
-  position: absolute;
-  top: 15%;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 25;
-
-  img {
-    width: 15%;
-  }
-
-  img:first-of-type {
-    width: 7%;
-  }
-
-  @media screen and (max-width: 1279px) {
-    top: 10%;
-    img {
-      width: 40%;
-    }
-    img:first-of-type {
-      width: 20%;
-    }
-  }
-`;
-
 const MainSection = styled.div`
   position: absolute;
-  top: 40%;
-  left: 38%;
+  top: 0;
   z-index: 40;
-  background-color: rgba(255, 255, 255, 0.8);
-  width: 25%;
-  height: 50%;
-  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 80px;
+
+  span:nth-child(1) {
+    display: flex;
+    margin-bottom: 30px;
+  }
+
+  img {
+    height: 100px;
+    cursor: pointer;
+  }
 
   @media screen and (max-width: 1279px) {
-    top: 30%;
-    width: 300px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    height: 350px;
+    margin-top: 20px;
+
+    span:nth-child(1) {
+      display: flex;
+      margin-bottom: 30px;
+    }
+
+    img {
+      height: 80px;
+      cursor: pointer;
+    }
   }
 `;
 
@@ -86,10 +78,17 @@ const FormSection = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  width: 400px;
+  height: 350px;
+  @media screen and (max-width: 1279px) {
+    height: 400px;
+  }
 `;
 
 const InputSection = styled.div`
-  width: 60%;
+  width: 300px;
   display: flex;
   flex-direction: column;
 
@@ -110,40 +109,43 @@ const ButtonSection = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   width: 60%;
+  margin-top: 45px;
+
+  p {
+    margin-top: 10px;
+    text-decoration: underline;
+    cursor: pointer;
+    opacity: 0.6;
+  }
+
   button {
     display: block;
     width: 100%;
-    background-color: #9ca3af;
+    background-color: #19242b;
+    color: white;
     padding: 5px;
     border-radius: 10px;
     font-weight: 400;
-    margin-top: 30px;
+    margin-bottom: 10px;
     box-shadow: 0 10px 10px -8px rgba(0, 0, 0, 0.7);
-
-    &:hover {
-      background-color: #19242b;
-      color: white;
-    }
-
-    &:active {
-      box-shadow: 2px 2px 5px #666666;
-      transform: scale(0.9);
-    }
   }
 
-  button:first-of-type {
-    background-color: #19242b;
-    color: white;
-    &:hover {
-      background-color: #9ca3af;
-      color: #19242b;
-    }
+  button:hover {
+    background-color: #9ca3af;
+    color: #19242b;
+  }
 
-    &:active {
-      box-shadow: 2px 2px 5px #666666;
-      transform: scale(0.9);
-    }
+  button:active {
+    box-shadow: 2px 2px 5px #666666;
+    transform: scale(0.9);
+  }
+
+  p {
+    text-decoration: underline;
+    cursor: pointer;
+    opacity: 0.6;
   }
 `;
 
@@ -190,27 +192,58 @@ const Login = () => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        if (errorCode === "auth/invalid-credential") {
+          toast.error("密碼錯誤", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        } else if (errorCode === "auth/missing-password") {
+          toast.error("未填寫密碼", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        } else if (errorCode === "auth/invalid-email") {
+          toast.error("尚未輸入信箱/信箱填寫錯誤", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        } else {
+          toast.error("登入發生錯誤", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
         console.log(errorCode, errorMessage);
-        toast.error("密碼輸入錯誤", {
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
       });
   };
 
   return (
     <>
       <Background>
-        <LogoSection>
-          <img src={logoImg} alt="logo" />
-          <img src={logoTitle} alt="brandName" />
-        </LogoSection>
         <BackgroundVideo
           src={backgroundVideo}
           ref={videoRef}
@@ -219,44 +252,53 @@ const Login = () => {
           muted
         ></BackgroundVideo>
         <BlackDiv></BlackDiv>
+
         <MainSection>
-          <form>
-            <FormSection>
-              <InputSection>
-                <label htmlFor="email-address">請輸入信箱</label>
-                <input
-                  id="email-address"
-                  name="email"
-                  type="email"
-                  required
-                  placeholder="Email address"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </InputSection>
+          <span>
+            <img onClick={() => navigate("/")} src={logoImg} alt="logo" />
+            <img
+              onClick={() => navigate("/")}
+              src={logoTitle}
+              alt="brandName"
+            />
+          </span>
+          <span>
+            <form>
+              <FormSection>
+                <InputSection>
+                  <label htmlFor="email-address">請輸入信箱</label>
+                  <input
+                    id="email-address"
+                    name="email"
+                    type="email"
+                    required
+                    placeholder="Email address"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </InputSection>
+                <InputSection>
+                  <label htmlFor="password">請輸入密碼</label>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    placeholder="Password"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </InputSection>
 
-              <InputSection>
-                <label htmlFor="password">請輸入密碼</label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  placeholder="Password"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </InputSection>
-
-              <ButtonSection>
-                <button type="submit" onClick={onLogin}>
-                  登入
-                </button>
-
-                <button type="button">
-                  <NavLink to="/signup">註冊會員</NavLink>
-                </button>
-              </ButtonSection>
-            </FormSection>
-          </form>
+                <ButtonSection>
+                  <button type="submit" onClick={onLogin}>
+                    登入
+                  </button>
+                  <p>
+                    <NavLink to="/signup">註冊</NavLink>
+                  </p>
+                </ButtonSection>
+              </FormSection>
+            </form>
+          </span>
         </MainSection>
         <div>
           <ToastContainer

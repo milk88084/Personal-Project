@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { collection, query, getDocs } from "firebase/firestore";
 import { db } from "../utils/firebase/firebase.jsx";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import Modal from "./Modal.jsx";
 import { useLoginState } from "../utils/zustand.js";
 import icon from "../assets/img/logoImg3.png";
 import { MapPin } from "lucide-react";
 import styled from "styled-components";
-import { MarkerClusterGroup } from "react-leaflet-markercluster";
+// import "leaflet.markercluster/dist/MarkerCluster.css";
+// import "leaflet.markercluster/dist/MarkerCluster.Default.css"; // 这是默认的样式，根据需要引入
+// import "leaflet.markercluster";
 
 //Adjust for invisible Marker after deploying due to webpack building
 import L from "leaflet";
@@ -109,13 +111,37 @@ const PostsLocation = () => {
     return Object.values(groups);
   };
   const sameNameLocation = groupLocation(comebinedArray);
-  console.log(sameNameLocation);
+  // console.log(sameNameLocation);
 
   //click Popup button可以連到該作者頁面
   const openModal = (title) => {
     showModal();
     setClickTitle(title);
   };
+
+  //markerGroup
+  // const MarkerClusterGroup = ({ children }) => {
+  //   const map = useMap();
+
+  //   useEffect(() => {
+  //     const markerClusterGroup = L.markerClusterGroup();
+  //     children.forEach((child) => {
+  //       const marker = L.marker(
+  //         [child.props.position[0], child.props.position[1]],
+  //         { icon: child.props.icon }
+  //       );
+  //       marker.bindPopup(child.props.children);
+  //       markerClusterGroup.addLayer(marker);
+  //     });
+  //     map.addLayer(markerClusterGroup);
+
+  //     return () => {
+  //       map.removeLayer(markerClusterGroup);
+  //     };
+  //   }, [map, children]);
+
+  //   return null;
+  // };
 
   return (
     <div>

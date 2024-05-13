@@ -89,7 +89,7 @@ const Title = styled.p`
 `;
 
 const EditSections = styled.div`
-  background: linear-gradient(75deg, #e3ffe7 0%, #d9e7ff 100%);
+  background: linear-gradient(60deg, #aeb4c0 0%, #d9e7ff 100%);
   width: 1000px;
   height: 100%;
   margin: 0 auto;
@@ -341,6 +341,10 @@ const AvatarPart = styled.div`
   width: 60px;
   height: 60px;
   padding: 5px;
+  img {
+    border-radius: 50px;
+  }
+
   @media screen and (max-width: 1279px) {
     width: 40px;
     height: 40px;

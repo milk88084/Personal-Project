@@ -487,11 +487,6 @@ const FooterContent = styled.div`
     font-weight: 600;
   }
 
-  button:hover {
-    color: #ffd16e;
-    text-shadow: 1px 1px 20px white;
-  }
-
   span {
     color: black;
     background-color: #fff0ac;
@@ -502,12 +497,13 @@ const FooterContent = styled.div`
   }
 
   span:hover {
-    color: #ffbb28;
+    background-color: #ffbb28;
+    transform: scale(0.9);
     text-shadow: 1px 1px 20px white;
   }
 
   span:active {
-    transform: scale(0.9);
+    transform: scale(0.8);
   }
 
   img {
@@ -723,7 +719,8 @@ function App() {
   }, []);
 
   //隨機拿到stories的內容
-  const [displayCount, setDisplayCount] = useState(6);
+  const [displayCount, setDisplayCount] = useState(0);
+  const [randomStories, setRandomStories] = useState([]);
   function getRandomStories(arr, size) {
     const result = [];
     const useIndex = new Set();
@@ -743,7 +740,19 @@ function App() {
     setDisplayCount(newDisplayCount);
   };
 
-  const randomStories = getRandomStories(stories, displayCount);
+  useEffect(() => {
+    const initialStories = getRandomStories(stories, 6);
+    setRandomStories(initialStories);
+  }, []);
+
+  useEffect(() => {
+    const newStories = getRandomStories(stories, displayCount);
+    if (displayCount === 6) {
+      setRandomStories(newStories);
+    } else {
+      setRandomStories((prev) => [...prev, ...newStories]);
+    }
+  }, [displayCount]);
 
   //進入到該作者的文章頁面
   const handleVisitAthor = (id) => {
@@ -824,7 +833,7 @@ function App() {
               <HighlightPost
                 ref={addToRefs}
                 onClick={() => handleVisitAthor(story.userId)}
-                key={index}
+                key={story.id}
               >
                 <h1>{index + 1}</h1>
                 <h2>疼痛暗號：{story.title}</h2>
@@ -835,7 +844,6 @@ function App() {
           })}
         </Highlights>
         <MoreButton>
-          {" "}
           <Buttons onClick={handleShowMore} text="更多" />
         </MoreButton>
 

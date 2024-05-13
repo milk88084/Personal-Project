@@ -60,7 +60,7 @@ export default function FigureChart() {
     };
   });
 
-  console.log(chartData);
+  // console.log(chartData);
 
   const COLORS = [
     "#FFF0AC",
