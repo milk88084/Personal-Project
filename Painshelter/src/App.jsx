@@ -719,41 +719,50 @@ function App() {
   }, []);
 
   //隨機拿到stories的內容
-  const [displayCount, setDisplayCount] = useState(0);
+  const [displayCount, setDisplayCount] = useState(6);
   const [randomStories, setRandomStories] = useState([]);
-  const gg = useRef(null);
-  function getRandomStories(arr, size) {
+  const [loadedIndices, setLoadedIndices] = useState(new Set());
+
+  function getRandomStories(arr, size, excludedIndices) {
     const result = [];
     const useIndex = new Set();
-
-    while (result.length < size && result.length < arr.length) {
+    while (
+      result.length < size &&
+      useIndex.size + excludedIndices.size < arr.length
+    ) {
       const index = Math.floor(Math.random() * arr.length);
-      if (!useIndex.has(index)) {
+      if (!useIndex.has(index) && !excludedIndices.has(index)) {
         result.push(arr[index]);
         useIndex.add(index);
       }
     }
-    return result;
+    return [result, useIndex];
   }
 
   const handleShowMore = () => {
-    const newDisplayCount = displayCount + 6; // 假設每次增加6篇
-    setDisplayCount(newDisplayCount);
+    setDisplayCount((prevState) => prevState + 6);
   };
 
   useEffect(() => {
-    const initialStories = getRandomStories(stories, 6);
-    setRandomStories(initialStories);
-  }, []);
-
-  useEffect(() => {
-    const newStories = getRandomStories(stories, displayCount);
+    if (stories.length < 1) return;
     if (displayCount === 6) {
+      const [newStories, newIndices] = getRandomStories(
+        stories,
+        6,
+        loadedIndices
+      );
       setRandomStories(newStories);
+      setLoadedIndices(newIndices);
     } else {
+      const [newStories, newIndices] = getRandomStories(
+        stories,
+        6,
+        loadedIndices
+      );
       setRandomStories((prev) => [...prev, ...newStories]);
+      setLoadedIndices((prev) => new Set([...prev, ...newIndices]));
     }
-  }, [displayCount]);
+  }, [stories, displayCount]);
 
   //進入到該作者的文章頁面
   const handleVisitAthor = (id) => {

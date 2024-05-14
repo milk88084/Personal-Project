@@ -265,6 +265,7 @@ export default function LandingPage() {
   const enterIconRef = useRef(null);
   const [threeRules, setThreeRules] = useState(false);
   const navigate = useNavigate();
+  const loginStatus = window.localStorage.getItem("loginStatus");
 
   useEffect(() => {
     const timeline = gsap.timeline({
@@ -315,6 +316,14 @@ export default function LandingPage() {
     });
   }, []);
 
+  const handleLogin = () => {
+    if (loginStatus === "true") {
+      navigate("/main");
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <Background>
       <video src={video} loop autoPlay muted></video>
@@ -337,7 +346,7 @@ export default function LandingPage() {
             </span>
             <ChevronRight ref={enterIconRef} />
           </div>
-          <div onClick={() => navigate("/login")}>
+          <div onClick={handleLogin}>
             <UsersRound />
             <span>
               <h1>登入/註冊</h1>
