@@ -440,7 +440,17 @@ const MainContent = styled.div`
   }
 
   span {
-    background: #19242b;
+    background: #666666;
+    padding: 4px 12px;
+    border-radius: 12px;
+    margin-right: 20px;
+    color: white;
+    margin-bottom: 10px;
+    opacity: 0.9;
+  }
+
+  h4 {
+    background: #29292d;
     padding: 4px 12px;
     border-radius: 12px;
     margin-right: 20px;
@@ -940,7 +950,7 @@ export default function History() {
                     <button onClick={() => navigate("/main")}>返回首頁</button>
                   </LeftButtonSection>
                   <LeftDateSection>
-                    <p>Join in {showCreation}</p>
+                    <p>Joined in {showCreation}</p>
                   </LeftDateSection>
                   <FAB>
                     <div>
@@ -980,7 +990,7 @@ export default function History() {
                 <button onClick={() => navigate("/main")}>返回首頁</button>
               </LeftButtonSection>
               <LeftDateSection>
-                <p>Join in {showCreation}</p>
+                <p>Joined in {showCreation}</p>
               </LeftDateSection>
               <FAB>
                 <div>
@@ -1090,7 +1100,7 @@ export default function History() {
                           </h3>
                           <h3>
                             {story.figure.map((item, index) => (
-                              <span key={index}>{item}</span>
+                              <h4 key={index}>#{item}</h4>
                             ))}
                           </h3>
                           <p>{story.story}</p>

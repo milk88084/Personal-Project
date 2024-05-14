@@ -212,6 +212,7 @@ const EditTextArea = styled.div`
 const PreviewTextArea = styled.div`
   margin-top: 20px;
   color: #838383;
+  white-space: pre-wrap;
   p {
     font-size: 30px;
     font-weight: 600;

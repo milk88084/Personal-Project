@@ -80,7 +80,7 @@ const Categories = styled.div`
   button {
     margin: 12px;
     margin-right: 100px;
-    opacity: 10%;
+    opacity: 30%;
   }
 
   button:hover {
@@ -399,14 +399,14 @@ const PostsCounts = styled.div`
   color: white;
   text-align: center;
 
-  p {
+  span {
     font-size: 180px;
     font-weight: 700;
   }
   @media screen and (max-width: 1279px) {
     margin-top: 30px;
 
-    p {
+    span {
       font-size: 160px;
       font-weight: 700;
     }
@@ -598,25 +598,23 @@ function App() {
   useGSAP(() => {
     gsap.from(about.current, {
       x: -300,
-      ease: "back.out",
       duration: 4,
       opacity: 0,
       scrollTrigger: {
         trigger: about.current,
         start: "top 70%",
-        end: "bottom 50%",
+        end: "bottom 80%",
         scrub: 1,
       },
     });
     gsap.from(about2.current, {
       x: 300,
-      ease: "back.out",
       duration: 4,
       opacity: 0,
       scrollTrigger: {
         trigger: about2.current,
         start: "top 70%",
-        end: "bottom 50%",
+        end: "bottom 90%",
         scrub: 1,
       },
     });
@@ -843,7 +841,7 @@ function App() {
               <HighlightPost
                 ref={addToRefs}
                 onClick={() => handleVisitAthor(story.userId)}
-                key={story.id}
+                key={index}
               >
                 <h1>{index + 1}</h1>
                 <h2>疼痛暗號：{story.title}</h2>
@@ -866,9 +864,9 @@ function App() {
             </TypesChartsSection>
             <PostsCounts>
               <h1>文章累積數量</h1>
-              <p>
+              <span>
                 <AnimatedNumber end={stories.length} />
-              </p>
+              </span>
             </PostsCounts>
             <FigureChartSection>
               <FigureChart />

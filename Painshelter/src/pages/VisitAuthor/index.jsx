@@ -30,13 +30,15 @@ import { auth } from "@/utils/firebase/auth.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import IsLoading from "@/components/IsLoadingPage.jsx";
 
 //#region
 const Background = styled.div`
   color: white;
   position: relative;
   font-family: "Noto Sans TC", sans-serif;
-  height: 100%;
+  height: 100vh;
+  background-color: #29292d;
 `;
 
 const TopSection = styled.div`
@@ -293,16 +295,6 @@ const MainContent = styled.div`
     display: flex;
   }
 
-  span {
-    background: #19242b;
-    padding: 4px 12px;
-    border-radius: 12px;
-    margin-right: 20px;
-    color: white;
-    margin-bottom: 10px;
-    opacity: 0.9;
-  }
-
   p {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -328,6 +320,26 @@ const MainContent = styled.div`
       margin-bottom: 7px;
     }
   }
+`;
+
+const Type_relationship = styled.span`
+  background: #666666;
+  padding: 4px 12px;
+  border-radius: 12px;
+  margin-right: 20px;
+  color: white;
+  margin-bottom: 10px;
+  opacity: 0.9;
+`;
+
+const Type_figure = styled.span`
+  background: #29292d;
+  padding: 4px 12px;
+  border-radius: 12px;
+  margin-right: 20px;
+  color: white;
+  margin-bottom: 10px;
+  opacity: 0.9;
 `;
 
 const InterActiveSection = styled.section`
@@ -502,6 +514,7 @@ const VisitAuthor = () => {
   const localStorageUserId = window.localStorage.getItem("userId");
   const { setSelectedStoryId } = useAuthorfiedData();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoadingPage, setIsLoadingPage] = useState(false);
   useAuthCheck();
 
   // console.log("這裡是這個作者的歷史文章", state.data);
@@ -533,6 +546,7 @@ const VisitAuthor = () => {
   useEffect(() => {
     async function getAuthor() {
       try {
+        setIsLoadingPage(true);
         const authorData = collection(db, "users");
         const q = query(authorData, where("id", "==", state.data));
         const querySnapshot = await getDocs(q);
@@ -541,7 +555,9 @@ const VisitAuthor = () => {
           name: doc.data().name,
           img: doc.data().profileImg,
         }));
+
         setAuthor(authorList);
+        setTimeout(() => setIsLoadingPage(false), 1000);
       } catch (e) {
         console.log(e);
       }
@@ -782,20 +798,71 @@ const VisitAuthor = () => {
 
   return (
     <>
-      {isLoggedIn ? (
-        <IsLoadingPage />
+      {isLoadingPage ? (
+        <IsLoading />
       ) : (
-        <Background>
-          <TopSection>
-            <AlignJustify onClick={() => setIsMobileSize(true)} />
-          </TopSection>
-          {isMobileSize ? (
-            <ShowLeftSection>
-              <LeftSectionMobile backgroundImg={backgroundImg}>
-                <CloseButton>
-                  <button onClick={() => setIsMobileSize(false)}>x</button>
-                </CloseButton>
+        <>
+          {isLoggedIn ? (
+            <IsLoadingPage />
+          ) : (
+            <Background>
+              <TopSection>
+                <AlignJustify onClick={() => setIsMobileSize(true)} />
+              </TopSection>
 
+              {isMobileSize ? (
+                <ShowLeftSection>
+                  <LeftSectionMobile backgroundImg={backgroundImg}>
+                    <CloseButton>
+                      <button onClick={() => setIsMobileSize(false)}>x</button>
+                    </CloseButton>
+
+                    <LeftNameSection>
+                      {isUserStories ? (
+                        <>
+                          <img src={profileImg} alt={profileImg} />
+                          <h1>{`${author[0]?.name}`}</h1>
+                          <p></p>
+                          <span>作者本人</span>
+                        </>
+                      ) : (
+                        <>
+                          <img src={profileImg} alt={profileImg} />
+                          <h1>{`${author[0]?.name}`}</h1>
+                          <h1>歷史文章</h1>
+                          {!isFollow ? (
+                            <IsFollowed>
+                              <button onClick={handleFollow}>關注作者</button>
+                            </IsFollowed>
+                          ) : (
+                            <IsFollowAuthor>
+                              <span disabled>已關注作者</span>
+                            </IsFollowAuthor>
+                          )}
+                        </>
+                      )}
+                      <h1>{name && name[0]?.name}</h1>
+                    </LeftNameSection>
+                    <LeftButtonSection>
+                      {/* <button onClick={handlePost}>撰寫文章</button>
+                       */}
+
+                      <button onClick={() => navigate("/main")}>
+                        返回首頁
+                      </button>
+                      <button onClick={() => navigate(-1)}>返回</button>
+                    </LeftButtonSection>
+
+                    <FAB>
+                      <div>
+                        <img src={logoImg} alt={logoImg} />
+                        <img src={logoTitle} alt={logoTitle}></img>
+                      </div>
+                    </FAB>
+                  </LeftSectionMobile>
+                </ShowLeftSection>
+              ) : null}
+              <LeftSection backgroundImg={backgroundImg}>
                 <LeftNameSection>
                   {isUserStories ? (
                     <>
@@ -806,8 +873,7 @@ const VisitAuthor = () => {
                   ) : (
                     <>
                       <img src={profileImg} alt={profileImg} />
-                      <h1>{`${author[0]?.name}'s`}</h1>
-                      <h1>歷史文章</h1>
+                      <h1>{`${author[0]?.name}`}</h1>
                       {!isFollow ? (
                         <IsFollowed>
                           <button onClick={handleFollow}>關注作者</button>
@@ -819,14 +885,10 @@ const VisitAuthor = () => {
                       )}
                     </>
                   )}
-                  <h1>{name && name[0]?.name}</h1>
                 </LeftNameSection>
                 <LeftButtonSection>
-                  {/* <button onClick={handlePost}>撰寫文章</button>
-                   */}
-
+                  <button onClick={() => navigate("/history")}>撰寫文章</button>
                   <button onClick={() => navigate("/main")}>返回首頁</button>
-                  <button onClick={() => navigate(-1)}>返回</button>
                 </LeftButtonSection>
 
                 <FAB>
@@ -835,144 +897,112 @@ const VisitAuthor = () => {
                     <img src={logoTitle} alt={logoTitle}></img>
                   </div>
                 </FAB>
-              </LeftSectionMobile>
-            </ShowLeftSection>
-          ) : null}
-          <LeftSection backgroundImg={backgroundImg}>
-            <LeftNameSection>
-              {isUserStories ? (
-                <>
-                  <img src={profileImg} alt={profileImg} />
-                  <h1>{`${author[0]?.name}`}</h1>
-                  <span>作者本人</span>
-                </>
-              ) : (
-                <>
-                  <img src={profileImg} alt={profileImg} />
-                  <h1>{`${author[0]?.name}`}</h1>
-                  {!isFollow ? (
-                    <IsFollowed>
-                      <button onClick={handleFollow}>關注作者</button>
-                    </IsFollowed>
-                  ) : (
-                    <IsFollowAuthor>
-                      <span disabled>已關注作者</span>
-                    </IsFollowAuthor>
-                  )}
-                </>
-              )}
-            </LeftNameSection>
-            <LeftButtonSection>
-              <button onClick={() => navigate("/history")}>撰寫文章</button>
-              <button onClick={() => navigate("/main")}>返回首頁</button>
-            </LeftButtonSection>
+              </LeftSection>
+              <RightSection>
+                <StorySection>
+                  {sortTimeOfStory &&
+                    sortTimeOfStory.map((story, index) => {
+                      return (
+                        <EachStory key={index} id={stories.storyId}>
+                          <PostIndex>
+                            <p>{index + 1}</p>
+                          </PostIndex>
+                          <MainContent>
+                            <h1>疼痛暗號：{story.title}</h1>
+                            <h2>
+                              {story.time}@{story.location.name}
+                            </h2>
+                            <h3>
+                              {story.type.map((item, index) => (
+                                <Type_relationship key={index}>
+                                  #{item}
+                                </Type_relationship>
+                              ))}
+                            </h3>
+                            <h3>
+                              {story.figure.map((item, index) => (
+                                <Type_figure key={index}>#{item}</Type_figure>
+                              ))}
+                            </h3>
+                            <p>{story.story}</p>
 
-            <FAB>
-              <div>
-                <img src={logoImg} alt={logoImg} />
-                <img src={logoTitle} alt={logoTitle}></img>
-              </div>
-            </FAB>
-          </LeftSection>
-          <RightSection>
-            <StorySection>
-              {sortTimeOfStory &&
-                sortTimeOfStory.map((story, index) => {
-                  return (
-                    <EachStory key={index} id={stories.storyId}>
-                      <PostIndex>
-                        <p>{index + 1}</p>
-                      </PostIndex>
-                      <MainContent>
-                        <h1>疼痛暗號：{story.title}</h1>
-                        <h2>
-                          {story.time}@{story.location.name}
-                        </h2>
-                        <h3>
-                          {story.type.map((item, index) => (
-                            <span key={index}>#{item}</span>
-                          ))}
-                        </h3>
-                        <h3>
-                          {story.figure.map((item, index) => (
-                            <span key={index}>{item}</span>
-                          ))}
-                        </h3>
-                        <p>{story.story}</p>
-
-                        {!isUserStories ? (
-                          <>
-                            <InterActiveSection>
-                              <form
-                                onSubmit={(event) =>
-                                  handleSubmit(event, story.storyId)
-                                }
-                              >
-                                <select name="replySelect" defaultValue="">
-                                  <option value="" disabled hidden>
-                                    給作者一句話...
-                                  </option>
-                                  {replyData.map((item, index) => {
-                                    return (
-                                      <option key={index} value={item}>
-                                        {item}
+                            {!isUserStories ? (
+                              <>
+                                <InterActiveSection>
+                                  <form
+                                    onSubmit={(event) =>
+                                      handleSubmit(event, story.storyId)
+                                    }
+                                  >
+                                    <select name="replySelect" defaultValue="">
+                                      <option value="" disabled hidden>
+                                        給作者一句話...
                                       </option>
-                                    );
-                                  })}
-                                </select>
-                                <Buttons type="submit" text="送出" />
-                                <Buttons
-                                  onClick={() => modifiedClick(story.storyId)}
-                                  text="完整文章"
-                                  type="button"
-                                />
-                              </form>
-                            </InterActiveSection>
-                          </>
-                        ) : (
-                          ""
-                        )}
-                      </MainContent>
+                                      {replyData.map((item, index) => {
+                                        return (
+                                          <option key={index} value={item}>
+                                            {item}
+                                          </option>
+                                        );
+                                      })}
+                                    </select>
+                                    <Buttons type="submit" text="送出" />
+                                    <Buttons
+                                      onClick={() =>
+                                        modifiedClick(story.storyId)
+                                      }
+                                      text="完整文章"
+                                      type="button"
+                                    />
+                                  </form>
+                                </InterActiveSection>
+                              </>
+                            ) : null}
+                          </MainContent>
 
-                      <LikerAccount>
-                        <div>
-                          <Heart onClick={() => handleLike(story.storyId)} />
-                          <span>
-                            {story.likedAuthorId?.length > 0
-                              ? story.likedAuthorId.length
-                              : 0}
-                          </span>
-                        </div>
-                        <div>
-                          <MessageCircle />
-                          <span>
-                            {story.userComments?.length > 0
-                              ? story.userComments.length
-                              : 0}
-                          </span>
-                        </div>
-                      </LikerAccount>
-                    </EachStory>
-                  );
-                })}
-            </StorySection>
-          </RightSection>
-          <div>
-            <ToastContainer
-              position="top-center"
-              autoClose={5000}
-              hideProgressBar
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="dark"
-              transition:Bounce
-            />
-          </div>
-        </Background>
+                          <LikerAccount>
+                            <div>
+                              <Heart
+                                onClick={() => handleLike(story.storyId)}
+                              />
+                              <span>
+                                {story.likedAuthorId?.length > 0
+                                  ? story.likedAuthorId.length
+                                  : 0}
+                              </span>
+                            </div>
+                            <div>
+                              <MessageCircle />
+                              <span>
+                                {story.userComments?.length > 0
+                                  ? story.userComments.length
+                                  : 0}
+                              </span>
+                            </div>
+                          </LikerAccount>
+                        </EachStory>
+                      );
+                    })}
+                </StorySection>
+              </RightSection>
+              <div>
+                <ToastContainer
+                  position="top-center"
+                  autoClose={5000}
+                  hideProgressBar
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  theme="dark"
+                  transition:Bounce
+                />
+              </div>
+            </Background>
+          )}
+        </>
       )}
     </>
   );

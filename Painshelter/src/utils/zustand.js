@@ -54,3 +54,12 @@ export const useHelpModal = create((set, get) => ({
   closeModal: () => set({ modal: false }),
   getModal: () => get().modal,
 }));
+
+export const useLyric = create((set, get) => ({
+  title: "",
+  searchStatus: false,
+  getTitle: () => get().title,
+  setTitle: (title) => set({ title }),
+  setStatus: () => set({ searchStatus: true }),
+  setStatusfasle: () => set({ searchStatus: false }),
+}));

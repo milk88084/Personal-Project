@@ -16,6 +16,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Buttons from "../../components/Buttons.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import ShowLyric from "../../components/ShowLyric.jsx";
+import { useLyric } from "../../utils/zustand.js";
+
 gsap.registerPlugin(useGSAP);
 gsap.registerPlugin(ScrollTrigger);
 
@@ -141,7 +144,7 @@ const SearchBar = styled.div`
     height: 30px;
     border-radius: 7px;
     color: black;
-    padding-left: 7px;
+    padding-left: 15px;
   }
 `;
 
@@ -225,6 +228,7 @@ function MusicHeal() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
+  const { title, setTitle, setStatus } = useLyric();
   useAuthCheck();
 
   //loading state
@@ -255,6 +259,8 @@ function MusicHeal() {
       });
       setVideos(response.data.items);
       setIsLoading(false);
+      setTitle(SearchInput.value);
+      setStatus();
     } catch (error) {
       setIsLoading(true);
       console.error("Search failed:", error);
@@ -265,6 +271,7 @@ function MusicHeal() {
     setCurrentVideo(video);
   };
 
+  //#region
   //GSAP三角形動畫
   useEffect(() => {
     [
@@ -288,7 +295,6 @@ function MusicHeal() {
   }, []);
 
   //GSAP標題和文字
-
   const lyric1 = useRef(null);
   const lyric2 = useRef(null);
   const lyric3 = useRef(null);
@@ -358,6 +364,9 @@ function MusicHeal() {
       },
     });
   });
+  //#endregion
+
+  console.log(title);
 
   return (
     <>
@@ -414,6 +423,7 @@ function MusicHeal() {
                 type="text"
               ></input>
             </form>
+            {/* <ShowLyric></ShowLyric> */}
           </SearchBar>
         </Intro>
         <MainSection>
