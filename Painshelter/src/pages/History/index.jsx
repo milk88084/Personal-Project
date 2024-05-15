@@ -41,6 +41,7 @@ import {
 import categoryImg from "../../assets/img/categoryImg.jpg";
 import Buttons from "../../components/Buttons.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import driverObj from "../../utils/newbie guide/historyPageGuide.js";
 
 //#region
 const Background = styled.div`
@@ -906,6 +907,11 @@ export default function History() {
 
   const profile = profileImg || showImg || defaultImg;
 
+  //newbie guide
+  function startTheMagicShow() {
+    driverObj.drive();
+  }
+
   return (
     <div>
       {isLoading ? (
@@ -940,17 +946,18 @@ export default function History() {
 
                     <h1>{`${name && name[0]?.name}`}</h1>
                   </LeftNameSection>
-                  <LeftButtonSection>
+                  <LeftButtonSection id="categories">
                     <button onClick={handlePost}>撰寫文章</button>
                     <button onClick={handleHelp}>測量壓力</button>
                     <button onClick={() => setShowFriendsList(true)}>
                       關注作者
                     </button>
                     <button onClick={showModal}>點選詩篇</button>
+                    <button onClick={startTheMagicShow}>新手教學</button>
                     <button onClick={() => navigate("/main")}>返回首頁</button>
                   </LeftButtonSection>
                   <LeftDateSection>
-                    <p>Joined in {showCreation}</p>
+                    <p id="joinedTime">Joined in {showCreation}</p>
                   </LeftDateSection>
                   <FAB>
                     <div>
@@ -980,17 +987,18 @@ export default function History() {
                 />
                 <h1>{`${name && name[0]?.name}`}</h1>
               </LeftNameSection>
-              <LeftButtonSection>
+              <LeftButtonSection id="categories">
                 <button onClick={handlePost}>撰寫文章</button>
                 <button onClick={handleHelp}>測量壓力</button>
                 <button onClick={() => setShowFriendsList(true)}>
                   關注作者
                 </button>
                 <button onClick={showModal}>點選詩篇</button>
+                <button onClick={startTheMagicShow}>新手教學</button>
                 <button onClick={() => navigate("/main")}>返回首頁</button>
               </LeftButtonSection>
               <LeftDateSection>
-                <p>Joined in {showCreation}</p>
+                <p id="joinedTime">Joined in {showCreation}</p>
               </LeftDateSection>
               <FAB>
                 <div>
@@ -1001,7 +1009,7 @@ export default function History() {
             </LeftSection>
             <RightSection>
               <Categories>
-                <section>
+                <section id="statistics">
                   <TopCategories onClick={() => navigate("/help")}>
                     <h1>
                       <h2>壓力</h2>
@@ -1047,7 +1055,7 @@ export default function History() {
                 <CategoriesImg>
                   <img src={categoryImg} alt={categoryImg}></img>
                 </CategoriesImg>
-                <CategoriesSection>
+                <CategoriesSection id="storySection">
                   <div>
                     <img src={logoImg} alt={logoImg} />
                   </div>

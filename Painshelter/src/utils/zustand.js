@@ -48,6 +48,12 @@ export const HistoryModal = create((set, get) => ({
   closeModal: () => set({ modal: false }),
 }));
 
+export const MainModal = create((set, get) => ({
+  modal: true,
+  showModal: () => set({ modal: true }),
+  closeModal: () => set({ modal: false }),
+}));
+
 export const useHelpModal = create((set, get) => ({
   modal: false,
   showModal: () => set({ modal: true }),

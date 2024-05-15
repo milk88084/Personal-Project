@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { auth } from "./utils/firebase/firebase.jsx";
 import { signOut } from "firebase/auth";
-import { useLoginState } from "./utils/zustand.js";
+import { useLoginState, MainModal } from "./utils/zustand.js";
 import { collection, query, getDocs } from "firebase/firestore";
 import { db } from "./utils/firebase/firebase.jsx";
 import { useState, useEffect, useRef } from "react";
@@ -26,6 +26,8 @@ import Buttons from "./components/Buttons.jsx";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { useAuthCheck } from "./utils/hooks/useAuthCheck.jsx";
+import ModalMain from "./components/ModalMain.jsx";
+// import driverObj from "../src/utils/newbie guide/mainPageGuide.js";
 gsap.registerPlugin(useGSAP);
 gsap.registerPlugin(ScrollTrigger);
 
@@ -44,6 +46,8 @@ const Background = styled.div`
   position: relative;
   overflow-x: hidden;
 `;
+
+const ShowNewbieGuide = styled.div``;
 
 const Banner = styled.div`
   position: relative;
@@ -446,6 +450,7 @@ const MapSection = styled.div`
   width: 1280px;
   margin: 0 auto;
   height: 100vh;
+  z-index: 1000;
 
   @media screen and (max-width: 1279px) {
     width: 100%;
@@ -541,6 +546,7 @@ function App() {
   const { offline, logout } = useLoginState();
   const localStorageUserId = window.localStorage.getItem("userId");
   const localStorageLogin = window.localStorage.getItem("loginStatus");
+  const { modal, showModal } = MainModal();
   const location = useLocation();
   useAuthCheck();
 
@@ -768,6 +774,11 @@ function App() {
     window.scrollTo(0, 0);
   };
 
+  //newbie guide
+  // function startTheMagicShow() {
+  //   driverObj.drive();
+  // }
+
   return (
     <>
       <GlobalStyle />
@@ -789,6 +800,7 @@ function App() {
               心靈緊急按鈕
             </button>
             <button onClick={() => scrollSection(footer)}>或是一首歌</button>
+            <button onClick={showModal}>關於</button>
             <button ref={seventhRef} onClick={handleLogout}>
               登出
             </button>
@@ -898,6 +910,7 @@ function App() {
           </FooterContent>
         </FooterSection>
         <CopyRight></CopyRight>
+        <ShowNewbieGuide>{modal ? <ModalMain /> : null}</ShowNewbieGuide>
       </Background>
     </>
   );
