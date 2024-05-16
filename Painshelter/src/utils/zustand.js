@@ -42,23 +42,22 @@ export const useAuthorfiedData = create((set, get) => ({
   setSelectedStoryId: (id) => set({ selectedStoryId: id }),
 }));
 
-export const HistoryModal = create((set, get) => ({
+export const HistoryModal = create((set) => ({
   modal: true,
   showModal: () => set({ modal: true }),
   closeModal: () => set({ modal: false }),
 }));
 
-export const MainModal = create((set, get) => ({
+export const MainModal = create((set) => ({
   modal: true,
   showModal: () => set({ modal: true }),
   closeModal: () => set({ modal: false }),
 }));
 
-export const useHelpModal = create((set, get) => ({
+export const useHelpModal = create((set) => ({
   modal: false,
   showModal: () => set({ modal: true }),
   closeModal: () => set({ modal: false }),
-  getModal: () => get().modal,
 }));
 
 export const useLyric = create((set, get) => ({

@@ -6,17 +6,10 @@ const driverObj = driver({
   //   overlayColor: "white",
   steps: [
     {
-      element: "#categories",
+      element: "#profileImg",
       popover: {
-        title: "功能列表",
-        description: "不同功能可以點選。",
-      },
-    },
-    {
-      element: "#joinedTime",
-      popover: {
-        title: "加入時間",
-        description: "使用者加入收容所的時間。",
+        title: "大頭照更換",
+        description: "點擊頭像可以更換大頭照。",
       },
     },
     {

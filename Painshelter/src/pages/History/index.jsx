@@ -928,7 +928,7 @@ export default function History() {
                   <CloseButton>
                     <button onClick={() => setIsMobileSize(false)}>x</button>
                   </CloseButton>
-                  <LeftNameSection>
+                  <LeftNameSection id="profileImg">
                     <input
                       label="Image"
                       placeholder="Choose image"
@@ -946,7 +946,7 @@ export default function History() {
 
                     <h1>{`${name && name[0]?.name}`}</h1>
                   </LeftNameSection>
-                  <LeftButtonSection id="categories">
+                  <LeftButtonSection>
                     <button onClick={handlePost}>撰寫文章</button>
                     <button onClick={handleHelp}>測量壓力</button>
                     <button onClick={() => setShowFriendsList(true)}>
@@ -957,7 +957,7 @@ export default function History() {
                     <button onClick={() => navigate("/main")}>返回首頁</button>
                   </LeftButtonSection>
                   <LeftDateSection>
-                    <p id="joinedTime">Joined in {showCreation}</p>
+                    <p>Joined in {showCreation}</p>
                   </LeftDateSection>
                   <FAB>
                     <div>
@@ -970,7 +970,7 @@ export default function History() {
             ) : null}
 
             <LeftSection backgroundImg={backgroundImg}>
-              <LeftNameSection>
+              <LeftNameSection id="profileImg">
                 <input
                   label="Image"
                   placeholder="Choose image"
@@ -987,7 +987,7 @@ export default function History() {
                 />
                 <h1>{`${name && name[0]?.name}`}</h1>
               </LeftNameSection>
-              <LeftButtonSection id="categories">
+              <LeftButtonSection>
                 <button onClick={handlePost}>撰寫文章</button>
                 <button onClick={handleHelp}>測量壓力</button>
                 <button onClick={() => setShowFriendsList(true)}>
@@ -998,7 +998,7 @@ export default function History() {
                 <button onClick={() => navigate("/main")}>返回首頁</button>
               </LeftButtonSection>
               <LeftDateSection>
-                <p id="joinedTime">Joined in {showCreation}</p>
+                <p>Joined in {showCreation}</p>
               </LeftDateSection>
               <FAB>
                 <div>

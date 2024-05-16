@@ -38,6 +38,7 @@ import {
 import defaultImg from "../../assets/img/defaultImg.png";
 import Buttons from "../../components/Buttons.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import useEditPageArticles from "@/utils/hooks/useEditPageArticles.jsx";
 
 const storyTypeData = [
   "成長軌跡",
@@ -895,19 +896,7 @@ export default function Edit() {
           </EditSections>
         </>
       )}
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-        transition:Bounce
-      />
+      <ToastContainer />
     </Background>
   );
 }

@@ -59,10 +59,19 @@ const Background = styled.div`
   }
 
   button {
-    background-color: black;
-    border-radius: 50%;
+    padding: 0px;
     width: 30px;
     height: 30px;
+  }
+
+  .slick-next {
+    background-color: #363b44;
+    border-radius: 20px;
+  }
+
+  .slick-prev {
+    background-color: #363b44;
+    border-radius: 20px;
   }
 
   .slick-initialized .slick-slide {
@@ -75,7 +84,7 @@ const Background = styled.div`
     border-radius: 10px;
     font-weight: 400;
     border: 1px solid white;
-    margin: 16px;
+    margin-top: 30px;
     cursor: pointer;
 
     &:hover,
@@ -154,14 +163,6 @@ export default function Modal() {
               </h2>
             </VideoSection>
           </Slider>
-
-          <span
-            onClick={() => {
-              closeModal();
-            }}
-          >
-            確認
-          </span>
         </Background>
       ) : null}
     </div>
