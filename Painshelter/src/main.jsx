@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login/index.jsx";
 import Signup from "./pages/Signup/index.jsx";
 import History from "./pages/History/index.jsx";
-import Disagree from "./pages/Disagree/index.jsx";
 import Help from "./pages/Help/index.jsx";
 import Post from "./pages/Post/index.jsx";
 import VisitAuthor from "./pages/VisitAuthor/index.jsx";
@@ -26,7 +25,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
         <Route path="history" element={<History />} />
-        <Route path="disagree" element={<Disagree />} />
         <Route path="help" element={<Help />} />
         <Route path="post" element={<Post />} />
         <Route path="visit" element={<VisitAuthor />} />

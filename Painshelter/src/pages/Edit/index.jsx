@@ -6,7 +6,6 @@ import { useEditCheckboxInput } from "../../utils/hooks/useEditCheckboxInput.jsx
 import EditLocationSearch from "../../components/EditLocationSearch.jsx";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { db, storage } from "../../utils/firebase/firebase.jsx";
-import pill from "../../assets/icon/pill.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {

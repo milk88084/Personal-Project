@@ -5,7 +5,6 @@ import { useEditFormInput } from "../../utils/hooks/useEditFormInput.jsx";
 import { useEditCheckboxInput } from "../../utils/hooks/useEditCheckboxInput.jsx";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { db } from "../../utils/firebase/firebase.jsx";
-import pill from "../../assets/icon/pill.png";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 import defaultImg from "../../assets/img/defaultImg.png";
 import {

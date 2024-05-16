@@ -16,7 +16,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Buttons from "../../components/Buttons.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
-import ShowLyric from "../../components/ShowLyric.jsx";
 import { useLyric } from "../../utils/zustand.js";
 
 gsap.registerPlugin(useGSAP);

@@ -1,4 +1,3 @@
-import React from "react";
 import { modifiedData } from "../../utils/zustand";
 import { collection, query, getDocs, where } from "firebase/firestore";
 import { useState, useEffect } from "react";

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { collection, query, getDocs } from "firebase/firestore";
 import { db } from "../utils/firebase/firebase.jsx";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import Modal from "./Modal.jsx";
 import { useLoginState } from "../utils/zustand.js";
 import icon from "../assets/img/logoImg3.png";

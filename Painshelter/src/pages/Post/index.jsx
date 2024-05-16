@@ -14,7 +14,6 @@ import { Timestamp, addDoc, collection, updateDoc } from "firebase/firestore";
 import LocationSearch from "../../components/LocationSearch.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
-import { Send, Image } from "lucide-react";
 import Swal from "sweetalert2";
 import { bouncy } from "ldrs";
 import Buttons from "../../components/Buttons.jsx";

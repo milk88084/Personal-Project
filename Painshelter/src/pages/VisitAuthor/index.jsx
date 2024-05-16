@@ -6,7 +6,6 @@ import {
   where,
   updateDoc,
   arrayUnion,
-  doc,
   onSnapshot,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -18,15 +17,12 @@ import styled from "styled-components";
 import logoImg from "../../assets/img/logoImg.png";
 import logoTitle from "../../assets/img/logoTitle.png";
 import backgroundImg from "../../assets/img/historyBanner.jpg";
-import heartIcon from "../../assets/icon/heart.png";
-import submitIcon from "../../assets/icon/paper-plane.png";
 // import backgroundImg from "../../assets/img/backgroundImg.jpg";
 import { useAuthorfiedData } from "../../utils/zustand.js";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 import { AlignJustify, Heart, MessageCircle } from "lucide-react";
 import Buttons from "@/components/Buttons.jsx";
 import defaultImg from "../../assets/img/defaultImg.png";
-import { auth } from "@/utils/firebase/auth.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

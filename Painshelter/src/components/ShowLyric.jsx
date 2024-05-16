@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { useLyric } from "../utils/zustand.js";
