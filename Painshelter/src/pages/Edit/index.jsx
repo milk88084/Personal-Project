@@ -1,13 +1,15 @@
 import styled from "styled-components";
 import { useEffect, useState, useRef } from "react";
-import { useLoginState } from "../../utils/zustand.js";
 import { useEditFormInput } from "../../utils/hooks/useEditFormInput.jsx";
 import { useEditCheckboxInput } from "../../utils/hooks/useEditCheckboxInput.jsx";
-import EditLocationSearch from "../../components/EditLocationSearch.jsx";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { db, storage } from "../../utils/firebase/firebase.jsx";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { storage } from "../../utils/firebase/firebase.jsx";
+import { ToastContainer } from "react-toastify";
+import storyTypeData from "@/utils/data/storyTypeData.json";
+import storyFigureData from "@/utils/data/storyFigureData.json";
+import defaultImg from "../../assets/img/defaultImg.png";
+import Buttons from "../../components/Buttons.jsx";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 import {
   Undo2,
   ScanSearch,
@@ -17,44 +19,16 @@ import {
   Pencil,
   Home,
 } from "lucide-react";
-import Swal from "sweetalert2";
 import {
   getDownloadURL,
   ref as storageRef,
   uploadBytes,
 } from "firebase/storage";
 import {
-  Timestamp,
-  collection,
-  updateDoc,
-  query,
-  getDocs,
-  where,
-  deleteDoc,
-  doc,
-  getDoc,
-} from "firebase/firestore";
-import defaultImg from "../../assets/img/defaultImg.png";
-import Buttons from "../../components/Buttons.jsx";
-import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
-import useEditPageArticles from "@/utils/hooks/useEditPageArticles.jsx";
-
-const storyTypeData = [
-  "成長軌跡",
-  "情感關係",
-  "人際交流",
-  "生命經歷",
-  "職場發展",
-];
-const storyFigureData = [
-  "親人",
-  "伴侶",
-  "朋友",
-  "關係人",
-  "陌生人",
-  "那個他",
-  "內在自我",
-];
+  getFirebasePosts,
+  handleEditSubmit,
+  handleDeletePost,
+} from "@/utils/firebase/firebaseService.js";
 
 //#region
 const Background = styled.div`
@@ -296,16 +270,6 @@ const CommentsSection = styled.div`
   justify-content: center;
 `;
 
-const CommentsWrapper = styled.div`
-  display: flex;
-  border-radius: 20px;
-  height: 100px;
-  background-color: rgb(255, 255, 255, 0.6);
-  margin-bottom: 30px;
-  align-items: center;
-  padding: 8px 24px;
-`;
-
 const CommentPart = styled.div`
   display: flex;
   flex-direction: column;
@@ -351,78 +315,71 @@ const AvatarPart = styled.div`
     padding: 2px;
   }
 `;
+
+const Reply = styled.div`
+  display: flex;
+  border-radius: 20px;
+  height: 100px;
+  background-color: rgb(255, 255, 255, 0.6);
+  margin-bottom: 30px;
+  align-items: center;
+  padding: 8px 24px;
+  cursor: pointer;
+
+  &:hover {
+    background: #1d1d1d;
+    color: white;
+  }
+  &:active {
+    box-shadow: 2px 2px 5px #666666;
+    transform: scale(0.9);
+  }
+  @media screen and (max-width: 1279px) {
+    border-radius: 15px;
+  }
+`;
 //#endregion
 
 export default function Edit() {
   const params = useParams();
+  const top = useRef(null);
   const navigate = useNavigate();
-  const { locationSerach } = useLoginState();
   const postStory = useEditFormInput();
   const storyTitle = useEditFormInput();
   const storyTime = useEditFormInput();
   const storyImage = useEditFormInput();
   const storyType = useEditCheckboxInput(storyTypeData);
   const storyFigure = useEditCheckboxInput(storyFigureData);
-  const storyLocation = locationSerach[0];
   const [locationName, setLocationName] = useState();
   const [isEdit, setIsEdit] = useState(true);
-  const top = useRef(null);
   const [comments, setComments] = useState();
   const location = useLocation();
   useAuthCheck();
 
-  //回到網頁最上方
+  //back to the top ref
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  //取得db資料
+  //Get the collection datas from firebase
   useEffect(() => {
-    async function getStories() {
-      try {
-        const postsData = collection(db, "posts");
-        const q = query(postsData, where("storyId", "==", params.id));
-        const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-          const data = querySnapshot.docs[0].data();
-          storyTitle.setValue(data.title);
-          postStory.setValue(data.story);
-          storyTime.setValue(data.time);
-          storyType.setCheckedValues(data.type);
-          storyFigure.setCheckedValues(data.figure);
-          setLocationName(data.location.name);
-          storyImage.setValue(data.imgUrl);
-          const commentsWithNames = await Promise.all(
-            data.userComments.map(async (comment) => {
-              const userRef = doc(db, "users", comment.id);
-              const userSnap = await getDoc(userRef);
-              return userSnap.exists()
-                ? {
-                    comment: comment.comment,
-                    name: userSnap.data().name,
-                    img: userSnap.data().profileImg,
-                  }
-                : comment;
-            })
-          );
-          setComments(commentsWithNames);
-        } else {
-          console.log("No document found with the given storyId");
-        }
-      } catch (e) {
-        console.error("Error fetching document: ", e);
+    async function fetchData() {
+      const data = await getFirebasePosts("storyId", params.id);
+      if (data) {
+        storyTitle.setValue(data.title);
+        postStory.setValue(data.story);
+        storyTime.setValue(data.time);
+        storyType.setCheckedValues(data.type);
+        storyFigure.setCheckedValues(data.figure);
+        storyImage.setValue(data.imgUrl);
+        setLocationName(data.location.name);
+        setComments(data.commentsWithNames);
       }
     }
-    getStories();
-  }, [db, params.id]);
+    fetchData();
+  }, [params.id]);
 
-  // console.log(locationName);
-  // console.log(storyType.checkedValues);
-  // console.log(comments);
-
-  //上傳照片
-  //上傳圖片
-
+  //upload Img
   const inputRef = useRef(null);
   const [showImg, setShowImg] = useState(null);
   const [fileName, setFileName] = useState("");
@@ -435,128 +392,27 @@ export default function Edit() {
     setShowImg(url);
   };
 
-  //更新db資料
+  //Edit post click button
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    console.log(storyTitle.value);
-    console.log(storyTime.value);
-    console.log(storyType.getSortedCheckedValues());
-    console.log(storyFigure.getSortedCheckedValues());
-    console.log(postStory.value);
-
-    const result = await Swal.fire({
-      title: "確定修改故事？",
-      text: "修改後將無法恢復",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#363636",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "儲存",
-      cancelButtonText: "取消",
-    });
-
-    if (result.isConfirmed) {
-      try {
-        const q = query(
-          collection(db, "posts"),
-          where("storyId", "==", params.id)
-        );
-        const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-          const docRef = querySnapshot.docs[0].ref;
-          await updateDoc(docRef, {
-            title: storyTitle.value,
-            time: storyTime.value,
-            imgUrl: storyImage.value,
-            type: storyType.getSortedCheckedValues(),
-            figure: storyFigure.getSortedCheckedValues(),
-            story: postStory.value,
-            modifiedAt: Timestamp.fromDate(new Date()),
-          });
-          toast.success("成功修改：" + storyTitle.value + "故事", {
-            position: "top-center",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
-          setIsEdit(true);
-        } else {
-          console.error("No document found with the given storyId");
-          toast.error("修改失敗", {
-            position: "top-center",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
-        }
-      } catch (error) {
-        console.error("Error updating document: ", error);
-        toast.error("修改失敗", {
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-      }
-    }
+    await handleEditSubmit(
+      event,
+      params.id,
+      storyTitle,
+      storyTime,
+      storyImage,
+      storyType,
+      storyFigure,
+      postStory,
+      setIsEdit
+    );
   };
 
-  //刪除文章
+  //Delete post button
   const deleteStory = async () => {
-    console.log(params.id);
-    const result = await Swal.fire({
-      title: "確定刪除故事？",
-      text: "刪除後將無法恢復",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#363636",
-      confirmButtonText: "刪除",
-    });
-
-    if (result.isConfirmed) {
-      try {
-        const q = doc(db, "posts", params.id);
-        console.log("delete");
-        await deleteDoc(q);
-        console.log("finish");
-        Swal.fire({
-          title: "刪除故事",
-          text: "此篇故事已被刪除",
-          icon: "success",
-        });
-        setTimeout(() => navigate("/history"), 2000);
-      } catch (error) {
-        console.error("Error updating document: ", error);
-        toast.error("刪除失敗", {
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-      }
-    } else {
-      console.log("取消刪除動作");
-    }
+    await handleDeletePost(params.id, navigate);
   };
 
-  //編輯按鈕來決定state狀態
+  //Change state between edit and delete
   const handleHistory = () => {
     setIsEdit(false);
     scrollSection(top);
@@ -567,18 +423,22 @@ export default function Edit() {
     scrollSection(top);
   };
 
+  //
   const backPreviewPage = () => {
     navigate("/history");
     setIsEdit(true);
     scrollSection(top);
   };
 
-  //回到最上方
   const scrollSection = (elementRef) => {
     window.scrollTo({
       top: elementRef.current.offsetTop,
       behavior: "smooth",
     });
+  };
+
+  const handleClikcToCommentAuthorPage = (id) => {
+    navigate("/visit", { state: { data: id } });
   };
 
   return (
@@ -631,21 +491,22 @@ export default function Edit() {
               <CommentsSection>
                 {comments && comments.length > 0
                   ? comments.map((data, index) => (
-                      <>
-                        <CommentsWrapper>
-                          <AvatarPart>
-                            {data.img ? (
-                              <img src={data.img} alt="profileImg" />
-                            ) : (
-                              <img src={defaultImg} alt="profileImg" />
-                            )}
-                          </AvatarPart>
-                          <CommentPart key={index}>
-                            <h2>{data.name}</h2>
-                            <p>#{data.comment}</p>
-                          </CommentPart>
-                        </CommentsWrapper>
-                      </>
+                      <Reply
+                        key={index}
+                        onClick={() => handleClikcToCommentAuthorPage(data.id)}
+                      >
+                        <AvatarPart>
+                          {data.img ? (
+                            <img src={data.img} alt="profileImg" />
+                          ) : (
+                            <img src={defaultImg} alt="profileImg" />
+                          )}
+                        </AvatarPart>
+                        <CommentPart key={index}>
+                          <h2>{data.name}</h2>
+                          <p>#{data.comment}</p>
+                        </CommentPart>
+                      </Reply>
                     ))
                   : null}
               </CommentsSection>
@@ -699,63 +560,21 @@ export default function Edit() {
                   />
                 </EditDateInput>
               </EditCategories>
-
-              {/* <div className="flex mt-12 items-center">
-            <label className="block marker:m-3 text-3xl mr-12 font-semibold">
-              發生地點
-            </label>
-            <EditLocationSearch location={locationName} />
-          </div> */}
-
               <EditCategories>
                 <EditTitle>故事類型</EditTitle>
                 <EditTypesInput>
                   <ul>
-                    <li>
-                      <input
-                        type="checkbox"
-                        onChange={storyType.onChange}
-                        checked={storyType.checkedValues.includes("成長軌跡")}
-                        value="成長軌跡"
-                      />
-                      成長軌跡
-                    </li>
-                    <li>
-                      <input
-                        type="checkbox"
-                        onChange={storyType.onChange}
-                        checked={storyType.checkedValues.includes("情感關係")}
-                        value="情感關係"
-                      />
-                      情感關係
-                    </li>
-                    <li>
-                      <input
-                        type="checkbox"
-                        onChange={storyType.onChange}
-                        checked={storyType.checkedValues.includes("人際交流")}
-                        value="人際交流"
-                      />
-                      人際交流
-                    </li>
-                    <li>
-                      <input
-                        type="checkbox"
-                        onChange={storyType.onChange}
-                        checked={storyType.checkedValues.includes("生命經歷")}
-                        value="生命經歷"
-                      />
-                      生命經歷
-                    </li>
-                    <li>
-                      <input
-                        type="checkbox"
-                        onChange={storyType.onChange}
-                        checked={storyType.checkedValues.includes("職場發展")}
-                        value="職場發展"
-                      />
-                      職場發展
-                    </li>
+                    {storyTypeData.map((option) => (
+                      <li key={option}>
+                        <input
+                          type="checkbox"
+                          onChange={storyType.onChange}
+                          checked={storyType.checkedValues.includes(option)}
+                          value={option}
+                        />
+                        {option}
+                      </li>
+                    ))}
                   </ul>
                 </EditTypesInput>
               </EditCategories>
@@ -763,69 +582,17 @@ export default function Edit() {
                 <EditTitle>故事對象</EditTitle>
                 <EditTypesInput>
                   <ul>
-                    <li>
-                      <input
-                        type="checkbox"
-                        onChange={storyFigure.onChange}
-                        checked={storyFigure.checkedValues.includes("親人")}
-                        value="親人"
-                      />
-                      親人
-                    </li>
-                    <li>
-                      <input
-                        type="checkbox"
-                        onChange={storyFigure.onChange}
-                        checked={storyFigure.checkedValues.includes("伴侶")}
-                        value="伴侶"
-                      />
-                      伴侶
-                    </li>
-                    <li>
-                      <input
-                        type="checkbox"
-                        onChange={storyFigure.onChange}
-                        checked={storyFigure.checkedValues.includes("朋友")}
-                        value="朋友"
-                      />
-                      朋友
-                    </li>
-                    <li>
-                      <input
-                        type="checkbox"
-                        onChange={storyFigure.onChange}
-                        checked={storyFigure.checkedValues.includes("關係人")}
-                        value="關係人"
-                      />
-                      關係人
-                    </li>
-                    <li>
-                      <input
-                        type="checkbox"
-                        onChange={storyFigure.onChange}
-                        checked={storyFigure.checkedValues.includes("陌生人")}
-                        value="陌生人"
-                      />
-                      陌生人
-                    </li>
-                    <li>
-                      <input
-                        type="checkbox"
-                        onChange={storyFigure.onChange}
-                        checked={storyFigure.checkedValues.includes("那個他")}
-                        value="那個他"
-                      />
-                      那個他
-                    </li>
-                    <li>
-                      <input
-                        type="checkbox"
-                        onChange={storyFigure.onChange}
-                        checked={storyFigure.checkedValues.includes("內在自我")}
-                        value="內在自我"
-                      />
-                      內在自我
-                    </li>
+                    {storyFigureData.map((option) => (
+                      <li key={option}>
+                        <input
+                          type="checkbox"
+                          onChange={storyFigure.onChange}
+                          checked={storyFigure.checkedValues.includes(option)}
+                          value={option}
+                        />
+                        {option}
+                      </li>
+                    ))}
                   </ul>
                 </EditTypesInput>
               </EditCategories>
@@ -855,7 +622,6 @@ export default function Edit() {
                   ) : (
                     <img src={storyImage.value} />
                   )}
-                  {/* <img src={storyImage.value} alt="" /> */}
                 </PrevImg>
               </EditCategories>
               <EditTextArea>
