@@ -64,12 +64,12 @@ const Background = styled.div`
     height: 30px;
   }
 
-  .slick-next {
+  .slick-next:before {
     background-color: #363b44;
     border-radius: 20px;
   }
 
-  .slick-prev {
+  .slick-prev:before {
     background-color: #363b44;
     border-radius: 20px;
   }
@@ -139,7 +139,7 @@ export default function Modal() {
       <BackdropMainPage />
       {modal ? (
         <Background>
-          <h1>新手教學</h1>
+          <h1>Tutorial</h1>
           <Slider {...settings}>
             <VideoSection key={1}>
               <video src={categories} loop autoPlay muted></video>

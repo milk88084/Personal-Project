@@ -1,40 +1,15 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { useLoginState } from "../../utils/zustand.js";
 import { useEditFormInput } from "../../utils/hooks/useEditFormInput.jsx";
 import { useEditCheckboxInput } from "../../utils/hooks/useEditCheckboxInput.jsx";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { db } from "../../utils/firebase/firebase.jsx";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 import defaultImg from "../../assets/img/defaultImg.png";
-import {
-  collection,
-  query,
-  getDocs,
-  where,
-  doc,
-  getDoc,
-} from "firebase/firestore";
-import { comment } from "postcss";
 import Buttons from "../../components/Buttons.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
-
-const storyTypeData = [
-  "成長軌跡",
-  "情感關係",
-  "人際交流",
-  "生命經歷",
-  "職場發展",
-];
-const storyFigureData = [
-  "親人",
-  "伴侶",
-  "朋友",
-  "關係人",
-  "陌生人",
-  "那個他",
-  "內在自我",
-];
+import { getFirebasePosts } from "@/utils/firebase/firebaseService.js";
+import stortTypeData from "@/utils/data/storyTypeData.json";
+import storyFigureData from "@/utils/data/storyFigureData.json";
 
 //#region
 const Background = styled.div`
@@ -318,74 +293,50 @@ export default function Edit() {
   const postStory = useEditFormInput();
   const storyTitle = useEditFormInput();
   const storyTime = useEditFormInput();
-  const storyType = useEditCheckboxInput(storyTypeData);
+  const storyType = useEditCheckboxInput(stortTypeData);
   const storyFigure = useEditCheckboxInput(storyFigureData);
   const [locationName, setLocationName] = useState();
   const [comments, setComments] = useState();
   const location = useLocation();
-  const [issloading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   useAuthCheck();
 
-  //回到網頁最上方
+  //Back to the scroll top
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  //取得db資料
+  //Get the collection datas from firebase
   useEffect(() => {
-    async function getStories() {
-      try {
-        setIsLoading(true);
-        const postsData = collection(db, "posts");
-        const q = query(postsData, where("storyId", "==", params.id));
-        const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-          const data = querySnapshot.docs[0].data(); // 直接取得数据
-          storyTitle.setValue(data.title);
-          postStory.setValue(data.story);
-          storyTime.setValue(data.time);
-          storyType.setCheckedValues(data.type);
-          storyFigure.setCheckedValues(data.figure);
-          setLocationName(data.location.name);
-          const commentsWithNames = await Promise.all(
-            data.userComments.map(async (comment) => {
-              const userRef = doc(db, "users", comment.id);
-              const userSnap = await getDoc(userRef);
-              return userSnap.exists()
-                ? {
-                    comment: comment.comment,
-                    name: userSnap.data().name,
-                    img: userSnap.data().profileImg,
-                    id: comment.id,
-                  }
-                : comment;
-            })
-          );
-          setComments(commentsWithNames);
-          setIsLoading(false);
-        } else {
-          console.log("No document found with the given storyId");
-        }
-      } catch (e) {
-        setIsLoading(true);
-        console.error("Error fetching document: ", e);
+    async function fetchData() {
+      setIsLoading(true);
+      const data = await getFirebasePosts("storyId", params.id);
+      if (data) {
+        storyTitle.setValue(data.title);
+        postStory.setValue(data.story);
+        storyTime.setValue(data.time);
+        storyType.setCheckedValues(data.type);
+        storyFigure.setCheckedValues(data.figure);
+        setLocationName(data.location.name);
+        setComments(data.commentsWithNames);
       }
+      setIsLoading(false);
     }
-    getStories();
-  }, [db, params.id]);
 
-  //留言到該作者頁面
+    fetchData();
+  }, [params.id]);
+
   const handleClikcToCommentAuthor = (id) => {
     navigate("/visit", { state: { data: id } });
   };
 
   return (
     <Background>
-      {issloading ? (
+      {isLoading ? (
         <IsLoadingPage />
       ) : (
         <>
-          <Title ref={top}>文章預覽</Title>
+          <Title>文章預覽</Title>
           <EditSections>
             <EditCategories>
               <EditTitle>疼痛暗號</EditTitle>
@@ -421,27 +372,25 @@ export default function Edit() {
             </EditTextArea>
             <EditTextArea>
               <p>故事留言</p>
-
               <CommentsSection>
                 {comments && comments.length > 0
                   ? comments.map((data, index) => (
-                      <>
-                        <Reply
-                          onClick={() => handleClikcToCommentAuthor(data.id)}
-                        >
-                          <AvatarPart>
-                            {data.img ? (
-                              <img src={data.img} alt="profileImg" />
-                            ) : (
-                              <img src={defaultImg} alt="profileImg" />
-                            )}
-                          </AvatarPart>
-                          <CommentPart key={index}>
-                            <h2>{data.name}</h2>
-                            <p>#{data.comment}</p>
-                          </CommentPart>
-                        </Reply>
-                      </>
+                      <Reply
+                        key={index}
+                        onClick={() => handleClikcToCommentAuthor(data.id)}
+                      >
+                        <AvatarPart>
+                          {data.img ? (
+                            <img src={data.img} alt="profileImg" />
+                          ) : (
+                            <img src={defaultImg} alt="profileImg" />
+                          )}
+                        </AvatarPart>
+                        <CommentPart key={index}>
+                          <h2>{data.name}</h2>
+                          <p>#{data.comment}</p>
+                        </CommentPart>
+                      </Reply>
                     ))
                   : null}
               </CommentsSection>
