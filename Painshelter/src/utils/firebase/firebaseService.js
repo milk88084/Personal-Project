@@ -8,6 +8,7 @@ import {
   updateDoc,
   Timestamp,
   deleteDoc,
+  arrayUnion,
 } from "firebase/firestore";
 import { db } from "../../utils/firebase/firebase.jsx";
 import Swal from "sweetalert2";
@@ -131,6 +132,7 @@ export const handleEditSubmit = async (
   }
 };
 
+//Delete the post function
 export const handleDeletePost = async (id, navigate) => {
   const result = await Swal.fire({
     title: "確定刪除故事？",
@@ -169,5 +171,33 @@ export const handleDeletePost = async (id, navigate) => {
     }
   } else {
     console.log("取消刪除動作");
+  }
+};
+
+//Update the survey data to the firestore function
+export const updateUserStressRecord = async (
+  userId,
+  score,
+  complete,
+  setIsLoading
+) => {
+  try {
+    const q = query(collection(db, "users"), where("id", "==", userId));
+    const recordArray = { time: Timestamp.fromDate(new Date()), number: score };
+    const querySnapshot = await getDocs(q);
+
+    if (complete === false) {
+      return;
+    } else if (complete) {
+      const docRef = querySnapshot.docs[0].ref;
+      setIsLoading(true);
+      await updateDoc(docRef, {
+        number: score,
+        stressRecord: arrayUnion(recordArray),
+      });
+      setIsLoading(false);
+    }
+  } catch (error) {
+    console.error("Error updating document: ", error);
   }
 };
