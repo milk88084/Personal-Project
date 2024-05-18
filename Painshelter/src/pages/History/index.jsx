@@ -1,15 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { db, storage } from "../../utils/firebase/firebase.jsx";
-import { auth } from "../../utils/firebase/auth.jsx";
-import {
-  collection,
-  query,
-  getDocs,
-  where,
-  doc,
-  arrayRemove,
-  updateDoc,
-} from "firebase/firestore";
+import { storage } from "../../utils/firebase/firebase.jsx";
 import { useState, useEffect, useRef } from "react";
 import { modifiedData } from "../../utils/zustand.js";
 import moment from "moment";
@@ -25,13 +15,11 @@ import pill from "../../assets/icon/pill.png";
 import AnimatedNumber from "../../components/AnimatedNumber.jsx";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 import { UserRoundX, User, StickyNote, AlignJustify } from "lucide-react";
-import { ToastContainer, toast } from "react-toastify";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import Swal from "sweetalert2";
 import defaultImg from "../../assets/img/defaultImg.png";
 import {
   getDownloadURL,
@@ -42,6 +30,15 @@ import categoryImg from "../../assets/img/categoryImg.jpg";
 import Buttons from "../../components/Buttons.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 import driverObj from "../../utils/newbie guide/historyPageGuide.js";
+import {
+  getFirebasePosts,
+  getFirebaseUsers,
+  getAuthorsByIds,
+  getAuthorJoinedDate,
+  handleUnFollow,
+  updateProfileImage,
+} from "@/utils/firebase/firebaseService.js";
+import LeftSectionMobile from "./LeftSectionMobile.jsx";
 
 //#region
 const Background = styled.div`
@@ -86,31 +83,6 @@ const LeftSection = styled.div`
   @media screen and (max-width: 1279px) {
     z-index: 30;
     display: none;
-  }
-`;
-const LeftSectionMobile = styled.div`
-  display: none;
-  @media screen and (max-width: 1279px) {
-    z-index: 500;
-    background-color: #666666;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-  }
-`;
-
-const CloseButton = styled.div`
-  @media screen and (max-width: 1279px) {
-    font-size: 30px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    margin-right: 20px;
   }
 `;
 
@@ -674,54 +646,59 @@ export default function History() {
     window.scrollTo(0, 0);
   }, [location]);
 
+  //Get all the Posts data from firebase collection
   useEffect(() => {
-    async function getStories() {
-      try {
-        setIsLoading(true);
-        const postsData = collection(db, "posts");
-        const authorData = collection(db, "users");
-        const q = query(postsData, where("userId", "==", localStorageUserId));
-        const qA = query(authorData, where("id", "==", localStorageUserId));
-        const querySnapshot = await getDocs(q);
-        const userStoryList = querySnapshot.docs.map((doc) => ({
-          title: doc.data().title,
-          time: doc.data().time,
-          location: doc.data().location,
-          type: doc.data().type,
-          figure: doc.data().figure,
-          story: doc.data().story,
-          userComments: doc.data().userComments,
-          likedAuthorId: doc.data().likedAuthorId,
-          storyId: doc.data().storyId,
+    async function fetchStoryData() {
+      setIsLoading(true);
+      const data = await getFirebasePosts("userId", localStorageUserId);
+      if (data.length > 0) {
+        const userStoryList = data.map((doc) => ({
+          title: doc.title,
+          time: doc.time,
+          location: doc.location,
+          type: doc.type,
+          figure: doc.figure,
+          story: doc.story,
+          userComments: doc.userComments || [],
+          likedAuthorId: doc.likedAuthorId,
+          storyId: doc.storyId,
         }));
         setStories(userStoryList);
-        const querySnapshotA = await getDocs(qA);
-        const followListData = querySnapshotA.docs
-          .map((doc) => doc.data().followAuthor)
-          .flat();
-        setFollowList(followListData);
-        const pressureCount = querySnapshotA.docs
-          .map((doc) => doc.data().stressRecord)
-          .flat();
-        setPressure(pressureCount);
-        setIsLoading(false);
+      }
+    }
+    fetchStoryData();
+    setIsLoading(false);
+  }, []);
+
+  const [authorName, setAuthorName] = useState();
+  //Get User data from firebase collection
+  useEffect(() => {
+    async function fetchUserDataAndAuthors() {
+      try {
+        const data = await getFirebaseUsers("id", localStorageUserId);
+        if (data) {
+          setAuthorName(data.name);
+          setProfileImg(data.profileImg);
+          const followListData = data.followAuthor.flat();
+          setFollowList(followListData);
+          const pressureCount = data.stressRecord.flat();
+          setPressure(pressureCount);
+          if (followListData.length > 0) {
+            const authorNamesList = await getAuthorsByIds(followListData);
+            setAuthors(authorNamesList);
+          }
+        }
       } catch (e) {
         console.log(e);
       }
     }
-    getStories();
-  }, []);
+    fetchUserDataAndAuthors();
+  }, [localStorageUserId]);
 
-  console.log(pressure);
-  // console.log(followList);
-  // console.log(stories);
   let getLastPressureNumber = {};
   if (pressure && pressure.length > 0) {
     getLastPressureNumber = pressure[pressure?.length - 1];
-  } else {
-    // console.log("沒有測驗過");
   }
-  // console.log(getLastPressureNumber.number);
 
   const modifiedClick = (storyId) => {
     navigate(`/edit/${storyId}`);
@@ -729,71 +706,18 @@ export default function History() {
     window.scroll(0, 0);
   };
 
-  //用作者id去對應到相對的名稱
-  useEffect(() => {
-    async function getAuthors() {
-      try {
-        const authorData = collection(db, "users");
-        const promises = followList.map((authorId) => {
-          const q = query(authorData, where("id", "==", authorId));
-          return getDocs(q);
-        });
-        const querySnapshots = await Promise.all(promises);
-        const authorNamesList = querySnapshots.map((snapshot) => {
-          return snapshot.docs.map((doc) => ({
-            id: doc.data().id,
-            name: doc.data().name,
-          }))[0];
-        });
-        if (followList && followList.length > 0) {
-          setAuthors(authorNamesList);
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    getAuthors();
-  }, [db, followList]);
-  // console.log(authors);
-
-  //拿到作者本人的名字
-  const [name, setName] = useState();
-  useEffect(() => {
-    async function getAuthor() {
-      try {
-        const authorData = collection(db, "users");
-        const q = query(authorData, where("id", "==", localStorageUserId));
-        const querySnapshot = await getDocs(q);
-        const author = querySnapshot.docs.map((doc) => ({
-          name: doc.data().name,
-          profileImg: doc.data().profileImg,
-        }));
-        setName(author);
-        setProfileImg(author[0].profileImg);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    getAuthor();
-  }, []);
-  // console.log(name[0]?.name);
-
   //拿到user的加入日期
   const [createUserTime, setCreateUserTime] = useState("");
   useEffect(() => {
-    const user = auth.currentUser;
-    if (user) {
-      const creationTime = user.metadata.creationTime;
+    const creationTime = getAuthorJoinedDate();
+    if (creationTime) {
       setCreateUserTime(creationTime);
-    } else {
-      console.log("No user is signed in.");
     }
   }, []);
   const showCreation = moment(createUserTime).format("YYYY-MM-DD");
 
   //將文章按照時間順序排序
   const sortTimeOfStory = stories.sort((a, b) => b.time.localeCompare(a.time));
-  // console.log(stories);
 
   const handlePost = () => {
     navigate("/post");
@@ -810,50 +734,10 @@ export default function History() {
     navigate("/visit", { state: { data: id } });
     window.scrollTo(0, 0);
   };
-  console.log(authors);
 
   //取消追蹤
   const deleteFollower = async (id) => {
-    const result = await Swal.fire({
-      title: "確定取消追蹤？",
-      text: "取消後無法恢復",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#363636",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "確定",
-      cancelButtonText: "取消",
-    });
-
-    if (result.isConfirmed) {
-      try {
-        const localStorageUserId = localStorage.getItem("userId");
-        const userRef = doc(db, "users", localStorageUserId);
-        console.log("delete");
-        await updateDoc(userRef, {
-          followAuthor: arrayRemove(id),
-        });
-        console.log("finish");
-        Swal.fire({
-          title: "取消追蹤!",
-          text: "此作者已取消追蹤",
-          icon: "success",
-        });
-        navigate("/history");
-      } catch (error) {
-        console.error("Error updating document: ", error);
-        toast.error("刪除失敗", {
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-      }
-    }
+    await handleUnFollow(id, navigate);
   };
 
   const [isMobileSize, setIsMobileSize] = useState(false);
@@ -882,28 +766,10 @@ export default function History() {
   };
 
   useEffect(() => {
-    const updateProfileImage = async () => {
-      if (showImg) {
-        try {
-          const q = query(
-            collection(db, "users"),
-            where("id", "==", localStorageUserId)
-          );
-          const querySnapshot = await getDocs(q);
-          if (!querySnapshot.empty) {
-            const docRef = querySnapshot.docs[0].ref;
-            await updateDoc(docRef, {
-              profileImg: showImg,
-            });
-          }
-        } catch (error) {
-          console.error("Error updating document: ", error);
-        }
-      }
-    };
-
-    updateProfileImage();
-  }, [showImg]);
+    if (showImg) {
+      updateProfileImage(localStorageUserId, showImg);
+    }
+  }, [showImg, localStorageUserId]);
 
   const profile = profileImg || showImg || defaultImg;
 
@@ -924,48 +790,10 @@ export default function History() {
             </TopSection>
             {isMobileSize ? (
               <ShowLeftSection>
-                <LeftSectionMobile backgroundImg={backgroundImg}>
-                  <CloseButton>
-                    <button onClick={() => setIsMobileSize(false)}>x</button>
-                  </CloseButton>
-                  <LeftNameSection id="profileImg">
-                    <input
-                      label="Image"
-                      placeholder="Choose image"
-                      accept="image/png,image/jpeg"
-                      type="file"
-                      ref={inputRef}
-                      onChange={upLoadToStorage}
-                      hidden
-                    />
-                    <img
-                      src={profile}
-                      alt={profile}
-                      onClick={() => inputRef.current.click()}
-                    />
-
-                    <h1>{`${name && name[0]?.name}`}</h1>
-                  </LeftNameSection>
-                  <LeftButtonSection>
-                    <button onClick={handlePost}>撰寫文章</button>
-                    <button onClick={handleHelp}>測量壓力</button>
-                    <button onClick={() => setShowFriendsList(true)}>
-                      關注作者
-                    </button>
-                    <button onClick={showModal}>點選詩篇</button>
-                    <button onClick={startTheMagicShow}>新手教學</button>
-                    <button onClick={() => navigate("/main")}>返回首頁</button>
-                  </LeftButtonSection>
-                  <LeftDateSection>
-                    <p>Joined in {showCreation}</p>
-                  </LeftDateSection>
-                  <FAB>
-                    <div>
-                      <img src={logoImg} alt={logoImg} />
-                      <img src={logoTitle} alt={logoTitle}></img>
-                    </div>
-                  </FAB>
-                </LeftSectionMobile>
+                <LeftSectionMobile
+                  isMobileSize={isMobileSize}
+                  setIsMobileSize={setIsMobileSize}
+                />
               </ShowLeftSection>
             ) : null}
 
@@ -985,7 +813,7 @@ export default function History() {
                   alt={profile}
                   onClick={() => inputRef.current.click()}
                 />
-                <h1>{`${name && name[0]?.name}`}</h1>
+                <h1>{authorName}</h1>
               </LeftNameSection>
               <LeftButtonSection>
                 <button onClick={handlePost}>撰寫文章</button>
@@ -1182,19 +1010,6 @@ export default function History() {
           ) : null}
         </>
       )}
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-        transition:Bounce
-      />
     </div>
   );
 }

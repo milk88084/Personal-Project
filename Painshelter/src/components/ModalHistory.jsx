@@ -64,6 +64,7 @@ const Background = styled.div`
     height: 80%;
     padding: 15px;
     border-radius: 12px;
+    z-index: 300;
     h1 {
       font-size: 25px;
     }

@@ -25,7 +25,7 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import {
-  getFirebasePosts,
+  getFirebaseSpacificPost,
   handleEditSubmit,
   handleDeletePost,
 } from "@/utils/firebase/firebaseService.js";
@@ -364,7 +364,7 @@ export default function Edit() {
   //Get the collection datas from firebase
   useEffect(() => {
     async function fetchData() {
-      const data = await getFirebasePosts("storyId", params.id);
+      const data = await getFirebaseSpacificPost("storyId", params.id);
       if (data) {
         storyTitle.setValue(data.title);
         postStory.setValue(data.story);

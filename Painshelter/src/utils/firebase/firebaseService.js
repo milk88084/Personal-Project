@@ -9,14 +9,15 @@ import {
   Timestamp,
   deleteDoc,
   arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
-import { db } from "../../utils/firebase/firebase.jsx";
+import { db, auth } from "../../utils/firebase/firebase.jsx";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-//Get all the data from firebase collection
-export const getFirebasePosts = async (field, value) => {
+//Get the spacific post data from firebase collection
+export const getFirebaseSpacificPost = async (field, value) => {
   try {
     const postsData = collection(db, "posts");
     const q = query(postsData, where(field, "==", value));
@@ -49,6 +50,75 @@ export const getFirebasePosts = async (field, value) => {
     }
   } catch (e) {
     console.error("Error fetching document: ", e);
+    return null;
+  }
+};
+
+//Get all the Posts data from firebase collection
+export const getFirebasePosts = async (field, value) => {
+  try {
+    const postsData = collection(db, "posts");
+    const q = query(postsData, where(field, "==", value));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const data = querySnapshot.docs.map((doc) => doc.data());
+      return data;
+    } else {
+      console.log("No documents found with the given query.");
+      return [];
+    }
+  } catch (e) {
+    console.error("Error fetching documents: ", e);
+    return [];
+  }
+};
+
+//Get all Users data from firebase collection
+export const getFirebaseUsers = async (field, value) => {
+  try {
+    const usersData = collection(db, "users");
+    const q = query(usersData, where(field, "==", value));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const data = querySnapshot.docs[0].data();
+      return data;
+    }
+  } catch (e) {
+    console.error("Error fetching document: ", e);
+    return null;
+  }
+};
+
+//Get user id to check the name from firebase collection
+export const getAuthorsByIds = async (authorIds) => {
+  try {
+    const authorData = collection(db, "users");
+    const promises = authorIds.map((authorId) => {
+      const q = query(authorData, where("id", "==", authorId));
+      return getDocs(q);
+    });
+    const querySnapshots = await Promise.all(promises);
+    const authorNamesList = querySnapshots.map((snapshot) => {
+      return snapshot.docs.map((doc) => ({
+        id: doc.data().id,
+        name: doc.data().name,
+      }))[0];
+    });
+    return authorNamesList;
+  } catch (e) {
+    console.error("Error fetching authors: ", e);
+    return [];
+  }
+};
+
+//Get author joined data
+export const getAuthorJoinedDate = () => {
+  const user = auth.currentUser;
+  if (user) {
+    const creationTime = user.metadata.creationTime;
+    return creationTime;
+  } else {
     return null;
   }
 };
@@ -199,5 +269,70 @@ export const updateUserStressRecord = async (
     }
   } catch (error) {
     console.error("Error updating document: ", error);
+  }
+};
+
+//UnFollow authors click function
+export const handleUnFollow = async (authorId, navigate) => {
+  const result = await Swal.fire({
+    title: "確定取消追蹤？",
+    text: "取消後無法恢復",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#363636",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "確定",
+    cancelButtonText: "取消",
+  });
+  if (result.isConfirmed) {
+    try {
+      const localStorageUserId = localStorage.getItem("userId");
+      const userRef = doc(db, "users", localStorageUserId);
+      console.log("delete");
+      await updateDoc(userRef, {
+        followAuthor: arrayRemove(authorId),
+      });
+      console.log("finish");
+      Swal.fire({
+        title: "取消追蹤!",
+        text: "此作者已取消追蹤",
+        icon: "success",
+      });
+      navigate("/history");
+    } catch (error) {
+      console.error("Error updating document: ", error);
+      toast.error("刪除失敗", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  }
+};
+
+//Uplaod the profile image to the firebase collection
+export const updateProfileImage = async (userId, imageUrl) => {
+  if (imageUrl) {
+    try {
+      const q = query(collection(db, "users"), where("id", "==", userId));
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        const docRef = querySnapshot.docs[0].ref;
+        await updateDoc(docRef, {
+          profileImg: imageUrl,
+        });
+      } else {
+        console.log("No user found with the given ID.");
+      }
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  } else {
+    console.log("Image URL is empty.");
   }
 };

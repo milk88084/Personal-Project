@@ -7,7 +7,7 @@ import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 import defaultImg from "../../assets/img/defaultImg.png";
 import Buttons from "../../components/Buttons.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
-import { getFirebasePosts } from "@/utils/firebase/firebaseService.js";
+import { getFirebaseSpacificPost } from "@/utils/firebase/firebaseService.js";
 import stortTypeData from "@/utils/data/storyTypeData.json";
 import storyFigureData from "@/utils/data/storyFigureData.json";
 
@@ -310,7 +310,7 @@ export default function Edit() {
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
-      const data = await getFirebasePosts("storyId", params.id);
+      const data = await getFirebaseSpacificPost("storyId", params.id);
       if (data) {
         storyTitle.setValue(data.title);
         postStory.setValue(data.story);
