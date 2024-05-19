@@ -93,6 +93,28 @@ export const getAllFirebasePosts = async () => {
   }
 };
 
+//Get Snapshot data from firebase collection
+export const getSnapshotPostsData = (id, setStories) => {
+  const q = query(collection(db, "posts"), where("userId", "==", id));
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const stories = querySnapshot.docs.map((doc) => ({
+      title: doc.data().title,
+      time: doc.data().time,
+      location: doc.data().location,
+      type: doc.data().type,
+      figure: doc.data().figure,
+      story: doc.data().story,
+      userId: doc.data().userId,
+      likedAuthorId: doc.data().likedAuthorId,
+      storyId: doc.data().storyId,
+      userComments: doc.data().userComments,
+    }));
+    setStories(stories);
+  });
+
+  return unsubscribe;
+};
+
 //Get all Users data from firebase collection
 export const getFirebaseUsers = async (field, value) => {
   try {
@@ -107,6 +129,23 @@ export const getFirebaseUsers = async (field, value) => {
   } catch (e) {
     console.error("Error fetching document: ", e);
     return null;
+  }
+};
+
+export const getVisitUserData = async (id, setAuthor) => {
+  try {
+    const authorData = collection(db, "users");
+    const q = query(authorData, where("id", "==", id));
+    const querySnapshot = await getDocs(q);
+    const authorList = querySnapshot.docs.map((doc) => ({
+      id: doc.data().id,
+      name: doc.data().name,
+      img: doc.data().profileImg,
+    }));
+
+    setAuthor(authorList);
+  } catch (e) {
+    console.log(e);
   }
 };
 
@@ -422,5 +461,179 @@ export const handleSubmitPost = async (
       });
       navigate("/post");
     }
+  }
+};
+
+export const submitComment = async (event, id, setStories) => {
+  event.preventDefault();
+  const commentContent = event.target.replySelect.value;
+  const localStorageUserId = window.localStorage.getItem("userId");
+  const replyArray = { id: localStorageUserId, comment: commentContent };
+
+  try {
+    const q = query(collection(db, "posts"), where("storyId", "==", id));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const docRef = querySnapshot.docs[0].ref;
+      const docData = querySnapshot.docs[0].data();
+      if (
+        docData.userComments &&
+        docData.userComments.some(
+          (auhtorId) => auhtorId.id === localStorageUserId
+        )
+      ) {
+        toast("❗已給過評論", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        return;
+      }
+      await updateDoc(docRef, {
+        userComments: arrayUnion(replyArray),
+      });
+      toast("💬留言成功!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      setStories((prev) =>
+        prev.map((story) => {
+          if (story.storyId === id) {
+            const updatedStory = {
+              ...story,
+              userComments: docData.userComments
+                ? [...docData.userComments, replyArray]
+                : [replyArray],
+            };
+            return updatedStory;
+          }
+          return story;
+        })
+      );
+
+      console.log("評論成功");
+    }
+  } catch (error) {
+    console.error("操作失败: ", error);
+  }
+};
+
+export const submitLike = async (id, localStorageUserId, setStories) => {
+  try {
+    const q = query(collection(db, "posts"), where("storyId", "==", id));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const docRef = querySnapshot.docs[0].ref;
+      const docData = querySnapshot.docs[0].data();
+
+      if (
+        docData.likedAuthorId &&
+        docData.likedAuthorId.includes(localStorageUserId)
+      ) {
+        toast("❗已按過讚", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        return;
+      }
+      await updateDoc(docRef, {
+        likedAuthorId: arrayUnion(localStorageUserId),
+      });
+      toast("💛按讚成功!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+
+      setStories((prev) =>
+        prev.map((story) => {
+          if (story.storyId === id) {
+            const updatedStory = {
+              ...story,
+              likedAuthorId: docData.likedAuthorId
+                ? [...docData.likedAuthorId, localStorageUserId]
+                : [localStorageUserId],
+            };
+            return updatedStory;
+          }
+          return story;
+        })
+      );
+    }
+  } catch (error) {
+    console.error("操作失败: ", error);
+  }
+};
+
+export const submitFollowAuthor = async (
+  localStorageUserId,
+  id,
+  setIsFollow
+) => {
+  try {
+    const q = query(
+      collection(db, "users"),
+      where("id", "==", localStorageUserId)
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const docRef = querySnapshot.docs[0].ref;
+      const docData = querySnapshot.docs[0].data();
+      if (docData.followAuthor && docData.followAuthor.includes(id)) {
+        toast("❗已關注", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        setIsFollow(false);
+        return;
+      }
+      await updateDoc(docRef, {
+        followAuthor: arrayUnion(id),
+      });
+      toast("➕關注成功!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      setIsFollow(true);
+    }
+  } catch (e) {
+    console.log(e);
   }
 };

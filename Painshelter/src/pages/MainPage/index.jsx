@@ -55,7 +55,7 @@ export default function MainPage() {
   const firstRef = useRef(null);
   const highlight = useRef(null);
   const chart = useRef(null);
-  const top = useRef(null);
+  const topSectionRef = useRef(null);
   const footer = useRef(null);
   const thirdRef = useRef(null);
   const fifthRef = useRef(null);
@@ -71,6 +71,7 @@ export default function MainPage() {
   }, [location.pathname]);
   return (
     <Background>
+      <span ref={topSectionRef}></span>
       <Banner
         firstRef={firstRef}
         about={about}
@@ -98,7 +99,7 @@ export default function MainPage() {
         </FeatureTitles>
         <MapSection />
       </span>
-      <FooterSection footer={footer} />
+      <FooterSection footer={footer} topSectionRef={topSectionRef} />
       <CopyRight></CopyRight>
       <ShowNewbieGuide>{modal ? <ModalMain /> : null}</ShowNewbieGuide>
     </Background>

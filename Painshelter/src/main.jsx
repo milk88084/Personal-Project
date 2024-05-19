@@ -9,7 +9,6 @@ import History from "./pages/History/index.jsx";
 import Help from "./pages/Help/index.jsx";
 import Post from "./pages/Post/index.jsx";
 import VisitAuthor from "./pages/VisitAuthor/index.jsx";
-import Openrouteservice from "./components/LocationSearch.jsx";
 import FigureType from "./components/Chart/FigureChart.jsx";
 import SinglePostPage from "./pages/SinglePostPage/index.jsx";
 import Edit from "./pages/Edit/index.jsx";

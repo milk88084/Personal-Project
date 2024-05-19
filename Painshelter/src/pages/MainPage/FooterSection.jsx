@@ -91,7 +91,7 @@ const FooterContent = styled.div`
 `;
 //#endregion
 
-export default function FooterSection({ footer }) {
+export default function FooterSection({ footer, topSectionRef }) {
   const navigate = useNavigate();
   const { offline, logout } = useLoginState();
 
@@ -126,7 +126,11 @@ export default function FooterSection({ footer }) {
       <FooterContent ref={footer}>
         <AccordionDemo></AccordionDemo>
         <button onClick={handleLogout}>登出</button>
-        <img onClick={() => scrollSection(top)} src={logoImg} alt={logoImg} />
+        <img
+          onClick={() => scrollSection(topSectionRef)}
+          src={logoImg}
+          alt={logoImg}
+        />
       </FooterContent>
     </FooterSectionWrapper>
   );

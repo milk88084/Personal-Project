@@ -95,7 +95,7 @@ export default function HighLights({ highlight }) {
           type: doc.type,
           figure: doc.figure,
           story: doc.story,
-          userId: doc.storyId,
+          userId: doc.userId,
         }));
         setStories(userStoryList);
       }
@@ -105,11 +105,6 @@ export default function HighLights({ highlight }) {
 
   const handleShowMore = () => {
     setDisplayCount((prevState) => prevState + 6);
-  };
-
-  const handleVisitAthor = (id) => {
-    navigate("/visit", { state: { data: id } });
-    window.scrollTo(0, 0);
   };
 
   function getRandomStories(arr, size, excludedIndices) {
@@ -172,6 +167,11 @@ export default function HighLights({ highlight }) {
       );
     });
   }, [stories]);
+
+  const handleVisitAthor = (id) => {
+    navigate("/visit", { state: { data: id } });
+    window.scrollTo(0, 0);
+  };
 
   return (
     <>
