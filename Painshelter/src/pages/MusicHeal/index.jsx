@@ -1,7 +1,6 @@
 import youtube from "../../utils/api/youtube";
 import styled from "styled-components";
-import { useFormInput } from "../../utils/hooks/useFormInputNoSetValue";
-import { useState, useRef, useEffect } from "react";
+import Buttons from "../../components/Buttons.jsx";
 import heal1 from "../../assets/img/heal1.jpg";
 import healtext1 from "../../assets/img/healtext1.png";
 import heal2 from "../../assets/img/heal2.jpg";
@@ -12,16 +11,12 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { zoomies } from "ldrs";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import Buttons from "../../components/Buttons.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 import { useLyric } from "../../utils/zustand.js";
-
-gsap.registerPlugin(useGSAP);
-gsap.registerPlugin(ScrollTrigger);
-
-// Default values shown
+import { musicHealPageGSAPAnimations } from "@/utils/gsapAnimations";
+import { useFormInput } from "../../utils/hooks/useFormInputNoSetValue";
+import { useState, useRef, useEffect } from "react";
 
 //#region
 const Lyric = styled.div`
@@ -215,8 +210,6 @@ const ButtonSection = styled.div`
 
 function MusicHeal() {
   const SearchInput = useFormInput();
-  const [videos, setVideos] = useState([]);
-  const [currentVideo, setCurrentVideo] = useState(null);
   const section1 = useRef(null);
   const section1Continue = useRef(null);
   const section2 = useRef(null);
@@ -224,13 +217,13 @@ function MusicHeal() {
   const section3 = useRef(null);
   const section3Continue = useRef(null);
   const section4 = useRef(null);
-  const navigate = useNavigate();
   const location = useLocation();
+  const [videos, setVideos] = useState([]);
+  const [currentVideo, setCurrentVideo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { title, setTitle, setStatus } = useLyric();
+  const { setTitle, setStatus } = useLyric();
+  const navigate = useNavigate();
   useAuthCheck();
-
-  //loading state
   zoomies.register();
 
   //監聽在網頁最上方
@@ -294,85 +287,30 @@ function MusicHeal() {
   }, []);
 
   //GSAP標題和文字
-  const lyric1 = useRef(null);
-  const lyric2 = useRef(null);
-  const lyric3 = useRef(null);
-  const smalllyric1 = useRef(null);
-  const smalllyric2 = useRef(null);
-  const smalllyric3 = useRef(null);
-  gsap.registerPlugin();
+  const titleRef1 = useRef(null);
+  const titleRef2 = useRef(null);
+  const titleRef3 = useRef(null);
+  const paragraphRef1 = useRef(null);
+  const paragraphRef2 = useRef(null);
+  const paragraphRef3 = useRef(null);
   useGSAP(() => {
-    gsap.from(lyric1.current, {
-      x: -300,
-      ease: "back.out",
-      duration: 4,
-      opacity: 0,
-    });
-    gsap.from(lyric2.current, {
-      x: -300,
-      ease: "back.out",
-      duration: 4,
-      opacity: 0,
-      scrollTrigger: {
-        trigger: lyric2.current,
-        start: "top 70%",
-        end: "bottom 50%",
-        scrub: 1,
-      },
-    });
-    gsap.from(lyric3.current, {
-      x: 300,
-      ease: "back.out",
-      duration: 4,
-      opacity: 0,
-      scrollTrigger: {
-        trigger: lyric3.current,
-        start: "top 70%",
-        end: "bottom 50%",
-        scrub: 1,
-      },
-    });
-    gsap.from(smalllyric1.current, {
-      y: -300,
-      ease: "back.out",
-      duration: 4,
-      opacity: 0,
-    });
-    gsap.from(smalllyric2.current, {
-      y: 300,
-      ease: "back.out",
-      duration: 4,
-      opacity: 0,
-      scrollTrigger: {
-        trigger: lyric2.current,
-        start: "top 50%",
-        end: "bottom 50%",
-        scrub: 1,
-      },
-    });
-    gsap.from(smalllyric3.current, {
-      y: 300,
-      ease: "back.out",
-      duration: 4,
-      opacity: 0,
-      scrollTrigger: {
-        trigger: lyric3.current,
-        start: "top 80%",
-        end: "bottom 50%",
-        scrub: 1,
-      },
-    });
+    musicHealPageGSAPAnimations(
+      titleRef1,
+      titleRef2,
+      titleRef3,
+      paragraphRef1,
+      paragraphRef2,
+      paragraphRef3
+    );
   });
   //#endregion
-
-  console.log(title);
 
   return (
     <>
       <Lyric ref={section1}>
         <img src={heal1} alt={heal1} />
-        <img ref={lyric1} src={healtext1} alt={healtext1} />
-        <div ref={smalllyric1}>
+        <img ref={titleRef1} src={healtext1} alt={healtext1} />
+        <div ref={paragraphRef1}>
           <p>你不是真正的快樂，你的傷從不肯完全的癒合</p>
           <p>我站在你左側，卻像隔著銀河，</p>
           <p>難道就真的，抱著遺憾一直到老了，然後才後悔著。</p>
@@ -385,8 +323,8 @@ function MusicHeal() {
 
       <Lyric ref={section2}>
         <img src={heal3} alt={heal3} />
-        <img ref={lyric2} src={healtext3} alt={healtext3} />
-        <div ref={smalllyric2}>
+        <img ref={titleRef2} src={healtext3} alt={healtext3} />
+        <div ref={paragraphRef2}>
           <p>如果你被她傷的很痛，請感謝她好心折磨，</p>
           <p>如果你對她感到愧疚，請感謝她慷慨淚流，</p>
           <p>在我們相遇相愛之前，多虧有她讓你成熟。</p>
@@ -397,8 +335,8 @@ function MusicHeal() {
       </Lyric>
       <Lyric ref={section3}>
         <img src={heal2} alt={heal2} />
-        <img ref={lyric3} src={healtext2} alt={healtext2} />
-        <div ref={smalllyric3}>
+        <img ref={titleRef3} src={healtext2} alt={healtext2} />
+        <div ref={paragraphRef3}>
           <p>我在夜裡大聲呼喊，夢太沈重，無力也無法動彈，</p>
           <p>一樣的，一樣的，不安又將我捆綁，直到天亮</p>
         </div>
@@ -451,18 +389,6 @@ function MusicHeal() {
                 </VideoItem>
               ))
             )}
-            {/* {videos.map((video) => (
-              <VideoItem
-                key={video.id.videoId}
-                onClick={() => handleVideoSelect(video)}
-              >
-                <h3>{video.snippet.title}</h3>
-                <img
-                  src={video.snippet.thumbnails.default.url}
-                  alt={video.snippet.description}
-                />
-              </VideoItem>
-            ))} */}
           </Video>
           {currentVideo && (
             <SearchVideo>
