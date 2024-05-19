@@ -1,23 +1,21 @@
 import styled from "styled-components";
-import { useState, useRef } from "react";
+import Buttons from "../../components/Buttons.jsx";
+import storyTypeData from "@/utils/data/storyTypeData.json";
+import LocationSearch from "../../components/LocationSearch.jsx";
+import storyFigureData from "@/utils/data/storyFigureData.json";
+import { bouncy } from "ldrs";
+import { storage } from "../../utils/firebase/firebase.jsx";
 import { useNavigate } from "react-router-dom";
-import { useLoginState } from "../../utils/zustand.js";
 import { useFormInput } from "../../utils/hooks/useFormInput.jsx";
-import { useCheckboxInput } from "../../utils/hooks/useCheckboxInput.jsx";
-import { db, storage } from "../../utils/firebase/firebase.jsx";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import { useLoginState } from "../../utils/zustand.js";
+import { handleSubmitPost } from "@/utils/firebase/firebaseService.js";
+import { useState, useRef } from "react";
 import {
   getDownloadURL,
   ref as storageRef,
   uploadBytes,
 } from "firebase/storage";
-import { Timestamp, addDoc, collection, updateDoc } from "firebase/firestore";
-import LocationSearch from "../../components/LocationSearch.jsx";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
-import Swal from "sweetalert2";
-import { bouncy } from "ldrs";
-import Buttons from "../../components/Buttons.jsx";
-import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 
 //#region
 const Background = styled.div`
@@ -247,34 +245,13 @@ const ButtonSection = styled.div`
 
 export default function Edit() {
   const navigate = useNavigate();
-  const { getLoginUserId, locationSerach } = useLoginState();
+  const { locationSerach } = useLoginState();
   const postStory = useFormInput();
   const storyTitle = useFormInput();
   const storyTime = useFormInput();
   const localStorageUserId = window.localStorage.getItem("userId");
   useAuthCheck();
-  const storyTypeData = [
-    "成長軌跡",
-    "情感關係",
-    "人際交流",
-    "生命經歷",
-    "職場發展",
-  ];
-  const storyFigureData = [
-    "親人",
-    "伴侶",
-    "朋友",
-    "關係人",
-    "陌生人",
-    "那個他",
-    "內在自我",
-  ];
-
-  // const storyType = useCheckboxInput(storyTypeData);
-  // const storyFigure = useCheckboxInput(storyFigureData);
-
   const storyLocation = locationSerach[0];
-  console.log(storyLocation);
 
   //調整成不用select方式的選擇人物和主題類型
   const [selectedTypes, setSelectedTypes] = useState([]);
@@ -309,8 +286,6 @@ export default function Edit() {
         const url = await getDownloadURL(snapshot.ref);
         setIsLoading(false);
         setShowImg(url);
-        console.log(showImg);
-        console.log(fileName);
       } catch (e) {
         console.log(e);
       }
@@ -319,65 +294,22 @@ export default function Edit() {
 
   //提交
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    const result = await Swal.fire({
-      title: "確定提交故事?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#363636",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "提交",
-      cancelButtonText: "取消",
-    });
-    if (result.isConfirmed) {
-      try {
-        const docRef = await addDoc(collection(db, "posts"), {
-          title: storyTitle.value,
-          time: storyTime.value,
-          location: storyLocation,
-          type: selectedTypes,
-          figure: selectedFigure,
-          story: postStory.value,
-          userId: localStorageUserId,
-          createdAt: Timestamp.fromDate(new Date()),
-        });
-        await updateDoc(docRef, { storyId: docRef.id, imgUrl: showImg });
-        console.log("Document written with ID: ", docRef.id);
-        console.log(getLoginUserId());
-        toast.success("成功提交：" + storyTitle.value + "故事", {
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-        setTimeout(() => {
-          navigate("/history");
-        }, 1000);
-      } catch (error) {
-        console.error("Error adding document: ", error);
-        toast.error("投稿失敗", {
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-        navigate("/post");
-      }
-    }
+    await handleSubmitPost(
+      event,
+      storyTitle,
+      storyTime,
+      storyLocation,
+      selectedTypes,
+      selectedFigure,
+      showImg,
+      postStory,
+      localStorageUserId,
+      navigate
+    );
   };
 
   //日期不能發生在未來
   const today = new Date().toISOString().split("T")[0];
-
-  console.log(today);
 
   return (
     <>
@@ -500,20 +432,6 @@ export default function Edit() {
             </ButtonSection>
           </form>
         </EditSections>
-
-        <ToastContainer
-          position="top-center"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-          transition:Bounce
-        />
       </Background>
     </>
   );

@@ -27,6 +27,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { UserRoundX, User, StickyNote } from "lucide-react";
+
 //#region
 const SectionWrapper = styled.div`
   display: none;
@@ -287,7 +288,7 @@ export default function LeftSectionMobile({ setIsMobileSize }) {
         if (data) {
           setAuthorName(data.name);
           setProfileImg(data.profileImg);
-          const followListData = data.followAuthor.flat();
+          const followListData = data.followAuthor?.flat() || [];
           setFollowList(followListData);
           if (followListData.length > 0) {
             const authorNamesList = await getAuthorsByIds(followListData);
@@ -341,6 +342,7 @@ export default function LeftSectionMobile({ setIsMobileSize }) {
       setCreateUserTime(creationTime);
     }
   }, []);
+
   const showCreation = moment(createUserTime).format("YYYY-MM-DD");
 
   const profile = profileImg || showImg || defaultImg;
@@ -416,7 +418,7 @@ export default function LeftSectionMobile({ setIsMobileSize }) {
           <button onClick={() => navigate("/main")}>返回首頁</button>
         </LeftButtonSection>
         <LeftDateSection>
-          <p>Joined in {showCreation}</p>
+          {showCreation ? <p>Joined in {showCreation}</p> : null}
         </LeftDateSection>
         <FAB>
           <div>

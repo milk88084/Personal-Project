@@ -5,6 +5,7 @@ import Buttons from "../../components/Buttons.jsx";
 import pill from "../../assets/icon/pill.png";
 import { useNavigate } from "react-router-dom";
 import { modifiedData } from "../../utils/zustand.js";
+import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 
 //#region
 const StorySection = styled.div`
@@ -74,7 +75,7 @@ const MainContent = styled.div`
     opacity: 0.9;
   }
 
-  h4 {
+  pre {
     background: #29292d;
     padding: 4px 12px;
     border-radius: 12px;
@@ -175,49 +176,47 @@ export default function RightHistoryPosts({ setIsLoading }) {
 
   const sortTimeOfStory = stories.sort((a, b) => b.time.localeCompare(a.time));
   return (
-    <div>
-      <StorySection>
-        {sortTimeOfStory &&
-          sortTimeOfStory.map((story, index) => {
-            return (
-              <EachStory key={index}>
-                <PostIndex>
-                  <p>{index + 1}</p>
-                </PostIndex>
-                <MainContent>
-                  <h1>疼痛暗號：{story.title}</h1>
-                  <h2>
-                    {story.time}@{story.location.name}
-                  </h2>
+    <StorySection>
+      {sortTimeOfStory &&
+        sortTimeOfStory.map((story, index) => {
+          return (
+            <EachStory key={index}>
+              <PostIndex>
+                <p>{index + 1}</p>
+              </PostIndex>
+              <MainContent>
+                <h1>疼痛暗號：{story.title}</h1>
+                <h2>
+                  {story.time}@{story.location.name}
+                </h2>
 
-                  <h3>
-                    {story.type.map((item, index) => (
-                      <span key={index}>#{item}</span>
-                    ))}
-                  </h3>
-                  <h3>
-                    {story.figure.map((item, index) => (
-                      <h4 key={index}>#{item}</h4>
-                    ))}
-                  </h3>
-                  <p>{story.story}</p>
-                  <Buttons
-                    onClick={() => modifiedClick(story.storyId)}
-                    text="完整文章"
-                  />
-                </MainContent>
-                <Heart>
-                  <img src={pill} alt={pill} />
-                  <p>
-                    {story.likedAuthorId?.length > 0
-                      ? story.likedAuthorId.length
-                      : 0}
-                  </p>
-                </Heart>
-              </EachStory>
-            );
-          })}
-      </StorySection>
-    </div>
+                <h3>
+                  {story.type.map((item, index) => (
+                    <span key={index}>#{item}</span>
+                  ))}
+                </h3>
+                <h3>
+                  {story.figure.map((item, index) => (
+                    <pre key={index}>#{item}</pre>
+                  ))}
+                </h3>
+                <p>{story.story}</p>
+                <Buttons
+                  onClick={() => modifiedClick(story.storyId)}
+                  text="完整文章"
+                />
+              </MainContent>
+              <Heart>
+                <img src={pill} alt={pill} />
+                <p>
+                  {story.likedAuthorId?.length > 0
+                    ? story.likedAuthorId.length
+                    : 0}
+                </p>
+              </Heart>
+            </EachStory>
+          );
+        })}
+    </StorySection>
   );
 }

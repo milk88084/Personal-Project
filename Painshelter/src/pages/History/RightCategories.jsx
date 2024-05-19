@@ -72,7 +72,7 @@ const TopCategories = styled.div`
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
 
-  span {
+  p {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -236,9 +236,9 @@ export default function RightCategories({ storyRef }) {
       try {
         const data = await getFirebaseUsers("id", localStorageUserId);
         if (data) {
-          const followListData = data.followAuthor.flat();
+          const followListData = data.followAuthor?.flat() || [];
           setFollowList(followListData);
-          const pressureCount = data.stressRecord.flat();
+          const pressureCount = data.stressRecord?.flat() || [];
           setPressure(pressureCount);
           if (followListData.length > 0) {
             const authorNamesList = await getAuthorsByIds(followListData);
@@ -273,42 +273,36 @@ export default function RightCategories({ storyRef }) {
     <Categories>
       <section id="statistics">
         <TopCategories onClick={() => navigate("/help")}>
-          <h1>
+          <div>
             <h2>壓力</h2>
             <h2>指數</h2>
-          </h1>
-          <span>
+          </div>
+          <p>
             {getLastPressureNumber?.number ? (
               <>
-                <p>
-                  <AnimatedNumber end={getLastPressureNumber?.number} />
-                </p>
-                <p>分</p>
+                <AnimatedNumber end={getLastPressureNumber?.number} />分
               </>
             ) : (
-              <p>0分</p>
+              <>0分</>
             )}
-          </span>
+          </p>
           <img src={broke} alt={broke} />
         </TopCategories>
         <span></span>
         <TopCategories>
-          <h1>
+          <div>
             <h2>關注</h2>
             <h2>作者</h2>
-          </h1>
-          <span>
+          </div>
+          <p>
             {authors && authors.length ? (
               <>
-                <p>
-                  <AnimatedNumber end={authors && authors.length} />
-                </p>
-                <p>位</p>
+                <AnimatedNumber end={authors && authors.length} />位
               </>
             ) : (
-              <p>0位</p>
+              <>0位</>
             )}
-          </span>
+          </p>
           <img src={jar} alt={jar} />
         </TopCategories>
       </section>
@@ -333,10 +327,7 @@ export default function RightCategories({ storyRef }) {
         <div>
           {stories.length ? (
             <>
-              <p>
-                <AnimatedNumber end={stories.length} />
-              </p>
-              <p>篇</p>
+              <AnimatedNumber end={stories.length} />篇
             </>
           ) : (
             <p>0篇</p>

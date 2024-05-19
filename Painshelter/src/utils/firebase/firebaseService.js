@@ -3,6 +3,7 @@ import {
   query,
   where,
   getDocs,
+  addDoc,
   doc,
   getDoc,
   updateDoc,
@@ -335,5 +336,73 @@ export const updateProfileImage = async (userId, imageUrl) => {
     }
   } else {
     console.log("Image URL is empty.");
+  }
+};
+
+//Submit the post to Firebase
+export const handleSubmitPost = async (
+  event,
+  storyTitle,
+  storyTime,
+  storyLocation,
+  selectedTypes,
+  selectedFigure,
+  showImg,
+  postStory,
+  localStorageUserId,
+  navigate
+) => {
+  event.preventDefault();
+  const result = await Swal.fire({
+    title: "確定提交故事?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#363636",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "提交",
+    cancelButtonText: "取消",
+  });
+  if (result.isConfirmed) {
+    try {
+      const docRef = await addDoc(collection(db, "posts"), {
+        title: storyTitle.value,
+        time: storyTime.value,
+        location: storyLocation,
+        type: selectedTypes,
+        figure: selectedFigure,
+        imgUrl: showImg,
+        story: postStory.value,
+        userId: localStorageUserId,
+        createdAt: Timestamp.fromDate(new Date()),
+      });
+      await updateDoc(docRef, { storyId: docRef.id, imgUrl: showImg });
+      console.log("Document written with ID: ", docRef.id);
+      toast.success("成功提交：" + storyTitle.value + "故事", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      setTimeout(() => {
+        navigate("/history");
+      }, 1000);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+      toast.error("投稿失敗", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      navigate("/post");
+    }
   }
 };

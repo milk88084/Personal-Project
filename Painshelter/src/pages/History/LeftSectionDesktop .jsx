@@ -77,6 +77,7 @@ const LeftButtonSection = styled.div`
   flex-direction: column;
 
   button {
+    height: 40px;
     font-size: 25px;
     margin: 7px;
     opacity: 0.5;
@@ -245,7 +246,6 @@ export default function LeftSectionDesktop() {
   const { modal, showModal } = HistoryModal();
   const [createUserTime, setCreateUserTime] = useState("");
   const navigate = useNavigate();
-  const showCreation = moment(createUserTime).format("YYYY-MM-DD");
 
   //Change the profile image
   const upLoadToStorage = async (e) => {
@@ -273,7 +273,7 @@ export default function LeftSectionDesktop() {
         if (data) {
           setAuthorName(data.name);
           setProfileImg(data.profileImg);
-          const followListData = data.followAuthor.flat();
+          const followListData = data.followAuthor?.flat() || [];
           if (followListData.length > 0) {
             const authorNamesList = await getAuthorsByIds(followListData);
             setAuthors(authorNamesList);
@@ -318,6 +318,8 @@ export default function LeftSectionDesktop() {
     await handleUnFollow(id, navigate);
   };
 
+  console.log(createUserTime);
+  const showCreation = moment(createUserTime).format("YYYY-MM-DD");
   const profile = profileImg || showImg || defaultImg;
 
   return (
@@ -386,7 +388,7 @@ export default function LeftSectionDesktop() {
           <button onClick={() => navigate("/main")}>返回首頁</button>
         </LeftButtonSection>
         <LeftDateSection>
-          <p>Joined in {showCreation}</p>
+          {!showCreation ? null : <p>Joined in {showCreation}</p>}
         </LeftDateSection>
         <BottomLogo>
           <div>

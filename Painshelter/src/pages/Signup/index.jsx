@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../../utils/firebase/firebase.jsx";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, Timestamp } from "firebase/firestore";
 import { useFormInput } from "../../utils/hooks/useFormInput.jsx";
 import logoImg from "../../assets/img/logoImg2.png";
 import logoTitle from "../../assets/img/logoTitle2.png";
@@ -201,6 +201,7 @@ const Signup = () => {
         name: nameInput.value,
         email: emailInput.value,
         password: passwordInput.value,
+        Registration: Timestamp.fromDate(new Date()),
       });
     } catch (err) {
       console.error("Error: ", err);

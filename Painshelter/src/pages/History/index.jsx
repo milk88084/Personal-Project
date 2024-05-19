@@ -44,11 +44,16 @@ const RightSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
   @media screen and (max-width: 1279px) {
     width: 100%;
     margin-top: 30px;
     position: relative;
   }
+`;
+
+const SpanSection = styled.div`
+  width: 100%;
 `;
 
 //#endregion
@@ -67,7 +72,7 @@ export default function History() {
   //將文章按照時間順序排序
   const [isMobileSize, setIsMobileSize] = useState(false);
   const storyRef = useRef(null);
-
+  // sc - fVkKPM;
   return (
     <div>
       {isLoading ? (
@@ -89,7 +94,9 @@ export default function History() {
             <LeftSectionDesktop />
             <RightSection>
               <RightCategories storyRef={storyRef} />
-              <RightHistoryPosts ref={storyRef} setIsLoading={setIsLoading} />
+              <SpanSection ref={storyRef}>
+                <RightHistoryPosts setIsLoading={setIsLoading} />
+              </SpanSection>
             </RightSection>
           </Background>
           {modal ? <ModalHistory /> : null}
