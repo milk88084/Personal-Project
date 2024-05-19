@@ -1,14 +1,14 @@
-import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../utils/firebase/firebase.jsx";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useLoginState } from "../../utils/zustand.js";
 import logoImg from "../../assets/img/logoImg.png";
 import logoTitle from "../../assets/img/logoTitle.png";
 import backgroundVideo from "../../assets/video/login.mp4";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import { useState, useRef, useEffect } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../utils/firebase/firebase.jsx";
+import { toastAlert } from "@/utils/toast.js";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useLoginState } from "../../utils/zustand.js";
 
 //#region
 const Background = styled.div`
@@ -165,23 +165,14 @@ const Login = () => {
   }, []);
 
   console.log(loginStatus);
+
   const onLogin = (e) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
         online();
         const user = userCredential.user;
-        toast.success("登入成功", {
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+        toastAlert("success", "登入成功", 1000);
         setLoginUserId(user.uid);
         window.localStorage.setItem("userId", user.uid);
         window.localStorage.setItem("loginStatus", true);
@@ -193,49 +184,13 @@ const Login = () => {
         const errorCode = error.code;
         const errorMessage = error.message;
         if (errorCode === "auth/invalid-credential") {
-          toast.error("密碼錯誤", {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
+          toastAlert("error", "密碼錯誤", 3000);
         } else if (errorCode === "auth/missing-password") {
-          toast.error("未填寫密碼", {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
+          toastAlert("error", "未填寫密碼", 3000);
         } else if (errorCode === "auth/invalid-email") {
-          toast.error("尚未輸入信箱/信箱填寫錯誤", {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
+          toastAlert("error", "尚未輸入信箱/信箱填寫錯誤", 3000);
         } else {
-          toast.error("登入發生錯誤", {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
+          toastAlert("error", "登入發生錯誤", 3000);
         }
         console.log(errorCode, errorMessage);
       });
