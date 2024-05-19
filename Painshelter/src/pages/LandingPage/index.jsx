@@ -1,17 +1,17 @@
-import { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import video from "../../assets/video/landingPage.mp4";
 import video2 from "../../assets/video/landingPage2.mp4";
 import logo from "../../assets/img/logoTitle.png";
+import gsap from "gsap";
+import landingPageTextLines from "@/utils/data/landingPageTextLines.json";
+import { landingPAgeGSAPAnimations } from "@/utils/gsapAnimations.js";
+import { useGSAP } from "@gsap/react";
 import { ScrollText } from "lucide-react";
 import { ChevronRight } from "lucide-react";
 import { UsersRound } from "lucide-react";
-import backgroundImg1 from "../../assets/img/disagreeImg1.jpg";
-import { CarouselDemo } from "../../components/Shadcn/CarouselDemo";
-import logoImg from "../../assets/img/logoImg.png";
-import logoTitle from "../../assets/img/logoTitle3.png";
 import { useNavigate } from "react-router-dom";
-import gsap from "gsap";
+import { useEffect, useRef, useState } from "react";
+import ThreeRules from "./ThreeRules.jsx";
 
 //#region
 const Background = styled.div`
@@ -145,119 +145,8 @@ const RightSection = styled.div`
     }
   }
 `;
-
-const ModalBackground = styled.div`
-  background-image: url(${backgroundImg1});
-  position: absolute;
-  z-index: 1001;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-`;
-
-const Opacity = styled.div`
-  background-color: rgba(0, 0, 0, 0.5);
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
-const Modal = styled.div`
-  width: 80%;
-  height: 600px;
-  background-color: rgba(255, 255, 255, 0.5);
-  top: 50px;
-  position: absolute;
-  display: flex;
-  align-items: center;
-  border-radius: 30px;
-  justify-content: space-around;
-  @media screen and (max-width: 1279px) {
-    display: block;
-    height: 850px;
-  }
-`;
-
-const ModalLogo = styled.div`
-  img {
-    width: 250px;
-  }
-
-  img:hover {
-    transform: scale(1.1);
-  }
-  @media screen and (max-width: 1279px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 30px;
-    img {
-      width: 150px;
-    }
-  }
-`;
-
-const ModalContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  h1 {
-    font-size: 50px;
-    margin-bottom: 30px;
-    font-weight: bold;
-    letter-spacing: 10px;
-    color: rgba(255, 255, 255, 0.8);
-    text-shadow: 1px 2px 5px black;
-  }
-  @media screen and (max-width: 1279px) {
-    h1 {
-      font-size: 30px;
-      margin-top: 30px;
-    }
-    span {
-      right: 0;
-      left: 0;
-      margin: 0 auto;
-    }
-  }
-`;
-
-const ModalButton = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
-  button {
-    display: block;
-    width: 150px;
-    background-color: #001a2a;
-    color: white;
-    padding: 10px;
-    border-radius: 10px;
-    font-weight: 400;
-    margin-top: 15px;
-    box-shadow: 0 10px 10px -8px rgba(0, 0, 0, 0.7);
-    margin: 15px;
-
-    &:hover,
-    &:focus {
-      background-color: #4c5e67;
-    }
-  }
-  @media screen and (max-width: 1279px) {
-    flex-direction: column;
-  }
-`;
 //#endregion
 
-const textLines = [
-  "沒有任何一種悲傷不值得一提",
-  "將疼痛的故事紀錄在日記室中",
-  "確認現階段的憂鬱指數",
-  "用一首歌來沉澱自己內心的樣子",
-];
 export default function LandingPage() {
   const textRefs = useRef([]);
   const imgRef = useRef(null);
@@ -273,7 +162,7 @@ export default function LandingPage() {
       repeatDelay: 1,
     });
 
-    textLines.forEach((_, index) => {
+    landingPageTextLines.forEach((_, index) => {
       timeline
         .fromTo(
           textRefs.current[index],
@@ -289,32 +178,9 @@ export default function LandingPage() {
     });
   }, []);
 
-  useEffect(() => {
-    gsap.fromTo(
-      imgRef.current,
-      { scale: 0.2, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 5, ease: "elastic.out(1, 0.3)" }
-    );
-  }, []);
-
-  useEffect(() => {
-    gsap.fromTo(
-      buttonRef.current,
-      { x: 100, opacity: 0 },
-      { x: 0, opacity: 1, duration: 3, ease: "expo.out" }
-    );
-  }, []);
-
-  useEffect(() => {
-    gsap.to(enterIconRef.current, {
-      scale: 1.5,
-      opacity: 1,
-      duration: 1,
-      repeat: -1,
-      yoyo: true,
-      ease: "power1.inOut",
-    });
-  }, []);
+  useGSAP(() => {
+    landingPAgeGSAPAnimations(imgRef, buttonRef, enterIconRef);
+  });
 
   const handleLogin = () => {
     if (loginStatus === "true") {
@@ -331,7 +197,7 @@ export default function LandingPage() {
       <div>
         <LeftSection>
           <img ref={imgRef} src={logo} alt={logo} />
-          {textLines.map((text, index) => (
+          {landingPageTextLines.map((text, index) => (
             <p key={index} ref={(el) => (textRefs.current[index] = el)}>
               {text}
             </p>
@@ -357,27 +223,7 @@ export default function LandingPage() {
         </RightSection>
       </div>
 
-      {!threeRules ? null : (
-        <ModalBackground>
-          <Opacity>
-            <Modal>
-              <ModalLogo>
-                <img src={logoImg} alt="Logo" />
-                <img src={logoTitle} alt="Logo title" />
-              </ModalLogo>
-              <ModalContent>
-                <h1>溫柔宣言</h1>
-                <span>
-                  <CarouselDemo></CarouselDemo>
-                </span>
-                <ModalButton>
-                  <button onClick={() => setThreeRules(false)}>同意</button>
-                </ModalButton>
-              </ModalContent>
-            </Modal>
-          </Opacity>
-        </ModalBackground>
-      )}
+      {!threeRules ? null : <ThreeRules setThreeRules={setThreeRules} />}
     </Background>
   );
 }

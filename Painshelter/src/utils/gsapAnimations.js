@@ -63,3 +63,26 @@ export const helpPAgeGSAPAnimations = (
     },
   });
 };
+
+export const landingPAgeGSAPAnimations = (imgRef, buttonRef, enterIconRef) => {
+  gsap.fromTo(
+    imgRef.current,
+    { scale: 0.2, opacity: 0 },
+    { scale: 1, opacity: 1, duration: 5, ease: "elastic.out(1, 0.3)" }
+  );
+
+  gsap.fromTo(
+    buttonRef.current,
+    { x: 100, opacity: 0 },
+    { x: 0, opacity: 1, duration: 3, ease: "expo.out" }
+  );
+
+  gsap.to(enterIconRef.current, {
+    scale: 1.5,
+    opacity: 1,
+    duration: 1,
+    repeat: -1,
+    yoyo: true,
+    ease: "power1.inOut",
+  });
+};
