@@ -8,8 +8,8 @@ import logoImg from "../../assets/img/logoImg2.png";
 import logoTitle from "../../assets/img/logoTitle2.png";
 import backgroundVideo from "../../assets/video/login.mp4";
 import { useRef, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import { toastAlert } from "@/utils/toast.js";
 
 //#region
 const Background = styled.div`
@@ -177,16 +177,7 @@ const Signup = () => {
           displayName: nameInput.value,
         }).then(() => {
           console.log(user);
-          toast.success("註冊成功，請至登入頁面進行登入", {
-            position: "top-center",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
+          toastAlert("success", "註冊成功，請至登入頁面進行登入", 1000);
           setTimeout(() => {
             navigate("/login");
           }, 1000);
@@ -196,27 +187,9 @@ const Signup = () => {
         const errorCode = error.code;
         const errorMessage = error.message;
         if (errorCode === "auth/email-already-in-use") {
-          toast.error("此信箱已註冊", {
-            position: "top-center",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
+          toastAlert("error", "此信箱已註冊", 2000);
         } else {
-          toast.error("註冊不成功", {
-            position: "top-center",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
+          toastAlert("error", "註冊不成功", 2000);
         }
         console.log(errorCode, errorMessage);
       });
