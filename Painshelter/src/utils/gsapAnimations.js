@@ -157,3 +157,71 @@ export const musicHealPageGSAPAnimations = (
     },
   });
 };
+
+export const bannerPageGSAPAnimations = (
+  firstRef,
+  thirdRef,
+  fifthRef,
+  seventhRef,
+  imageRef,
+  logoRef
+) => {
+  gsap.to(firstRef.current, { duration: 1, x: 50 });
+  gsap.to(thirdRef.current, { duration: 1, x: 50 });
+  gsap.to(fifthRef.current, { duration: 1, x: 70 });
+  gsap.to(seventhRef.current, { duration: 1, x: 5 });
+  gsap.to(imageRef.current, {
+    duration: 0.7,
+    scale: 1.2,
+    filter: "drop-shadow(0 0 20px rgba(0, 0, 0, 0.8))",
+  });
+  gsap.to(
+    firstRef.current,
+    {
+      skewX: -3,
+      skewY: 0,
+    },
+    {
+      skewX: 3,
+      skewY: 0,
+      duration: 2,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+      stagger: 0.1,
+    }
+  );
+  gsap.to(logoRef.current, {
+    duration: 3,
+    rotation: 360,
+    scale: 1.2,
+    ease: "power4.inOut",
+    repeat: -1,
+    yoyo: true,
+  });
+};
+
+export const aboutPainGSAPAnimations = (about, about2) => {
+  gsap.from(about.current, {
+    x: -300,
+    duration: 4,
+    opacity: 0,
+    scrollTrigger: {
+      trigger: about.current,
+      start: "top 70%",
+      end: "bottom 80%",
+      scrub: 1,
+    },
+  });
+  gsap.from(about2.current, {
+    x: 300,
+    duration: 4,
+    opacity: 0,
+    scrollTrigger: {
+      trigger: about2.current,
+      start: "top 70%",
+      end: "bottom 90%",
+      scrub: 1,
+    },
+  });
+};

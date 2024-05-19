@@ -1,4 +1,3 @@
-import { modifiedData } from "../../utils/zustand";
 import { collection, query, getDocs, where } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { db } from "../../utils/firebase/firebase.jsx";
@@ -6,7 +5,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 
 export default function SinglePage() {
-  const { selectedStoryId } = modifiedData();
   const [story, setStory] = useState();
   const navigate = useNavigate();
   const params = useParams();

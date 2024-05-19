@@ -75,6 +75,24 @@ export const getFirebasePosts = async (field, value) => {
   }
 };
 
+//Get all Posts data from firebase collection
+export const getAllFirebasePosts = async () => {
+  try {
+    const postsData = collection(db, "posts");
+    const q = query(postsData);
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const data = querySnapshot.docs.map((doc) => doc.data());
+      return data;
+    } else {
+      console.log("No documents found with the given query.");
+      return [];
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 //Get all Users data from firebase collection
 export const getFirebaseUsers = async (field, value) => {
   try {

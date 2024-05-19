@@ -10,6 +10,7 @@ import painMap from "../assets/video/painMap.mp4";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+//#region
 const glowing = keyframes`
   0% { box-shadow: 0 0 5px #ffd4f4; }
   50% { box-shadow: 0 0 20px #ffd4f4; }
@@ -124,6 +125,7 @@ const VideoSection = styled.div`
     height: 300px;
   }
 `;
+//#endregion
 
 export default function Modal() {
   const { modal, closeModal } = MainModal();
