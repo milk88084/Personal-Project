@@ -1,21 +1,21 @@
 import youtube from "../../utils/api/youtube";
 import styled from "styled-components";
-import Buttons from "../../components/Buttons.jsx";
 import heal1 from "../../assets/img/heal1.jpg";
-import healtext1 from "../../assets/img/healtext1.png";
 import heal2 from "../../assets/img/heal2.jpg";
-import healtext2 from "../../assets/img/healtext2.png";
 import heal3 from "../../assets/img/heal3.jpg";
+import Buttons from "../../components/Buttons.jsx";
+import healtext2 from "../../assets/img/healtext2.png";
+import healtext1 from "../../assets/img/healtext1.png";
 import healtext3 from "../../assets/img/healtext3.png";
+import { gsap } from "gsap";
+import { zoomies } from "ldrs";
+import { useGSAP } from "@gsap/react";
+import { useLyric } from "../../utils/zustand.js";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { zoomies } from "ldrs";
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
-import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
-import { useLyric } from "../../utils/zustand.js";
-import { musicHealPageGSAPAnimations } from "@/utils/gsapAnimations";
 import { useFormInput } from "../../utils/hooks/useFormInputNoSetValue";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import { musicHealPageGSAPAnimations } from "@/utils/gsapAnimations";
 import { useState, useRef, useEffect } from "react";
 
 //#region
@@ -226,7 +226,6 @@ function MusicHeal() {
   useAuthCheck();
   zoomies.register();
 
-  //監聽在網頁最上方
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
@@ -263,8 +262,6 @@ function MusicHeal() {
     setCurrentVideo(video);
   };
 
-  //#region
-  //GSAP三角形動畫
   useEffect(() => {
     [
       section1Continue.current,
@@ -286,7 +283,6 @@ function MusicHeal() {
     });
   }, []);
 
-  //GSAP標題和文字
   const titleRef1 = useRef(null);
   const titleRef2 = useRef(null);
   const titleRef3 = useRef(null);
@@ -303,7 +299,6 @@ function MusicHeal() {
       paragraphRef3
     );
   });
-  //#endregion
 
   return (
     <>

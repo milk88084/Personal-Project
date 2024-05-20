@@ -1,8 +1,8 @@
-import { collection, query, getDocs, where } from "firebase/firestore";
-import { useState, useEffect } from "react";
 import { db } from "../../utils/firebase/firebase.jsx";
-import { useNavigate, useParams } from "react-router-dom";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { collection, query, getDocs, where } from "firebase/firestore";
 
 export default function SinglePage() {
   const [story, setStory] = useState();
@@ -10,13 +10,11 @@ export default function SinglePage() {
   const params = useParams();
   useAuthCheck();
 
-  //拿到firestore的資料
   useEffect(() => {
     async function getStories() {
       try {
         const postsData = collection(db, "posts");
         const q = query(postsData, where("storyId", "==", params.id));
-
         const querySnapshot = await getDocs(q);
         const userStoryList = querySnapshot.docs.map((doc) => ({
           title: doc.data().title,
@@ -31,7 +29,7 @@ export default function SinglePage() {
         }));
         setStory(userStoryList);
       } catch (e) {
-        console.log(e);
+        alert(e);
       }
     }
     getStories();
@@ -41,7 +39,6 @@ export default function SinglePage() {
     return <p>isLoding</p>;
   }
 
-  //將時間轉換為我要的格式
   let objectDate = new Date(story[0].time);
   let year = objectDate.getFullYear();
   let month = objectDate.getMonth() + 1;

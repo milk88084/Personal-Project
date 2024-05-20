@@ -253,7 +253,6 @@ export default function Edit() {
   useAuthCheck();
   const storyLocation = locationSerach[0];
 
-  //調整成不用select方式的選擇人物和主題類型
   const [selectedTypes, setSelectedTypes] = useState([]);
   const toggleType = (type) => {
     setSelectedTypes((prev) =>
@@ -268,7 +267,6 @@ export default function Edit() {
     );
   };
 
-  //上傳圖片
   bouncy.register();
   const inputRef = useRef(null);
   const [showImg, setShowImg] = useState(null);
@@ -287,12 +285,11 @@ export default function Edit() {
         setIsLoading(false);
         setShowImg(url);
       } catch (e) {
-        console.log(e);
+        alert(e);
       }
     }
   };
 
-  //提交
   const handleSubmit = async (event) => {
     await handleSubmitPost(
       event,
@@ -308,7 +305,6 @@ export default function Edit() {
     );
   };
 
-  //日期不能發生在未來
   const today = new Date().toISOString().split("T")[0];
 
   return (

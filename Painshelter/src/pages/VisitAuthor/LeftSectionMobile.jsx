@@ -1,17 +1,18 @@
 import styled from "styled-components";
 import logoImg from "@/assets/img/logoImg.png";
 import logoTitle from "@/assets/img/logoTitle.png";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import defaultImg from "@/assets/img/defaultImg.png";
+import { db } from "../../utils/firebase/firebase.jsx";
+import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { collection, query, getDocs, where } from "firebase/firestore";
 import {
   submitFollowAuthor,
   getSnapshotPostsData,
   getVisitUserData,
 } from "@/utils/firebase/firebaseService.js";
-import { collection, query, getDocs, where } from "firebase/firestore";
-import { db } from "../../utils/firebase/firebase.jsx";
+
 //#region
 const LeftSectionWrapper = styled.div`
   display: none;
@@ -125,11 +126,13 @@ const IsFollowAuthor = styled.div`
 
 const LeftButtonSection = styled.div`
   width: 100%;
+
   display: flex;
   flex-direction: column;
 
   button {
     font-size: 25px;
+    height: 40px;
     margin: 7px;
     opacity: 0.3;
     text-shadow: 1px 1px 20px white;
@@ -244,7 +247,7 @@ export default function LeftSectionMobile({ setIsMobileSize }) {
           setIsFollow(false);
         }
       } catch (e) {
-        console.log(e);
+        alert(e);
       }
     }
     commfirmFollow();

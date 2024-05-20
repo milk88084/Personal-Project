@@ -238,34 +238,29 @@ const StyledUser = styled(User)`
 export default function LeftSectionDesktop() {
   const localStorageUserId = window.localStorage.getItem("userId");
   const inputRef = useRef(null);
+  const { modal, showModal } = HistoryModal();
+  const [authors, setAuthors] = useState();
   const [showImg, setShowImg] = useState(null);
   const [profileImg, setProfileImg] = useState(null);
   const [authorName, setAuthorName] = useState();
-  const [authors, setAuthors] = useState();
-  const [showFriendsList, setShowFriendsList] = useState(false);
-  const { modal, showModal } = HistoryModal();
   const [createUserTime, setCreateUserTime] = useState("");
+  const [showFriendsList, setShowFriendsList] = useState(false);
   const navigate = useNavigate();
 
-  //Change the profile image
   const upLoadToStorage = async (e) => {
     const file = e.target.files[0];
     const imageRef = storageRef(storage, `authorsImg/${file.name}`);
     const snapshot = await uploadBytes(imageRef, file);
     const url = await getDownloadURL(snapshot.ref);
     setShowImg(url);
-    console.log(showImg);
-    console.log("Uploaded image URL:", url);
   };
 
-  //UpLoad the profile image
   useEffect(() => {
     if (showImg) {
       updateProfileImage(localStorageUserId, showImg);
     }
   }, [showImg, localStorageUserId]);
 
-  //Get User data from firebase collection
   useEffect(() => {
     async function fetchUserDataAndAuthors() {
       try {
@@ -280,7 +275,7 @@ export default function LeftSectionDesktop() {
           }
         }
       } catch (e) {
-        console.log(e);
+        alert(e);
       }
     }
     fetchUserDataAndAuthors();
@@ -293,12 +288,10 @@ export default function LeftSectionDesktop() {
     }
   }, []);
 
-  //Newbie guide
   function startTheMagicShow() {
     driverObj.drive();
   }
 
-  //Click Function
   const handlePost = () => {
     navigate("/post");
     window.scrollTo(0, 0);
@@ -318,7 +311,6 @@ export default function LeftSectionDesktop() {
     await handleUnFollow(id, navigate);
   };
 
-  console.log(createUserTime);
   const showCreation = moment(createUserTime).format("YYYY-MM-DD");
   const profile = profileImg || showImg || defaultImg;
 

@@ -75,6 +75,23 @@ export const getFirebasePosts = async (field, value) => {
   }
 };
 
+//Get all the Posts data from firebase collection
+async function fetchData(collectionName, dataMapper, dataSetters) {
+  try {
+    const data = collection(db, collectionName);
+    const q = query(data);
+    const querySnapshot = await getDocs(q);
+    const mappedData = dataMapper(querySnapshot.docs);
+    dataSetters.forEach((setter, index) => {
+      setter(mappedData[index]);
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export default fetchData;
+
 //Get all Posts data from firebase collection
 export const getAllFirebasePosts = async () => {
   try {
@@ -94,9 +111,11 @@ export const getAllFirebasePosts = async () => {
 };
 
 //Get Snapshot data from firebase collection
-export const getSnapshotPostsData = (id, setStories) => {
+export const getSnapshotPostsData = (id, setStories, setIsLoading) => {
+  // setIsLoggedIn && setIsLoggedIn(true);
   const q = query(collection(db, "posts"), where("userId", "==", id));
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    // console.log("66666");
     const stories = querySnapshot.docs.map((doc) => ({
       title: doc.data().title,
       time: doc.data().time,
@@ -110,8 +129,9 @@ export const getSnapshotPostsData = (id, setStories) => {
       userComments: doc.data().userComments,
     }));
     setStories(stories);
+    // console.log("5555");
+    // setIsLoading && setIsLoading(false);
   });
-
   return unsubscribe;
 };
 
@@ -464,14 +484,14 @@ export const handleSubmitPost = async (
   }
 };
 
-export const submitComment = async (event, id, setStories) => {
+export const submitComment = async (event, storyId, setStories) => {
   event.preventDefault();
   const commentContent = event.target.replySelect.value;
   const localStorageUserId = window.localStorage.getItem("userId");
   const replyArray = { id: localStorageUserId, comment: commentContent };
 
   try {
-    const q = query(collection(db, "posts"), where("storyId", "==", id));
+    const q = query(collection(db, "posts"), where("storyId", "==", storyId));
     const querySnapshot = await getDocs(q);
 
     if (!querySnapshot.empty) {
@@ -510,7 +530,7 @@ export const submitComment = async (event, id, setStories) => {
       });
       setStories((prev) =>
         prev.map((story) => {
-          if (story.storyId === id) {
+          if (story.storyId === storyId) {
             const updatedStory = {
               ...story,
               userComments: docData.userComments
@@ -522,7 +542,16 @@ export const submitComment = async (event, id, setStories) => {
           return story;
         })
       );
-
+      toast("💬留言成功!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
       console.log("評論成功");
     }
   } catch (error) {

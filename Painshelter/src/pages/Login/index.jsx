@@ -2,13 +2,13 @@ import styled from "styled-components";
 import logoImg from "../../assets/img/logoImg.png";
 import logoTitle from "../../assets/img/logoTitle.png";
 import backgroundVideo from "../../assets/video/login.mp4";
-import { ToastContainer } from "react-toastify";
-import { useState, useRef, useEffect } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../utils/firebase/firebase.jsx";
 import { toastAlert } from "@/utils/toast.js";
-import { NavLink, useNavigate } from "react-router-dom";
 import { useLoginState } from "../../utils/zustand.js";
+import { ToastContainer } from "react-toastify";
+import { NavLink, useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useState, useRef, useEffect } from "react";
 
 //#region
 const Background = styled.div`
@@ -148,14 +148,13 @@ const ButtonSection = styled.div`
     opacity: 0.6;
   }
 `;
-
 //#endregion
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { online, setLoginUserId, loginStatus } = useLoginState();
+  const { online, setLoginUserId } = useLoginState();
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -163,8 +162,6 @@ const Login = () => {
       videoRef.current.playbackRate = 0.3;
     }
   }, []);
-
-  console.log(loginStatus);
 
   const onLogin = (e) => {
     e.preventDefault();
@@ -192,7 +189,7 @@ const Login = () => {
         } else {
           toastAlert("error", "登入發生錯誤", 3000);
         }
-        console.log(errorCode, errorMessage);
+        alert(errorCode, errorMessage);
       });
   };
 

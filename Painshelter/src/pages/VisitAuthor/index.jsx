@@ -1,17 +1,13 @@
-import { db } from "../../utils/firebase/firebase.jsx";
-import { collection, query, getDocs, where } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import styled from "styled-components";
-import IsLoadingPage from "@/components/IsLoadingPage.jsx";
-import { AlignJustify } from "lucide-react";
-import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 import "react-toastify/dist/ReactToastify.css";
-import IsLoading from "@/components/IsLoadingPage.jsx";
+import styled from "styled-components";
 import RightSection from "./RightSection.jsx";
+import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 import LeftSectionDesk from "./LeftSectionDesk.jsx";
 import LeftSectionMobile from "./LeftSectionMobile.jsx";
+import { useState } from "react";
+import { AlignJustify } from "lucide-react";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import { ToastContainer } from "react-toastify";
 
 //#region
 const Background = styled.div`
@@ -40,37 +36,46 @@ const ShowLeftSection = styled.div``;
 //#endregion
 
 const VisitAuthor = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isLoadingPage, setIsLoadingPage] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isMobileSize, setIsMobileSize] = useState(false);
   useAuthCheck();
 
   return (
     <>
-      {isLoadingPage ? (
-        <IsLoading />
+      {isLoading ? (
+        <IsLoadingPage />
       ) : (
-        <>
-          {isLoggedIn ? (
-            <IsLoadingPage />
-          ) : (
-            <Background>
-              <TopSection>
-                <AlignJustify onClick={() => setIsMobileSize(true)} />
-              </TopSection>
-              {isMobileSize ? (
-                <ShowLeftSection>
-                  <LeftSectionMobile setIsMobileSize={setIsMobileSize} />
-                </ShowLeftSection>
-              ) : null}
-              <LeftSectionDesk />
-              <RightSection />
-            </Background>
-          )}
-        </>
+        <Background>
+          <TopSection>
+            <AlignJustify
+              style={{ cursor: "pointer" }}
+              onClick={() => setIsMobileSize(true)}
+            />
+          </TopSection>
+          {isMobileSize ? (
+            <ShowLeftSection>
+              <LeftSectionMobile setIsMobileSize={setIsMobileSize} />
+            </ShowLeftSection>
+          ) : null}
+          <LeftSectionDesk />
+          <RightSection setIsLoggedIn={setIsLoading} />
+        </Background>
       )}
     </>
   );
 };
+<ToastContainer
+  position="top-center"
+  autoClose={5000}
+  hideProgressBar
+  newestOnTop={false}
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  theme="dark"
+  transition:Bounce
+/>;
 
 export default VisitAuthor;

@@ -7,6 +7,7 @@ import { useLoginState } from "../utils/zustand.js";
 import backgroundImg from "../assets/img/outputimg.jpg";
 import styled from "styled-components";
 import { toPng } from "html-to-image";
+import getFirebasePosts from "@/utils/firebase/firebaseService.js";
 
 //#region
 const Wrapper = styled.div`
@@ -69,6 +70,7 @@ const ContentSections = styled.div`
     text-overflow: ellipsis;
     font-size: 15px;
     margin-top: 350px;
+    text-align: center;
   }
   @media screen and (max-width: 1279px) {
     h1 {
@@ -131,30 +133,21 @@ export default function Modal({ comebinedArray, clickTitle }) {
 
   //拿取所有的db資料
   useEffect(() => {
-    async function getStories() {
-      try {
-        const data = collection(db, "posts");
-        const q = query(data);
-        const querySnapshot = await getDocs(q);
-        const storyList = querySnapshot.docs.map((doc) => ({
-          title: doc.data().title,
-          time: doc.data().time,
-          type: doc.data().type,
-          figure: doc.data().figure,
-          story: doc.data().story,
-          userId: doc.data().userId,
-          storyId: doc.data().storyId,
-        }));
-        setStories(storyList);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    getStories();
-  }, []);
+    const dataMapper = (docs) => [
+      docs.map((doc) => ({
+        title: doc.data().title,
+        time: doc.data().time,
+        type: doc.data().type,
+        figure: doc.data().figure,
+        story: doc.data().story,
+        userId: doc.data().userId,
+        storyId: doc.data().storyId,
+      })),
+    ];
 
-  // console.log(comebinedArray);
-  // console.log(modal);
+    getFirebasePosts("posts", dataMapper, [setStories]);
+  }, [setStories]);
+
   //判斷點選的title是否吻合db資料，是的話呈現在頁面上
   useEffect(() => {
     const metchedItem = stories.find((data) => data.title === clickTitle.item);
@@ -185,7 +178,6 @@ export default function Modal({ comebinedArray, clickTitle }) {
         });
     }
   };
-  // console.log(captureRef.current);
 
   return (
     <div>

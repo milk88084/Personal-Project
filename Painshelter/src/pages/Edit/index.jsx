@@ -356,12 +356,10 @@ export default function Edit() {
   const location = useLocation();
   useAuthCheck();
 
-  //back to the top ref
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  //Get the collection datas from firebase
   useEffect(() => {
     async function fetchData() {
       const data = await getFirebaseSpacificPost("storyId", params.id);
@@ -379,7 +377,6 @@ export default function Edit() {
     fetchData();
   }, [params.id]);
 
-  //upload Img
   const inputRef = useRef(null);
   const [showImg, setShowImg] = useState(null);
   const [fileName, setFileName] = useState("");
@@ -392,7 +389,6 @@ export default function Edit() {
     setShowImg(url);
   };
 
-  //Edit post click button
   const handleSubmit = async (event) => {
     await handleEditSubmit(
       event,
@@ -407,12 +403,10 @@ export default function Edit() {
     );
   };
 
-  //Delete post button
   const deleteStory = async () => {
     await handleDeletePost(params.id, navigate);
   };
 
-  //Change state between edit and delete
   const handleHistory = () => {
     setIsEdit(false);
     scrollSection(top);
@@ -423,7 +417,6 @@ export default function Edit() {
     scrollSection(top);
   };
 
-  //
   const backPreviewPage = () => {
     navigate("/history");
     setIsEdit(true);

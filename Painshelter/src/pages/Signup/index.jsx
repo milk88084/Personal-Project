@@ -1,15 +1,15 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth, db } from "../../utils/firebase/firebase.jsx";
-import { setDoc, doc, Timestamp } from "firebase/firestore";
-import { useFormInput } from "../../utils/hooks/useFormInput.jsx";
 import logoImg from "../../assets/img/logoImg2.png";
 import logoTitle from "../../assets/img/logoTitle2.png";
 import backgroundVideo from "../../assets/video/login.mp4";
-import { useRef, useEffect } from "react";
-import { ToastContainer } from "react-toastify";
+import { auth, db } from "../../utils/firebase/firebase.jsx";
 import { toastAlert } from "@/utils/toast.js";
+import { useNavigate } from "react-router-dom";
+import { useFormInput } from "../../utils/hooks/useFormInput.jsx";
+import { ToastContainer } from "react-toastify";
+import { useRef, useEffect } from "react";
+import { setDoc, doc, Timestamp } from "firebase/firestore";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 //#region
 const Background = styled.div`
@@ -163,7 +163,6 @@ const Signup = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    //Official registration member code
     await createUserWithEmailAndPassword(
       auth,
       emailInput.value,
@@ -171,12 +170,10 @@ const Signup = () => {
     )
       .then((userCredential) => {
         const user = userCredential.user;
-
-        //The method needed to add a name during this test.
         updateProfile(user, {
           displayName: nameInput.value,
         }).then(() => {
-          console.log(user);
+          alert(user);
           toastAlert("success", "註冊成功，請至登入頁面進行登入", 1000);
           setTimeout(() => {
             navigate("/login");
@@ -191,10 +188,9 @@ const Signup = () => {
         } else {
           toastAlert("error", "註冊不成功", 2000);
         }
-        console.log(errorCode, errorMessage);
+        alert(errorCode, errorMessage);
       });
 
-    //Store the registered member's information in Firestore.
     try {
       await setDoc(doc(db, "users", auth.currentUser.uid), {
         id: auth.currentUser.uid,
@@ -208,7 +204,6 @@ const Signup = () => {
     }
   };
 
-  //監聽背景圖片
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.playbackRate = 0.3;

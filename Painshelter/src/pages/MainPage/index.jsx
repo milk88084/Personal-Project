@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import Banner from "./Banner.jsx";
-import AboutPainSection from "./AboutPainSection.jsx";
-import HighLights from "./HighLights.jsx";
-import ChartFeatures from "./ChartFeatures.jsx";
-import MapSection from "./MapSection.jsx";
-import FooterSection from "./FooterSection.jsx";
 import CopyRight from "@/components/CopyRight.jsx";
 import ModalMain from "@/components/ModalMain.jsx";
+import MapSection from "./MapSection.jsx";
+import HighLights from "./HighLights.jsx";
+import ChartFeatures from "./ChartFeatures.jsx";
+import FooterSection from "./FooterSection.jsx";
+import AboutPainSection from "./AboutPainSection.jsx";
 import { MainModal } from "@/utils/zustand.js";
 import { useLocation } from "react-router-dom";
 import { useRef, useEffect } from "react";

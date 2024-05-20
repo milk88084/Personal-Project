@@ -1,14 +1,20 @@
-import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import backgroundImg from "../../assets/img/hitsoryLeft.jpg";
+import moment from "moment";
+import logoImg from "../../assets/img/logoImg.png";
+import logoTitle from "../../assets/img/logoTitle.png";
+import defaultImg from "@/assets/img/defaultImg.png";
 import ModalHistory from "../../components/ModalHistory.jsx";
+import backgroundImg from "../../assets/img/hitsoryLeft.jpg";
 import { storage } from "../../utils/firebase/firebase.jsx";
+import { useNavigate } from "react-router-dom";
+import { HistoryModal } from "../../utils/zustand.js";
+import { useState, useRef, useEffect } from "react";
+import { UserRoundX, User, StickyNote } from "lucide-react";
 import {
   getDownloadURL,
   ref as storageRef,
   uploadBytes,
 } from "firebase/storage";
-import defaultImg from "@/assets/img/defaultImg.png";
 import {
   getFirebaseUsers,
   getAuthorsByIds,
@@ -16,17 +22,11 @@ import {
   handleUnFollow,
   updateProfileImage,
 } from "@/utils/firebase/firebaseService.js";
-import { useNavigate } from "react-router-dom";
-import moment from "moment";
-import logoImg from "../../assets/img/logoImg.png";
-import logoTitle from "../../assets/img/logoTitle.png";
-import { HistoryModal } from "../../utils/zustand.js";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { UserRoundX, User, StickyNote } from "lucide-react";
 
 //#region
 const SectionWrapper = styled.div`
@@ -270,17 +270,16 @@ const StyledUser = styled(User)`
 
 export default function LeftSectionMobile({ setIsMobileSize }) {
   const [showImg, setShowImg] = useState(null);
+  const [authors, setAuthors] = useState();
+  const [followList, setFollowList] = useState();
   const [profileImg, setProfileImg] = useState(null);
   const [authorName, setAuthorName] = useState();
+  const [showFriendsList, setShowFriendsList] = useState(false);
+  const { modal, showModal } = HistoryModal();
   const inputRef = useRef(null);
   const localStorageUserId = window.localStorage.getItem("userId");
-  const [followList, setFollowList] = useState();
-  const [authors, setAuthors] = useState();
-  const { modal, showModal } = HistoryModal();
-  const [showFriendsList, setShowFriendsList] = useState(false);
   const navigate = useNavigate();
 
-  //Get User data from firebase collection
   useEffect(() => {
     async function fetchUserDataAndAuthors() {
       try {
@@ -296,7 +295,7 @@ export default function LeftSectionMobile({ setIsMobileSize }) {
           }
         }
       } catch (e) {
-        console.log(e);
+        alert(e);
       }
     }
     fetchUserDataAndAuthors();

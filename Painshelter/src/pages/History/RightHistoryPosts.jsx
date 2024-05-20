@@ -1,11 +1,10 @@
-import styled from "styled-components";
-import { useState, useEffect } from "react";
-import { getFirebasePosts } from "@/utils/firebase/firebaseService.js";
-import Buttons from "../../components/Buttons.jsx";
 import pill from "../../assets/icon/pill.png";
+import styled from "styled-components";
+import Buttons from "../../components/Buttons.jsx";
 import { useNavigate } from "react-router-dom";
 import { modifiedData } from "../../utils/zustand.js";
-import IsLoadingPage from "@/components/IsLoadingPage.jsx";
+import { useState, useEffect } from "react";
+import { getFirebasePosts } from "@/utils/firebase/firebaseService.js";
 
 //#region
 const StorySection = styled.div`
@@ -140,9 +139,9 @@ const Heart = styled.div`
 //#endregion
 
 export default function RightHistoryPosts({ setIsLoading }) {
+  const navigate = useNavigate();
   const localStorageUserId = window.localStorage.getItem("userId");
   const [stories, setStories] = useState([]);
-  const navigate = useNavigate();
   const { setSelectedStoryId } = modifiedData();
 
   useEffect(() => {

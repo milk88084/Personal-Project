@@ -1,17 +1,17 @@
 import styled, { keyframes } from "styled-components";
+import gsap from "gsap";
+import logo from "../../assets/img/logoTitle.png";
 import video from "../../assets/video/landingPage.mp4";
 import video2 from "../../assets/video/landingPage2.mp4";
-import logo from "../../assets/img/logoTitle.png";
-import gsap from "gsap";
+import ThreeRules from "./ThreeRules.jsx";
 import landingPageTextLines from "@/utils/data/landingPageTextLines.json";
-import { landingPAgeGSAPAnimations } from "@/utils/gsapAnimations.js";
 import { useGSAP } from "@gsap/react";
 import { ScrollText } from "lucide-react";
-import { ChevronRight } from "lucide-react";
 import { UsersRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { ChevronRight } from "lucide-react";
+import { landingPAgeGSAPAnimations } from "@/utils/gsapAnimations.js";
 import { useEffect, useRef, useState } from "react";
-import ThreeRules from "./ThreeRules.jsx";
 
 //#region
 const Background = styled.div`

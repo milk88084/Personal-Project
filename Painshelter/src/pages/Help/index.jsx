@@ -1,26 +1,26 @@
 import "survey-core/defaultV2.min.css";
-import { useEffect, useState, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
 import { Model } from "survey-core";
+import { bouncy } from "ldrs";
+import { useGSAP } from "@gsap/react";
 import { themeJson } from "../../assets/survey";
 import { PopupSurvey } from "survey-react-ui";
+import { useHelpModal } from "../../utils/zustand.js";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 import { updateUserStressRecord } from "@/utils/firebase/firebaseService.js";
 import { helpPAgeGSAPAnimations } from "@/utils/gsapAnimations.js";
-import { bouncy } from "ldrs";
-import { useGSAP } from "@gsap/react";
-import { useHelpModal } from "../../utils/zustand.js";
-import videoSrc from "../../assets/video/helpbanner.mp4";
-import feature3Banner from "../../assets/img/feature3Banner.png";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
 import zero from "../../assets/img/help_zero.png";
 import one from "../../assets/img/help_one.png";
 import two from "../../assets/img/help_two.png";
 import four from "../../assets/img/help_four.png";
 import json from "../../utils/data/survey.json";
 import styled from "styled-components";
+import Buttons from "../../components/Buttons.jsx";
+import videoSrc from "../../assets/video/helpbanner.mp4";
+import feature3Banner from "../../assets/img/feature3Banner.png";
 import AnimatedNumber from "../../components/AnimatedNumber";
 import SurveyResult from "./SurveyResult";
-import Buttons from "../../components/Buttons.jsx";
 
 //#region
 const Background = styled.div`
@@ -238,10 +238,10 @@ const LoadingSection = styled.div`
 
 function SurveyComponent() {
   const [show, setShow] = useState(false);
-  const [surveyData, setSurveyData] = useState([]);
   const [score, setScore] = useState(null);
   const [complete, setComplete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [surveyData, setSurveyData] = useState([]);
   const { modal, showModal, closeModal } = useHelpModal();
   const survey = new Model(json);
   const resultBottom = useRef(null);
@@ -251,7 +251,6 @@ function SurveyComponent() {
   bouncy.register();
   useAuthCheck();
 
-  //回到網頁最上方
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
@@ -262,12 +261,10 @@ function SurveyComponent() {
     showModal();
   };
 
-  //測驗完移動到結果
   const scrollToBottom = () => {
     resultBottom.current.scrollIntoView({ behavior: "smooth", block: "end" });
   };
 
-  //監聽彈跳視窗叉叉按鈕的狀態
   useEffect(() => {
     const closeButton = document.querySelector(".sv_window_button_close");
     if (closeButton) {
@@ -288,7 +285,6 @@ function SurveyComponent() {
     scrollToBottom();
   }, [surveyData]);
 
-  //將資料存到state裡面
   survey.onComplete.add(function (result) {
     const surveyData = JSON.stringify(result.data);
     if (surveyData) {
@@ -300,7 +296,6 @@ function SurveyComponent() {
     }
   });
 
-  //統計測驗結果
   function staticData(data) {
     let resultsData = {};
     for (let section of Object.values(data)) {
@@ -329,7 +324,6 @@ function SurveyComponent() {
     return score;
   }
 
-  //監聽測驗結果，存到firestore中的users集合
   useEffect(() => {
     const localStorageUserId = window.localStorage.getItem("userId");
     if (localStorageUserId) {
@@ -337,7 +331,6 @@ function SurveyComponent() {
     }
   }, [score, complete]);
 
-  //GSAP
   let imgText = useRef(null);
   let titleSection1 = useRef(null);
   let titleSection2 = useRef(null);
@@ -354,7 +347,6 @@ function SurveyComponent() {
   return (
     <>
       {modal ? <BlackBackground></BlackBackground> : null}
-
       <Background>
         <TopSection>
           <video src={videoSrc} loop height="480px" autoPlay muted></video>

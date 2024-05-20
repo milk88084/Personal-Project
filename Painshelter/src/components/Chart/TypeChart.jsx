@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { db } from "../../utils/firebase/firebase.jsx";
-import { collection, query, getDocs } from "firebase/firestore";
+import getFirebasePosts from "@/utils/firebase/firebaseService.js";
 import {
   XAxis,
   YAxis,
@@ -14,24 +13,16 @@ import {
 export default function TypeChart() {
   const [typeData, setTypeData] = useState();
   const [types, setTypes] = useState([]);
+
   useEffect(() => {
-    async function getType() {
-      try {
-        const data = collection(db, "posts");
-        const q = query(data);
-        const querySnapshot = await getDocs(q);
-        const userStoryList = querySnapshot.docs.map((doc) => ({
-          type: doc.data().type,
-          figure: doc.data().figure,
-        }));
-        setTypeData(userStoryList);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    getType();
-  }, []);
-  // console.log(typeData);
+    const dataMapper = (docs) => [
+      docs.map((doc) => ({
+        type: doc.data().type,
+        figure: doc.data().figure,
+      })),
+    ];
+    getFirebasePosts("posts", dataMapper, [setTypeData]);
+  }, [setTypeData]);
 
   //扁平化物件裡面的type內容，變成陣列
 
@@ -41,7 +32,6 @@ export default function TypeChart() {
       setTypes(newTypesArray);
     }
   }, [typeData]);
-  // console.log(types);
 
   //統計文章類型的資料function
   const total_count = types.reduce((obj, item) => {
@@ -53,15 +43,12 @@ export default function TypeChart() {
     return obj;
   }, {});
 
-  // console.log(total_count);
   const chartData = Object.entries(total_count).map(([name, count]) => {
     return {
       name,
       count,
     };
   });
-
-  // console.log(chartData);
 
   //監聽視窗大小，去調整地圖的寬度
   const [width, setWidth] = useState(520);

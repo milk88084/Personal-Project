@@ -1,12 +1,12 @@
 import styled, { keyframes } from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import jar from "../../assets/img/historyJar.png";
 import broke from "../../assets/img/historyBroke.png";
 import AnimatedNumber from "../../components/AnimatedNumber.jsx";
 import categoryImg from "../../assets/img/categoryImg.jpg";
 import logoImg from "../../assets/img/logoImg.png";
 import Buttons from "../../components/Buttons.jsx";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import {
   getFirebasePosts,
   getFirebaseUsers,
@@ -207,14 +207,12 @@ const CategoriesSection = styled.div`
 export default function RightCategories({ storyRef }) {
   const localStorageUserId = window.localStorage.getItem("userId");
   const navigate = useNavigate();
+  const [authors, setAuthors] = useState();
   const [stories, setStories] = useState([]);
   const [pressure, setPressure] = useState();
-  const [authors, setAuthors] = useState();
-  //   const storyRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [followList, setFollowList] = useState();
 
-  //Get all the Posts data from firebase collection
   useEffect(() => {
     async function fetchStoryData() {
       setIsLoading(true);
@@ -230,7 +228,6 @@ export default function RightCategories({ storyRef }) {
     setIsLoading(false);
   }, []);
 
-  //Get User data from firebase collection
   useEffect(() => {
     async function fetchUserDataAndAuthors() {
       try {
@@ -246,7 +243,7 @@ export default function RightCategories({ storyRef }) {
           }
         }
       } catch (e) {
-        console.log(e);
+        alert(e);
       }
     }
     fetchUserDataAndAuthors();

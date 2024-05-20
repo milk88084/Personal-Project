@@ -2,11 +2,11 @@ import styled from "styled-components";
 import logoImg from "@/assets/img/logoImg.png";
 import logoTitle from "@/assets/img/logoTitle.png";
 import mainBanner from "@/assets/img/mainBanner.jpg";
-import { signOut } from "firebase/auth";
 import { auth } from "@/utils/firebase/firebase";
+import { signOut } from "firebase/auth";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginState } from "@/utils/zustand.js";
-import { useEffect } from "react";
 import { bannerPageGSAPAnimations } from "@/utils/gsapAnimations";
 
 //#region
@@ -144,19 +144,18 @@ export default function Banner({
     signOut(auth)
       .then(() => {
         navigate("/");
-        console.log("Signed out successfully");
+        alert("Signed out successfully");
         window.localStorage.removeItem("userId");
         window.localStorage.removeItem("loginStatus");
       })
       .catch((error) => {
-        console.log(error);
+        alert(error);
       });
     offline();
     logout();
     scrollSection(top);
   };
 
-  //#region
   useEffect(() => {
     bannerPageGSAPAnimations(
       firstRef,
@@ -167,7 +166,6 @@ export default function Banner({
       logoRef
     );
   }, []);
-  //#endregion
 
   return (
     <BannerWrapper>

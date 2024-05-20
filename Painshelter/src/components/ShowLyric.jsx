@@ -38,17 +38,12 @@ function LyricSearch() {
   const [lyrics, setLyrics] = useState("");
   const [selectedSong, setSelectedSong] = useState(null);
   const { title, searchStatus, setStatusfasle } = useLyric();
-  console.log(searchStatus);
-  console.log(title);
 
   const handleSearch = useCallback(
     debounce(async () => {
       const apiKey = "AIzaSyDyZLRDFoYtMaLdm5wWEwVSBBQkK8RgIRM";
       const cx = "130af128a09214343";
       const url = `https://www.googleapis.com/customsearch/v1?cx=${cx}&key=${apiKey}&q=${title}&siteSearch=mojim.com`;
-
-      console.log(title + 123);
-
       try {
         const response = await axios.get(url);
         setSongs(response.data.items);

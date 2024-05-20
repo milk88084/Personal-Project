@@ -1,17 +1,17 @@
 import styled from "styled-components";
 import logoImg from "@/assets/img/logoImg.png";
 import logoTitle from "@/assets/img/logoTitle.png";
+import defaultImg from "@/assets/img/defaultImg.png";
+import { db } from "../../utils/firebase/firebase.jsx";
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import defaultImg from "@/assets/img/defaultImg.png";
-import { useLocation } from "react-router-dom";
+import { collection, query, getDocs, where } from "firebase/firestore";
 import {
   submitFollowAuthor,
   getSnapshotPostsData,
   getVisitUserData,
 } from "@/utils/firebase/firebaseService.js";
-import { db } from "../../utils/firebase/firebase.jsx";
-import { collection, query, getDocs, where } from "firebase/firestore";
 
 //#region
 const LeftSectionWrapper = styled.div`
@@ -120,6 +120,7 @@ const LeftButtonSection = styled.div`
   flex-direction: column;
 
   button {
+    height: 40px;
     font-size: 25px;
     margin: 7px;
     opacity: 0.3;
@@ -185,12 +186,11 @@ const LogoSection = styled.div`
   }
 `;
 //#endregion
-export default function LeftSectionDesk({ setIsLoadingPage }) {
+export default function LeftSectionDesk() {
   const { state } = useLocation();
   const [stories, setStories] = useState([]);
   const [author, setAuthor] = useState([]);
   const [isFollow, setIsFollow] = useState(false);
-
   const navigate = useNavigate();
   const localStorageUserId = window.localStorage.getItem("userId");
 
@@ -204,7 +204,7 @@ export default function LeftSectionDesk({ setIsLoadingPage }) {
         unsubscribe();
       }
     };
-  }, [localStorageUserId]);
+  }, []);
 
   const isUserStories = stories.every(
     (story) => story.userId === localStorageUserId
@@ -235,7 +235,7 @@ export default function LeftSectionDesk({ setIsLoadingPage }) {
           setIsFollow(false);
         }
       } catch (e) {
-        console.log(e);
+        alert(e);
       }
     }
     commfirmFollow();

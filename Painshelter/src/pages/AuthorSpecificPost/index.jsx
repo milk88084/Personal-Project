@@ -1,15 +1,15 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import Buttons from "../../components/Buttons.jsx";
+import defaultImg from "../../assets/img/defaultImg.png";
+import stortTypeData from "@/utils/data/storyTypeData.json";
+import IsLoadingPage from "@/components/IsLoadingPage.jsx";
+import storyFigureData from "@/utils/data/storyFigureData.json";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 import { useEditFormInput } from "../../utils/hooks/useEditFormInput.jsx";
+import { useEffect, useState } from "react";
 import { useEditCheckboxInput } from "../../utils/hooks/useEditCheckboxInput.jsx";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import IsLoadingPage from "@/components/IsLoadingPage.jsx";
-import defaultImg from "../../assets/img/defaultImg.png";
-import Buttons from "../../components/Buttons.jsx";
-import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 import { getFirebaseSpacificPost } from "@/utils/firebase/firebaseService.js";
-import stortTypeData from "@/utils/data/storyTypeData.json";
-import storyFigureData from "@/utils/data/storyFigureData.json";
 
 //#region
 const Background = styled.div`
@@ -288,25 +288,23 @@ const AvatarPart = styled.div`
 //#endregion
 
 export default function Edit() {
-  const params = useParams();
+  useAuthCheck();
   const navigate = useNavigate();
+  const params = useParams();
+  const location = useLocation();
   const postStory = useEditFormInput();
   const storyTitle = useEditFormInput();
   const storyTime = useEditFormInput();
   const storyType = useEditCheckboxInput(stortTypeData);
   const storyFigure = useEditCheckboxInput(storyFigureData);
-  const [locationName, setLocationName] = useState();
   const [comments, setComments] = useState();
-  const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
-  useAuthCheck();
+  const [locationName, setLocationName] = useState();
 
-  //Back to the scroll top
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  //Get the collection datas from firebase
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);

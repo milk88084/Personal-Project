@@ -1,11 +1,10 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import replyData from "../../utils/data/reply.json";
 import Buttons from "@/components/Buttons.jsx";
-import { useNavigate } from "react-router-dom";
-import { Heart, MessageCircle } from "lucide-react";
+import replyData from "../../utils/data/reply.json";
 import { useAuthorfiedData } from "../../utils/zustand.js";
+import { useState, useEffect } from "react";
+import { Heart, MessageCircle } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   getSnapshotPostsData,
   submitComment,
@@ -205,11 +204,9 @@ const LikerAccount = styled.div`
 `;
 //#endregion
 
-export default function RightSection() {
+export default function RightSection({ setIsLoading }) {
   const { state } = useLocation();
   const [stories, setStories] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   const localStorageUserId = window.localStorage.getItem("userId");
   const navigate = useNavigate();
   const { setSelectedStoryId } = useAuthorfiedData();
@@ -217,14 +214,15 @@ export default function RightSection() {
   useEffect(() => {
     let unsubscribe;
     if (localStorageUserId) {
-      unsubscribe = getSnapshotPostsData(state.data, setStories, setIsLoggedIn);
+      unsubscribe = getSnapshotPostsData(state.data, setStories, setIsLoading);
     }
     return () => {
       if (unsubscribe) {
+        // console.log("return");
         unsubscribe();
       }
     };
-  }, [localStorageUserId]);
+  }, []);
 
   const sortTimeOfStory = stories.sort((a, b) => b.time.localeCompare(a.time));
 

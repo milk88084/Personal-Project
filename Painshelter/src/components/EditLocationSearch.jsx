@@ -31,8 +31,6 @@ const EditLocationSearch = ({ location }) => {
     }
   };
 
-  console.log(locationSerach);
-
   useEffect(() => {
     storyLocation.setValue(location);
   }, [location, storyLocation]);

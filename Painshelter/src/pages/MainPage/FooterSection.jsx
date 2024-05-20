@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { AccordionDemo } from "@/components/Shadcn/Accordion";
 import footer1 from "@/assets/img/mainFooter1.jpg";
 import logoImg from "@/assets/img/logoImg.png";
+import { auth } from "@/utils/firebase/firebase.jsx";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { auth } from "@/utils/firebase/firebase.jsx";
 import { useLoginState } from "@/utils/zustand.js";
+import { AccordionDemo } from "@/components/Shadcn/Accordion";
 
 //#region
 const FooterSectionWrapper = styled.div`
@@ -99,12 +99,12 @@ export default function FooterSection({ footer, topSectionRef }) {
     signOut(auth)
       .then(() => {
         navigate("/");
-        console.log("Signed out successfully");
+        alert("Signed out successfully");
         window.localStorage.removeItem("userId");
         window.localStorage.removeItem("loginStatus");
       })
       .catch((error) => {
-        console.log(error);
+        alert(error);
       });
     offline();
     logout();

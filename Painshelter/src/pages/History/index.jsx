@@ -1,15 +1,15 @@
-import { useLocation } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { HistoryModal } from "../../utils/zustand.js";
 import ModalHistory from "../../components/ModalHistory.jsx";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
-import { AlignJustify } from "lucide-react";
-import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import RightCategories from "./RightCategories.jsx";
 import LeftSectionMobile from "./LeftSectionMobile.jsx";
 import LeftSectionDesktop from "./LeftSectionDesktop .jsx";
-import RightCategories from "./RightCategories.jsx";
 import RightHistoryPosts from "./RightHistoryPosts.jsx";
+import { useLocation } from "react-router-dom";
+import { HistoryModal } from "../../utils/zustand.js";
+import { AlignJustify } from "lucide-react";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import { useState, useEffect, useRef } from "react";
 
 //#region
 const Background = styled.div`
@@ -61,18 +61,15 @@ const SpanSection = styled.div`
 export default function History() {
   const { modal, showModal } = HistoryModal();
   const [isLoading, setIsLoading] = useState(false);
+  const [isMobileSize, setIsMobileSize] = useState(false);
+  const storyRef = useRef(null);
   const location = useLocation();
   useAuthCheck();
 
-  //監聽到網頁最上方
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
 
-  //將文章按照時間順序排序
-  const [isMobileSize, setIsMobileSize] = useState(false);
-  const storyRef = useRef(null);
-  // sc - fVkKPM;
   return (
     <div>
       {isLoading ? (

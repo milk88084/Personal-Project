@@ -7,27 +7,13 @@ import { useLoginState } from "../utils/zustand.js";
 import icon from "../assets/img/logoImg3.png";
 import { MapPin } from "lucide-react";
 import styled from "styled-components";
-// import "leaflet.markercluster/dist/MarkerCluster.css";
-// import "leaflet.markercluster/dist/MarkerCluster.Default.css"; // 这是默认的样式，根据需要引入
-// import "leaflet.markercluster";
-
-//Adjust for invisible Marker after deploying due to webpack building
 import L from "leaflet";
-// import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
-// import iconUrl from "leaflet/dist/images/marker-icon.png";
-// import shadowUrl from "leaflet/dist/images/marker-shadow.png";
-// delete L.Icon.Default.prototype._getIconUrl;
-// L.Icon.Default.mergeOptions({
-//   iconRetinaUrl,
-//   iconUrl,
-//   shadowUrl,
-// });
 
 const painIcon = L.icon({
   iconUrl: icon,
-  iconSize: [24, 32], //icon大小
-  iconAnchor: [10, 20], //圖標中心點位置
-  popupAnchor: [0, 0], //popup視窗位置
+  iconSize: [24, 32],
+  iconAnchor: [10, 20],
+  popupAnchor: [0, 0],
 });
 
 //#region
@@ -74,12 +60,11 @@ const PostsLocation = () => {
         setLocations(storyList);
         setTitles(storyTitle);
       } catch (e) {
-        console.log(e);
+        alert(e);
       }
     }
     getStories();
   }, []);
-  // console.log(locations);
 
   //將title加到location array裡面
   const comebinedArray = locations.map((data, index) => {
@@ -111,7 +96,6 @@ const PostsLocation = () => {
     return Object.values(groups);
   };
   const sameNameLocation = groupLocation(comebinedArray);
-  // console.log(sameNameLocation);
 
   //click Popup button可以連到該作者頁面
   const openModal = (title) => {
@@ -120,28 +104,6 @@ const PostsLocation = () => {
   };
 
   //markerGroup
-  // const MarkerClusterGroup = ({ children }) => {
-  //   const map = useMap();
-
-  //   useEffect(() => {
-  //     const markerClusterGroup = L.markerClusterGroup();
-  //     children.forEach((child) => {
-  //       const marker = L.marker(
-  //         [child.props.position[0], child.props.position[1]],
-  //         { icon: child.props.icon }
-  //       );
-  //       marker.bindPopup(child.props.children);
-  //       markerClusterGroup.addLayer(marker);
-  //     });
-  //     map.addLayer(markerClusterGroup);
-
-  //     return () => {
-  //       map.removeLayer(markerClusterGroup);
-  //     };
-  //   }, [map, children]);
-
-  //   return null;
-  // };
 
   return (
     <div>
