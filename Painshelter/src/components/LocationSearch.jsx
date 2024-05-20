@@ -60,8 +60,6 @@ const LocationSearch = () => {
     }
   };
 
-  console.log(locationSerach);
-
   return (
     <div>
       <Input>

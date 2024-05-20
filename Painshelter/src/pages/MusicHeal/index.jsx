@@ -353,14 +353,13 @@ function MusicHeal() {
           <p>更通過音樂與字句的藝術治療，學會了如何自我療癒。</p>
           <p>讓我們一起，用這些溫柔的語言和旋律，療癒心靈，抒發情感。</p>
           <SearchBar>
-            <form onSubmit={handleSubmit}>
+            <form data-testid="search-form" onSubmit={handleSubmit}>
               <input
                 {...SearchInput}
                 placeholder="輸入一首喜愛的歌"
                 type="text"
               ></input>
             </form>
-            {/* <ShowLyric></ShowLyric> */}
           </SearchBar>
         </Intro>
         <MainSection>

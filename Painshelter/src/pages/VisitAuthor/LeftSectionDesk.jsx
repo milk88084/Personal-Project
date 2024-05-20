@@ -211,7 +211,7 @@ export default function LeftSectionDesk({ setIsLoadingPage }) {
   );
 
   useEffect(() => {
-    getVisitUserData(setIsLoadingPage, state.data, setAuthor);
+    getVisitUserData(state.data, setAuthor);
   }, []);
 
   const profileImg = author[0]?.img || defaultImg;
