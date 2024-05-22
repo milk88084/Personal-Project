@@ -9,6 +9,8 @@ const MapSectionWrapper = styled.div`
 
   @media screen and (max-width: 1279px) {
     width: 100%;
+    height: 100%;
+    margin-bottom: 100px;
   }
 `;
 

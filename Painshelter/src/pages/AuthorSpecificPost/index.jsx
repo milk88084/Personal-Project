@@ -149,7 +149,7 @@ const PreviewType = styled.div`
   }
   @media screen and (max-width: 1279px) {
     margin-top: 20px;
-    font-size: 15px;
+    font-size: 14px;
   }
 `;
 
@@ -207,8 +207,8 @@ const ButtonSection = styled.div`
   display: flex;
 
   @media screen and (max-width: 1279px) {
-    justify-content: space-between;
-    width: 100%;
+    flex-direction: column;
+    align-items: center;
   }
 `;
 
@@ -274,15 +274,21 @@ const CommentPart = styled.div`
 `;
 
 const AvatarPart = styled.div`
-  width: 60px;
-  height: 60px;
   img {
     border-radius: 50px;
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
   }
 
   @media screen and (max-width: 1279px) {
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    img {
+      border-radius: 50px;
+      width: 40px;
+      height: 40px;
+      overflow: hidden;
+    }
   }
 `;
 //#endregion

@@ -4,7 +4,6 @@ import logoImg from "@/assets/img/logoImg.png";
 import logoTitle from "@/assets/img/logoTitle.png";
 import defaultImg from "@/assets/img/defaultImg.png";
 import ModalHistory from "@/components/ModalHistory.jsx";
-import backgroundImg from "@/assets/img/hitsoryLeft.jpg";
 import { storage } from "@/utils/firebase/firebase.jsx";
 import { useNavigate } from "react-router-dom";
 import { HistoryModal } from "@/utils/zustand.js";
@@ -347,7 +346,7 @@ export default function LeftSectionMobile({ setIsMobileSize }) {
   const profile = profileImg || showImg || defaultImg;
   return (
     <div>
-      <SectionWrapper backgroundImg={backgroundImg}>
+      <SectionWrapper>
         {modal ? <ModalHistory /> : null}
         {showFriendsList ? (
           <OtherAuthorList>

@@ -14,6 +14,7 @@ const AboutPain = styled.div`
   @media screen and (max-width: 1279px) {
     height: 100%;
     width: 100%;
+    margin-top: 100px;
   }
 `;
 

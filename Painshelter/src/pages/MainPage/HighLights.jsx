@@ -66,10 +66,13 @@ const HighlightPost = styled.div`
     transform: scale(1.1);
     color: white;
   }
+  @media screen and (max-width: 1279px) {
+    width: 90%;
+  }
 `;
 
 const MoreButton = styled.div`
-  width: 100%;
+  width: 90%;
   display: flex;
   justify-content: center;
   margin-top: 60px;

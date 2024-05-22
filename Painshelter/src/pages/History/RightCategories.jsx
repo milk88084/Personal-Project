@@ -72,7 +72,7 @@ const TopCategories = styled.div`
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
 
-  p {
+  span {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -84,6 +84,7 @@ const TopCategories = styled.div`
 
   @media screen and (max-width: 1279px) {
     width: 400px;
+    margin: 15px 0px;
     img {
       height: 60px;
     }
@@ -166,11 +167,11 @@ const CategoriesSection = styled.div`
     flex-direction: column;
     padding: 10px;
     border-radius: 20px;
+    margin: 15px 0px;
 
     img {
       width: 70px;
-      margin-right: 0px;
-      margin-bottom: 15px;
+      margin: 30px 0px;
     }
 
     h1 {
@@ -193,7 +194,7 @@ const CategoriesSection = styled.div`
 
     span {
       height: 100%;
-      margin-top: 20px;
+      margin: 20px 0px;
     }
 
     button {
@@ -274,7 +275,7 @@ export default function RightCategories({ storyRef }) {
             <h2>壓力</h2>
             <h2>指數</h2>
           </div>
-          <p>
+          <span>
             {getLastPressureNumber?.number ? (
               <>
                 <AnimatedNumber end={getLastPressureNumber?.number} />分
@@ -282,7 +283,7 @@ export default function RightCategories({ storyRef }) {
             ) : (
               <>0分</>
             )}
-          </p>
+          </span>
           <img src={broke} alt={broke} />
         </TopCategories>
         <span></span>
@@ -291,7 +292,7 @@ export default function RightCategories({ storyRef }) {
             <h2>關注</h2>
             <h2>作者</h2>
           </div>
-          <p>
+          <span>
             {authors && authors.length ? (
               <>
                 <AnimatedNumber end={authors && authors.length} />位
@@ -299,7 +300,7 @@ export default function RightCategories({ storyRef }) {
             ) : (
               <>0位</>
             )}
-          </p>
+          </span>
           <img src={jar} alt={jar} />
         </TopCategories>
       </section>

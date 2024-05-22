@@ -72,6 +72,7 @@ const Lyric = styled.div`
       width: 100%;
       font-size: 12px;
       padding: 40px;
+      margin-bottom: 50px;
     }
     span {
       position: absolute;
@@ -148,6 +149,8 @@ const Video = styled.div`
   @media screen and (max-width: 1279px) {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 `;
 

@@ -20,6 +20,9 @@ const FooterImg = styled.div`
   width: 1000px;
   @media screen and (max-width: 1279px) {
     width: 100%;
+    img {
+      width: 100%;
+    }
   }
 `;
 
@@ -87,11 +90,14 @@ const FooterContent = styled.div`
       font-size: 40px;
       letter-spacing: 4px;
     }
+    img {
+      display: none;
+    }
   }
 `;
 //#endregion
 
-export default function FooterSection({ footer, topSectionRef }) {
+export default function FooterSection({ footer }) {
   const navigate = useNavigate();
   const { offline, logout } = useLoginState();
 
@@ -111,9 +117,9 @@ export default function FooterSection({ footer, topSectionRef }) {
     scrollSection(top);
   };
 
-  const scrollSection = (elementRef) => {
+  const scrollSection = () => {
     window.scrollTo({
-      top: elementRef.current.offsetTop,
+      top: 0,
       behavior: "smooth",
     });
   };
@@ -126,11 +132,7 @@ export default function FooterSection({ footer, topSectionRef }) {
       <FooterContent ref={footer}>
         <AccordionDemo></AccordionDemo>
         <button onClick={handleLogout}>登出</button>
-        <img
-          onClick={() => scrollSection(topSectionRef)}
-          src={logoImg}
-          alt={logoImg}
-        />
+        <img onClick={scrollSection} src={logoImg} alt={logoImg} />
       </FooterContent>
     </FooterSectionWrapper>
   );

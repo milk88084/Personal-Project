@@ -96,12 +96,13 @@ const Background = styled.div`
   }
 
   @media screen and (max-width: 1279px) {
-    width: 70%;
-    height: 80%;
+    width: 400px;
+    height: 500px;
     padding: 15px;
     border-radius: 12px;
     h1 {
       font-size: 25px;
+      margin-bottom: 0px;
     }
 
     button {
@@ -128,7 +129,7 @@ const VideoSection = styled.div`
 //#endregion
 
 export default function Modal() {
-  const { modal, closeModal } = MainModal();
+  const { modal } = MainModal();
   var settings = {
     dots: true,
     infinite: true,

@@ -238,7 +238,7 @@ const ButtonSection = styled.div`
 
   @media screen and (max-width: 1279px) {
     margin-top: 25px;
-    display: block;
+    justify-content: center;
     width: 100%;
   }
 `;

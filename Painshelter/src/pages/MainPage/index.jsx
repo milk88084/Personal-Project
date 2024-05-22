@@ -34,7 +34,7 @@ const FeatureTitles = styled.div`
     font-weight: 500;
     margin-left: 0px;
     text-align: center;
-    margin-top: 50px;
+    margin-top: 100px;
   }
 `;
 
@@ -43,6 +43,9 @@ const FeatureSubTitles = styled.div`
   text-align: end;
   opacity: 0.6;
   color: white;
+  @media screen and (max-width: 1279px) {
+    text-align: center;
+  }
 `;
 
 const ShowNewbieGuide = styled.div``;
@@ -99,7 +102,7 @@ export default function MainPage() {
         </FeatureTitles>
         <MapSection />
       </span>
-      <FooterSection footer={footer} topSectionRef={topSectionRef} />
+      <FooterSection footer={footer} />
       <CopyRight></CopyRight>
       <ShowNewbieGuide>{modal ? <ModalMain /> : null}</ShowNewbieGuide>
     </Background>

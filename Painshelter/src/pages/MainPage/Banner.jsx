@@ -59,6 +59,7 @@ const Categories = styled.div`
     letter-spacing: 1px;
     font-weight: 500;
     padding-top: 0px;
+    z-index: 200;
 
     button {
       margin: 3px;
@@ -91,14 +92,14 @@ const Logo = styled.div`
     align-items: center;
     margin-left: 0px;
     right: 0;
-    margin-top: 250px;
+    margin-top: 150px;
     img:nth-of-type(1) {
-      width: 150px;
+      width: 100px;
     }
 
     img:nth-of-type(2) {
-      width: 250px;
-      margin-top: 20px;
+      width: 200px;
+      margin-top: 10px;
     }
   }
 `;
@@ -172,7 +173,11 @@ export default function Banner({
       <BannerImg>
         <img src={mainBanner} alt="mainBannerr" />
       </BannerImg>
-      <Categories ref={top}>
+      <Logo>
+        <img ref={logoRef} src={logoImg} alt="Logo" />
+        <img ref={imageRef} src={logoTitle} alt="Logo title" />
+      </Logo>
+      <Categories>
         <button ref={firstRef} onClick={() => scrollSection(about)}>
           關於疼痛
         </button>
@@ -190,10 +195,7 @@ export default function Banner({
           登出
         </button>
       </Categories>
-      <Logo>
-        <img ref={logoRef} src={logoImg} alt="Logo" />
-        <img ref={imageRef} src={logoTitle} alt="Logo title" />
-      </Logo>
+
       <SubTitle ref={subtitle}>PAINSHELTER</SubTitle>
     </BannerWrapper>
   );
