@@ -300,6 +300,16 @@ export const handleDeletePost = async (id, navigate) => {
         text: "此篇故事已被刪除",
         icon: "success",
       });
+      toast.success("成功刪除故事", {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
       setTimeout(() => navigate("/history"), 2000);
     } catch (error) {
       console.error("Error updating document: ", error);

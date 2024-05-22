@@ -1,44 +1,36 @@
 import { create } from "zustand";
 
-export const useLoginState = create((set, get) => ({
+export const useLoginState = create((set) => ({
   //Login status
   loginStatus: false,
-  getLoginStatus: () => get().loginStatus,
   online: () => set({ loginStatus: true }),
   offline: () => set({ loginStatus: false }),
   //Login user name
   loginUserNAme: "",
-  getLoginUserNAme: () => get().userNAme,
   //userId
   loginUserId: "",
-  getLoginUserId: () => get().loginUserId,
   setLoginUserId: (id) => set({ loginUserId: id }),
   logout: () => set({ loginUserId: "" }),
   //other author post like
   postLikeNumber: "",
-  getPostLikeNumber: () => get().postLikeNumber,
   setPostLikeNumber: (number) => set({ postLikeNumber: number }),
   //locationSerach
   locationSerach: [],
   setLocationSearch: (data) => set({ locationSerach: data }),
-  getLocationSearch: () => get().locationSerach,
 
   //modal
   modal: false,
   showModal: () => set({ modal: true }),
   closeModal: () => set({ modal: false }),
-  getModal: () => get().modal,
 }));
 
-export const modifiedData = create((set, get) => ({
+export const modifiedData = create((set) => ({
   selectedStoryId: "",
-  getSelectedStoryId: () => get().selectedStoryId,
   setSelectedStoryId: (id) => set({ selectedStoryId: id }),
 }));
 
-export const useAuthorfiedData = create((set, get) => ({
+export const useAuthorfiedData = create((set) => ({
   selectedStoryId: "",
-  getSelectedStoryId: () => get().selectedStoryId,
   setSelectedStoryId: (id) => set({ selectedStoryId: id }),
 }));
 
@@ -60,10 +52,9 @@ export const useHelpModal = create((set) => ({
   closeModal: () => set({ modal: false }),
 }));
 
-export const useLyric = create((set, get) => ({
+export const useLyric = create((set) => ({
   title: "",
   searchStatus: false,
-  getTitle: () => get().title,
   setTitle: (title) => set({ title }),
   setStatus: () => set({ searchStatus: true }),
   setStatusfasle: () => set({ searchStatus: false }),

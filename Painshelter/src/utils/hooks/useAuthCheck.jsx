@@ -9,5 +9,5 @@ export function useAuthCheck() {
     if (localStorageUserStatus === "false" || localStorageUserStatus === null) {
       navigate("/");
     }
-  }, [navigate]);
+  }, []);
 }

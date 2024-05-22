@@ -271,21 +271,19 @@ export default function Edit() {
   bouncy.register();
   const inputRef = useRef(null);
   const [showImg, setShowImg] = useState(null);
-  const [fileName, setFileName] = useState("");
+  // const [fileName, setFileName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const upLoadToStorage = async (e) => {
     const file = e.target.files[0];
 
     //fileName有需要寫成state嗎?
-    //拿掉test
     //資料夾名稱更改
-    //Readme放外面
-    //自定義hook的監聽
 
     if (file) {
       setIsLoading(true);
       try {
-        setFileName(file.name);
+        let fileName = file.name;
+        // setFileName(file.name);
         const imageRef = storageRef(storage, `postsImg/${fileName}`);
         const snapshot = await uploadBytes(imageRef, file);
         const url = await getDownloadURL(snapshot.ref);
