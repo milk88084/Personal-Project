@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { bouncy } from "ldrs";
-import logo from "../assets/img/logoImg.png";
+import logo from "@/assets/img/logoImg.png";
 
 const Container = styled.div`
   display: flex;

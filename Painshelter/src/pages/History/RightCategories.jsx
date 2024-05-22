@@ -1,10 +1,10 @@
 import styled, { keyframes } from "styled-components";
-import jar from "../../assets/img/historyJar.png";
-import broke from "../../assets/img/historyBroke.png";
-import AnimatedNumber from "../../components/AnimatedNumber.jsx";
-import categoryImg from "../../assets/img/categoryImg.jpg";
-import logoImg from "../../assets/img/logoImg.png";
-import Buttons from "../../components/Buttons.jsx";
+import jar from "@/assets/img/historyJar.png";
+import broke from "@/assets/img/historyBroke.png";
+import AnimatedNumber from "@/components/AnimatedNumber.jsx";
+import categoryImg from "@/assets/img/categoryImg.jpg";
+import logoImg from "@/assets/img/logoImg.png";
+import Buttons from "@/components/Buttons.jsx";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {

@@ -2,13 +2,13 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB3PbxX50Sjy6ResCZThq9x3hwRdUW8Fsk",
-  authDomain: "painshelter.firebaseapp.com",
-  projectId: "painshelter",
-  storageBucket: "painshelter.appspot.com",
-  messagingSenderId: "698261612830",
-  appId: "1:698261612830:web:0f0c3d258c58c23d65c10f",
-  measurementId: "G-GCF2382W03",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);

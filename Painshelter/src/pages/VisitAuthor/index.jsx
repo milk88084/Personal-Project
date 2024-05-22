@@ -36,9 +36,10 @@ const ShowLeftSection = styled.div``;
 //#endregion
 
 const VisitAuthor = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isMobileSize, setIsMobileSize] = useState(false);
   useAuthCheck();
+  setTimeout(() => setIsLoading(false), 1000);
 
   return (
     <>
@@ -58,24 +59,12 @@ const VisitAuthor = () => {
             </ShowLeftSection>
           ) : null}
           <LeftSectionDesk />
-          <RightSection setIsLoggedIn={setIsLoading} />
+          <RightSection />
         </Background>
       )}
     </>
   );
 };
-<ToastContainer
-  position="top-center"
-  autoClose={5000}
-  hideProgressBar
-  newestOnTop={false}
-  closeOnClick
-  rtl={false}
-  pauseOnFocusLoss
-  draggable
-  pauseOnHover
-  theme="dark"
-  transition:Bounce
-/>;
+<ToastContainer />;
 
 export default VisitAuthor;

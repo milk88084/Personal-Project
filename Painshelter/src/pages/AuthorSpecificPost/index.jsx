@@ -1,13 +1,13 @@
 import styled from "styled-components";
-import Buttons from "../../components/Buttons.jsx";
-import defaultImg from "../../assets/img/defaultImg.png";
+import Buttons from "@/components/Buttons.jsx";
+import defaultImg from "@/assets/img/defaultImg.png";
 import stortTypeData from "@/utils/data/storyTypeData.json";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 import storyFigureData from "@/utils/data/storyFigureData.json";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
-import { useEditFormInput } from "../../utils/hooks/useEditFormInput.jsx";
+import { useEditFormInput } from "@/utils/hooks/useEditFormInput.jsx";
 import { useEffect, useState } from "react";
-import { useEditCheckboxInput } from "../../utils/hooks/useEditCheckboxInput.jsx";
+import { useEditCheckboxInput } from "@/utils/hooks/useEditCheckboxInput.jsx";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { getFirebaseSpacificPost } from "@/utils/firebase/firebaseService.js";
 

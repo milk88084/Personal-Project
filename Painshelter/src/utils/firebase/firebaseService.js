@@ -111,11 +111,9 @@ export const getAllFirebasePosts = async () => {
 };
 
 //Get Snapshot data from firebase collection
-export const getSnapshotPostsData = (id, setStories, setIsLoading) => {
-  // setIsLoggedIn && setIsLoggedIn(true);
+export const getSnapshotPostsData = (id, setStories) => {
   const q = query(collection(db, "posts"), where("userId", "==", id));
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
-    // console.log("66666");
     const stories = querySnapshot.docs.map((doc) => ({
       title: doc.data().title,
       time: doc.data().time,
@@ -129,8 +127,6 @@ export const getSnapshotPostsData = (id, setStories, setIsLoading) => {
       userComments: doc.data().userComments,
     }));
     setStories(stories);
-    // console.log("5555");
-    // setIsLoading && setIsLoading(false);
   });
   return unsubscribe;
 };
@@ -452,7 +448,7 @@ export const handleSubmitPost = async (
         userId: localStorageUserId,
         createdAt: Timestamp.fromDate(new Date()),
       });
-      await updateDoc(docRef, { storyId: docRef.id, imgUrl: showImg });
+      await updateDoc(docRef, { storyId: docRef.id });
       console.log("Document written with ID: ", docRef.id);
       toast.success("成功提交：" + storyTitle.value + "故事", {
         position: "top-center",

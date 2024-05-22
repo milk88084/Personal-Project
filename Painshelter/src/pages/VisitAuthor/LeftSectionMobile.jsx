@@ -2,7 +2,7 @@ import styled from "styled-components";
 import logoImg from "@/assets/img/logoImg.png";
 import logoTitle from "@/assets/img/logoTitle.png";
 import defaultImg from "@/assets/img/defaultImg.png";
-import { db } from "../../utils/firebase/firebase.jsx";
+import { db } from "@/utils/firebase/firebase.jsx";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";

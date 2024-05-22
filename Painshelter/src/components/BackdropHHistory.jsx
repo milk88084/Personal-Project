@@ -1,4 +1,4 @@
-import { HistoryModal } from "../utils/zustand";
+import { HistoryModal } from "@/utils/zustand";
 import styled from "styled-components";
 
 const Background = styled.div`

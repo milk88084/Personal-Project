@@ -1,12 +1,12 @@
-import { useFormInput } from "../utils/hooks/useFormInput";
+import "leaflet/dist/leaflet.css";
+import { useFormInput } from "@/utils/hooks/useFormInput";
 import { useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import { useLoginState } from "../utils/zustand";
-import styled from "styled-components";
-import icon from "../assets/img/logoImg3.png";
+import { useLoginState } from "@/utils/zustand";
 import { Search } from "lucide-react";
-import Buttons from "./Buttons";
+import styled from "styled-components";
+import icon from "@/assets/img/logoImg3.png";
+import Buttons from "@/components/Buttons";
 
 const Input = styled.div`
   width: 100%;

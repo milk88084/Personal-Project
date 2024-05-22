@@ -1,14 +1,15 @@
 import styled from "styled-components";
-import Buttons from "../../components/Buttons.jsx";
+import Buttons from "@/components/Buttons.jsx";
 import storyTypeData from "@/utils/data/storyTypeData.json";
-import LocationSearch from "../../components/LocationSearch.jsx";
+import LocationSearch from "@/components/LocationSearch.jsx";
 import storyFigureData from "@/utils/data/storyFigureData.json";
 import { bouncy } from "ldrs";
-import { storage } from "../../utils/firebase/firebase.jsx";
+import { storage } from "@/utils/firebase/firebase.jsx";
+import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useFormInput } from "../../utils/hooks/useFormInput.jsx";
+import { useFormInput } from "@/utils/hooks/useFormInput.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
-import { useLoginState } from "../../utils/zustand.js";
+import { useLoginState } from "@/utils/zustand.js";
 import { handleSubmitPost } from "@/utils/firebase/firebaseService.js";
 import { useState, useRef } from "react";
 import {
@@ -275,6 +276,12 @@ export default function Edit() {
   const upLoadToStorage = async (e) => {
     const file = e.target.files[0];
 
+    //fileName有需要寫成state嗎?
+    //拿掉test
+    //資料夾名稱更改
+    //Readme放外面
+    //自定義hook的監聽
+
     if (file) {
       setIsLoading(true);
       try {
@@ -428,6 +435,7 @@ export default function Edit() {
             </ButtonSection>
           </form>
         </EditSections>
+        <ToastContainer />
       </Background>
     </>
   );

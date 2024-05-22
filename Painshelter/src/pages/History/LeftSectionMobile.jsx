@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import moment from "moment";
-import logoImg from "../../assets/img/logoImg.png";
-import logoTitle from "../../assets/img/logoTitle.png";
+import logoImg from "@/assets/img/logoImg.png";
+import logoTitle from "@/assets/img/logoTitle.png";
 import defaultImg from "@/assets/img/defaultImg.png";
-import ModalHistory from "../../components/ModalHistory.jsx";
-import backgroundImg from "../../assets/img/hitsoryLeft.jpg";
-import { storage } from "../../utils/firebase/firebase.jsx";
+import ModalHistory from "@/components/ModalHistory.jsx";
+import backgroundImg from "@/assets/img/hitsoryLeft.jpg";
+import { storage } from "@/utils/firebase/firebase.jsx";
 import { useNavigate } from "react-router-dom";
-import { HistoryModal } from "../../utils/zustand.js";
+import { HistoryModal } from "@/utils/zustand.js";
 import { useState, useRef, useEffect } from "react";
 import { UserRoundX, User, StickyNote } from "lucide-react";
 import {

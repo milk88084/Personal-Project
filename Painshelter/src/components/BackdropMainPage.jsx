@@ -1,4 +1,4 @@
-import { MainModal } from "../utils/zustand";
+import { MainModal } from "@/utils/zustand";
 import styled from "styled-components";
 export default function Backdrop() {
   const { modal, closeModal } = MainModal();

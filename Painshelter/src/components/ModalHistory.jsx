@@ -1,7 +1,7 @@
 import BackdropHistory from "./BackdropHHistory";
-import { HistoryModal } from "../utils/zustand.js";
-import poem from "../utils/data/poem.json";
-import modalpoem from "../assets/img/modalpoem.jpg";
+import { HistoryModal } from "@/utils/zustand.js";
+import poem from "@/utils/data/poem.json";
+import modalpoem from "@/assets/img/modalpoem.jpg";
 import styled, { keyframes } from "styled-components";
 
 const glowing = keyframes`

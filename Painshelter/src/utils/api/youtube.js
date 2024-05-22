@@ -1,5 +1,6 @@
 import axios from "axios";
-const KEY = "AIzaSyD0hJya4Hm-YzT9gKDEumESgxl4WnDd_OM";
+
+const KEY = import.meta.env.VITE_FIREBASE_API_KEY;
 
 export default axios.create({
   baseURL: "https://www.googleapis.com/youtube/v3/",

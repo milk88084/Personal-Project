@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import Buttons from "@/components/Buttons.jsx";
-import replyData from "../../utils/data/reply.json";
-import { useAuthorfiedData } from "../../utils/zustand.js";
+import replyData from "@/utils/data/reply.json";
+import { ToastContainer } from "react-toastify";
+import { useAuthorfiedData } from "@/utils/zustand.js";
 import { useState, useEffect } from "react";
 import { Heart, MessageCircle } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -204,7 +205,7 @@ const LikerAccount = styled.div`
 `;
 //#endregion
 
-export default function RightSection({ setIsLoading }) {
+export default function RightSection() {
   const { state } = useLocation();
   const [stories, setStories] = useState([]);
   const localStorageUserId = window.localStorage.getItem("userId");
@@ -214,11 +215,10 @@ export default function RightSection({ setIsLoading }) {
   useEffect(() => {
     let unsubscribe;
     if (localStorageUserId) {
-      unsubscribe = getSnapshotPostsData(state.data, setStories, setIsLoading);
+      unsubscribe = getSnapshotPostsData(state.data, setStories);
     }
     return () => {
       if (unsubscribe) {
-        // console.log("return");
         unsubscribe();
       }
     };
@@ -291,6 +291,7 @@ export default function RightSection({ setIsLoading }) {
                               );
                             })}
                           </select>
+
                           <Buttons type="submit" text="送出" />
                           <Buttons
                             onClick={() => modifiedClick(story.storyId)}
@@ -325,6 +326,7 @@ export default function RightSection({ setIsLoading }) {
             );
           })}
       </StorySection>
+      <ToastContainer />
     </RightSectionWrapper>
   );
 }

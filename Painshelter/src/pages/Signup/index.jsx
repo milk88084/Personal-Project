@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import logoImg from "../../assets/img/logoImg2.png";
-import logoTitle from "../../assets/img/logoTitle2.png";
-import backgroundVideo from "../../assets/video/login.mp4";
-import { auth, db } from "../../utils/firebase/firebase.jsx";
+import logoImg from "@/assets/img/logoImg2.png";
+import logoTitle from "@/assets/img/logoTitle2.png";
+import backgroundVideo from "@/assets/video/login.mp4";
+import { auth, db } from "@/utils/firebase/firebase.jsx";
 import { toastAlert } from "@/utils/toast.js";
 import { useNavigate } from "react-router-dom";
-import { useFormInput } from "../../utils/hooks/useFormInput.jsx";
+import { useFormInput } from "@/utils/hooks/useFormInput.jsx";
 import { ToastContainer } from "react-toastify";
 import { useRef, useEffect } from "react";
 import { setDoc, doc, Timestamp } from "firebase/firestore";

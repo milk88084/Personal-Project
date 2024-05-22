@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import ModalHistory from "../../components/ModalHistory.jsx";
+import ModalHistory from "@/components/ModalHistory.jsx";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 import RightCategories from "./RightCategories.jsx";
 import LeftSectionMobile from "./LeftSectionMobile.jsx";
 import LeftSectionDesktop from "./LeftSectionDesktop .jsx";
 import RightHistoryPosts from "./RightHistoryPosts.jsx";
 import { useLocation } from "react-router-dom";
-import { HistoryModal } from "../../utils/zustand.js";
+import { HistoryModal } from "@/utils/zustand.js";
 import { AlignJustify } from "lucide-react";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 import { useState, useEffect, useRef } from "react";
@@ -59,7 +59,7 @@ const SpanSection = styled.div`
 //#endregion
 
 export default function History() {
-  const { modal, showModal } = HistoryModal();
+  const { modal } = HistoryModal();
   const [isLoading, setIsLoading] = useState(false);
   const [isMobileSize, setIsMobileSize] = useState(false);
   const storyRef = useRef(null);

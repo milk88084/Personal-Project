@@ -1,11 +1,11 @@
 import moment from "moment";
 import styled from "styled-components";
-import logoImg from "../../assets/img/logoImg.png";
-import logoTitle from "../../assets/img/logoTitle.png";
-import driverObj from "../../utils/newbie guide/historyPageGuide.js";
-import defaultImg from "../../assets/img/defaultImg.png";
-import { storage } from "../../utils/firebase/firebase.jsx";
-import { HistoryModal } from "../../utils/zustand.js";
+import logoImg from "@/assets/img/logoImg.png";
+import logoTitle from "@/assets/img/logoTitle.png";
+import driverObj from "@/utils/newbie-guide/historyPageGuide.js";
+import defaultImg from "@/assets/img/defaultImg.png";
+import { storage } from "@/utils/firebase/firebase.jsx";
+import { HistoryModal } from "@/utils/zustand.js";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { UserRoundX, User, StickyNote } from "lucide-react";
@@ -238,7 +238,7 @@ const StyledUser = styled(User)`
 export default function LeftSectionDesktop() {
   const localStorageUserId = window.localStorage.getItem("userId");
   const inputRef = useRef(null);
-  const { modal, showModal } = HistoryModal();
+  const { showModal } = HistoryModal();
   const [authors, setAuthors] = useState();
   const [showImg, setShowImg] = useState(null);
   const [profileImg, setProfileImg] = useState(null);

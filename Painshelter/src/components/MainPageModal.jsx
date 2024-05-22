@@ -1,10 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import Backdrop from "./Backdrop";
-import { db } from "../utils/firebase/firebase.jsx";
-import { collection, query, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { useLoginState } from "../utils/zustand.js";
-import backgroundImg from "../assets/img/outputimg.jpg";
+import { useLoginState } from "@/utils/zustand";
+import backgroundImg from "@/assets/img/outputimg.jpg";
 import styled from "styled-components";
 import { toPng } from "html-to-image";
 import getFirebasePosts from "@/utils/firebase/firebaseService.js";

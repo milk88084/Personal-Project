@@ -1,11 +1,11 @@
-import { useFormInput } from "../utils/hooks/useFormInput";
+import { useFormInput } from "@/utils/hooks/useFormInput";
 import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
 import { useLoginState } from "../utils/zustand";
+import "leaflet/dist/leaflet.css";
 
 const EditLocationSearch = ({ location }) => {
-  const { locationSerach, setLocationSearch } = useLoginState();
+  const { setLocationSearch } = useLoginState();
   const [locationState, setLocationState] = useState();
   const storyLocation = useFormInput(location);
   const locationArray = [];

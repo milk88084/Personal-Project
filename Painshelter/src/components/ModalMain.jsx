@@ -1,12 +1,12 @@
 import BackdropMainPage from "./BackdropMainPage";
-import { MainModal } from "../utils/zustand.js";
-import modalpoem from "../assets/img/modalpoem.jpg";
+import { MainModal } from "@/utils/zustand.js";
+import modalpoem from "@/assets/img/modalpoem.jpg";
 import styled, { keyframes } from "styled-components";
 import Slider from "react-slick";
-import categories from "../assets/video/categories.mp4";
-import highlight from "../assets/video/highlight.mp4";
-import mainPageTypeGuide from "../assets/img/mainPageTypeGuide.png";
-import painMap from "../assets/video/painMap.mp4";
+import categories from "@/assets/video/categories.mp4";
+import highlight from "@/assets/video/highlight.mp4";
+import mainPageTypeGuide from "@/assets/img/mainPageTypeGuide.png";
+import painMap from "@/assets/video/painMap.mp4";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 

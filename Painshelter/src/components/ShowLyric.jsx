@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import { useLyric } from "../utils/zustand.js";
-import { debounce } from "../utils/debounce";
+import { useLyric } from "@/utils/zustand.js";
+import { debounce } from "@/utils/debounce";
 
 const SearchBar = styled.div`
   margin-top: 30px;
@@ -41,7 +41,7 @@ function LyricSearch() {
 
   const handleSearch = useCallback(
     debounce(async () => {
-      const apiKey = "AIzaSyDyZLRDFoYtMaLdm5wWEwVSBBQkK8RgIRM";
+      const apiKey = import.meta.env.VITE_FIREBASE_API_KEY;
       const cx = "130af128a09214343";
       const url = `https://www.googleapis.com/customsearch/v1?cx=${cx}&key=${apiKey}&q=${title}&siteSearch=mojim.com`;
       try {

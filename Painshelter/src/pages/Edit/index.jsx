@@ -1,15 +1,15 @@
 import styled from "styled-components";
-import { useEffect, useState, useRef } from "react";
-import { useEditFormInput } from "../../utils/hooks/useEditFormInput.jsx";
-import { useEditCheckboxInput } from "../../utils/hooks/useEditCheckboxInput.jsx";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { storage } from "../../utils/firebase/firebase.jsx";
-import { ToastContainer } from "react-toastify";
+import Buttons from "@/components/Buttons.jsx";
+import defaultImg from "@/assets/img/defaultImg.png";
 import storyTypeData from "@/utils/data/storyTypeData.json";
 import storyFigureData from "@/utils/data/storyFigureData.json";
-import defaultImg from "../../assets/img/defaultImg.png";
-import Buttons from "../../components/Buttons.jsx";
+import { storage } from "@/utils/firebase/firebase.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import { ToastContainer } from "react-toastify";
+import { useEditFormInput } from "@/utils/hooks/useEditFormInput.jsx";
+import { useEditCheckboxInput } from "@/utils/hooks/useEditCheckboxInput.jsx";
+import { useEffect, useState, useRef } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import {
   Undo2,
   ScanSearch,

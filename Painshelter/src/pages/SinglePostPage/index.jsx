@@ -1,4 +1,4 @@
-import { db } from "../../utils/firebase/firebase.jsx";
+import { db } from "@/utils/firebase/firebase.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
