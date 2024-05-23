@@ -5,11 +5,12 @@ import LocationSearch from "@/components/LocationSearch.jsx";
 import storyFigureData from "@/utils/data/storyFigureData.json";
 import { bouncy } from "ldrs";
 import { storage } from "@/utils/firebase/firebase.jsx";
-import { ToastContainer } from "react-toastify";
+import { toastAlert } from "@/utils/toast.js";
 import { useNavigate } from "react-router-dom";
 import { useFormInput } from "@/utils/hooks/useFormInput.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 import { useLoginState } from "@/utils/zustand.js";
+import { ToastContainer } from "react-toastify";
 import { handleSubmitPost } from "@/utils/firebase/firebaseService.js";
 import { useState, useRef } from "react";
 import {
@@ -271,26 +272,21 @@ export default function Edit() {
   bouncy.register();
   const inputRef = useRef(null);
   const [showImg, setShowImg] = useState(null);
-  // const [fileName, setFileName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const upLoadToStorage = async (e) => {
     const file = e.target.files[0];
-
-    //fileName有需要寫成state嗎?
-    //資料夾名稱更改
 
     if (file) {
       setIsLoading(true);
       try {
         let fileName = file.name;
-        // setFileName(file.name);
         const imageRef = storageRef(storage, `postsImg/${fileName}`);
         const snapshot = await uploadBytes(imageRef, file);
         const url = await getDownloadURL(snapshot.ref);
         setIsLoading(false);
         setShowImg(url);
       } catch (e) {
-        alert(e);
+        toastAlert("error", e, 2000);
       }
     }
   };

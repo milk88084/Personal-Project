@@ -10,12 +10,12 @@ const AnimatedNumber = ({ end }) => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setAnimate(true); // 觸發動畫
-            observer.unobserve(ref.current); // 動畫開始後取消觀察
+            setAnimate(true);
+            observer.unobserve(ref.current);
           }
         });
       },
-      { threshold: 0.5 } // 元素至少有50%在畫面上時觸發
+      { threshold: 0.5 }
     );
 
     if (ref.current) {

@@ -1,5 +1,7 @@
 import { db } from "@/utils/firebase/firebase.jsx";
+import { toastAlert } from "@/utils/toast.js";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import { ToastContainer } from "react-toastify";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { collection, query, getDocs, where } from "firebase/firestore";
@@ -29,7 +31,7 @@ export default function SinglePage() {
         }));
         setStory(userStoryList);
       } catch (e) {
-        alert(e);
+        toastAlert("error", e, 2000);
       }
     }
     getStories();
@@ -107,6 +109,7 @@ export default function SinglePage() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

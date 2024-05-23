@@ -5,6 +5,7 @@ import { useLoginState } from "@/utils/zustand";
 import backgroundImg from "@/assets/img/outputimg.jpg";
 import styled from "styled-components";
 import { toPng } from "html-to-image";
+import { ToastContainer } from "react-toastify";
 import getFirebasePosts from "@/utils/firebase/firebaseService.js";
 
 //#region
@@ -129,7 +130,6 @@ export default function Modal({ comebinedArray, clickTitle }) {
   const [stories, setStories] = useState([]);
   const { modal, closeModal } = useLoginState();
 
-  //拿取所有的db資料
   useEffect(() => {
     const dataMapper = (docs) => [
       docs.map((doc) => ({
@@ -146,7 +146,6 @@ export default function Modal({ comebinedArray, clickTitle }) {
     getFirebasePosts("posts", dataMapper, [setStories]);
   }, [setStories]);
 
-  //判斷點選的title是否吻合db資料，是的話呈現在頁面上
   useEffect(() => {
     const metchedItem = stories.find((data) => data.title === clickTitle.item);
     if (metchedItem) {
@@ -160,7 +159,6 @@ export default function Modal({ comebinedArray, clickTitle }) {
     window.scrollTo(0, 0);
   };
 
-  //螢幕截圖
   const captureRef = useRef(null);
   const handleCaptureClick = () => {
     if (captureRef.current) {
@@ -203,6 +201,7 @@ export default function Modal({ comebinedArray, clickTitle }) {
           </ButtonSections>
         </Wrapper>
       ) : null}
+      <ToastContainer />
     </div>
   );
 }

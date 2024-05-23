@@ -16,7 +16,8 @@ import {
 import { db, auth } from "../../utils/firebase/firebase.jsx";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toastAlert } from "@/utils/toast.js";
+("react-toastify/dist/ReactToastify.css");
 
 //Get the spacific post data from firebase collection
 export const getFirebaseSpacificPost = async (field, value) => {
@@ -47,11 +48,10 @@ export const getFirebaseSpacificPost = async (field, value) => {
 
       return { ...data, commentsWithNames };
     } else {
-      console.log("No document found with the given storyId");
       return null;
     }
   } catch (e) {
-    console.error("Error fetching document: ", e);
+    toastAlert("error", e, 2000);
     return null;
   }
 };
@@ -66,11 +66,10 @@ export const getFirebasePosts = async (field, value) => {
       const data = querySnapshot.docs.map((doc) => doc.data());
       return data;
     } else {
-      console.log("No documents found with the given query.");
       return [];
     }
   } catch (e) {
-    console.error("Error fetching documents: ", e);
+    toastAlert("error", e, 2000);
     return [];
   }
 };
@@ -86,7 +85,7 @@ async function fetchData(collectionName, dataMapper, dataSetters) {
       setter(mappedData[index]);
     });
   } catch (e) {
-    console.error(e);
+    toastAlert("error", e, 2000);
   }
 }
 
@@ -102,11 +101,10 @@ export const getAllFirebasePosts = async () => {
       const data = querySnapshot.docs.map((doc) => doc.data());
       return data;
     } else {
-      console.log("No documents found with the given query.");
       return [];
     }
   } catch (e) {
-    console.log(e);
+    toastAlert("error", e, 2000);
   }
 };
 
@@ -143,7 +141,7 @@ export const getFirebaseUsers = async (field, value) => {
       return data;
     }
   } catch (e) {
-    console.error("Error fetching document: ", e);
+    toastAlert("error", e, 2000);
     return null;
   }
 };
@@ -161,7 +159,7 @@ export const getVisitUserData = async (id, setAuthor) => {
 
     setAuthor(authorList);
   } catch (e) {
-    console.log(e);
+    toastAlert("error", e, 2000);
   }
 };
 
@@ -182,7 +180,7 @@ export const getAuthorsByIds = async (authorIds) => {
     });
     return authorNamesList;
   } catch (e) {
-    console.error("Error fetching authors: ", e);
+    toastAlert("error", e, 2000);
     return [];
   }
 };
@@ -249,7 +247,6 @@ export const handleEditSubmit = async (
         });
         setIsEdit(true);
       } else {
-        console.error("No document found with the given storyId");
         toast.error("修改失敗", {
           position: "top-center",
           autoClose: 1000,
@@ -262,7 +259,6 @@ export const handleEditSubmit = async (
         });
       }
     } catch (error) {
-      console.error("Error updating document: ", error);
       toast.error("修改失敗", {
         position: "top-center",
         autoClose: 1000,
@@ -292,9 +288,7 @@ export const handleDeletePost = async (id, navigate) => {
   if (result.isConfirmed) {
     try {
       const q = doc(db, "posts", id);
-      console.log("delete");
       await deleteDoc(q);
-      console.log("finish");
       Swal.fire({
         title: "刪除故事",
         text: "此篇故事已被刪除",
@@ -312,7 +306,6 @@ export const handleDeletePost = async (id, navigate) => {
       });
       setTimeout(() => navigate("/history"), 2000);
     } catch (error) {
-      console.error("Error updating document: ", error);
       toast.error("刪除失敗", {
         position: "top-center",
         autoClose: 1000,
@@ -324,8 +317,6 @@ export const handleDeletePost = async (id, navigate) => {
         theme: "dark",
       });
     }
-  } else {
-    console.log("取消刪除動作");
   }
 };
 
@@ -352,8 +343,8 @@ export const updateUserStressRecord = async (
       });
       setIsLoading(false);
     }
-  } catch (error) {
-    console.error("Error updating document: ", error);
+  } catch (e) {
+    toastAlert("error", e, 2000);
   }
 };
 
@@ -373,11 +364,9 @@ export const handleUnFollow = async (authorId, navigate) => {
     try {
       const localStorageUserId = localStorage.getItem("userId");
       const userRef = doc(db, "users", localStorageUserId);
-      console.log("delete");
       await updateDoc(userRef, {
         followAuthor: arrayRemove(authorId),
       });
-      console.log("finish");
       Swal.fire({
         title: "取消追蹤!",
         text: "此作者已取消追蹤",
@@ -385,7 +374,6 @@ export const handleUnFollow = async (authorId, navigate) => {
       });
       navigate("/history");
     } catch (error) {
-      console.error("Error updating document: ", error);
       toast.error("刪除失敗", {
         position: "top-center",
         autoClose: 1000,
@@ -412,13 +400,11 @@ export const updateProfileImage = async (userId, imageUrl) => {
           profileImg: imageUrl,
         });
       } else {
-        console.log("No user found with the given ID.");
+        return null;
       }
-    } catch (error) {
-      console.error("Error updating document: ", error);
+    } catch (e) {
+      toastAlert("error", e, 2000);
     }
-  } else {
-    console.log("Image URL is empty.");
   }
 };
 
@@ -459,7 +445,6 @@ export const handleSubmitPost = async (
         createdAt: Timestamp.fromDate(new Date()),
       });
       await updateDoc(docRef, { storyId: docRef.id });
-      console.log("Document written with ID: ", docRef.id);
       toast.success("成功提交：" + storyTitle.value + "故事", {
         position: "top-center",
         autoClose: 1000,
@@ -474,7 +459,6 @@ export const handleSubmitPost = async (
         navigate("/history");
       }, 1000);
     } catch (error) {
-      console.error("Error adding document: ", error);
       toast.error("投稿失敗", {
         position: "top-center",
         autoClose: 1000,
@@ -558,10 +542,9 @@ export const submitComment = async (event, storyId, setStories) => {
         progress: undefined,
         theme: "dark",
       });
-      console.log("評論成功");
     }
-  } catch (error) {
-    console.error("操作失败: ", error);
+  } catch (e) {
+    toastAlert("error", e, 2000);
   }
 };
 
@@ -619,8 +602,8 @@ export const submitLike = async (id, localStorageUserId, setStories) => {
         })
       );
     }
-  } catch (error) {
-    console.error("操作失败: ", error);
+  } catch (e) {
+    toastAlert("error", e, 2000);
   }
 };
 
@@ -669,6 +652,6 @@ export const submitFollowAuthor = async (
       setIsFollow(true);
     }
   } catch (e) {
-    console.log(e);
+    toastAlert("error", e, 2000);
   }
 };

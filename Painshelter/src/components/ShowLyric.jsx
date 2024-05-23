@@ -33,7 +33,6 @@ const Lyrics = styled.div`
 `;
 
 function LyricSearch() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [songs, setSongs] = useState([]);
   const [lyrics, setLyrics] = useState("");
   const [selectedSong, setSelectedSong] = useState(null);
@@ -47,11 +46,11 @@ function LyricSearch() {
       try {
         const response = await axios.get(url);
         setSongs(response.data.items);
-        setStatusfasle(); // 重置 searchStatus
+        setStatusfasle();
       } catch (error) {
         console.error("Error fetching songs:", error);
       }
-    }, 1000), // 设置防抖时间，例如1000毫秒
+    }, 1000),
     [title, setStatusfasle]
   );
 

@@ -5,7 +5,9 @@ import AnimatedNumber from "@/components/AnimatedNumber.jsx";
 import categoryImg from "@/assets/img/categoryImg.jpg";
 import logoImg from "@/assets/img/logoImg.png";
 import Buttons from "@/components/Buttons.jsx";
+import { toastAlert } from "@/utils/toast.js";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { useState, useEffect } from "react";
 import {
   getFirebasePosts,
@@ -244,7 +246,7 @@ export default function RightCategories({ storyRef }) {
           }
         }
       } catch (e) {
-        alert(e);
+        toastAlert("error", e, 2000);
       }
     }
     fetchUserDataAndAuthors();
@@ -332,6 +334,7 @@ export default function RightCategories({ storyRef }) {
           )}
         </div>
       </CategoriesSection>
+      <ToastContainer />
     </Categories>
   );
 }

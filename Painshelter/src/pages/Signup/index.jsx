@@ -173,7 +173,6 @@ const Signup = () => {
         updateProfile(user, {
           displayName: nameInput.value,
         }).then(() => {
-          alert(user);
           toastAlert("success", "註冊成功，請至登入頁面進行登入", 1000);
           setTimeout(() => {
             navigate("/login");
@@ -182,13 +181,11 @@ const Signup = () => {
       })
       .catch((error) => {
         const errorCode = error.code;
-        const errorMessage = error.message;
         if (errorCode === "auth/email-already-in-use") {
           toastAlert("error", "此信箱已註冊", 2000);
         } else {
           toastAlert("error", "註冊不成功", 2000);
         }
-        alert(errorCode, errorMessage);
       });
 
     try {
@@ -282,19 +279,7 @@ const Signup = () => {
         </MainSection>
 
         <div>
-          <ToastContainer
-            position="top-center"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="dark"
-            transition:Bounce
-          />
+          <ToastContainer />
         </div>
       </Background>
     </>

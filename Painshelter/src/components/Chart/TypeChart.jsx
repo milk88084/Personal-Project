@@ -24,8 +24,6 @@ export default function TypeChart() {
     getFirebasePosts("posts", dataMapper, [setTypeData]);
   }, [setTypeData]);
 
-  //扁平化物件裡面的type內容，變成陣列
-
   useEffect(() => {
     if (typeData) {
       const newTypesArray = typeData.map((item) => item.type).flat();
@@ -33,7 +31,6 @@ export default function TypeChart() {
     }
   }, [typeData]);
 
-  //統計文章類型的資料function
   const total_count = types.reduce((obj, item) => {
     if (item in obj) {
       obj[item] += 1;
@@ -50,7 +47,6 @@ export default function TypeChart() {
     };
   });
 
-  //監聽視窗大小，去調整地圖的寬度
   const [width, setWidth] = useState(520);
   useEffect(() => {
     const handleResize = () => {

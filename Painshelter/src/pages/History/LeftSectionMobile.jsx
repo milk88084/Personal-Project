@@ -5,8 +5,10 @@ import logoTitle from "@/assets/img/logoTitle.png";
 import defaultImg from "@/assets/img/defaultImg.png";
 import ModalHistory from "@/components/ModalHistory.jsx";
 import { storage } from "@/utils/firebase/firebase.jsx";
+import { toastAlert } from "@/utils/toast.js";
 import { useNavigate } from "react-router-dom";
 import { HistoryModal } from "@/utils/zustand.js";
+import { ToastContainer } from "react-toastify";
 import { useState, useRef, useEffect } from "react";
 import { UserRoundX, User, StickyNote } from "lucide-react";
 import {
@@ -294,7 +296,7 @@ export default function LeftSectionMobile({ setIsMobileSize }) {
           }
         }
       } catch (e) {
-        alert(e);
+        toastAlert("error", e, 2000);
       }
     }
     fetchUserDataAndAuthors();
@@ -425,6 +427,9 @@ export default function LeftSectionMobile({ setIsMobileSize }) {
           </div>
         </FAB>
       </SectionWrapper>
+      <div>
+        <ToastContainer />
+      </div>
     </div>
   );
 }

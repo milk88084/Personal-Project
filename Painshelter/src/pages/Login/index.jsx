@@ -187,9 +187,8 @@ const Login = () => {
         } else if (errorCode === "auth/invalid-email") {
           toastAlert("error", "尚未輸入信箱/信箱填寫錯誤", 3000);
         } else {
-          toastAlert("error", "登入發生錯誤", 3000);
+          toastAlert("error", errorMessage, 3000);
         }
-        alert(errorCode, errorMessage);
       });
   };
 
@@ -253,19 +252,7 @@ const Login = () => {
           </span>
         </MainSection>
         <div>
-          <ToastContainer
-            position="top-center"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="dark"
-            transition:Bounce
-          />
+          <ToastContainer />
         </div>
       </Background>
     </>

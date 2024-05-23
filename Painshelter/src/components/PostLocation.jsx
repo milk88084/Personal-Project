@@ -8,6 +8,8 @@ import icon from "@/assets/img/logoImg3.png";
 import { MapPin } from "lucide-react";
 import styled from "styled-components";
 import L from "leaflet";
+import { toastAlert } from "@/utils/toast.js";
+import { ToastContainer } from "react-toastify";
 
 const painIcon = L.icon({
   iconUrl: icon,
@@ -48,7 +50,6 @@ const PostsLocation = () => {
   const center = [23.604799, 120.7976256];
   const { showModal } = useLoginState();
 
-  //讀取firestore資料，並存到state當中
   useEffect(() => {
     async function getStories() {
       try {
@@ -60,13 +61,12 @@ const PostsLocation = () => {
         setLocations(storyList);
         setTitles(storyTitle);
       } catch (e) {
-        alert(e);
+        toastAlert("error", e, 2000);
       }
     }
     getStories();
   }, []);
 
-  //將title加到location array裡面
   const comebinedArray = locations.map((data, index) => {
     const title = titles[index];
     return {
@@ -75,7 +75,6 @@ const PostsLocation = () => {
     };
   });
 
-  //進行相同地點不同文章的判斷
   const groupLocation = (array) => {
     const groups = {};
     array.forEach((item) => {
@@ -97,13 +96,10 @@ const PostsLocation = () => {
   };
   const sameNameLocation = groupLocation(comebinedArray);
 
-  //click Popup button可以連到該作者頁面
   const openModal = (title) => {
     showModal();
     setClickTitle(title);
   };
-
-  //markerGroup
 
   return (
     <div>
@@ -114,7 +110,6 @@ const PostsLocation = () => {
         style={{ height: "400px", width: "100%" }}
       >
         <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png" />
-        {/* <MarkerClusterGroup> */}
         {sameNameLocation.map((item, index) => (
           <Marker key={index} position={[item.lat, item.lon]} icon={painIcon}>
             <Popup>
@@ -138,8 +133,8 @@ const PostsLocation = () => {
             </Popup>
           </Marker>
         ))}
-        {/* </MarkerClusterGroup> */}
       </MapContainer>
+      <ToastContainer />
     </div>
   );
 };

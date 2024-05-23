@@ -3,9 +3,11 @@ import footer1 from "@/assets/img/mainFooter1.jpg";
 import logoImg from "@/assets/img/logoImg.png";
 import { auth } from "@/utils/firebase/firebase.jsx";
 import { signOut } from "firebase/auth";
+import { toastAlert } from "@/utils/toast.js";
 import { useNavigate } from "react-router-dom";
 import { useLoginState } from "@/utils/zustand.js";
 import { AccordionDemo } from "@/components/Shadcn/Accordion";
+import { ToastContainer } from "react-toastify";
 
 //#region
 const FooterSectionWrapper = styled.div`
@@ -105,12 +107,12 @@ export default function FooterSection({ footer }) {
     signOut(auth)
       .then(() => {
         navigate("/");
-        alert("Signed out successfully");
+        toastAlert("success", "成功登出", 2000);
         window.localStorage.removeItem("userId");
         window.localStorage.removeItem("loginStatus");
       })
-      .catch((error) => {
-        alert(error);
+      .catch((e) => {
+        toastAlert("error", e, 2000);
       });
     offline();
     logout();
@@ -134,6 +136,7 @@ export default function FooterSection({ footer }) {
         <button onClick={handleLogout}>登出</button>
         <img onClick={scrollSection} src={logoImg} alt={logoImg} />
       </FooterContent>
+      <ToastContainer />
     </FooterSectionWrapper>
   );
 }

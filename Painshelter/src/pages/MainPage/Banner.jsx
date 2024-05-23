@@ -5,8 +5,10 @@ import mainBanner from "@/assets/img/mainBanner.jpg";
 import { auth } from "@/utils/firebase/firebase";
 import { signOut } from "firebase/auth";
 import { useEffect } from "react";
+import { toastAlert } from "@/utils/toast.js";
 import { useNavigate } from "react-router-dom";
 import { useLoginState } from "@/utils/zustand.js";
+import { ToastContainer } from "react-toastify";
 import { bannerPageGSAPAnimations } from "@/utils/gsapAnimations";
 
 //#region
@@ -144,17 +146,17 @@ export default function Banner({
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
+        toastAlert("success", "成功登出", 1000);
         navigate("/");
-        alert("Signed out successfully");
         window.localStorage.removeItem("userId");
         window.localStorage.removeItem("loginStatus");
       })
       .catch((error) => {
-        alert(error);
+        toastAlert("error", error, 3000);
+        navigate("/");
       });
     offline();
     logout();
-    scrollSection(top);
   };
 
   useEffect(() => {
@@ -197,6 +199,7 @@ export default function Banner({
       </Categories>
 
       <SubTitle ref={subtitle}>PAINSHELTER</SubTitle>
+      <ToastContainer />
     </BannerWrapper>
   );
 }

@@ -5,6 +5,7 @@ import stortTypeData from "@/utils/data/storyTypeData.json";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 import storyFigureData from "@/utils/data/storyFigureData.json";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import { ToastContainer } from "react-toastify";
 import { useEditFormInput } from "@/utils/hooks/useEditFormInput.jsx";
 import { useEffect, useState } from "react";
 import { useEditCheckboxInput } from "@/utils/hooks/useEditCheckboxInput.jsx";
@@ -407,6 +408,7 @@ export default function Edit() {
           </EditSections>
         </>
       )}
+      <ToastContainer />
     </Background>
   );
 }

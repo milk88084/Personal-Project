@@ -5,8 +5,10 @@ import logoTitle from "@/assets/img/logoTitle.png";
 import driverObj from "@/utils/newbie-guide/historyPageGuide.js";
 import defaultImg from "@/assets/img/defaultImg.png";
 import { storage } from "@/utils/firebase/firebase.jsx";
-import { HistoryModal } from "@/utils/zustand.js";
+import { toastAlert } from "@/utils/toast.js";
 import { useNavigate } from "react-router-dom";
+import { HistoryModal } from "@/utils/zustand.js";
+import { ToastContainer } from "react-toastify";
 import { useState, useEffect, useRef } from "react";
 import { UserRoundX, User, StickyNote } from "lucide-react";
 import {
@@ -275,7 +277,7 @@ export default function LeftSectionDesktop() {
           }
         }
       } catch (e) {
-        alert(e);
+        toastAlert("error", e, 3000);
       }
     }
     fetchUserDataAndAuthors();
@@ -388,6 +390,9 @@ export default function LeftSectionDesktop() {
             <img src={logoTitle} alt={logoTitle}></img>
           </div>
         </BottomLogo>
+        <div>
+          <ToastContainer />
+        </div>
       </LeftSection>
     </div>
   );

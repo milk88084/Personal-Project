@@ -23,7 +23,6 @@ export default function FigureChart() {
     getFirebasePosts("posts", dataMapper, [setTypeData]);
   }, [setTypeData]);
 
-  //扁平化物件裡面的type內容，變成陣列
   useEffect(() => {
     if (typeData) {
       const newTypesArray = typeData.map((item) => item.figure).flat();
@@ -31,7 +30,6 @@ export default function FigureChart() {
     }
   }, [typeData]);
 
-  //統計文章類型的資料function
   const total_count = types.reduce((obj, item) => {
     if (item in obj) {
       obj[item] += 1;
