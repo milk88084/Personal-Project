@@ -379,10 +379,9 @@ export default function Edit() {
 
   const inputRef = useRef(null);
   const [showImg, setShowImg] = useState(null);
-  const [fileName, setFileName] = useState("");
   const upLoadToStorage = async (e) => {
     const file = e.target.files[0];
-    setFileName(file.name);
+    let fileName = file.name;
     const imageRef = storageRef(storage, `postsImg/${fileName}`);
     const snapshot = await uploadBytes(imageRef, file);
     const url = await getDownloadURL(snapshot.ref);

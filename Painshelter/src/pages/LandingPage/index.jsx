@@ -6,10 +6,13 @@ import video2 from "@/assets/video/landingPage2.mp4";
 import ThreeRules from "./ThreeRules.jsx";
 import landingPageTextLines from "@/utils/data/landingPageTextLines.json";
 import { useGSAP } from "@gsap/react";
-import { ScrollText } from "lucide-react";
-import { UsersRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
+import {
+  ChevronRight,
+  UserRoundSearch,
+  UsersRound,
+  ScrollText,
+} from "lucide-react";
 import { landingPAgeGSAPAnimations } from "@/utils/gsapAnimations.js";
 import { useEffect, useRef, useState } from "react";
 
@@ -91,7 +94,7 @@ const RightSection = styled.div`
   right: 0;
   display: flex;
   flex-direction: column;
-  margin-top: 250px;
+  margin-top: 200px;
   padding-left: 300px;
 
   div {
@@ -133,14 +136,13 @@ const RightSection = styled.div`
     margin-top: 420px;
     padding-left: 0px;
     color: #151517;
+    flex-direction: column;
 
     div {
       padding: 10px;
-      width: 250px;
-      margin: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      width: 100%;
+      margin: 0px;
+      margin-bottom: 20px;
       background-color: #e1e0d9;
     }
   }
@@ -190,6 +192,12 @@ export default function LandingPage() {
     }
   };
 
+  const visitLogin = () => {
+    window.localStorage.setItem("userId", "visitor88084");
+    window.localStorage.setItem("loginStatus", true);
+    navigate("/main");
+  };
+
   return (
     <Background>
       <video src={video} loop autoPlay muted></video>
@@ -217,6 +225,14 @@ export default function LandingPage() {
             <span>
               <h1>登入/註冊</h1>
               <p>投稿你的疼痛故事</p>
+            </span>
+            <ChevronRight />
+          </div>
+          <div onClick={visitLogin}>
+            <UserRoundSearch />
+            <span>
+              <h1>訪客</h1>
+              <p>訪客模式進入</p>
             </span>
             <ChevronRight />
           </div>

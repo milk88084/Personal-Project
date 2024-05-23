@@ -316,6 +316,13 @@ export default function LeftSectionDesktop() {
   const showCreation = moment(createUserTime).format("YYYY-MM-DD");
   const profile = profileImg || showImg || defaultImg;
 
+  const [visitor, setVisitor] = useState(false);
+  useEffect(() => {
+    if (localStorageUserId === "visitor88084") {
+      setVisitor(true);
+    }
+  }, [localStorageUserId]);
+
   return (
     <div>
       {showFriendsList ? (
@@ -371,7 +378,7 @@ export default function LeftSectionDesktop() {
             alt={profile}
             onClick={() => inputRef.current.click()}
           />
-          <h1>{authorName}</h1>
+          {visitor ? <p>Guest</p> : <h1>{authorName}</h1>}
         </LeftNameSection>
         <LeftButtonSection>
           <button onClick={handlePost}>撰寫文章</button>
@@ -382,7 +389,9 @@ export default function LeftSectionDesktop() {
           <button onClick={() => navigate("/main")}>返回首頁</button>
         </LeftButtonSection>
         <LeftDateSection>
-          {!showCreation ? null : <p>Joined in {showCreation}</p>}
+          {visitor ? null : !showCreation ? null : (
+            <p>Joined in {showCreation}</p>
+          )}
         </LeftDateSection>
         <BottomLogo>
           <div>

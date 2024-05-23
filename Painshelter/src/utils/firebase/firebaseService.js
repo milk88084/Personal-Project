@@ -215,7 +215,7 @@ export const handleEditSubmit = async (
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#363636",
-    cancelButtonColor: "#d33",
+    cancelButtonColor: "#d2d2d2",
     confirmButtonText: "儲存",
     cancelButtonText: "取消",
   });
@@ -356,7 +356,7 @@ export const handleUnFollow = async (authorId, navigate) => {
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#363636",
-    cancelButtonColor: "#d33",
+    cancelButtonColor: "#d2d2d2",
     confirmButtonText: "確定",
     cancelButtonText: "取消",
   });
@@ -427,7 +427,7 @@ export const handleSubmitPost = async (
     icon: "question",
     showCancelButton: true,
     confirmButtonColor: "#363636",
-    cancelButtonColor: "#d33",
+    cancelButtonColor: "#d2d2d2",
     confirmButtonText: "提交",
     cancelButtonText: "取消",
   });
@@ -532,16 +532,6 @@ export const submitComment = async (event, storyId, setStories) => {
           return story;
         })
       );
-      toast("💬留言成功!", {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
     }
   } catch (e) {
     toastAlert("error", e, 2000);

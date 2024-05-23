@@ -20,8 +20,8 @@ const glowing = keyframes`
 const Background = styled.div`
   background-image: url(${modalpoem});
   z-index: 5000;
-  width: 50%;
-  height: 85%;
+  width: 700px;
+  height: 650px;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -44,7 +44,7 @@ const Background = styled.div`
   }
 
   div {
-    width: 90%;
+    width: 500px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,7 +55,6 @@ const Background = styled.div`
     text-align: center;
     font-size: 17px;
     padding: 10px;
-    height: 70px;
     margin-top: 30px;
   }
 
@@ -63,6 +62,11 @@ const Background = styled.div`
     padding: 0px;
     width: 30px;
     height: 30px;
+  }
+
+  .slick-prev,
+  .slick-next {
+    top: 84px;
   }
 
   .slick-next:before {
@@ -75,26 +79,6 @@ const Background = styled.div`
     border-radius: 20px;
   }
 
-  .slick-initialized .slick-slide {
-    display: flex;
-  }
-
-  span {
-    background-color: #9ca3af;
-    padding: 10px;
-    border-radius: 10px;
-    font-weight: 400;
-    border: 1px solid white;
-    margin-top: 30px;
-    cursor: pointer;
-
-    &:hover,
-    &:focus {
-      background-color: #19242b;
-      color: white;
-    }
-  }
-
   @media screen and (max-width: 1279px) {
     width: 400px;
     height: 500px;
@@ -103,12 +87,34 @@ const Background = styled.div`
     h1 {
       font-size: 25px;
       margin-bottom: 0px;
+      height: 50px;
     }
 
     button {
       padding: 7px;
       border-radius: 10px;
       margin: 20px;
+    }
+
+    h2 {
+      font-size: 14px;
+      padding: 0;
+      margin-bottom: 25px;
+    }
+
+    div {
+      width: 350px;
+    }
+
+    video {
+      width: 300px;
+      text-align: center;
+      margin-left: 27.5px;
+    }
+
+    img {
+      width: 300px;
+      margin-left: 27.5px;
     }
   }
 `;
@@ -123,7 +129,6 @@ const VideoSection = styled.div`
 
   img {
     border-radius: 20px;
-    height: 300px;
   }
 `;
 //#endregion

@@ -324,7 +324,7 @@ export default function Edit() {
                   onChange={storyTitle.onChange}
                   {...storyTitle}
                   required
-                  placeholder="陽明山的星星"
+                  placeholder="十字內標題"
                   maxLength="10"
                 />
               </EditTitleInput>

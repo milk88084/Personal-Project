@@ -192,7 +192,7 @@ export default function Banner({
           心靈緊急按鈕
         </button>
         <button onClick={() => scrollSection(footer)}>或是一首歌</button>
-        <button onClick={showModal}>關於</button>
+        <button onClick={showModal}>導覽</button>
         <button ref={seventhRef} onClick={handleLogout}>
           登出
         </button>

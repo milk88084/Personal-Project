@@ -27,7 +27,6 @@
 #### Base
 
 - React
-- ESLint
 - Zustand
 - Firebase
 - Styled Components
@@ -45,10 +44,13 @@
 ## Demo
 
 - Clickable function menu in the top right corner of the page.<br>
-  <img src="Painshelter/src/assets/readme/categories.gif" alt="categories" width="400"><br><br>
+  <br><br>
+  <img src="Painshelter/src/assets/readme/categories.gif" alt="categories" width="400">
 - Featured articles that let users explore external websites.<br>
-  <img src="Painshelter/src/assets/readme/highlight.gif" alt="highlight" width="400"><br><br>
+  <br><br>
+  <img src="Painshelter/src/assets/readme/highlight.gif" alt="highlight" width="400">
 - Tap the map icon to download your favorite articles to your device.<br>
+  <br><br>
   <img src="Painshelter/src/assets/readme/painMap.gif" alt="painMap" width="400">
 
 ## Guest mode

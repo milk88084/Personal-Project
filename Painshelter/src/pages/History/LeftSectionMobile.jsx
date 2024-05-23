@@ -346,6 +346,13 @@ export default function LeftSectionMobile({ setIsMobileSize }) {
   const showCreation = moment(createUserTime).format("YYYY-MM-DD");
 
   const profile = profileImg || showImg || defaultImg;
+
+  const [visitor, setVisitor] = useState(false);
+  useEffect(() => {
+    if (localStorageUserId === "visitor88084") {
+      setVisitor(true);
+    }
+  }, [localStorageUserId]);
   return (
     <div>
       <SectionWrapper>
@@ -407,7 +414,7 @@ export default function LeftSectionMobile({ setIsMobileSize }) {
             alt={profile}
             onClick={() => inputRef.current.click()}
           />
-
+          {visitor ? <p>Guest</p> : <h1>{authorName}</h1>}
           <h1>{authorName}</h1>
         </LeftNameSection>
         <LeftButtonSection>
@@ -418,7 +425,9 @@ export default function LeftSectionMobile({ setIsMobileSize }) {
           <button onClick={() => navigate("/main")}>返回首頁</button>
         </LeftButtonSection>
         <LeftDateSection>
-          {showCreation ? <p>Joined in {showCreation}</p> : null}
+          {visitor ? null : !showCreation ? null : (
+            <p>Joined in {showCreation}</p>
+          )}
         </LeftDateSection>
         <FAB>
           <div>
