@@ -1,11 +1,13 @@
 <div style="width:100% ; display: flex; justify-content: center; align-items: center;">
-  <img src="Painshelter/src/assets/img/logoImg2.png" alt="Logo" width="150" />(https://painshelter.site/)
-  <img src="Painshelter/src/assets/img/logoTitle2.png" alt="Logo" width="150" />(https://painshelter.site/)
+  <a href="https://painshelter.site/">
+  <img src="Painshelter/src/assets/img/logoImg2.png" alt="Logo" width="150" />
+  <img src="Painshelter/src/assets/img/logoTitle2.png" alt="Logo" width="150" />
+  </a>
 </div>
 
 # PainShelter
 
-PainShelter(https://painshelter.site/) is a platform dedicated to collecting painful and sorrowful memories. By sharing their own sadness, users may find their burdens lightened.
+<a href="https://painshelter.site/">PainShelter</a> is a platform dedicated to collecting painful and sorrowful memories. By sharing their own sadness, users may find their burdens lightened.
 
 ## About PainShelter
 
