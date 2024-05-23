@@ -1,11 +1,11 @@
-<div style="text-align: center;">
-  <img src="Painshelter/src/assets/img/logoImg2.png" alt="Logo" width="150" />
-  <img src="Painshelter/src/assets/img/logoTitle2.png" alt="Logo" width="150" />
+<div style="width:100% ; display: flex; justify-content: center; align-items: center;">
+  <img src="Painshelter/src/assets/img/logoImg2.png" alt="Logo" width="150" />(https://painshelter.site/)
+  <img src="Painshelter/src/assets/img/logoTitle2.png" alt="Logo" width="150" />(https://painshelter.site/)
 </div>
 
 # PainShelter
 
-A platform dedicated to collecting painful and sorrowful memories. By sharing their own sadness, users may find their burdens lightened.
+PainShelter(https://painshelter.site/) is a platform dedicated to collecting painful and sorrowful memories. By sharing their own sadness, users may find their burdens lightened.
 
 ## About PainShelter
 
@@ -59,4 +59,4 @@ A platform dedicated to collecting painful and sorrowful memories. By sharing th
 ## Contact
 
 [![LINKEDIN](https://img.shields.io/badge/-Linkedin-272428?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kochuang/)
-[![GMAIL](https://img.shields.io/badge/-Gmail-EFF1EA?style=for-the-badge&logo=gmail&logoColor=black)](milk88084@gmail.com)
+[![GMAIL](https://img.shields.io/badge/-Gmail-EFF1EA?style=for-the-badge&logo=gmail&logoColor=black)](mailto:milk88084@gmail.com)
