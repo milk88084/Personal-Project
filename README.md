@@ -1,5 +1,5 @@
-![Logo](Painshelter/src/assets/img/logoImg2.png)
-![Logo](Painshelter/src/assets/img/logoTitle2.png)
+<img src="Painshelter/src/assets/img/logoImg2.png" alt="Logo" width="100" />
+<img src="Painshelter/src/assets/img/logoTitle2.png" alt="Logo" width="100" />
 
 # PainShelter
 
@@ -40,12 +40,12 @@ A platform dedicated to collecting painful and sorrowful memories. By sharing th
 
 ## Demo
 
-- Clickable function menu in the top right corner of the page.
-  ![categories](Painshelter/src/assets/readme/categories.gif)
-- Featured articles that let users explore external websites.
-  ![highlight](Painshelter/src/assets/readme/highlight.gif)
+- Clickable function menu in the top right corner of the page.<br>
+  <img src="Painshelter/src/assets/readme/categories.gif" alt="categories" width="400"><br><br>
+- Featured articles that let users explore external websites.<br>
+  <img src="Painshelter/src/assets/readme/highlight.gif" alt="highlight" width="400"><br><br>
 - Tap the map icon to download your favorite articles to your device.
-  ![painMap](Painshelter/src/assets/readme/painMap.gif)
+  <img src="Painshelter/src/assets/readme/painMap.gif" alt="painMap" width="400">
 
 ## Guest mode
 
