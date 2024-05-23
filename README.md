@@ -1,5 +1,7 @@
-<img src="Painshelter/src/assets/img/logoImg2.png" alt="Logo" width="100" />
-<img src="Painshelter/src/assets/img/logoTitle2.png" alt="Logo" width="100" />
+<div style="text-align: center;">
+  <img src="Painshelter/src/assets/img/logoImg2.png" alt="Logo" width="150" />
+  <img src="Painshelter/src/assets/img/logoTitle2.png" alt="Logo" width="150" />
+</div>
 
 # PainShelter
 
@@ -30,13 +32,13 @@ A platform dedicated to collecting painful and sorrowful memories. By sharing th
 
 #### Libraries
 
-- react-leaflet
-- react-toastify
-- survey-react
 - ldrs
+- Shadcn
 - gsap/react
 - lucide-react
-- Shadcn
+- survey-react
+- react-leaflet
+- react-toastify
 
 ## Demo
 
@@ -44,7 +46,7 @@ A platform dedicated to collecting painful and sorrowful memories. By sharing th
   <img src="Painshelter/src/assets/readme/categories.gif" alt="categories" width="400"><br><br>
 - Featured articles that let users explore external websites.<br>
   <img src="Painshelter/src/assets/readme/highlight.gif" alt="highlight" width="400"><br><br>
-- Tap the map icon to download your favorite articles to your device.
+- Tap the map icon to download your favorite articles to your device.<br>
   <img src="Painshelter/src/assets/readme/painMap.gif" alt="painMap" width="400">
 
 ## Guest mode
@@ -56,5 +58,5 @@ A platform dedicated to collecting painful and sorrowful memories. By sharing th
 
 ## Contact
 
-![LINKEDIN](https://img.shields.io/badge/-Linkedin-272428?style=for-the-badge&logo=linkedin&logoColor=white)
-![GMAIL](https://img.shields.io/badge/-Gmail-EFF1EA?style=for-the-badge&logo=gmail&logoColor=black)
+[![LINKEDIN](https://img.shields.io/badge/-Linkedin-272428?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kochuang/)
+[![GMAIL](https://img.shields.io/badge/-Gmail-EFF1EA?style=for-the-badge&logo=gmail&logoColor=black)](milk88084@gmail.com)
