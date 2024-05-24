@@ -64,11 +64,6 @@ const Background = styled.div`
     height: 30px;
   }
 
-  .slick-prev,
-  .slick-next {
-    top: 84px;
-  }
-
   .slick-next:before {
     background-color: #363b44;
     border-radius: 20px;
@@ -115,6 +110,11 @@ const Background = styled.div`
     img {
       width: 300px;
       margin-left: 27.5px;
+    }
+
+    .slick-prev,
+    .slick-next {
+      top: 84px;
     }
   }
 `;
@@ -167,7 +167,7 @@ export default function Modal() {
             <VideoSection key={4}>
               <video src={painMap} loop autoPlay muted></video>
               <h2>
-                4.蒐集所有故事發生地點呈現在地圖中，使用者可以點選玻璃瓶，獲得一張專屬小卡，可以前往該作者頁面或儲存圖片至裝置中。
+                4.玻璃瓶儲存了每個故事，使用者可以點選玻璃瓶，獲得一張專屬小卡，也可以前往該作者頁面或儲存圖片至您的裝置中。
               </h2>
             </VideoSection>
           </Slider>

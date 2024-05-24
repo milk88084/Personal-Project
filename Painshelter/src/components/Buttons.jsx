@@ -26,10 +26,22 @@ const ButtonStyle = styled.button`
   }
 `;
 
-export default function Buttons({ text, onClick, icon, type, title }) {
+export default function Buttons({
+  text,
+  onClick,
+  icon,
+  type,
+  title,
+  onChange,
+}) {
   return (
     <div>
-      <ButtonStyle title={title} type={type} onClick={onClick}>
+      <ButtonStyle
+        title={title}
+        type={type}
+        onClick={onClick}
+        onChange={{ onChange }}
+      >
         {icon}
         {text}
       </ButtonStyle>

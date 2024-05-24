@@ -379,6 +379,7 @@ export default function Edit() {
 
   const inputRef = useRef(null);
   const [showImg, setShowImg] = useState(null);
+  // const [fileName, setFileName] = useState("");
   const upLoadToStorage = async (e) => {
     const file = e.target.files[0];
     let fileName = file.name;
@@ -386,6 +387,7 @@ export default function Edit() {
     const snapshot = await uploadBytes(imageRef, file);
     const url = await getDownloadURL(snapshot.ref);
     setShowImg(url);
+    storyImage.setValue(url);
   };
 
   const handleSubmit = async (event) => {
@@ -591,6 +593,7 @@ export default function Edit() {
               <EditCategories>
                 <EditTitle>
                   <p>記憶照片</p>
+
                   <EditImg>
                     <input
                       label="Image"
@@ -603,8 +606,10 @@ export default function Edit() {
                     />
                     <Buttons
                       title={"插入圖片"}
+                      onChange={upLoadToStorage}
                       onClick={() => inputRef.current.click()}
                       icon={<Image />}
+                      type={"button"}
                     />
                   </EditImg>
                 </EditTitle>

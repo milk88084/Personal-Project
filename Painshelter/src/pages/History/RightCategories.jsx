@@ -164,6 +164,10 @@ const CategoriesSection = styled.div`
     animation: ${glowing} 2s infinite ease-in-out;
   }
 
+  p {
+    width: 150px;
+  }
+
   @media screen and (max-width: 1279px) {
     width: 400px;
     flex-direction: column;
@@ -203,6 +207,10 @@ const CategoriesSection = styled.div`
       width: 120px;
       font-size: 15px;
       margin: 10px 10px;
+    }
+
+    p {
+      text-align: center;
     }
   }
 `;
