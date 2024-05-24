@@ -1,0 +1,7 @@
+div.sv_window {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 50% !important;
+  height: 50% !important;
+}
