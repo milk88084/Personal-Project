@@ -24,6 +24,11 @@ const Input = styled.div`
     margin-left: 10px;
     margin-bottom: 15px;
   }
+  @media screen and (max-width: 1279px) {
+    input {
+      width: 100%;
+    }
+  }
 `;
 
 const painIcon = L.icon({

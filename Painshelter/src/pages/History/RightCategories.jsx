@@ -53,7 +53,7 @@ const Categories = styled.div`
   }
 `;
 
-const TopCategories = styled.div`
+const TopCategoriesPressure = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-around;
@@ -73,6 +73,36 @@ const TopCategories = styled.div`
     transform: scale(0.9);
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
+
+  span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  img {
+    height: 100px;
+  }
+
+  @media screen and (max-width: 1279px) {
+    width: 400px;
+    margin: 15px 0px;
+    img {
+      height: 60px;
+    }
+  }
+`;
+
+const TopCategoriesFriends = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 4px solid #888888;
+  border-radius: 20px;
+  height: 180px;
+  font-size: 50px;
+  padding: 10px;
 
   span {
     display: flex;
@@ -280,7 +310,7 @@ export default function RightCategories({ storyRef }) {
   return (
     <Categories>
       <section id="statistics">
-        <TopCategories onClick={() => navigate("/help")}>
+        <TopCategoriesPressure onClick={() => navigate("/help")}>
           <div>
             <h2>壓力</h2>
             <h2>指數</h2>
@@ -295,9 +325,9 @@ export default function RightCategories({ storyRef }) {
             )}
           </span>
           <img src={broke} alt={broke} />
-        </TopCategories>
+        </TopCategoriesPressure>
         <span></span>
-        <TopCategories>
+        <TopCategoriesFriends>
           <div>
             <h2>關注</h2>
             <h2>作者</h2>
@@ -312,7 +342,7 @@ export default function RightCategories({ storyRef }) {
             )}
           </span>
           <img src={jar} alt={jar} />
-        </TopCategories>
+        </TopCategoriesFriends>
       </section>
       <CategoriesImg>
         <img src={categoryImg} alt={categoryImg}></img>

@@ -222,15 +222,21 @@ export default function RightSection() {
         unsubscribe();
       }
     };
-  }, []);
+  }, [localStorageUserId, state.data]);
 
   const sortTimeOfStory = stories.sort((a, b) => b.time.localeCompare(a.time));
 
   const isUserStories = stories.every(
     (story) => story.userId === localStorageUserId
   );
-
   const handleSubmitComment = async (event, id) => {
+    event.preventDefault();
+    const form = event.target;
+    const select = form.querySelector('select[name="replySelect"]');
+    if (!select.value) {
+      alert("請選擇一個留言");
+      return;
+    }
     await submitComment(event, id, setStories);
   };
 
