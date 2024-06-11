@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 import PostsLocation from "@/components/PostLocation.jsx";
 
 const MapSectionWrapper = styled.div`

@@ -1,13 +1,15 @@
 import "react-toastify/dist/ReactToastify.css";
+import { AlignJustify } from "lucide-react";
+import { useState } from "react";
+import { ToastContainer } from "react-toastify";
 import styled from "styled-components";
-import RightSection from "./RightSection.jsx";
-import IsLoadingPage from "@/components/IsLoadingPage.jsx";
+
 import LeftSectionDesk from "./LeftSectionDesk.jsx";
 import LeftSectionMobile from "./LeftSectionMobile.jsx";
-import { useState } from "react";
-import { AlignJustify } from "lucide-react";
+import RightSection from "./RightSection.jsx";
+
+import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
-import { ToastContainer } from "react-toastify";
 
 //#region
 const Background = styled.div`

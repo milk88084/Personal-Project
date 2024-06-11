@@ -6,7 +6,7 @@ export const useLoginState = create((set) => ({
   online: () => set({ loginStatus: true }),
   offline: () => set({ loginStatus: false }),
   //Login user name
-  loginUserNAme: "",
+  loginUserName: "",
   //userId
   loginUserId: "",
   setLoginUserId: (id) => set({ loginUserId: id }),
@@ -15,8 +15,8 @@ export const useLoginState = create((set) => ({
   postLikeNumber: "",
   setPostLikeNumber: (number) => set({ postLikeNumber: number }),
   //locationSerach
-  locationSerach: [],
-  setLocationSearch: (data) => set({ locationSerach: data }),
+  locationSearch: [],
+  setLocationSearch: (data) => set({ locationSearch: data }),
 
   //modal
   modal: false,
@@ -29,7 +29,7 @@ export const modifiedData = create((set) => ({
   setSelectedStoryId: (id) => set({ selectedStoryId: id }),
 }));
 
-export const useAuthorfiedData = create((set) => ({
+export const useAuthorfieldData = create((set) => ({
   selectedStoryId: "",
   setSelectedStoryId: (id) => set({ selectedStoryId: id }),
 }));
@@ -57,5 +57,5 @@ export const useLyric = create((set) => ({
   searchStatus: false,
   setTitle: (title) => set({ title }),
   setStatus: () => set({ searchStatus: true }),
-  setStatusfasle: () => set({ searchStatus: false }),
+  setStatusfalse: () => set({ searchStatus: false }),
 }));

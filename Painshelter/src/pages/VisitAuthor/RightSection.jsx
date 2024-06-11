@@ -1,16 +1,17 @@
+import { Heart, MessageCircle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import styled from "styled-components";
+
 import Buttons from "@/components/Buttons.jsx";
 import replyData from "@/utils/data/reply.json";
-import { ToastContainer } from "react-toastify";
-import { useAuthorfiedData } from "@/utils/zustand.js";
-import { useState, useEffect } from "react";
-import { Heart, MessageCircle } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
 import {
   getSnapshotPostsData,
   submitComment,
   submitLike,
 } from "@/utils/firebase/firebaseService.js";
+import { useAuthorfieldData } from "@/utils/zustand.js";
 
 //#region
 const RightSectionWrapper = styled.div`
@@ -210,7 +211,7 @@ export default function RightSection() {
   const [stories, setStories] = useState([]);
   const localStorageUserId = window.localStorage.getItem("userId");
   const navigate = useNavigate();
-  const { setSelectedStoryId } = useAuthorfiedData();
+  const { setSelectedStoryId } = useAuthorfieldData();
 
   useEffect(() => {
     let unsubscribe;

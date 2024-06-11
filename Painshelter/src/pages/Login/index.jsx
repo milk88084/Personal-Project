@@ -1,14 +1,15 @@
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useState, useRef, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import styled from "styled-components";
+
 import logoImg from "@/assets/img/logoImg.png";
 import logoTitle from "@/assets/img/logoTitle.png";
 import backgroundVideo from "@/assets/video/login.mp4";
 import { auth } from "@/utils/firebase/firebase.jsx";
 import { toastAlert } from "@/utils/toast.js";
 import { useLoginState } from "@/utils/zustand.js";
-import { ToastContainer } from "react-toastify";
-import { NavLink, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { useState, useRef, useEffect } from "react";
 
 //#region
 const Background = styled.div`

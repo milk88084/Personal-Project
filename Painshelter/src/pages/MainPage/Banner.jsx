@@ -1,15 +1,16 @@
+import { signOut } from "firebase/auth";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import styled from "styled-components";
+
 import logoImg from "@/assets/img/logoImg.png";
 import logoTitle from "@/assets/img/logoTitle.png";
 import mainBanner from "@/assets/img/mainBanner.jpg";
 import { auth } from "@/utils/firebase/firebase";
-import { signOut } from "firebase/auth";
-import { useEffect } from "react";
-import { toastAlert } from "@/utils/toast.js";
-import { useNavigate } from "react-router-dom";
-import { useLoginState } from "@/utils/zustand.js";
-import { ToastContainer } from "react-toastify";
 import { bannerPageGSAPAnimations } from "@/utils/gsapAnimations";
+import { toastAlert } from "@/utils/toast.js";
+import { useLoginState } from "@/utils/zustand.js";
 
 //#region
 const BannerWrapper = styled.div`

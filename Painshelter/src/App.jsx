@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+
 import MainPage from "@/pages/MainPage/index.jsx";
 
 //#region

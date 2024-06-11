@@ -1,23 +1,24 @@
-import styled from "styled-components";
-import Buttons from "@/components/Buttons.jsx";
-import storyTypeData from "@/utils/data/storyTypeData.json";
-import LocationSearch from "@/components/LocationSearch.jsx";
-import storyFigureData from "@/utils/data/storyFigureData.json";
-import { bouncy } from "ldrs";
-import { storage } from "@/utils/firebase/firebase.jsx";
-import { toastAlert } from "@/utils/toast.js";
-import { useNavigate } from "react-router-dom";
-import { useFormInput } from "@/utils/hooks/useFormInput.jsx";
-import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
-import { useLoginState } from "@/utils/zustand.js";
-import { ToastContainer } from "react-toastify";
-import { handleSubmitPost } from "@/utils/firebase/firebaseService.js";
-import { useState, useRef } from "react";
 import {
   getDownloadURL,
   ref as storageRef,
   uploadBytes,
 } from "firebase/storage";
+import { bouncy } from "ldrs";
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import styled from "styled-components";
+
+import Buttons from "@/components/Buttons.jsx";
+import LocationSearch from "@/components/LocationSearch.jsx";
+import storyFigureData from "@/utils/data/storyFigureData.json";
+import storyTypeData from "@/utils/data/storyTypeData.json";
+import { storage } from "@/utils/firebase/firebase.jsx";
+import { handleSubmitPost } from "@/utils/firebase/firebaseService.js";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import { useFormInput } from "@/utils/hooks/useFormInput.jsx";
+import { toastAlert } from "@/utils/toast.js";
+import { useLoginState } from "@/utils/zustand.js";
 
 //#region
 const Background = styled.div`

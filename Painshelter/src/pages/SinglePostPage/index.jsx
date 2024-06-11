@@ -1,10 +1,11 @@
-import { db } from "@/utils/firebase/firebase.jsx";
-import { toastAlert } from "@/utils/toast.js";
-import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
-import { ToastContainer } from "react-toastify";
+import { collection, query, getDocs, where } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { collection, query, getDocs, where } from "firebase/firestore";
+import { ToastContainer } from "react-toastify";
+
+import { db } from "@/utils/firebase/firebase.jsx";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import { toastAlert } from "@/utils/toast.js";
 
 export default function SinglePage() {
   const [story, setStory] = useState();

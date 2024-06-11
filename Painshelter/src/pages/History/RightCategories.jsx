@@ -1,19 +1,20 @@
-import styled, { keyframes } from "styled-components";
-import jar from "@/assets/img/historyJar.png";
-import broke from "@/assets/img/historyBroke.png";
-import AnimatedNumber from "@/components/AnimatedNumber.jsx";
-import categoryImg from "@/assets/img/categoryImg.jpg";
-import logoImg from "@/assets/img/logoImg.png";
-import Buttons from "@/components/Buttons.jsx";
-import { toastAlert } from "@/utils/toast.js";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { useState, useEffect } from "react";
+import styled, { keyframes } from "styled-components";
+
+import categoryImg from "@/assets/img/categoryImg.jpg";
+import broke from "@/assets/img/historyBroke.png";
+import jar from "@/assets/img/historyJar.png";
+import logoImg from "@/assets/img/logoImg.png";
+import AnimatedNumber from "@/components/AnimatedNumber.jsx";
+import Buttons from "@/components/Buttons.jsx";
 import {
   getFirebasePosts,
   getFirebaseUsers,
   getAuthorsByIds,
 } from "@/utils/firebase/firebaseService.js";
+import { toastAlert } from "@/utils/toast.js";
 
 //#region
 const Categories = styled.div`

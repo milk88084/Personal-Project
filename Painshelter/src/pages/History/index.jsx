@@ -1,15 +1,17 @@
-import styled from "styled-components";
-import ModalHistory from "@/components/ModalHistory.jsx";
-import IsLoadingPage from "@/components/IsLoadingPage.jsx";
-import RightCategories from "./RightCategories.jsx";
-import LeftSectionMobile from "./LeftSectionMobile.jsx";
-import LeftSectionDesktop from "./LeftSectionDesktop .jsx";
-import RightHistoryPosts from "./RightHistoryPosts.jsx";
-import { useLocation } from "react-router-dom";
-import { HistoryModal } from "@/utils/zustand.js";
 import { AlignJustify } from "lucide-react";
-import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 import { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
+import styled from "styled-components";
+
+import LeftSectionDesktop from "./LeftSectionDesktop .jsx";
+import LeftSectionMobile from "./LeftSectionMobile.jsx";
+import RightCategories from "./RightCategories.jsx";
+import RightHistoryPosts from "./RightHistoryPosts.jsx";
+
+import IsLoadingPage from "@/components/IsLoadingPage.jsx";
+import ModalHistory from "@/components/ModalHistory.jsx";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import { HistoryModal } from "@/utils/zustand.js";
 
 //#region
 const Background = styled.div`

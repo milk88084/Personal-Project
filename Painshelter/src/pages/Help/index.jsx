@@ -1,26 +1,29 @@
 import "survey-core/defaultV2.min.css";
-import { Model } from "survey-core";
-import { bouncy } from "ldrs";
+
 import { useGSAP } from "@gsap/react";
-import { themeJson } from "@/assets/survey";
-import { PopupSurvey } from "survey-react-ui";
-import { useHelpModal } from "@/utils/zustand.js";
-import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
-import { updateUserStressRecord } from "@/utils/firebase/firebaseService.js";
-import { helpPAgeGSAPAnimations } from "@/utils/gsapAnimations.js";
-import { useNavigate, useLocation } from "react-router-dom";
+import { bouncy } from "ldrs";
 import { useEffect, useState, useRef } from "react";
-import zero from "@/assets/img/help_zero.png";
+import { useNavigate, useLocation } from "react-router-dom";
+import styled from "styled-components";
+import { Model } from "survey-core";
+import { PopupSurvey } from "survey-react-ui";
+
+import SurveyResult from "./SurveyResult";
+
+import feature3Banner from "@/assets/img/feature3Banner.png";
+import four from "@/assets/img/help_four.png";
 import one from "@/assets/img/help_one.png";
 import two from "@/assets/img/help_two.png";
-import four from "@/assets/img/help_four.png";
-import json from "@/utils/data/survey.json";
-import styled from "styled-components";
-import Buttons from "@/components/Buttons.jsx";
+import zero from "@/assets/img/help_zero.png";
+import { themeJson } from "@/assets/survey";
 import videoSrc from "@/assets/video/helpbanner.mp4";
-import feature3Banner from "@/assets/img/feature3Banner.png";
 import AnimatedNumber from "@/components/AnimatedNumber";
-import SurveyResult from "./SurveyResult";
+import Buttons from "@/components/Buttons.jsx";
+import json from "@/utils/data/survey.json";
+import { updateUserStressRecord } from "@/utils/firebase/firebaseService.js";
+import { helpPAgeGSAPAnimations } from "@/utils/gsapAnimations.js";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import { useHelpModal } from "@/utils/zustand.js";
 
 //#region
 const Background = styled.div`
@@ -151,7 +154,7 @@ const AccordingSection = styled.div`
   }
 `;
 
-const ComfirmSection = styled.div`
+const ConfirmSection = styled.div`
   width: 650px;
   padding: 10px;
   display: flex;
@@ -372,7 +375,7 @@ function SurveyComponent() {
               <AnimatedNumber end={1250000} />
             </div>
           </AccordingSection>
-          <ComfirmSection>
+          <ConfirmSection>
             <h3>我有憂鬱的情緒嗎？</h3>
             <p>
               台灣約8.95% (約200萬人) 的人口有憂鬱症狀，約5.2% (約125萬人)
@@ -383,7 +386,7 @@ function SurveyComponent() {
               <Buttons onClick={handleClick} text="點我測驗" />
               <Buttons onClick={() => navigate("/main")} text="首頁" />
             </ButtonSection>
-          </ComfirmSection>
+          </ConfirmSection>
         </SurveySection>
 
         <SurveyDialog>

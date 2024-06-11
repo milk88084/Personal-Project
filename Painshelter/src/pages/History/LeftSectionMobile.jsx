@@ -1,21 +1,25 @@
-import styled from "styled-components";
-import moment from "moment";
-import logoImg from "@/assets/img/logoImg.png";
-import logoTitle from "@/assets/img/logoTitle.png";
-import defaultImg from "@/assets/img/defaultImg.png";
-import ModalHistory from "@/components/ModalHistory.jsx";
-import { storage } from "@/utils/firebase/firebase.jsx";
-import { toastAlert } from "@/utils/toast.js";
-import { useNavigate } from "react-router-dom";
-import { HistoryModal } from "@/utils/zustand.js";
-import { ToastContainer } from "react-toastify";
-import { useState, useRef, useEffect } from "react";
-import { UserRoundX, User, StickyNote } from "lucide-react";
 import {
   getDownloadURL,
   ref as storageRef,
   uploadBytes,
 } from "firebase/storage";
+import { UserRoundX, User, StickyNote } from "lucide-react";
+import moment from "moment";
+import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import styled from "styled-components";
+
+import defaultImg from "@/assets/img/defaultImg.png";
+import logoImg from "@/assets/img/logoImg.png";
+import logoTitle from "@/assets/img/logoTitle.png";
+import ModalHistory from "@/components/ModalHistory.jsx";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { storage } from "@/utils/firebase/firebase.jsx";
 import {
   getFirebaseUsers,
   getAuthorsByIds,
@@ -23,11 +27,8 @@ import {
   handleUnFollow,
   updateProfileImage,
 } from "@/utils/firebase/firebaseService.js";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+import { toastAlert } from "@/utils/toast.js";
+import { HistoryModal } from "@/utils/zustand.js";
 
 //#region
 const SectionWrapper = styled.div`

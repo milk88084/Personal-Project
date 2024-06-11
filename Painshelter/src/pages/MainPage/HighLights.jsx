@@ -1,9 +1,10 @@
-import styled from "styled-components";
-import Buttons from "@/components/Buttons";
 import { gsap } from "gsap";
-import { useNavigate } from "react-router-dom";
-import { getAllFirebasePosts } from "@/utils/firebase/firebaseService";
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
+import Buttons from "@/components/Buttons";
+import { getAllFirebasePosts } from "@/utils/firebase/firebaseService";
 
 //#region
 const HighlightWrapper = styled.div`
@@ -72,10 +73,11 @@ const HighlightPost = styled.div`
 `;
 
 const MoreButton = styled.div`
-  width: 90%;
+  width: 100%;
   display: flex;
   justify-content: center;
   margin-top: 60px;
+  margin-right: 0px;
 `;
 //#endregion
 
@@ -171,7 +173,7 @@ export default function HighLights({ highlight }) {
     });
   }, [stories]);
 
-  const handleVisitAthor = (id) => {
+  const handleVisitAuthor = (id) => {
     navigate("/visit", { state: { data: id } });
     window.scrollTo(0, 0);
   };
@@ -183,7 +185,7 @@ export default function HighLights({ highlight }) {
           return (
             <HighlightPost
               ref={addToRefs}
-              onClick={() => handleVisitAthor(story.userId)}
+              onClick={() => handleVisitAuthor(story.userId)}
               key={index}
             >
               <h1>{index + 1}</h1>

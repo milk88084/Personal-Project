@@ -1,10 +1,11 @@
-import pill from "@/assets/icon/pill.png";
-import styled from "styled-components";
-import Buttons from "@/components/Buttons.jsx";
-import { useNavigate } from "react-router-dom";
-import { modifiedData } from "@/utils/zustand.js";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
+import pill from "@/assets/icon/pill.png";
+import Buttons from "@/components/Buttons.jsx";
 import { getFirebasePosts } from "@/utils/firebase/firebaseService.js";
+import { modifiedData } from "@/utils/zustand.js";
 
 //#region
 const StorySection = styled.div`

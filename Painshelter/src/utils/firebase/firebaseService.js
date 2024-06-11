@@ -20,7 +20,7 @@ import { toastAlert } from "@/utils/toast.js";
 ("react-toastify/dist/ReactToastify.css");
 
 //Get the spacific post data from firebase collection
-export const getFirebaseSpacificPost = async (field, value) => {
+export const getFirebaseSpecificPost = async (field, value) => {
   try {
     const postsData = collection(db, "posts");
     const q = query(postsData, where(field, "==", value));
