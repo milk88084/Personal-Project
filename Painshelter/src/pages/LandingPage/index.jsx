@@ -7,14 +7,14 @@ import ThreeRules from "./ThreeRules.jsx";
 import landingPageTextLines from "@/utils/data/landingPageTextLines.json";
 import { useGSAP } from "@gsap/react";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { landingPAgeGSAPAnimations } from "@/utils/gsapAnimations.js";
 import {
   ChevronRight,
   UserRoundSearch,
   UsersRound,
   ScrollText,
 } from "lucide-react";
-import { landingPAgeGSAPAnimations } from "@/utils/gsapAnimations.js";
-import { useEffect, useRef, useState } from "react";
 
 //#region
 const Background = styled.div`
@@ -22,6 +22,7 @@ const Background = styled.div`
   font-family: "Noto Sans TC", sans-serif;
   position: relative;
   overflow-x: hidden;
+
   video:nth-child(1) {
     width: 100%;
     height: 100vh;
@@ -42,16 +43,26 @@ const Background = styled.div`
   }
 `;
 
+const MainSection = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
+  }
+`;
+
 const LeftSection = styled.div`
   color: #e1e0d9;
   display: flex;
   flex-direction: column;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 50%;
   align-items: center;
-  margin-top: 250px;
+
   img {
     width: 370px;
   }
@@ -62,12 +73,9 @@ const LeftSection = styled.div`
     position: absolute;
   }
   @media screen and (max-width: 1279px) {
-    top: 0;
-    left: 0;
-    width: 50%;
     align-items: center;
-    margin-top: 100px;
-    margin-left: 120px;
+    justify-content: center;
+    height: 50%;
     img {
       width: 300px;
     }
@@ -88,14 +96,8 @@ const glowing = keyframes`
 
 const RightSection = styled.div`
   color: #e1e0d9;
-  position: absolute;
-  width: 50%;
-  top: 0;
-  right: 0;
   display: flex;
   flex-direction: column;
-  margin-top: 200px;
-  padding-left: 300px;
 
   div {
     padding: 15px;
@@ -129,21 +131,22 @@ const RightSection = styled.div`
   }
   @media screen and (max-width: 1279px) {
     width: 100%;
-    top: 0;
-    left: 0;
-    display: flex;
     flex-direction: row;
-    margin-top: 420px;
-    padding-left: 0px;
     color: #151517;
     flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
 
     div {
       padding: 10px;
-      width: 100%;
+      width: 80%;
       margin: 0px;
-      margin-bottom: 20px;
+      margin-top: 20px;
       background-color: #e1e0d9;
+    }
+
+    p {
+      display: none;
     }
   }
 `;
@@ -154,9 +157,9 @@ export default function LandingPage() {
   const imgRef = useRef(null);
   const buttonRef = useRef(null);
   const enterIconRef = useRef(null);
-  const [threeRules, setThreeRules] = useState(false);
-  const navigate = useNavigate();
   const loginStatus = window.localStorage.getItem("loginStatus");
+  const navigate = useNavigate();
+  const [threeRules, setThreeRules] = useState(false);
 
   useEffect(() => {
     const timeline = gsap.timeline({
@@ -202,7 +205,7 @@ export default function LandingPage() {
     <Background>
       <video src={video} loop autoPlay muted></video>
       <video src={video2} loop autoPlay muted></video>
-      <div>
+      <MainSection>
         <LeftSection>
           <img ref={imgRef} src={logo} alt={logo} />
           {landingPageTextLines.map((text, index) => (
@@ -237,7 +240,7 @@ export default function LandingPage() {
             <ChevronRight />
           </div>
         </RightSection>
-      </div>
+      </MainSection>
 
       {!threeRules ? null : <ThreeRules setThreeRules={setThreeRules} />}
     </Background>

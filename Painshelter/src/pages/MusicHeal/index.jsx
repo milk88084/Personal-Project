@@ -306,7 +306,7 @@ function MusicHeal() {
   return (
     <>
       <Lyric ref={section1}>
-        <img src={heal1} alt={heal1} />
+        <img src={heal1} alt={heal1} loading="lazy" />
         <img ref={titleRef1} src={healtext1} alt={healtext1} />
         <div ref={paragraphRef1}>
           <p>你不是真正的快樂，你的傷從不肯完全的癒合</p>
@@ -320,7 +320,7 @@ function MusicHeal() {
       </Lyric>
 
       <Lyric ref={section2}>
-        <img src={heal3} alt={heal3} />
+        <img src={heal3} alt={heal3} loading="lazy" />
         <img ref={titleRef2} src={healtext3} alt={healtext3} />
         <div ref={paragraphRef2}>
           <p>如果你被她傷的很痛，請感謝她好心折磨，</p>
@@ -332,7 +332,7 @@ function MusicHeal() {
         </span>
       </Lyric>
       <Lyric ref={section3}>
-        <img src={heal2} alt={heal2} />
+        <img src={heal2} alt={heal2} loading="lazy" />
         <img ref={titleRef3} src={healtext2} alt={healtext2} />
         <div ref={paragraphRef3}>
           <p>我在夜裡大聲呼喊，夢太沈重，無力也無法動彈，</p>
