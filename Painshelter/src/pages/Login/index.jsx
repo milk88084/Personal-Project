@@ -13,7 +13,6 @@ import { useLoginState } from "@/utils/zustand.js";
 
 //#region
 const Background = styled.div`
-  font-family: "Noto Sans TC", sans-serif;
   height: 100vh;
   position: relative;
   display: flex;

@@ -26,7 +26,7 @@ const EachStory = styled.div`
   align-items: center;
   position: relative;
   @media screen and (max-width: 1279px) {
-    height: 380px;
+    height: 100%;
   }
 `;
 
@@ -56,7 +56,6 @@ const MainContent = styled.div`
     font-size: 20px;
     margin-bottom: 10px;
   }
-
   h2 {
     margin-bottom: 24px;
   }
@@ -97,7 +96,7 @@ const MainContent = styled.div`
 
   @media screen and (max-width: 1279px) {
     width: 400px;
-    padding: 15px;
+    padding: 12px;
     h1 {
       font-size: 18px;
       margin-bottom: 8px;
@@ -106,9 +105,26 @@ const MainContent = styled.div`
     h2 {
       margin-bottom: 18px;
     }
+    h3 {
+      flex-direction: column;
+    }
 
     span {
-      margin-bottom: 7px;
+      font-size: 15px;
+      margin-bottom: 6px;
+      margin-right: 1px;
+      width: 100px;
+      text-align: center;
+    }
+
+    pre {
+      margin-right: 0;
+      text-align: center;
+      width: 100px;
+    }
+
+    button {
+      width: 100%;
     }
   }
 `;
@@ -127,9 +143,11 @@ const Heart = styled.div`
     width: 30px;
   }
   @media screen and (max-width: 1279px) {
+    flex-direction: column;
+    margin-right: 10px;
     p {
       font-size: 15px;
-      margin-right: 5px;
+      margin-left: 0px;
     }
     img {
       width: 20px;

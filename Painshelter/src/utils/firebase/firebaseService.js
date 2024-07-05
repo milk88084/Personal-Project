@@ -13,9 +13,11 @@ import {
   arrayRemove,
   onSnapshot,
 } from "firebase/firestore";
-import { db, auth } from "../../utils/firebase/firebase.jsx";
-import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+
+import { db, auth } from "../../utils/firebase/firebase.jsx";
+
 import { toastAlert } from "@/utils/toast.js";
 ("react-toastify/dist/ReactToastify.css");
 

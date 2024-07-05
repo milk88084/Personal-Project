@@ -27,7 +27,6 @@ const Background = styled.div`
   align-items: center;
   padding: 30px;
   flex-direction: column;
-  font-family: "Noto Sans TC", sans-serif;
   animation: ${glowing} 2s infinite ease-in-out;
   top: 0;
   left: 0;

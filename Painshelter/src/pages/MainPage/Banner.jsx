@@ -58,17 +58,7 @@ const Categories = styled.div`
   }
 
   @media screen and (max-width: 1279px) {
-    font-size: 20px;
-    letter-spacing: 1px;
-    font-weight: 500;
-    padding-top: 0px;
-    z-index: 200;
-
-    button {
-      margin: 3px;
-      margin-right: 60px;
-      opacity: 10%;
-    }
+    display: none;
   }
 `;
 

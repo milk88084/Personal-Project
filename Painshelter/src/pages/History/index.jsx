@@ -17,7 +17,6 @@ import { HistoryModal } from "@/utils/zustand.js";
 const Background = styled.div`
   color: white;
   position: relative;
-  font-family: "Noto Sans TC", sans-serif;
   height: 100%;
 `;
 

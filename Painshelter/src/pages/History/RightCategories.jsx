@@ -43,7 +43,8 @@ const Categories = styled.div`
 
     section {
       flex-direction: column;
-      margin: 15px;
+      margin: 0px;
+      margin-top: 15px;
       justify-content: center;
       align-items: center;
     }
@@ -86,7 +87,7 @@ const TopCategoriesPressure = styled.div`
   }
 
   @media screen and (max-width: 1279px) {
-    width: 400px;
+    width: 350px;
     margin: 15px 0px;
     img {
       height: 60px;
@@ -116,7 +117,7 @@ const TopCategoriesFriends = styled.div`
   }
 
   @media screen and (max-width: 1279px) {
-    width: 400px;
+    width: 350px;
     margin: 15px 0px;
     img {
       height: 60px;
@@ -200,7 +201,7 @@ const CategoriesSection = styled.div`
   }
 
   @media screen and (max-width: 1279px) {
-    width: 400px;
+    width: 100%;
     flex-direction: column;
     padding: 10px;
     border-radius: 20px;
@@ -298,7 +299,6 @@ export default function RightCategories({ storyRef }) {
 
   const handlePost = () => {
     navigate("/post");
-    window.scrollTo(0, 0);
   };
 
   const scrollSection = (elementRef) => {

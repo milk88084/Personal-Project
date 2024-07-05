@@ -106,7 +106,6 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Noto Sans TC", sans-serif;
   @media screen and (max-width: 1279px) {
     flex-direction: column;
     height: 100%;
@@ -207,6 +206,10 @@ const ButtonSection = styled.div`
   @media screen and (max-width: 1279px) {
     display: flex;
     flex-direction: column;
+
+    button {
+      width: 300px;
+    }
   }
 `;
 //#endregion

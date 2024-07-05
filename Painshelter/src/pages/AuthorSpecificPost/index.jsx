@@ -15,7 +15,6 @@ import { useEditFormInput } from "@/utils/hooks/useEditFormInput.jsx";
 
 //#region
 const Background = styled.div`
-  font-family: "Noto Sans TC", sans-serif;
   background: linear-gradient(
     90deg,
     rgba(0, 2, 0, 1) 0%,

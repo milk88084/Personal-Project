@@ -197,7 +197,6 @@ const OtherAuthorList = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: "Noto Sans TC", sans-serif;
   color: #19242b;
   z-index: 300;
 

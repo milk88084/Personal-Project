@@ -15,7 +15,6 @@ import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 const Background = styled.div`
   color: white;
   position: relative;
-  font-family: "Noto Sans TC", sans-serif;
   height: 100vh;
   background-color: #29292d;
 `;

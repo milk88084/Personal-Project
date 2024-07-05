@@ -14,10 +14,9 @@ export const useLoginState = create((set) => ({
   //other author post like
   postLikeNumber: "",
   setPostLikeNumber: (number) => set({ postLikeNumber: number }),
-  //locationSerach
+  //locationSearch
   locationSearch: [],
   setLocationSearch: (data) => set({ locationSearch: data }),
-
   //modal
   modal: false,
   showModal: () => set({ modal: true }),

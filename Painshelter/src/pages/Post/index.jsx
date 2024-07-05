@@ -22,7 +22,6 @@ import { useLoginState } from "@/utils/zustand.js";
 
 //#region
 const Background = styled.div`
-  font-family: "Noto Sans TC", sans-serif;
   background: linear-gradient(
     90deg,
     rgba(0, 2, 0, 1) 0%,
@@ -246,15 +245,15 @@ const ButtonSection = styled.div`
 `;
 //#endregion
 
-export default function Edit() {
+export default function Post() {
   const navigate = useNavigate();
-  const { locationSerach } = useLoginState();
+  const { locationSearch } = useLoginState();
   const postStory = useFormInput();
   const storyTitle = useFormInput();
   const storyTime = useFormInput();
   const localStorageUserId = window.localStorage.getItem("userId");
   useAuthCheck();
-  const storyLocation = locationSerach[0];
+  const storyLocation = locationSearch[0];
 
   const [selectedTypes, setSelectedTypes] = useState([]);
   const toggleType = (type) => {

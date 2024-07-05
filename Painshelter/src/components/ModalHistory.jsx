@@ -18,7 +18,6 @@ const Background = styled.div`
   display: flex;
   padding: 30px;
   flex-direction: column;
-  font-family: "Noto Sans TC", sans-serif;
   animation: ${glowing} 2s infinite ease-in-out;
   opacity: 0.8;
   top: 0;

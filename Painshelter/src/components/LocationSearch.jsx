@@ -39,7 +39,7 @@ const painIcon = L.icon({
 });
 
 const LocationSearch = () => {
-  const { locationSerach, setLocationSearch } = useLoginState();
+  const { locationSearch, setLocationSearch } = useLoginState();
   const [locationState, setLocationState] = useState();
   const storyLocation = useFormInput();
   const locationArray = [];

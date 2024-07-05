@@ -53,7 +53,7 @@ const EachStory = styled.div`
   position: relative;
 
   @media screen and (max-width: 1279px) {
-    height: 600px;
+    height: 100%;
     flex-direction: column;
   }
 `;
@@ -99,7 +99,7 @@ const MainContent = styled.div`
     margin-top: 24px;
   }
   @media screen and (max-width: 1279px) {
-    width: 400px;
+    width: 280px;
     padding: 15px;
     h1 {
       font-size: 18px;
@@ -110,8 +110,18 @@ const MainContent = styled.div`
       margin-bottom: 18px;
     }
 
+    h3 {
+      flex-direction: column;
+      text-align: center;
+      width: 120px;
+    }
+
     span {
       margin-bottom: 7px;
+    }
+
+    button {
+      width: 250px;
     }
   }
 `;

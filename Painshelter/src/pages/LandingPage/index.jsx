@@ -18,10 +18,104 @@ import video2 from "@/assets/video/landingPage2.mp4";
 import landingPageTextLines from "@/utils/data/landingPageTextLines.json";
 import { landingPAgeGSAPAnimations } from "@/utils/gsapAnimations.js";
 
+export default function LandingPage() {
+  const textRefs = useRef([]);
+  const imgRef = useRef(null);
+  const buttonRef = useRef(null);
+  const enterIconRef = useRef(null);
+  const loginStatus = window.localStorage.getItem("loginStatus");
+  const navigate = useNavigate();
+  const [threeRules, setThreeRules] = useState(false);
+
+  useEffect(() => {
+    const timeline = gsap.timeline({
+      repeat: -1,
+      repeatDelay: 1,
+    });
+
+    landingPageTextLines.forEach((_, index) => {
+      timeline
+        .fromTo(
+          textRefs.current[index],
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1, ease: "power1.in" },
+          `+=${index === 0 ? 0 : 1.25}`
+        )
+        .to(
+          textRefs.current[index],
+          { y: -30, opacity: 0, duration: 1, ease: "power1.out" },
+          `+=1`
+        );
+    });
+  }, []);
+
+  useGSAP(() => {
+    landingPAgeGSAPAnimations(imgRef, buttonRef, enterIconRef);
+  });
+
+  const handleLogin = () => {
+    if (loginStatus === "true") {
+      navigate("/main");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const visitLogin = () => {
+    window.localStorage.setItem("userId", "visitor88084");
+    window.localStorage.setItem("loginStatus", true);
+    navigate("/main");
+  };
+
+  return (
+    <Background>
+      <video src={video} loop autoPlay muted></video>
+      <video src={video2} loop autoPlay muted></video>
+      <MainSection>
+        <LeftSection>
+          <img ref={imgRef} src={logo} alt={logo} />
+          {landingPageTextLines.map((text, index) => (
+            <p key={index} ref={(el) => (textRefs.current[index] = el)}>
+              {text}
+            </p>
+          ))}
+        </LeftSection>
+        <RightSection ref={buttonRef}>
+          <div onClick={() => setThreeRules(true)}>
+            <ScrollText />
+            <span>
+              <h1>溫柔宣言</h1>
+              <p>來這裡請你溫柔以待</p>
+            </span>
+            <ChevronRight ref={enterIconRef} />
+          </div>
+          <div onClick={handleLogin}>
+            <UsersRound />
+            <span>
+              <h1>登入/註冊</h1>
+              <p>投稿你的疼痛故事</p>
+            </span>
+            <ChevronRight />
+          </div>
+          <div onClick={visitLogin}>
+            <UserRoundSearch />
+            <span>
+              <h1>訪客</h1>
+              <p>訪客模式進入</p>
+            </span>
+            <ChevronRight />
+          </div>
+        </RightSection>
+      </MainSection>
+
+      {!threeRules ? null : <ThreeRules setThreeRules={setThreeRules} />}
+    </Background>
+  );
+}
+
 //#region
 const Background = styled.div`
   background-color: #000000;
-  font-family: "Noto Sans TC", sans-serif;
   position: relative;
   overflow-x: hidden;
 
@@ -153,98 +247,3 @@ const RightSection = styled.div`
   }
 `;
 //#endregion
-
-export default function LandingPage() {
-  const textRefs = useRef([]);
-  const imgRef = useRef(null);
-  const buttonRef = useRef(null);
-  const enterIconRef = useRef(null);
-  const loginStatus = window.localStorage.getItem("loginStatus");
-  const navigate = useNavigate();
-  const [threeRules, setThreeRules] = useState(false);
-
-  useEffect(() => {
-    const timeline = gsap.timeline({
-      repeat: -1,
-      repeatDelay: 1,
-    });
-
-    landingPageTextLines.forEach((_, index) => {
-      timeline
-        .fromTo(
-          textRefs.current[index],
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1, ease: "power1.in" },
-          `+=${index === 0 ? 0 : 1.25}`
-        )
-        .to(
-          textRefs.current[index],
-          { y: -30, opacity: 0, duration: 1, ease: "power1.out" },
-          `+=1`
-        );
-    });
-  }, []);
-
-  useGSAP(() => {
-    landingPAgeGSAPAnimations(imgRef, buttonRef, enterIconRef);
-  });
-
-  const handleLogin = () => {
-    if (loginStatus === "true") {
-      navigate("/main");
-    } else {
-      navigate("/login");
-    }
-  };
-
-  const visitLogin = () => {
-    window.localStorage.setItem("userId", "visitor88084");
-    window.localStorage.setItem("loginStatus", true);
-    navigate("/main");
-  };
-
-  return (
-    <Background>
-      <video src={video} loop autoPlay muted></video>
-      <video src={video2} loop autoPlay muted></video>
-      <MainSection>
-        <LeftSection>
-          <img ref={imgRef} src={logo} alt={logo} />
-          {landingPageTextLines.map((text, index) => (
-            <p key={index} ref={(el) => (textRefs.current[index] = el)}>
-              {text}
-            </p>
-          ))}
-        </LeftSection>
-        <RightSection ref={buttonRef}>
-          <div onClick={() => setThreeRules(true)}>
-            <ScrollText />
-            <span>
-              <h1>溫柔宣言</h1>
-              <p>來這裡請你溫柔以待</p>
-            </span>
-            <ChevronRight ref={enterIconRef} />
-          </div>
-          <div onClick={handleLogin}>
-            <UsersRound />
-            <span>
-              <h1>登入/註冊</h1>
-              <p>投稿你的疼痛故事</p>
-            </span>
-            <ChevronRight />
-          </div>
-          <div onClick={visitLogin}>
-            <UserRoundSearch />
-            <span>
-              <h1>訪客</h1>
-              <p>訪客模式進入</p>
-            </span>
-            <ChevronRight />
-          </div>
-        </RightSection>
-      </MainSection>
-
-      {!threeRules ? null : <ThreeRules setThreeRules={setThreeRules} />}
-    </Background>
-  );
-}

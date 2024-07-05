@@ -42,7 +42,7 @@
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.8",
     "survey-core": "^1.10.5",
-    "survey-react-ui": "^1.9.139",
+    "survey-react-ui": "^1.10.5",
     "sweetalert2": "^11.10.8",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",

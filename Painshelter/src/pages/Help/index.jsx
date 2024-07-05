@@ -27,7 +27,6 @@ import { useHelpModal } from "@/utils/zustand.js";
 
 //#region
 const Background = styled.div`
-  font-family: "Noto Sans TC", sans-serif;
   background-color: #11120f;
   color: white;
   display: flex;
@@ -146,7 +145,7 @@ const AccordingSection = styled.div`
     font-size: 65px;
   }
   @media screen and (max-width: 1279px) {
-    width: 100%;
+    width: 100px;
     padding: 0px;
   }
   div {
