@@ -1,22 +1,22 @@
-import youtube from "@/utils/api/youtube";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { zoomies } from "ldrs";
+import { useState, useRef, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
+
 import heal1 from "@/assets/img/heal1.jpg";
 import heal2 from "@/assets/img/heal2.jpg";
 import heal3 from "@/assets/img/heal3.jpg";
-import Buttons from "@/components/Buttons.jsx";
-import healtext2 from "@/assets/img/healtext2.png";
 import healtext1 from "@/assets/img/healtext1.png";
+import healtext2 from "@/assets/img/healtext2.png";
 import healtext3 from "@/assets/img/healtext3.png";
-import { gsap } from "gsap";
-import { zoomies } from "ldrs";
-import { useGSAP } from "@gsap/react";
-import { useLyric } from "@/utils/zustand.js";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import { useFormInput } from "@/utils/hooks/useFormInputNoSetValue";
-import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import Buttons from "@/components/Buttons.jsx";
+import youtube from "@/utils/api/youtube";
 import { musicHealPageGSAPAnimations } from "@/utils/gsapAnimations";
-import { useState, useRef, useEffect } from "react";
+import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
+import { useFormInput } from "@/utils/hooks/useFormInputNoSetValue";
+import { useLyric } from "@/utils/zustand.js";
 
 //#region
 const Lyric = styled.div`
@@ -106,7 +106,6 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Noto Sans TC", sans-serif;
   @media screen and (max-width: 1279px) {
     flex-direction: column;
     height: 100%;
@@ -207,6 +206,10 @@ const ButtonSection = styled.div`
   @media screen and (max-width: 1279px) {
     display: flex;
     flex-direction: column;
+
+    button {
+      width: 300px;
+    }
   }
 `;
 //#endregion
@@ -306,7 +309,7 @@ function MusicHeal() {
   return (
     <>
       <Lyric ref={section1}>
-        <img src={heal1} alt={heal1} />
+        <img src={heal1} alt={heal1} loading="lazy" />
         <img ref={titleRef1} src={healtext1} alt={healtext1} />
         <div ref={paragraphRef1}>
           <p>你不是真正的快樂，你的傷從不肯完全的癒合</p>
@@ -320,7 +323,7 @@ function MusicHeal() {
       </Lyric>
 
       <Lyric ref={section2}>
-        <img src={heal3} alt={heal3} />
+        <img src={heal3} alt={heal3} loading="lazy" />
         <img ref={titleRef2} src={healtext3} alt={healtext3} />
         <div ref={paragraphRef2}>
           <p>如果你被她傷的很痛，請感謝她好心折磨，</p>
@@ -332,7 +335,7 @@ function MusicHeal() {
         </span>
       </Lyric>
       <Lyric ref={section3}>
-        <img src={heal2} alt={heal2} />
+        <img src={heal2} alt={heal2} loading="lazy" />
         <img ref={titleRef3} src={healtext2} alt={healtext2} />
         <div ref={paragraphRef3}>
           <p>我在夜裡大聲呼喊，夢太沈重，無力也無法動彈，</p>

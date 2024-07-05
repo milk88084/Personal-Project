@@ -1,8 +1,9 @@
-import styled from "styled-components";
-import Chart from "@/components/Chart/TypeChart.jsx";
-import FigureChart from "@/components/Chart/FigureChart.jsx";
-import AnimatedNumber from "@/components/AnimatedNumber.jsx";
 import { useState, useEffect } from "react";
+import styled from "styled-components";
+
+import AnimatedNumber from "@/components/AnimatedNumber.jsx";
+import FigureChart from "@/components/Chart/FigureChart.jsx";
+import Chart from "@/components/Chart/TypeChart.jsx";
 import { getAllFirebasePosts } from "@/utils/firebase/firebaseService";
 
 //#region

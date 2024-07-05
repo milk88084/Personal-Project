@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import { useLyric } from "@/utils/zustand.js";
+
 import { debounce } from "@/utils/debounce";
+import { useLyric } from "@/utils/zustand.js";
 
 const SearchBar = styled.div`
   margin-top: 30px;
@@ -36,7 +37,7 @@ function LyricSearch() {
   const [songs, setSongs] = useState([]);
   const [lyrics, setLyrics] = useState("");
   const [selectedSong, setSelectedSong] = useState(null);
-  const { title, searchStatus, setStatusfasle } = useLyric();
+  const { title, searchStatus, setStatusfalse } = useLyric();
 
   const handleSearch = useCallback(
     debounce(async () => {
@@ -46,12 +47,12 @@ function LyricSearch() {
       try {
         const response = await axios.get(url);
         setSongs(response.data.items);
-        setStatusfasle();
+        setStatusfalse();
       } catch (error) {
         console.error("Error fetching songs:", error);
       }
     }, 1000),
-    [title, setStatusfasle]
+    [title, setStatusfalse]
   );
 
   useEffect(() => {

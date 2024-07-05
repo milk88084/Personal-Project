@@ -24,6 +24,11 @@ const Input = styled.div`
     margin-left: 10px;
     margin-bottom: 15px;
   }
+  @media screen and (max-width: 1279px) {
+    input {
+      width: 100%;
+    }
+  }
 `;
 
 const painIcon = L.icon({
@@ -34,7 +39,7 @@ const painIcon = L.icon({
 });
 
 const LocationSearch = () => {
-  const { locationSerach, setLocationSearch } = useLoginState();
+  const { locationSearch, setLocationSearch } = useLoginState();
   const [locationState, setLocationState] = useState();
   const storyLocation = useFormInput();
   const locationArray = [];

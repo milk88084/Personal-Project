@@ -1,19 +1,19 @@
+import { collection, query, getDocs, where } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import styled from "styled-components";
+
+import defaultImg from "@/assets/img/defaultImg.png";
 import logoImg from "@/assets/img/logoImg.png";
 import logoTitle from "@/assets/img/logoTitle.png";
-import defaultImg from "@/assets/img/defaultImg.png";
 import { db } from "@/utils/firebase/firebase.jsx";
-import { toastAlert } from "@/utils/toast.js";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import { useState, useEffect } from "react";
-import { collection, query, getDocs, where } from "firebase/firestore";
 import {
   submitFollowAuthor,
   getSnapshotPostsData,
   getVisitUserData,
 } from "@/utils/firebase/firebaseService.js";
+import { toastAlert } from "@/utils/toast.js";
 
 //#region
 const LeftSectionWrapper = styled.div`

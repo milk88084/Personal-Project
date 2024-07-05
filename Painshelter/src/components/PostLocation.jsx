@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
 import { collection, query, getDocs } from "firebase/firestore";
-import { db } from "@/utils/firebase/firebase.jsx";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import Modal from "./Modal.jsx";
-import { useLoginState } from "@/utils/zustand.js";
-import icon from "@/assets/img/logoImg3.png";
-import { MapPin } from "lucide-react";
-import styled from "styled-components";
 import L from "leaflet";
-import { toastAlert } from "@/utils/toast.js";
+import { MapPin } from "lucide-react";
+import { useEffect, useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { ToastContainer } from "react-toastify";
+import styled from "styled-components";
+
+import Modal from "./Modal.jsx";
+
+import icon from "@/assets/img/logoImg3.png";
+import { db } from "@/utils/firebase/firebase.jsx";
+import { toastAlert } from "@/utils/toast.js";
+import { useLoginState } from "@/utils/zustand.js";
 
 const painIcon = L.icon({
   iconUrl: icon,
@@ -67,7 +69,7 @@ const PostsLocation = () => {
     getStories();
   }, []);
 
-  const comebinedArray = locations.map((data, index) => {
+  const combinedArray = locations.map((data, index) => {
     const title = titles[index];
     return {
       ...data,
@@ -94,7 +96,7 @@ const PostsLocation = () => {
     });
     return Object.values(groups);
   };
-  const sameNameLocation = groupLocation(comebinedArray);
+  const sameNameLocation = groupLocation(combinedArray);
 
   const openModal = (title) => {
     showModal();
@@ -103,7 +105,7 @@ const PostsLocation = () => {
 
   return (
     <div>
-      <Modal comebinedArray={comebinedArray} clickTitle={clickTitle} />
+      <Modal combinedArray={combinedArray} clickTitle={clickTitle} />
       <MapContainer
         center={center}
         zoom={7}

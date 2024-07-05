@@ -1,7 +1,8 @@
 import styled from "styled-components";
+
+import backgroundImg1 from "@/assets/img/disagreeImg1.jpg";
 import logoImg from "@/assets/img/logoImg.png";
 import logoTitle from "@/assets/img/logoTitle3.png";
-import backgroundImg1 from "@/assets/img/disagreeImg1.jpg";
 import { CarouselDemo } from "@/components/Shadcn/CarouselDemo";
 
 //#region
@@ -122,7 +123,7 @@ export default function ThreeRules({ setThreeRules }) {
           <ModalContent>
             <h1>溫柔宣言</h1>
             <span>
-              <CarouselDemo></CarouselDemo>
+              <CarouselDemo />
             </span>
             <ModalButton>
               <button onClick={() => setThreeRules(false)}>同意</button>

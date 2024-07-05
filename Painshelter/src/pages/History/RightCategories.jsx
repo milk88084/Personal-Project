@@ -1,19 +1,20 @@
-import styled, { keyframes } from "styled-components";
-import jar from "@/assets/img/historyJar.png";
-import broke from "@/assets/img/historyBroke.png";
-import AnimatedNumber from "@/components/AnimatedNumber.jsx";
-import categoryImg from "@/assets/img/categoryImg.jpg";
-import logoImg from "@/assets/img/logoImg.png";
-import Buttons from "@/components/Buttons.jsx";
-import { toastAlert } from "@/utils/toast.js";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { useState, useEffect } from "react";
+import styled, { keyframes } from "styled-components";
+
+import categoryImg from "@/assets/img/categoryImg.jpg";
+import broke from "@/assets/img/historyBroke.png";
+import jar from "@/assets/img/historyJar.png";
+import logoImg from "@/assets/img/logoImg.png";
+import AnimatedNumber from "@/components/AnimatedNumber.jsx";
+import Buttons from "@/components/Buttons.jsx";
 import {
   getFirebasePosts,
   getFirebaseUsers,
   getAuthorsByIds,
 } from "@/utils/firebase/firebaseService.js";
+import { toastAlert } from "@/utils/toast.js";
 
 //#region
 const Categories = styled.div`
@@ -42,7 +43,8 @@ const Categories = styled.div`
 
     section {
       flex-direction: column;
-      margin: 15px;
+      margin: 0px;
+      margin-top: 15px;
       justify-content: center;
       align-items: center;
     }
@@ -53,7 +55,7 @@ const Categories = styled.div`
   }
 `;
 
-const TopCategories = styled.div`
+const TopCategoriesPressure = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-around;
@@ -85,7 +87,37 @@ const TopCategories = styled.div`
   }
 
   @media screen and (max-width: 1279px) {
-    width: 400px;
+    width: 350px;
+    margin: 15px 0px;
+    img {
+      height: 60px;
+    }
+  }
+`;
+
+const TopCategoriesFriends = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 4px solid #888888;
+  border-radius: 20px;
+  height: 180px;
+  font-size: 50px;
+  padding: 10px;
+
+  span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  img {
+    height: 100px;
+  }
+
+  @media screen and (max-width: 1279px) {
+    width: 350px;
     margin: 15px 0px;
     img {
       height: 60px;
@@ -169,7 +201,7 @@ const CategoriesSection = styled.div`
   }
 
   @media screen and (max-width: 1279px) {
-    width: 400px;
+    width: 100%;
     flex-direction: column;
     padding: 10px;
     border-radius: 20px;
@@ -267,7 +299,6 @@ export default function RightCategories({ storyRef }) {
 
   const handlePost = () => {
     navigate("/post");
-    window.scrollTo(0, 0);
   };
 
   const scrollSection = (elementRef) => {
@@ -280,7 +311,7 @@ export default function RightCategories({ storyRef }) {
   return (
     <Categories>
       <section id="statistics">
-        <TopCategories onClick={() => navigate("/help")}>
+        <TopCategoriesPressure onClick={() => navigate("/help")}>
           <div>
             <h2>壓力</h2>
             <h2>指數</h2>
@@ -295,9 +326,9 @@ export default function RightCategories({ storyRef }) {
             )}
           </span>
           <img src={broke} alt={broke} />
-        </TopCategories>
+        </TopCategoriesPressure>
         <span></span>
-        <TopCategories>
+        <TopCategoriesFriends>
           <div>
             <h2>關注</h2>
             <h2>作者</h2>
@@ -312,7 +343,7 @@ export default function RightCategories({ storyRef }) {
             )}
           </span>
           <img src={jar} alt={jar} />
-        </TopCategories>
+        </TopCategoriesFriends>
       </section>
       <CategoriesImg>
         <img src={categoryImg} alt={categoryImg}></img>

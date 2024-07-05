@@ -1,7 +1,8 @@
+import { useGSAP } from "@gsap/react";
 import styled from "styled-components";
+
 import aboutpainsectionimg from "@/assets/img/aboutpainsection1.jpg";
 import aboutpainsectionimg2 from "@/assets/img/aboutpainsection2.jpg";
-import { useGSAP } from "@gsap/react";
 import { aboutPainGSAPAnimations } from "@/utils/gsapAnimations";
 
 //#region

@@ -32,7 +32,7 @@ export default function Buttons({
   icon,
   type,
   title,
-  onChange,
+  // onChange,
 }) {
   return (
     <div>
@@ -40,7 +40,7 @@ export default function Buttons({
         title={title}
         type={type}
         onClick={onClick}
-        onChange={{ onChange }}
+        // onChange={{ onChange }}
       >
         {icon}
         {text}

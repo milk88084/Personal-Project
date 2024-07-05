@@ -1,20 +1,20 @@
+import { useEffect, useState } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import styled from "styled-components";
-import Buttons from "@/components/Buttons.jsx";
+
 import defaultImg from "@/assets/img/defaultImg.png";
-import stortTypeData from "@/utils/data/storyTypeData.json";
+import Buttons from "@/components/Buttons.jsx";
 import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 import storyFigureData from "@/utils/data/storyFigureData.json";
+import storyTypeData from "@/utils/data/storyTypeData.json";
+import { getFirebaseSpecificPost } from "@/utils/firebase/firebaseService.js";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
-import { ToastContainer } from "react-toastify";
-import { useEditFormInput } from "@/utils/hooks/useEditFormInput.jsx";
-import { useEffect, useState } from "react";
 import { useEditCheckboxInput } from "@/utils/hooks/useEditCheckboxInput.jsx";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { getFirebaseSpacificPost } from "@/utils/firebase/firebaseService.js";
+import { useEditFormInput } from "@/utils/hooks/useEditFormInput.jsx";
 
 //#region
 const Background = styled.div`
-  font-family: "Noto Sans TC", sans-serif;
   background: linear-gradient(
     90deg,
     rgba(0, 2, 0, 1) 0%,
@@ -99,42 +99,6 @@ const PreviewTitle = styled.div`
   @media screen and (max-width: 1279px) {
     width: 100%;
     font-size: 15px;
-  }
-`;
-
-const EditDateInput = styled.div`
-  border: 2px solid black;
-  input {
-    width: 400px;
-    color: black;
-  }
-  @media screen and (max-width: 1279px) {
-    border: 1px solid black;
-    input {
-      width: 100%;
-    }
-  }
-`;
-
-const EditTypesInput = styled.div`
-  font-size: 20px;
-  ul {
-    display: flex;
-  }
-
-  li {
-    margin-right: 30px;
-  }
-  @media screen and (max-width: 1279px) {
-    font-size: 15px;
-    ul {
-      display: block;
-    }
-
-    li {
-      margin-right: 0px;
-      padding: 5px;
-    }
   }
 `;
 
@@ -285,10 +249,8 @@ const AvatarPart = styled.div`
   @media screen and (max-width: 1279px) {
     width: 60px;
     img {
-      border-radius: 50px;
       width: 40px;
       height: 40px;
-      overflow: hidden;
     }
   }
 `;
@@ -302,7 +264,7 @@ export default function Edit() {
   const postStory = useEditFormInput();
   const storyTitle = useEditFormInput();
   const storyTime = useEditFormInput();
-  const storyType = useEditCheckboxInput(stortTypeData);
+  const storyType = useEditCheckboxInput(storyTypeData);
   const storyFigure = useEditCheckboxInput(storyFigureData);
   const [comments, setComments] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -315,7 +277,7 @@ export default function Edit() {
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
-      const data = await getFirebaseSpacificPost("storyId", params.id);
+      const data = await getFirebaseSpecificPost("storyId", params.id);
       if (data) {
         storyTitle.setValue(data.title);
         postStory.setValue(data.story);
@@ -331,7 +293,7 @@ export default function Edit() {
     fetchData();
   }, [params.id]);
 
-  const handleClikcToCommentAuthor = (id) => {
+  const handleClickToCommentAuthor = (id) => {
     navigate("/visit", { state: { data: id } });
   };
 
@@ -382,7 +344,7 @@ export default function Edit() {
                   ? comments.map((data, index) => (
                       <Reply
                         key={index}
-                        onClick={() => handleClikcToCommentAuthor(data.id)}
+                        onClick={() => handleClickToCommentAuthor(data.id)}
                       >
                         <AvatarPart>
                           {data.img ? (

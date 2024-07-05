@@ -1,15 +1,16 @@
+import { signOut } from "firebase/auth";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import styled from "styled-components";
+
 import logoImg from "@/assets/img/logoImg.png";
 import logoTitle from "@/assets/img/logoTitle.png";
 import mainBanner from "@/assets/img/mainBanner.jpg";
 import { auth } from "@/utils/firebase/firebase";
-import { signOut } from "firebase/auth";
-import { useEffect } from "react";
-import { toastAlert } from "@/utils/toast.js";
-import { useNavigate } from "react-router-dom";
-import { useLoginState } from "@/utils/zustand.js";
-import { ToastContainer } from "react-toastify";
 import { bannerPageGSAPAnimations } from "@/utils/gsapAnimations";
+import { toastAlert } from "@/utils/toast.js";
+import { useLoginState } from "@/utils/zustand.js";
 
 //#region
 const BannerWrapper = styled.div`
@@ -57,17 +58,7 @@ const Categories = styled.div`
   }
 
   @media screen and (max-width: 1279px) {
-    font-size: 20px;
-    letter-spacing: 1px;
-    font-weight: 500;
-    padding-top: 0px;
-    z-index: 200;
-
-    button {
-      margin: 3px;
-      margin-right: 60px;
-      opacity: 10%;
-    }
+    display: none;
   }
 `;
 

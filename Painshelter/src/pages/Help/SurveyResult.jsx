@@ -1,7 +1,8 @@
-import styled from "styled-components";
-import Buttons from "@/components/Buttons.jsx";
-import AnimatedNumber from "@/components/AnimatedNumber";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
+import AnimatedNumber from "@/components/AnimatedNumber";
+import Buttons from "@/components/Buttons.jsx";
 
 //#region
 const ResualtSection = styled.div`
@@ -23,7 +24,7 @@ const ResualtSection = styled.div`
   }
 `;
 
-const ResualtImg = styled.div`
+const ResultImg = styled.div`
   img {
     width: 300px;
     border-radius: 20px;
@@ -98,9 +99,9 @@ export default function SurveyResult({
   return (
     <div>
       <ResualtSection>
-        <ResualtImg>
+        <ResultImg>
           <img src={imgSrc} alt={imgSrc} />
-        </ResualtImg>
+        </ResultImg>
         <ResualtContent>
           <h2>
             測驗結果：

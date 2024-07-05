@@ -1,13 +1,14 @@
-import styled from "styled-components";
-import footer1 from "@/assets/img/mainFooter1.jpg";
-import logoImg from "@/assets/img/logoImg.png";
-import { auth } from "@/utils/firebase/firebase.jsx";
 import { signOut } from "firebase/auth";
-import { toastAlert } from "@/utils/toast.js";
 import { useNavigate } from "react-router-dom";
-import { useLoginState } from "@/utils/zustand.js";
-import { AccordionDemo } from "@/components/Shadcn/Accordion";
 import { ToastContainer } from "react-toastify";
+import styled from "styled-components";
+
+import logoImg from "@/assets/img/logoImg.png";
+import footer1 from "@/assets/img/mainFooter1.jpg";
+import { AccordionDemo } from "@/components/Shadcn/Accordion";
+import { auth } from "@/utils/firebase/firebase.jsx";
+import { toastAlert } from "@/utils/toast.js";
+import { useLoginState } from "@/utils/zustand.js";
 
 //#region
 const FooterSectionWrapper = styled.div`

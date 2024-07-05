@@ -1,12 +1,14 @@
-import { useEffect, useState, useRef } from "react";
-import Backdrop from "./Backdrop";
-import { useNavigate } from "react-router-dom";
-import { useLoginState } from "@/utils/zustand";
-import backgroundImg from "@/assets/img/outputimg.jpg";
-import styled from "styled-components";
 import { toPng } from "html-to-image";
+import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import styled from "styled-components";
+
+import Backdrop from "./Backdrop";
+
+import backgroundImg from "@/assets/img/outputimg.jpg";
 import getFirebasePosts from "@/utils/firebase/firebaseService.js";
+import { useLoginState } from "@/utils/zustand";
 
 //#region
 const Wrapper = styled.div`
@@ -147,13 +149,13 @@ export default function Modal({ clickTitle }) {
   }, [setStories]);
 
   useEffect(() => {
-    const metchedItem = stories.find((data) => data.title === clickTitle.item);
-    if (metchedItem) {
-      setModalPost(metchedItem);
+    const matchedItem = stories.find((data) => data.title === clickTitle.item);
+    if (matchedItem) {
+      setModalPost(matchedItem);
     }
   }, [clickTitle]);
 
-  const handleVisitAthor = (id) => {
+  const handleVisitAuthor = (id) => {
     navigate("/visit", { state: { data: id } });
     closeModal();
     window.scrollTo(0, 0);
@@ -191,7 +193,7 @@ export default function Modal({ clickTitle }) {
           <ButtonSections>
             <button
               onClick={() => {
-                handleVisitAthor(modalPost.userId);
+                handleVisitAuthor(modalPost.userId);
               }}
             >
               觀看作者

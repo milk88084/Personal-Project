@@ -1,162 +1,31 @@
-import styled, { keyframes } from "styled-components";
-import gsap from "gsap";
-import logo from "@/assets/img/logoTitle.png";
-import video from "@/assets/video/landingPage.mp4";
-import video2 from "@/assets/video/landingPage2.mp4";
-import ThreeRules from "./ThreeRules.jsx";
-import landingPageTextLines from "@/utils/data/landingPageTextLines.json";
 import { useGSAP } from "@gsap/react";
-import { useNavigate } from "react-router-dom";
+import gsap from "gsap";
 import {
   ChevronRight,
   UserRoundSearch,
   UsersRound,
   ScrollText,
 } from "lucide-react";
-import { landingPAgeGSAPAnimations } from "@/utils/gsapAnimations.js";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styled, { keyframes } from "styled-components";
 
-//#region
-const Background = styled.div`
-  background-color: #000000;
-  font-family: "Noto Sans TC", sans-serif;
-  position: relative;
-  overflow-x: hidden;
-  video:nth-child(1) {
-    width: 100%;
-    height: 100vh;
-    object-fit: cover;
-  }
-  video:nth-child(2) {
-    display: none;
-  }
-  @media screen and (max-width: 1279px) {
-    video:nth-child(1) {
-      display: none;
-    }
-    video:nth-child(2) {
-      height: 100vh;
-      display: block;
-      object-fit: cover;
-    }
-  }
-`;
+import ThreeRules from "./ThreeRules.jsx";
 
-const LeftSection = styled.div`
-  color: #e1e0d9;
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 50%;
-  align-items: center;
-  margin-top: 250px;
-  img {
-    width: 370px;
-  }
-  p {
-    font-size: 25px;
-    margin-top: 180px;
-    opacity: 0.5;
-    position: absolute;
-  }
-  @media screen and (max-width: 1279px) {
-    top: 0;
-    left: 0;
-    width: 50%;
-    align-items: center;
-    margin-top: 100px;
-    margin-left: 120px;
-    img {
-      width: 300px;
-    }
-    p {
-      font-size: 15px;
-      color: #151517;
-      text-align: center;
-      margin-top: 150px;
-    }
-  }
-`;
-
-const glowing = keyframes`
-  0% { box-shadow: 0 0 5px white; }
-  50% { box-shadow: 0 0 20px white; }
-  100% { box-shadow: 0 0 5px white; }
-`;
-
-const RightSection = styled.div`
-  color: #e1e0d9;
-  position: absolute;
-  width: 50%;
-  top: 0;
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  margin-top: 200px;
-  padding-left: 300px;
-
-  div {
-    padding: 15px;
-    width: 250px;
-    margin: 10px;
-    background-color: #151517;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-
-  div:hover {
-    background: rgb(133, 133, 133);
-    background: linear-gradient(
-      60deg,
-      #eeeeee 0%,
-      #e0f0ff 35%,
-      rgba(242, 242, 242, 1) 100%
-    );
-    color: #151517;
-    transform: scale(1.1);
-    animation: ${glowing} 2s infinite ease-in-out;
-  }
-
-  p {
-    font-size: 12px;
-    opacity: 0.6;
-  }
-  @media screen and (max-width: 1279px) {
-    width: 100%;
-    top: 0;
-    left: 0;
-    display: flex;
-    flex-direction: row;
-    margin-top: 420px;
-    padding-left: 0px;
-    color: #151517;
-    flex-direction: column;
-
-    div {
-      padding: 10px;
-      width: 100%;
-      margin: 0px;
-      margin-bottom: 20px;
-      background-color: #e1e0d9;
-    }
-  }
-`;
-//#endregion
+import logo from "@/assets/img/logoTitle.png";
+import video from "@/assets/video/landingPage.mp4";
+import video2 from "@/assets/video/landingPage2.mp4";
+import landingPageTextLines from "@/utils/data/landingPageTextLines.json";
+import { landingPAgeGSAPAnimations } from "@/utils/gsapAnimations.js";
 
 export default function LandingPage() {
   const textRefs = useRef([]);
   const imgRef = useRef(null);
   const buttonRef = useRef(null);
   const enterIconRef = useRef(null);
-  const [threeRules, setThreeRules] = useState(false);
-  const navigate = useNavigate();
   const loginStatus = window.localStorage.getItem("loginStatus");
+  const navigate = useNavigate();
+  const [threeRules, setThreeRules] = useState(false);
 
   useEffect(() => {
     const timeline = gsap.timeline({
@@ -202,7 +71,7 @@ export default function LandingPage() {
     <Background>
       <video src={video} loop autoPlay muted></video>
       <video src={video2} loop autoPlay muted></video>
-      <div>
+      <MainSection>
         <LeftSection>
           <img ref={imgRef} src={logo} alt={logo} />
           {landingPageTextLines.map((text, index) => (
@@ -237,9 +106,144 @@ export default function LandingPage() {
             <ChevronRight />
           </div>
         </RightSection>
-      </div>
+      </MainSection>
 
       {!threeRules ? null : <ThreeRules setThreeRules={setThreeRules} />}
     </Background>
   );
 }
+
+//#region
+const Background = styled.div`
+  background-color: #000000;
+  position: relative;
+  overflow-x: hidden;
+
+  video:nth-child(1) {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+  }
+  video:nth-child(2) {
+    display: none;
+  }
+  @media screen and (max-width: 1279px) {
+    video:nth-child(1) {
+      display: none;
+    }
+    video:nth-child(2) {
+      height: 100vh;
+      display: block;
+      object-fit: cover;
+    }
+  }
+`;
+
+const MainSection = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
+  }
+`;
+
+const LeftSection = styled.div`
+  color: #e1e0d9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  img {
+    width: 370px;
+  }
+  p {
+    font-size: 25px;
+    margin-top: 180px;
+    opacity: 0.5;
+    position: absolute;
+  }
+  @media screen and (max-width: 1279px) {
+    align-items: center;
+    justify-content: center;
+    height: 50%;
+    img {
+      width: 300px;
+    }
+    p {
+      font-size: 15px;
+      color: #151517;
+      text-align: center;
+      margin-top: 150px;
+    }
+  }
+`;
+
+const glowing = keyframes`
+  0% { box-shadow: 0 0 5px white; }
+  50% { box-shadow: 0 0 20px white; }
+  100% { box-shadow: 0 0 5px white; }
+`;
+
+const RightSection = styled.div`
+  color: #e1e0d9;
+  display: flex;
+  flex-direction: column;
+
+  div {
+    padding: 15px;
+    width: 250px;
+    margin: 10px;
+    background-color: #151517;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+
+  div:hover {
+    background: rgb(133, 133, 133);
+    background: linear-gradient(
+      60deg,
+      #eeeeee 0%,
+      #e0f0ff 35%,
+      rgba(242, 242, 242, 1) 100%
+    );
+    color: #151517;
+    transform: scale(1.1);
+    animation: ${glowing} 2s infinite ease-in-out;
+  }
+
+  p {
+    font-size: 12px;
+    opacity: 0.6;
+  }
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+    flex-direction: row;
+    color: #151517;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+
+    div {
+      padding: 10px;
+      width: 80%;
+      margin: 0px;
+      margin-top: 20px;
+      background-color: #e1e0d9;
+    }
+
+    p {
+      display: none;
+    }
+  }
+`;
+//#endregion

@@ -1,16 +1,17 @@
+import { Heart, MessageCircle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import styled from "styled-components";
+
 import Buttons from "@/components/Buttons.jsx";
 import replyData from "@/utils/data/reply.json";
-import { ToastContainer } from "react-toastify";
-import { useAuthorfiedData } from "@/utils/zustand.js";
-import { useState, useEffect } from "react";
-import { Heart, MessageCircle } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
 import {
   getSnapshotPostsData,
   submitComment,
   submitLike,
 } from "@/utils/firebase/firebaseService.js";
+import { useAuthorfieldData } from "@/utils/zustand.js";
 
 //#region
 const RightSectionWrapper = styled.div`
@@ -52,7 +53,7 @@ const EachStory = styled.div`
   position: relative;
 
   @media screen and (max-width: 1279px) {
-    height: 600px;
+    height: 100%;
     flex-direction: column;
   }
 `;
@@ -98,7 +99,7 @@ const MainContent = styled.div`
     margin-top: 24px;
   }
   @media screen and (max-width: 1279px) {
-    width: 400px;
+    width: 280px;
     padding: 15px;
     h1 {
       font-size: 18px;
@@ -109,8 +110,18 @@ const MainContent = styled.div`
       margin-bottom: 18px;
     }
 
+    h3 {
+      flex-direction: column;
+      text-align: center;
+      width: 120px;
+    }
+
     span {
       margin-bottom: 7px;
+    }
+
+    button {
+      width: 250px;
     }
   }
 `;
@@ -210,7 +221,7 @@ export default function RightSection() {
   const [stories, setStories] = useState([]);
   const localStorageUserId = window.localStorage.getItem("userId");
   const navigate = useNavigate();
-  const { setSelectedStoryId } = useAuthorfiedData();
+  const { setSelectedStoryId } = useAuthorfieldData();
 
   useEffect(() => {
     let unsubscribe;
@@ -222,15 +233,21 @@ export default function RightSection() {
         unsubscribe();
       }
     };
-  }, []);
+  }, [localStorageUserId, state.data]);
 
   const sortTimeOfStory = stories.sort((a, b) => b.time.localeCompare(a.time));
 
   const isUserStories = stories.every(
     (story) => story.userId === localStorageUserId
   );
-
   const handleSubmitComment = async (event, id) => {
+    event.preventDefault();
+    const form = event.target;
+    const select = form.querySelector('select[name="replySelect"]');
+    if (!select.value) {
+      alert("請選擇一個留言");
+      return;
+    }
     await submitComment(event, id, setStories);
   };
 
