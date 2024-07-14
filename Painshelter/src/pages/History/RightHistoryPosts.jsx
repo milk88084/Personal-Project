@@ -4,7 +4,7 @@ import Buttons from "@/components/Buttons.jsx";
 import { useNavigate } from "react-router-dom";
 import { modifiedData } from "@/utils/zustand.js";
 import { useState, useEffect } from "react";
-import { getFirebasePosts } from "@/utils/firebase/firebaseService.js";
+import { getFirebasePosts } from "@/utils/firebase/firebaseService.ts";
 
 //#region
 const StorySection = styled.div`

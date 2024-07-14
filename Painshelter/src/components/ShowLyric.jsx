@@ -36,7 +36,7 @@ function LyricSearch() {
   const [songs, setSongs] = useState([]);
   const [lyrics, setLyrics] = useState("");
   const [selectedSong, setSelectedSong] = useState(null);
-  const { title, searchStatus, setStatusfasle } = useLyric();
+  const { title, searchStatus, setStatusFalse } = useLyric();
 
   const handleSearch = useCallback(
     debounce(async () => {
@@ -46,12 +46,12 @@ function LyricSearch() {
       try {
         const response = await axios.get(url);
         setSongs(response.data.items);
-        setStatusfasle();
+        setStatusFalse();
       } catch (error) {
         console.error("Error fetching songs:", error);
       }
     }, 1000),
-    [title, setStatusfasle]
+    [title, setStatusFalse]
   );
 
   useEffect(() => {

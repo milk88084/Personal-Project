@@ -11,7 +11,7 @@ import { useFormInput } from "@/utils/hooks/useFormInput.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 import { useLoginState } from "@/utils/zustand.js";
 import { ToastContainer } from "react-toastify";
-import { handleSubmitPost } from "@/utils/firebase/firebaseService.js";
+import { handleSubmitPost } from "@/utils/firebase/firebaseService.ts";
 import { useState, useRef } from "react";
 import {
   getDownloadURL,
@@ -247,13 +247,13 @@ const ButtonSection = styled.div`
 
 export default function Edit() {
   const navigate = useNavigate();
-  const { locationSerach } = useLoginState();
+  const { locationSearch } = useLoginState();
   const postStory = useFormInput();
   const storyTitle = useFormInput();
   const storyTime = useFormInput();
   const localStorageUserId = window.localStorage.getItem("userId");
   useAuthCheck();
-  const storyLocation = locationSerach[0];
+  const storyLocation = locationSearch[0];
 
   const [selectedTypes, setSelectedTypes] = useState([]);
   const toggleType = (type) => {

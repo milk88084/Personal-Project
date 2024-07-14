@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import getFirebasePosts from "@/utils/firebase/firebaseService.js";
+import { getFirebasePosts } from "@/utils/firebase/firebaseService.ts";
 import {
   XAxis,
   YAxis,

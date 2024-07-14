@@ -13,7 +13,7 @@ import {
   submitFollowAuthor,
   getSnapshotPostsData,
   getVisitUserData,
-} from "@/utils/firebase/firebaseService.js";
+} from "@/utils/firebase/firebaseService.ts";
 
 //#region
 const LeftSectionWrapper = styled.div`

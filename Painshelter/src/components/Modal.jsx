@@ -6,7 +6,7 @@ import backgroundImg from "@/assets/img/outputimg.jpg";
 import styled from "styled-components";
 import { toPng } from "html-to-image";
 import { ToastContainer } from "react-toastify";
-import getFirebasePosts from "@/utils/firebase/firebaseService.js";
+import { getFirebasePosts } from "@/utils/firebase/firebaseService.ts";
 
 //#region
 const Wrapper = styled.div`

@@ -17,7 +17,7 @@ import {
   getAuthorJoinedDate,
   handleUnFollow,
   updateProfileImage,
-} from "@/utils/firebase/firebaseService.js";
+} from "@/utils/firebase/firebaseService.ts";
 import {
   getDownloadURL,
   ref as storageRef,

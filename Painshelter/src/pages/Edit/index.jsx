@@ -6,7 +6,7 @@ import storyFigureData from "@/utils/data/storyFigureData.json";
 import { storage } from "@/utils/firebase/firebase.jsx";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 import { ToastContainer } from "react-toastify";
-import { useEditFormInput } from "@/utils/hooks/useEditFormInput.jsx";
+import { useEditFormInput } from "@/utils/hooks/useEditFormInput.tsx";
 import { useEditCheckboxInput } from "@/utils/hooks/useEditCheckboxInput.jsx";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
@@ -25,10 +25,10 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import {
-  getFirebaseSpacificPost,
+  getFirebaseSpecificPost,
   handleEditSubmit,
   handleDeletePost,
-} from "@/utils/firebase/firebaseService.js";
+} from "@/utils/firebase/firebaseService.ts";
 
 //#region
 const Background = styled.div`
@@ -362,7 +362,7 @@ export default function Edit() {
 
   useEffect(() => {
     async function fetchData() {
-      const data = await getFirebaseSpacificPost("storyId", params.id);
+      const data = await getFirebaseSpecificPost("storyId", params.id);
       if (data) {
         storyTitle.setValue(data.title);
         postStory.setValue(data.story);

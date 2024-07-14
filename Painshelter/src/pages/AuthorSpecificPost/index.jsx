@@ -6,11 +6,11 @@ import IsLoadingPage from "@/components/IsLoadingPage.jsx";
 import storyFigureData from "@/utils/data/storyFigureData.json";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
 import { ToastContainer } from "react-toastify";
-import { useEditFormInput } from "@/utils/hooks/useEditFormInput.jsx";
+import { useEditFormInput } from "@/utils/hooks/useEditFormInput.tsx";
 import { useEffect, useState } from "react";
 import { useEditCheckboxInput } from "@/utils/hooks/useEditCheckboxInput.jsx";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { getFirebaseSpacificPost } from "@/utils/firebase/firebaseService.js";
+import { getFirebaseSpecificPost } from "@/utils/firebase/firebaseService.ts";
 
 //#region
 const Background = styled.div`
@@ -315,7 +315,7 @@ export default function Edit() {
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
-      const data = await getFirebaseSpacificPost("storyId", params.id);
+      const data = await getFirebaseSpecificPost("storyId", params.id);
       if (data) {
         storyTitle.setValue(data.title);
         postStory.setValue(data.story);

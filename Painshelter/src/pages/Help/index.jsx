@@ -6,7 +6,7 @@ import { themeJson } from "@/assets/survey";
 import { PopupSurvey } from "survey-react-ui";
 import { useHelpModal } from "@/utils/zustand.js";
 import { useAuthCheck } from "@/utils/hooks/useAuthCheck.jsx";
-import { updateUserStressRecord } from "@/utils/firebase/firebaseService.js";
+import { updateUserStressRecord } from "@/utils/firebase/firebaseService.ts";
 import { helpPAgeGSAPAnimations } from "@/utils/gsapAnimations.js";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";

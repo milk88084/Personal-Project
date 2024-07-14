@@ -13,7 +13,7 @@ import {
   getFirebasePosts,
   getFirebaseUsers,
   getAuthorsByIds,
-} from "@/utils/firebase/firebaseService.js";
+} from "@/utils/firebase/firebaseService.ts";
 
 //#region
 const Categories = styled.div`

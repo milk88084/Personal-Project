@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-export function useCheckboxInput(options) {
-  const [checkedValues, setCheckedValues] = useState([]);
-  function handleChange(e) {
+export function useCheckboxInput(options: string[]) {
+  const [checkedValues, setCheckedValues] = useState<string[]>([]);
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
     setCheckedValues((array) =>
       e.target.checked
